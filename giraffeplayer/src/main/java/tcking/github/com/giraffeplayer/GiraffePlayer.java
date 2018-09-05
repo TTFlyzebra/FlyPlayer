@@ -1,5 +1,6 @@
 package tcking.github.com.giraffeplayer;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -81,16 +82,14 @@ public class GiraffePlayer {
     private boolean isLive = false;//是否为直播
     private OrientationEventListener orientationEventListener;
     final private int initHeight;
-    private int defaultTimeout = 3000;
+    private int defaultTimeout = 5000;
     private int screenWidthPixels;
 
 
     private final View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (v.getId() == R.id.app_video_fullscreen) {
-                toggleFullScreen();
-            } else if (v.getId() == R.id.app_video_play) {
+            if (v.getId() == R.id.app_video_play) {
                 doPauseResume();
                 show(defaultTimeout);
             } else if (v.getId() == R.id.app_video_replay_icon) {
@@ -169,9 +168,9 @@ public class GiraffePlayer {
 
     private void updatePausePlay() {
         if (videoView.isPlaying()) {
-            $.id(R.id.app_video_play).image(R.drawable.ic_stop_white_24dp);
+            $.id(R.id.app_video_play).image(R.drawable.play_pause);
         } else {
-            $.id(R.id.app_video_play).image(R.drawable.ic_play_arrow_white_24dp);
+            $.id(R.id.app_video_play).image(R.drawable.play_play);
         }
     }
 
@@ -186,9 +185,6 @@ public class GiraffePlayer {
             if (!isLive) {
                 showBottomControl(true);
             }
-            if (!fullScreenOnly) {
-                $.id(R.id.app_video_fullscreen).visible();
-            }
             isShowing = true;
             onControlPanelVisibilityChangeListener.change(true);
         }
@@ -200,11 +196,15 @@ public class GiraffePlayer {
         }
     }
 
+
     private void showBottomControl(boolean show) {
-        $.id(R.id.app_video_play).visibility(show ? View.VISIBLE : View.GONE);
-        $.id(R.id.app_video_currentTime).visibility(show ? View.VISIBLE : View.GONE);
-        $.id(R.id.app_video_endTime).visibility(show ? View.VISIBLE : View.GONE);
-        $.id(R.id.app_video_seekBar).visibility(show ? View.VISIBLE : View.GONE);
+//        $.id(R.id.app_video_play).visibility(show ? View.VISIBLE : View.GONE);
+//        $.id(R.id.app_video_currentTime).visibility(show ? View.VISIBLE : View.GONE);
+//        $.id(R.id.app_video_endTime).visibility(show ? View.VISIBLE : View.GONE);
+//        $.id(R.id.app_video_seekBar).visibility(show ? View.VISIBLE : View.GONE);
+//        activity.findViewById(R.id.app_video_bottom_box).animate().translationY(show ? 0f : 150f).setDuration(show ? 300 : 300).start();
+
+        activity.findViewById(R.id.app_video_bottom_box).animate().translationY(show ? 0f : 150f).setDuration(show ? 300 : 300).start();
     }
 
 
@@ -282,6 +282,7 @@ public class GiraffePlayer {
         }
     };
 
+
     public GiraffePlayer(final Activity activity) {
         try {
             IjkMediaPlayer.loadLibrariesOnce(null);
@@ -336,7 +337,6 @@ public class GiraffePlayer {
         seekBar.setMax(1000);
         seekBar.setOnSeekBarChangeListener(mSeekListener);
         $.id(R.id.app_video_play).clicked(onClickListener);
-        $.id(R.id.app_video_fullscreen).clicked(onClickListener);
 //        $.id(R.id.app_video_finish).clicked(onClickListener);
         $.id(R.id.app_video_replay_icon).clicked(onClickListener);
 
@@ -440,7 +440,6 @@ public class GiraffePlayer {
         $.id(R.id.app_video_replay).gone();
         $.id(R.id.app_video_top_box).gone();
         $.id(R.id.app_video_loading).gone();
-        $.id(R.id.app_video_fullscreen).invisible();
         $.id(R.id.app_video_status).gone();
         showBottomControl(false);
         onControlPanelVisibilityChangeListener.change(false);
@@ -489,7 +488,6 @@ public class GiraffePlayer {
                         int widthPixels = activity.getResources().getDisplayMetrics().widthPixels;
                         $.id(R.id.app_video_box).height(Math.min(heightPixels, widthPixels), false);
                     }
-                    updateFullScreenButton();
                 }
             });
             orientationEventListener.enable();
@@ -730,19 +728,11 @@ public class GiraffePlayer {
             handler.removeMessages(MESSAGE_SHOW_PROGRESS);
             showBottomControl(false);
             $.id(R.id.app_video_top_box).gone();
-            $.id(R.id.app_video_fullscreen).invisible();
             isShowing = false;
             onControlPanelVisibilityChangeListener.change(false);
         }
     }
 
-    private void updateFullScreenButton() {
-        if (activity.getWindow().getDecorView().getSystemUiVisibility()==View.VISIBLE) {
-            $.id(R.id.app_video_fullscreen).image(R.drawable.ic_fullscreen_exit_white_36dp);
-        } else {
-            $.id(R.id.app_video_fullscreen).image(R.drawable.ic_fullscreen_white_24dp);
-        }
-    }
 
     public void setFullScreenOnly(boolean fullScreenOnly) {
         this.fullScreenOnly = fullScreenOnly;
@@ -803,7 +793,7 @@ public class GiraffePlayer {
 
     class Query {
         private final Activity activity;
-        private View view;
+        public View view;
 
         public Query(Activity activity) {
             this.activity = activity;
@@ -1030,21 +1020,10 @@ public class GiraffePlayer {
     public GiraffePlayer playInFullScreen(boolean fullScreen) {
         if (fullScreen) {
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            updateFullScreenButton();
         }
         return this;
     }
 
-    public void toggleFullScreen() {
-//        if (getScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-//            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//        } else {
-//            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//        }
-        activity.getWindow().getDecorView().setSystemUiVisibility(
-                activity.getWindow().getDecorView().getSystemUiVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
-        updateFullScreenButton();
-    }
 
     public interface OnErrorListener {
         void onError(int what, int extra);

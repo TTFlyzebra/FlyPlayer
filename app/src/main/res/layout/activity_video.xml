@@ -4,9 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".VideoActivity">
+
     <include
         layout="@layout/giraffe_player"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:id="@+id/ac_video_palylist"
+        android:layout_width="341px"
+        android:layout_height="403px"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="#EA212121"
+        android:layout_marginBottom="138px"
+        android:layout_marginRight="-341px"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52px"
+            android:background="@drawable/play_list_header">
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>
