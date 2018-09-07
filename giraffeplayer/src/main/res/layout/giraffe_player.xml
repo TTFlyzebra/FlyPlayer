@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<tcking.github.com.giraffeplayer.RootPlayView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/app_video_box"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -289,4 +289,25 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/play_ll01_playlist"
+        android:layout_width="341px"
+        android:layout_height="403px"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="#EA212121"
+        android:layout_marginBottom="138px"
+        android:layout_marginRight="-342px"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52px"
+            android:background="@drawable/play_list_header"/>
+        <FrameLayout
+            android:id="@+id/ac_video_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+</tcking.github.com.giraffeplayer.RootPlayView>

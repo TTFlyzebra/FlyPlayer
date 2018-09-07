@@ -1,6 +1,5 @@
 package tcking.github.com.giraffeplayer;
 
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -33,6 +32,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
  * Created by tcking on 15/10/27.
  */
 public class GiraffePlayer {
+    public static boolean isShowVideoPlayList = false;
     /**
      * fitParent:scale the video uniformly (maintain the video's aspect ratio) so that both dimensions (width and height) of the video will be equal to or **less** than the corresponding dimension of the view. like ImageView's `CENTER_INSIDE`.等比缩放,画面填满view。
      */
@@ -97,11 +97,7 @@ public class GiraffePlayer {
                 videoView.start();
                 doPauseResume();
             } else if (v.getId() == R.id.app_video_finish) {
-//                if (!fullScreenOnly && !portrait) {
-//                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//                } else {
-//                    activity.finish();
-//                }
+                activity.finish();
             }
         }
     };
@@ -134,6 +130,7 @@ public class GiraffePlayer {
 
         }
     };
+
 
     /**
      * try to play when error(only for live video)
@@ -202,8 +199,6 @@ public class GiraffePlayer {
 //        $.id(R.id.app_video_currentTime).visibility(show ? View.VISIBLE : View.GONE);
 //        $.id(R.id.app_video_endTime).visibility(show ? View.VISIBLE : View.GONE);
 //        $.id(R.id.app_video_seekBar).visibility(show ? View.VISIBLE : View.GONE);
-//        activity.findViewById(R.id.app_video_bottom_box).animate().translationY(show ? 0f : 150f).setDuration(show ? 300 : 300).start();
-
         activity.findViewById(R.id.app_video_bottom_box).animate().translationY(show ? 0f : 150f).setDuration(show ? 300 : 300).start();
     }
 
@@ -254,7 +249,12 @@ public class GiraffePlayer {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MESSAGE_FADE_OUT:
-                    hide(false);
+                    long time = defaultRetryTime - (System.currentTimeMillis()-RootPlayView.TOUCHTIME);
+                    if (time <= 0) {
+                        hide(false);
+                    } else {
+                        handler.sendMessageDelayed(handler.obtainMessage(MESSAGE_FADE_OUT), time);
+                    }
                     break;
                 case MESSAGE_HIDE_CENTER_BOX:
                     $.id(R.id.app_video_volume_box).gone();
@@ -337,7 +337,7 @@ public class GiraffePlayer {
         seekBar.setMax(1000);
         seekBar.setOnSeekBarChangeListener(mSeekListener);
         $.id(R.id.app_video_play).clicked(onClickListener);
-//        $.id(R.id.app_video_finish).clicked(onClickListener);
+        $.id(R.id.app_video_finish).clicked(onClickListener);
         $.id(R.id.app_video_replay_icon).clicked(onClickListener);
 
 
@@ -623,7 +623,6 @@ public class GiraffePlayer {
             if (volume < 0)
                 volume = 0;
         }
-        hide(true);
 
         int index = (int) (percent * mMaxVolume) + volume;
         if (index > mMaxVolume)
@@ -723,6 +722,8 @@ public class GiraffePlayer {
     }
 
     public void hide(boolean force) {
+        isShowVideoPlayList = false;
+        $.id(R.id.play_ll01_playlist).view.animate().translationX(0).setDuration(300).start();
         activity.getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
         if (force || isShowing) {
             handler.removeMessages(MESSAGE_SHOW_PROGRESS);
@@ -731,6 +732,7 @@ public class GiraffePlayer {
             isShowing = false;
             onControlPanelVisibilityChangeListener.change(false);
         }
+
     }
 
 
