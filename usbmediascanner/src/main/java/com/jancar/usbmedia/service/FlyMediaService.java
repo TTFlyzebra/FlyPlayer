@@ -10,6 +10,7 @@ import android.text.TextUtils;
 
 import com.jancar.media.FlyMedia;
 import com.jancar.media.Notify;
+import com.jancar.usbmedia.data.Const;
 import com.jancar.usbmedia.utils.FlyLog;
 
 import java.io.File;
@@ -33,8 +34,13 @@ public class FlyMediaService extends Service {
 
     private IBinder mBinder = new FlyMedia.Stub() {
         @Override
-            public List<String> getMusics() throws RemoteException {
-                return mMusicList;
+        public void scanDisk(String disk) throws RemoteException {
+
+        }
+
+        @Override
+        public List<String> getMusics() throws RemoteException {
+            return mMusicList;
         }
 
         @Override
@@ -73,8 +79,8 @@ public class FlyMediaService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String str = intent.getStringExtra("SCANPATH");
-        if(TextUtils.isEmpty(str)){
+        String str = intent.getStringExtra(Const.SCAN_PATH_KEY);
+        if (TextUtils.isEmpty(str)) {
             FlyLog.e("Not get scan path!");
             str = "/storage";
         }
@@ -83,7 +89,7 @@ public class FlyMediaService extends Service {
             @Override
             public void run() {
                 isStoped.set(true);
-                while (isRunning.get()){
+                while (isRunning.get()) {
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
@@ -117,35 +123,53 @@ public class FlyMediaService extends Service {
 
     private void scanPath(String path) {
         isFirst = true;
-        getVideoFromPath(new File(path));
+        try {
+            getVideoFromPath(new File(path));
+        } catch (Exception e) {
+            FlyLog.e();
+        }
 
     }
 
-    private void getVideoFromPath(File file){
-        if(isStoped.get()) return;
-        try {
-            if (file.isDirectory()) {
-                File[] files = file.listFiles(filter);
-                for (File tempFile : files) {
-                    if (tempFile.isDirectory()) {
-                        getVideoFromPath(tempFile);
-                    } else {
-                        if(isFirst){
-                            isFirst =false;
-                            Intent intent = new Intent();
-                            ComponentName cn = new ComponentName("com.jancar.media", "com.jancar.media.activity.VideoActivity");
-                            intent.setComponent(cn);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.putExtra("playurl",tempFile.getAbsolutePath());
-                            startActivity(intent);
-                            FlyLog.d("start intent playurl=%s",tempFile.getAbsolutePath());
-                        }
-                        mVideoList.add(tempFile.getAbsolutePath());
-                    }
-                }
+    private void getVideoFromPath(File file) throws Exception{
+        if (isStoped.get()) return;
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if(files==null) return;
+            for (File tempFile : files) {
+                getVideoFromPath(tempFile);
             }
-        }catch (Exception e){
-            FlyLog.d(e.toString());
+        } else {
+            String filename = file.getName();
+            String url = file.getAbsolutePath();
+            int ret = file.getName().lastIndexOf('.');
+            if (ret < 0) return;
+            String strSuffix = filename.substring(ret, filename.length()).toLowerCase();
+            switch (strSuffix) {
+                case ".mp4":
+                case ".mkv":
+                    if (isFirst) {
+                        isFirst = false;
+                        Intent intent = new Intent();
+                        ComponentName cn = new ComponentName("com.jancar.media", "com.jancar.media.activity.VideoActivity");
+                        intent.setComponent(cn);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(Const.PLAYURL_KEY, url);
+                        startActivity(intent);
+                        FlyLog.d("start intent playurl=%s", url);
+                    }
+                    mVideoList.add(url);
+                    FlyLog.d("add a video=%s", url);
+                    break;
+                case ".mp3":
+                    mMusicList.add(url);
+                    FlyLog.d("add a music=%s", url);
+                    break;
+                case ".png":
+                    mImageList.add(url);
+                    FlyLog.d("add a image=%s", url);
+                    break;
+            }
         }
     }
 

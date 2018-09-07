@@ -1,1 +1,1 @@
-include ':players',':ijkplayer-java', ':usbmediascanner','giraffeplayer'
+include ':jancarplayer', ':ijkplayer', ':usbmediascanner'

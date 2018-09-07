@@ -303,7 +303,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="52px"
-            android:background="@drawable/play_list_header" />
+            android:background="@drawable/play_list_header">
+
+            <com.jancar.media.view.FlyTabView
+                android:id="@+id/app_video_tabview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
         <FrameLayout
             android:id="@+id/ac_video_fragment"
