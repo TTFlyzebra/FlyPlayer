@@ -2,18 +2,17 @@
 <tcking.github.com.giraffeplayer.RootPlayView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/app_video_box"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#000">
 
     <tcking.github.com.giraffeplayer.IjkVideoView
         android:id="@+id/video_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="0px"
         android:background="#00000000">
 
         <LinearLayout
@@ -198,9 +197,9 @@
                     android:layout_width="880px"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:progressDrawable="@drawable/seekbar_define_style"
+                    android:progressDrawable="@drawable/media_seekbar_style"
                     android:splitTrack="false"
-                    android:thumb="@drawable/seekbar_thumb"
+                    android:thumb="@drawable/media_seekbar_thumb"
                     android:thumbOffset="5px" />
 
                 <TextView
@@ -227,7 +226,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:padding="8dp"
-                    android:src="@drawable/play_fore" />
+                    android:src="@drawable/media_fore" />
 
                 <ImageView
                     android:id="@+id/app_video_play"
@@ -235,7 +234,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:padding="8dp"
-                    android:src="@drawable/play_play" />
+                    android:src="@drawable/media_play" />
 
                 <ImageView
                     android:id="@+id/menu_play_next"
@@ -243,7 +242,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:padding="8dp"
-                    android:src="@drawable/play_next" />
+                    android:src="@drawable/media_next" />
             </LinearLayout>
 
             <ImageView
@@ -253,69 +252,67 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:scaleType="centerInside"
-                android:src="@drawable/play_list" />
+                android:src="@drawable/media_video_list" />
 
         </RelativeLayout>
 
 
-    </RelativeLayout>
-
-
-    <LinearLayout
-        android:id="@+id/app_video_top_box"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <ImageView
-            android:id="@+id/app_video_finish"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_chevron_left_white_36dp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/app_video_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="marquee"
-            android:padding="8dp"
-            android:singleLine="true"
-            android:textColor="@android:color/white"
-            android:textSize="12dp"
-            android:visibility="gone" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/play_ll01_playlist"
-        android:layout_width="341px"
-        android:layout_height="403px"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="138px"
-        android:layout_marginRight="-342px"
-        android:background="#EA212121"
-        android:orientation="vertical">
-
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="52px"
-            android:background="@drawable/play_list_header">
+            android:id="@+id/app_video_top_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/app_video_finish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_chevron_left_white_36dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/app_video_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textSize="12dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/play_ll01_playlist"
+            android:layout_width="345px"
+            android:layout_height="403px"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="138px"
+            android:layout_marginRight="-342px"
+            android:orientation="vertical"
+            android:paddingLeft="4px">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#EA212121" />
 
             <com.jancar.media.view.FlyTabView
                 android:id="@+id/app_video_tabview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
+                android:layout_height="52px"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/media_list_header" />
 
-        <FrameLayout
-            android:id="@+id/ac_video_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-
+            <FrameLayout
+                android:id="@+id/ac_video_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/app_video_tabview" />
+        </RelativeLayout>
+    </RelativeLayout>
 </tcking.github.com.giraffeplayer.RootPlayView>

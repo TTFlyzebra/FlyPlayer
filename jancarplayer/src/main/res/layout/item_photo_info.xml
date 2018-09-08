@@ -12,7 +12,7 @@
         android:layout_height="match_parent" />
 
     <ImageView
-        android:src="@drawable/play_list_play"
+        android:src="@drawable/media_list_item_play"
         android:scaleType="centerInside"
         android:duplicateParentState="true"
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
 
     <ImageView
         android:id="@+id/item_iv01_back"
-        android:background="@drawable/play_list_select_01"
+        android:background="@drawable/media_list_item_select_01"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

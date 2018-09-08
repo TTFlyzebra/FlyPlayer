@@ -167,9 +167,9 @@ public class GiraffePlayer {
 
     private void updatePausePlay() {
         if (videoView.isPlaying()) {
-            $.id(R.id.app_video_play).image(R.drawable.play_pause);
+            $.id(R.id.app_video_play).image(R.drawable.media_pause);
         } else {
-            $.id(R.id.app_video_play).image(R.drawable.play_play);
+            $.id(R.id.app_video_play).image(R.drawable.media_play);
         }
     }
 

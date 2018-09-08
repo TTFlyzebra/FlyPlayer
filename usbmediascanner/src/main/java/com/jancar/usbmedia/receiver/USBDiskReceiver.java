@@ -23,6 +23,15 @@ public class USBDiskReceiver extends BroadcastReceiver {
             Intent scanService = new Intent(context, FlyMediaService.class);
             scanService.putExtra(Const.SCAN_PATH_KEY, path);
             context.startService(scanService);
+        }else if(intent.getAction().equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
+            final Uri uri = intent.getData();
+            if (uri == null) return;
+            if (!uri.getScheme().equals("file")) return;
+            String path = uri.getPath();
+            if (path == null) return;
+            Intent removeService = new Intent(context, FlyMediaService.class);
+            removeService.putExtra(Const.UMOUNT_STORE, path);
+            context.startService(removeService);
         }
     }
 }

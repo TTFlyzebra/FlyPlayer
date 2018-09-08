@@ -1,9 +1,10 @@
 package com.jancar.usbmedia.service;
 
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.text.TextUtils;
@@ -12,6 +13,7 @@ import com.jancar.media.FlyMedia;
 import com.jancar.media.Notify;
 import com.jancar.usbmedia.data.Const;
 import com.jancar.usbmedia.utils.FlyLog;
+import com.jancar.usbmedia.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -79,12 +81,53 @@ public class FlyMediaService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String str = intent.getStringExtra(Const.SCAN_PATH_KEY);
-        if (TextUtils.isEmpty(str)) {
-            FlyLog.e("Not get scan path!");
-            str = "/storage";
+        String str1 = intent.getStringExtra(Const.SCAN_PATH_KEY);
+        if (!TextUtils.isEmpty(str1)) {
+            scanPath(str1);
         }
-        final String scanPath = str;
+
+
+        String str2 = intent.getStringExtra(Const.UMOUNT_STORE);
+        if (!TextUtils.isEmpty(str2)) {
+            removePath(str2);
+        }
+
+        return Service.START_STICKY;
+    }
+
+    private Handler mHandler = new Handler(Looper.getMainLooper());
+
+    public void notifyAllListener() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                FlyLog.d("notify all list");
+                final int N = mNotifys.beginBroadcast();
+                FlyLog.d("start notify client, client sum=%d",N);
+                for (int i = 0; i < N; i++) {
+                    Notify l = mNotifys.getBroadcastItem(i);
+                    if (l != null) {
+                        FlyLog.d("notify client=%s",l.toString());
+                        try {
+                            l.notifyVideo(mVideoList);
+                            l.notifyMusic(mMusicList);
+                            l.notifyImage(mImageList);
+                        } catch (RemoteException e) {
+                            FlyLog.e(e.toString());
+                        }
+                    }
+                }
+                mNotifys.finishBroadcast();
+            }
+        });
+    }
+
+    private boolean isFirst = true;
+    private String currentPath = "";
+
+    private void scanPath(final String path) {
+        FlyLog.d("scan path=%s",path);
+        currentPath = path;
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -99,43 +142,34 @@ public class FlyMediaService extends Service {
                 isRunning.set(true);
                 isStoped.set(false);
                 mVideoList.clear();
-                scanPath(scanPath);
-                isRunning.set(false);
-                final int N = mNotifys.beginBroadcast();
-                for (int i = 0; i < N; i++) {
-                    Notify l = mNotifys.getBroadcastItem(i);
-                    if (l != null) {
-                        try {
-                            l.notifyVideo(mVideoList);
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                isFirst = true;
+                try {
+                    getVideoFromPath(new File(path));
+                } catch (Exception e) {
+                    FlyLog.e(e.toString());
                 }
-                mNotifys.finishBroadcast();
+                isRunning.set(false);
+                notifyAllListener();
             }
         });
-
-        return Service.START_STICKY;
     }
 
-    private boolean isFirst = true;
-
-    private void scanPath(String path) {
-        isFirst = true;
-        try {
-            getVideoFromPath(new File(path));
-        } catch (Exception e) {
-            FlyLog.e();
+    private void removePath(String path) {
+        FlyLog.d("remove path=%s",path);
+        if (currentPath.equals(path)) {
+            FlyLog.d("clear all list");
+            mVideoList.clear();
+            mImageList.clear();
+            mMusicList.clear();
+            notifyAllListener();
         }
-
     }
 
-    private void getVideoFromPath(File file) throws Exception{
+    private void getVideoFromPath(File file) throws Exception {
         if (isStoped.get()) return;
         if (file.isDirectory()) {
             File[] files = file.listFiles();
-            if(files==null) return;
+            if (files == null) return;
             for (File tempFile : files) {
                 getVideoFromPath(tempFile);
             }
@@ -150,18 +184,16 @@ public class FlyMediaService extends Service {
                 case ".mkv":
                     if (isFirst) {
                         isFirst = false;
-                        Intent intent = new Intent();
-                        ComponentName cn = new ComponentName("com.jancar.media", "com.jancar.media.activity.VideoActivity");
-                        intent.setComponent(cn);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra(Const.PLAYURL_KEY, url);
-                        startActivity(intent);
-                        FlyLog.d("start intent playurl=%s", url);
+                        Utils.startActivity(this,"com.jancar.media","com.jancar.media.activity.VideoActivity");
                     }
                     mVideoList.add(url);
                     FlyLog.d("add a video=%s", url);
                     break;
                 case ".mp3":
+                    if (isFirst) {
+                        isFirst = false;
+                        Utils.startActivity(this,"com.jancar.media","com.jancar.media.activity.MusicActivity");
+                    }
                     mMusicList.add(url);
                     FlyLog.d("add a music=%s", url);
                     break;

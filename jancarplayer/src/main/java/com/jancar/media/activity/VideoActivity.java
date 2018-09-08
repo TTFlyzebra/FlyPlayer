@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.jancar.media.R;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Const;
 import com.jancar.media.fragment.PlayListFragment;
+import com.jancar.media.model.IUsbMediaScan;
+import com.jancar.media.model.UsbMediaScan;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.view.FlyTabView;
 
@@ -23,17 +25,20 @@ import static tcking.github.com.giraffeplayer.GiraffePlayer.isShowVideoPlayList;
 
 public class VideoActivity extends BaseActivity implements View.OnClickListener {
     private ImageView play_fore, play_next, play_list;
-    private LinearLayout play_ll01_playlist;
+    private RelativeLayout play_ll01_playlist;
     public String currentPlayUrl;
     public int currenPos = 0;
     public GiraffePlayer player;
     public List<String> videoList = new ArrayList<>();
     private FlyTabView tabView;
+    private IUsbMediaScan usbMediaScan = UsbMediaScan.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
+
+        usbMediaScan.init(this);
         player = new GiraffePlayer(this);
         getFragmentManager().beginTransaction().replace(R.id.ac_video_fragment,new PlayListFragment()).commit();
 
@@ -70,7 +75,7 @@ public class VideoActivity extends BaseActivity implements View.OnClickListener 
         play_fore = (ImageView) findViewById(R.id.menu_play_fore);
         play_next = (ImageView) findViewById(R.id.menu_play_next);
         play_list = (ImageView) findViewById(R.id.menu_play_list);
-        play_ll01_playlist = (LinearLayout) findViewById(R.id.play_ll01_playlist);
+        play_ll01_playlist = (RelativeLayout) findViewById(R.id.play_ll01_playlist);
         tabView = (FlyTabView) findViewById(R.id.app_video_tabview);
         tabView.setTitles(new String[]{getString(R.string.disk_list),getString(R.string.play_list),getString(R.string.file_list)});
 
@@ -122,6 +127,7 @@ public class VideoActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     protected void onDestroy() {
+        usbMediaScan.close();
         super.onDestroy();
     }
 }
