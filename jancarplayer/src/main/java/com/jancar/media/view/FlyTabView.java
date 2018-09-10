@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.jancar.media.R;
 import com.jancar.media.utils.FlyLog;
@@ -15,7 +14,7 @@ import java.util.List;
 
 public class FlyTabView extends FrameLayout implements View.OnClickListener{
     private String titles[] = null;
-    private TextView textViews[] = null;
+    private FlyTabTextView textViews[] = null;
     private View focusView = null;
     private int focusPos = 0;
     private Context context;
@@ -26,6 +25,7 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener{
     private int[][] states = new int[][]{{android.R.attr.state_enabled},{}};
     private int[] colors = new int[]{0xFFFFFFFF,0xFF0370E5};
     private ColorStateList colorStateList = new ColorStateList(states, colors);
+    private OnItemClickListener onItemClickListener;
 
     public FlyTabView(Context context) {
         this(context,null);
@@ -47,7 +47,7 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener{
     public void setTitles(String[] strs) {
         this.titles = strs;
         if(titles==null||titles.length==0) return;
-        textViews = new TextView[titles.length];
+        textViews = new FlyTabTextView[titles.length];
         post(new Runnable() {
             @Override
             public void run() {
@@ -64,7 +64,7 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener{
                 for(int i=0;i<textViews.length;i++){
                     LayoutParams lp = new LayoutParams(childWidth,height);
                     lp.leftMargin = i*childWidth;
-                    textViews[i] = new TextView(context);
+                    textViews[i] = new FlyTabTextView(context);
                     textViews[i].setGravity(Gravity.CENTER);
                     textViews[i].setText(titles[i]);
                     textViews[i].setTextColor(colorStateList);
@@ -72,8 +72,6 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener{
                     textViews[i].setOnClickListener(FlyTabView.this);
                     addView(textViews[i],lp);
                 }
-
-
                 setSelectItem(0);
             }
         });
@@ -90,6 +88,9 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener{
         FlyLog.d("onclick %d",v.getTag());
         focusPos = (int) v.getTag();
         setSelectItem(animDuration);
+        if(onItemClickListener!=null){
+            onItemClickListener.onItemClick(v, (Integer) v.getTag());
+        }
     }
 
     @Override
@@ -112,4 +113,12 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener{
         }
     }
 
+
+    public interface OnItemClickListener{
+        void onItemClick(View v,int pos);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 }

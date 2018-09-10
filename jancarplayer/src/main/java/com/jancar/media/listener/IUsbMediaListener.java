@@ -23,8 +23,8 @@ public interface IUsbMediaListener {
     void imageUrlList(List<String> imageUrlList);
 
     /**
-     *
-     * @param usbstore U盘路径
+     *通知U盘已移除
+     * @param usbstore 移除U盘路径
      */
     void usbRemove(String usbstore);
 

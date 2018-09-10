@@ -20,6 +20,8 @@ import java.util.List;
 public class UsbMediaScan implements IUsbMediaScan {
     private FlyMedia mFlyMedia;
     private Handler mHandler = new Handler(Looper.getMainLooper());
+    private Context mContext;
+    private List<IUsbMediaListener> listeners = new ArrayList<>();
     private ServiceConnection conn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -84,9 +86,6 @@ public class UsbMediaScan implements IUsbMediaScan {
             });
         }
     };
-
-    private Context mContext;
-    private List<IUsbMediaListener> listeners = new ArrayList<>();
 
 
     private UsbMediaScan() {

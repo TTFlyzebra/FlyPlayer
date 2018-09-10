@@ -27,7 +27,7 @@ import java.util.Set;
  * Created by flyzebra on 18-3-29-下午3:06.
  */
 
-public class FileAdapater extends RecyclerView.Adapter<FileAdapater.ViewHolder> {
+public class PlayFileAdapater extends RecyclerView.Adapter<PlayFileAdapater.ViewHolder> {
     private static final int smallImageWidth = 101;
     private static final int smallImageHeight = 96;
     private List<String> mList;
@@ -45,7 +45,7 @@ public class FileAdapater extends RecyclerView.Adapter<FileAdapater.ViewHolder> 
         this.onItemClickListener = onItemClickListener;
     }
 
-    public FileAdapater(Context context, List<String> list, RecyclerView recyclerView) {
+    public PlayFileAdapater(Context context, List<String> list, RecyclerView recyclerView) {
         mContext = context;
         mList = list;
         mRecyclerView = recyclerView;

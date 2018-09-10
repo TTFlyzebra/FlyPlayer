@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.jancar.media.R;
 import com.jancar.media.activity.VideoActivity;
-import com.jancar.media.adpater.FileAdapater;
+import com.jancar.media.adpater.PlayFileAdapater;
 import com.jancar.media.listener.IUsbMediaListener;
 import com.jancar.media.model.IUsbMediaScan;
 import com.jancar.media.model.UsbMediaScan;
@@ -18,19 +18,19 @@ import com.jancar.media.utils.FlyLog;
 
 import java.util.List;
 
-public class PlayListFragment extends Fragment implements IUsbMediaListener {
+public class PlayFileFragment extends Fragment implements IUsbMediaListener {
     private VideoActivity activity;
-    private FileAdapater fileAdapater;
+    private PlayFileAdapater fileAdapater;
     private RecyclerView recyclerView;
     private IUsbMediaScan usbMediaScan = UsbMediaScan.getInstance();
 
-    public static PlayListFragment newInstance(Bundle args) {
-        PlayListFragment listPlayFileFragment = new PlayListFragment();
+    public static PlayFileFragment newInstance(Bundle args) {
+        PlayFileFragment listPlayFileFragment = new PlayFileFragment();
         listPlayFileFragment.setArguments(args);
         return listPlayFileFragment;
     }
 
-    public PlayListFragment() {
+    public PlayFileFragment() {
 
     }
 
@@ -43,12 +43,12 @@ public class PlayListFragment extends Fragment implements IUsbMediaListener {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         recyclerView = (RecyclerView) view.findViewById(R.id.fm_photo_list_rv01);
-        fileAdapater = new FileAdapater(getActivity(), activity.videoList, recyclerView);
+        fileAdapater = new PlayFileAdapater(getActivity(), activity.videoList, recyclerView);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(fileAdapater);
 
-        fileAdapater.setOnItemClickListener(new FileAdapater.OnItemClickListener() {
+        fileAdapater.setOnItemClickListener(new PlayFileAdapater.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
                 activity.currenPos = pos;

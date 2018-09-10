@@ -81,15 +81,19 @@ public class FlyMediaService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String str1 = intent.getStringExtra(Const.SCAN_PATH_KEY);
-        if (!TextUtils.isEmpty(str1)) {
-            scanPath(str1);
-        }
+        try {
+            String str1 = intent.getStringExtra(Const.SCAN_PATH_KEY);
+            if (!TextUtils.isEmpty(str1)) {
+                scanPath(str1);
+            }
 
-
-        String str2 = intent.getStringExtra(Const.UMOUNT_STORE);
-        if (!TextUtils.isEmpty(str2)) {
-            removePath(str2);
+            String str2 = intent.getStringExtra(Const.UMOUNT_STORE);
+            if (!TextUtils.isEmpty(str2)) {
+                removePath(str2);
+            }
+        }catch (Exception e){
+            //TODO:检测此处抛出空异常
+            FlyLog.e(e.toString());
         }
 
         return Service.START_STICKY;
