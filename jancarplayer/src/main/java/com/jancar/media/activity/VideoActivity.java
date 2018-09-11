@@ -1,7 +1,5 @@
 package com.jancar.media.activity;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,13 +11,10 @@ import com.jancar.media.R;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Const;
 import com.jancar.media.listener.IUsbMediaListener;
-import com.jancar.media.model.IUsbMediaScan;
-import com.jancar.media.model.UsbMediaScan;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,15 +25,14 @@ import static tcking.github.com.giraffeplayer.GiraffePlayer.isShowVideoPlayList;
 public class VideoActivity extends BaseActivity implements IUsbMediaListener,View.OnClickListener,FlyTabView.OnItemClickListener {
     private ImageView play_fore, play_next, play_list;
     private RelativeLayout play_ll01_playlist;
-    public String currentPlayUrl;
+    public static String currentPlayUrl = "";
     public int currenPos = 0;
     public GiraffePlayer player;
     public List<String> videoList = new ArrayList<>();
     private FlyTabView tabView;
-    private IUsbMediaScan usbMediaScan = UsbMediaScan.getInstance();
 
     private String titles[] = new String[]{"磁盘列表","播放列表","文件列表"};
-    private String fmName[] = new String[]{"StorageFragment","PlayFileFragment","FileListFragment"};
+    private String fmName[] = new String[]{"StorageFragment","VideoPlayListFragment","VideoFloderFragment"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +45,6 @@ public class VideoActivity extends BaseActivity implements IUsbMediaListener,Vie
 
         player = new GiraffePlayer(this);
 
-        usbMediaScan.init(this);
-        usbMediaScan.addListener(this);
 
         replaceFragment(fmName[0]);
 
@@ -148,31 +140,6 @@ public class VideoActivity extends BaseActivity implements IUsbMediaListener,Vie
     }
 
     @Override
-    protected void onDestroy() {
-        usbMediaScan.removeListener(this);
-        usbMediaScan.close();
-        super.onDestroy();
-    }
-
-    public void replaceFragment(String fName) {
-        FlyLog.d("replaceFragment com.jancar.media.fragment.%s",fName);
-        try {
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            Class<?> cls = Class.forName("com.jancar.media.fragment." + fName);
-            Constructor<?> cons = cls.getConstructor();
-            Fragment fragment = (Fragment) cons.newInstance();
-            ft.replace(R.id.ac_video_fragment, fragment).commit();
-        } catch (Exception e) {
-           FlyLog.e(e.toString());
-        }
-    }
-
-    @Override
-    public void musicUrlList(List<String> musicUrlList) {
-
-    }
-
-    @Override
     public void videoUrlList(List<String> videoUrlList) {
         if(videoUrlList==null) return;
         if (videoUrlList.isEmpty()) {
@@ -181,18 +148,11 @@ public class VideoActivity extends BaseActivity implements IUsbMediaListener,Vie
             }
         } else {
             if (player!=null&&!player.isPlaying()) {
-                player.play(videoUrlList.get(0));
+                currentPlayUrl = videoUrlList.get(0);
+                currenPos = 0;
+                player.play(currentPlayUrl);
             }
         }
     }
 
-    @Override
-    public void imageUrlList(List<String> imageUrlList) {
-
-    }
-
-    @Override
-    public void usbRemove(String usbstore) {
-
-    }
 }

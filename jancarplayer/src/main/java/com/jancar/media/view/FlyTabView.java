@@ -56,8 +56,7 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener{
                 childWidth = width/textViews.length;
 
                 focusView = new View(context);
-                LayoutParams lpbak = new LayoutParams(childWidth-20,height-5);
-                lpbak.leftMargin = 10;
+                LayoutParams lpbak = new LayoutParams(childWidth,height-5);
                 addView(focusView,lpbak);
                 focusView.setBackgroundResource(R.drawable.bottom_line_blue);
 

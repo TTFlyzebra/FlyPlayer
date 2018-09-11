@@ -8,6 +8,7 @@
         android:id="@+id/item_iv01"
         android:layout_margin="4px"
         android:scaleType="fitXY"
+        android:duplicateParentState="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -20,8 +21,9 @@
 
     <ImageView
         android:id="@+id/item_iv01_back"
-        android:background="@drawable/media_list_item_select_01"
+        android:background="@drawable/media_list_item_select"
         android:layout_width="match_parent"
+        android:duplicateParentState="true"
         android:layout_height="match_parent" />
 
 </FrameLayout>

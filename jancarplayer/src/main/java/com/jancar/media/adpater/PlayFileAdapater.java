@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.jancar.media.R;
+import com.jancar.media.activity.VideoActivity;
 import com.jancar.media.module.DoubleBitmapCache;
 import com.jancar.media.utils.BitmapTools;
 import com.jancar.media.utils.FlyLog;
@@ -80,6 +81,12 @@ public class PlayFileAdapater extends RecyclerView.Adapter<PlayFileAdapater.View
                 }
             }
         });
+
+        if(dvrFile.equals(VideoActivity.currentPlayUrl)){
+            holder.itemView.setSelected(true);
+        }else{
+            holder.itemView.setSelected(false);
+        }
     }
 
     public void cancleAllTask() {

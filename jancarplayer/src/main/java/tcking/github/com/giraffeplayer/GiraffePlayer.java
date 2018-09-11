@@ -27,6 +27,9 @@ import android.widget.TextView;
 
 import com.jancar.media.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
@@ -424,6 +427,9 @@ public class GiraffePlayer {
 
     private void statusChange(int newStatus) {
         status = newStatus;
+        for(OnPlayStatusChangeLiseter onPlayStatusChangeLiseter : onPlayStatusChangeLiseters){
+            onPlayStatusChangeLiseter.statusChange(newStatus);
+        }
         if (!isLive && newStatus == STATUS_COMPLETED) {
             handler.removeMessages(MESSAGE_SHOW_PROGRESS);
             hideAll();
@@ -1100,6 +1106,20 @@ public class GiraffePlayer {
     public GiraffePlayer onControlPanelVisibilityChange(OnControlPanelVisibilityChangeListener listener) {
         this.onControlPanelVisibilityChangeListener = listener;
         return this;
+    }
+
+    public interface OnPlayStatusChangeLiseter {
+        void statusChange(int statu);
+    }
+
+    private List<OnPlayStatusChangeLiseter> onPlayStatusChangeLiseters = new ArrayList<>();
+
+    public void addStatusChangeLiseter(OnPlayStatusChangeLiseter onPlayStatusChangeLiseter){
+       onPlayStatusChangeLiseters.add(onPlayStatusChangeLiseter);
+    }
+
+    public void removeStatusChangeLiseter(OnPlayStatusChangeLiseter onPlayStatusChangeLiseter){
+        onPlayStatusChangeLiseters.remove(onPlayStatusChangeLiseter);
     }
 
 }

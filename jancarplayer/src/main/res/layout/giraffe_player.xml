@@ -309,7 +309,7 @@
                 android:background="@drawable/media_list_header" />
 
             <FrameLayout
-                android:id="@+id/ac_video_fragment"
+                android:id="@+id/ac_replace_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/app_video_tabview" />

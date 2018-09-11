@@ -2,12 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="96px"
+    android:padding="2px"
     android:orientation="vertical">
     <ImageView
         android:id="@+id/iv_gridview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
+        android:duplicateParentState="true"
         android:src="@drawable/media_default_image"/>
 
     <TextView
@@ -18,6 +20,8 @@
         android:layout_alignParentBottom="true"
         android:textColor="@drawable/textcolor_blue_white"
         android:singleLine="true"
+        android:duplicateParentState="true"
+        android:textSize="18px"
         android:text="video "/>
 
 </RelativeLayout>

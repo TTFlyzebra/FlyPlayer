@@ -12,9 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jancar.media.R;
+import com.jancar.media.activity.VideoActivity;
 import com.jancar.media.module.DoubleBitmapCache;
 import com.jancar.media.utils.BitmapTools;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -63,8 +65,16 @@ public class FileListGridViewAdapter extends BaseAdapter {
         if (null == convertView) {
             convertView = View.inflate(mContext, R.layout.gridview_item, null);
         }
-        TextView tvGridView = (TextView) convertView.findViewById(R.id.tv_gridview);
-        tvGridView.setText(itemGridList.get(position));
+        TextView textView = (TextView) convertView.findViewById(R.id.tv_gridview);
+        String url = itemGridList.get(position);
+        int start = url.lastIndexOf(File.separator)+1;
+        int end = url.lastIndexOf('.');
+        start = Math.max(0,start);
+        end = Math.max(0,end);
+        start = Math.min(start,url.length()-1);
+        end = Math.min(end,url.length()-1);
+        String name = url.substring(start,end);
+        textView.setText(name);
         ImageView imageView = (ImageView) convertView.findViewById(R.id.iv_gridview);
         imageView.setTag(itemGridList.get(position));
         Bitmap bitmap = doubleBitmapCache.get(itemGridList.get(position));
@@ -74,6 +84,12 @@ public class FileListGridViewAdapter extends BaseAdapter {
             GetDvrVideoBitmatTask task = new GetDvrVideoBitmatTask(itemGridList.get(position));
             task.execute(itemGridList.get(position));
             tasks.add(task);
+        }
+
+        if(url.equals(VideoActivity.currentPlayUrl)){
+            textView.setTextColor(0xFF0370E5);
+        }else{
+            textView.setTextColor(0xFFFFFFFF);
         }
         return convertView;
     }

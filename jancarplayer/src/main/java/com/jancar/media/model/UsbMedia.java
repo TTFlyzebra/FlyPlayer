@@ -17,7 +17,7 @@ import com.jancar.media.utils.FlyLog;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsbMediaScan implements IUsbMediaScan {
+public class UsbMedia implements IUsbMediaScan {
     private FlyMedia mFlyMedia;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private Context mContext;
@@ -88,15 +88,15 @@ public class UsbMediaScan implements IUsbMediaScan {
     };
 
 
-    private UsbMediaScan() {
+    private UsbMedia() {
     }
 
-    public static UsbMediaScan getInstance() {
+    public static UsbMedia getInstance() {
         return UsbMediaScanHolder.sInstance;
     }
 
     private static class UsbMediaScanHolder {
-        public static final UsbMediaScan sInstance = new UsbMediaScan();
+        public static final UsbMedia sInstance = new UsbMedia();
     }
 
     private void bindService() {

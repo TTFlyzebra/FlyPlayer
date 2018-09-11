@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jancar.media.R;
-import com.jancar.media.data.StorageInfo;
+import com.jancar.media.data.Storage;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import java.util.List;
  */
 
 public class StorageAdapater extends RecyclerView.Adapter<StorageAdapater.ViewHolder> {
-    private List<StorageInfo> mList;
+    private List<Storage> mList;
     private Context mContext;
     private OnItemClickListener onItemClickListener;
 
@@ -31,7 +31,7 @@ public class StorageAdapater extends RecyclerView.Adapter<StorageAdapater.ViewHo
         this.onItemClickListener = onItemClickListener;
     }
 
-    public StorageAdapater(Context context, List<StorageInfo> list) {
+    public StorageAdapater(Context context, List<Storage> list) {
         mContext = context;
         mList = list;
     }
@@ -44,7 +44,7 @@ public class StorageAdapater extends RecyclerView.Adapter<StorageAdapater.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        StorageInfo storage = mList.get(position);
+        Storage storage = mList.get(position);
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

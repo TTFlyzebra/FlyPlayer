@@ -2,7 +2,7 @@ package com.jancar.media.data;
 
 import android.os.UserHandle;
 
-public class StorageInfo {
+public class Storage {
     public String path;
     public boolean isRemoveable;
     public String state;
@@ -12,15 +12,12 @@ public class StorageInfo {
     public int mStorageId;
     public long mMaxFileSize;
     public boolean mPrimary;
-    public boolean mRemovable;
     public boolean mEmulated;
     public boolean mAllowMassStorage;
     public UserHandle mOwner;
     public String mFsUuid;
 
-    public boolean isSelect;
-
-    public StorageInfo(String path) {
+    public Storage(String path) {
         this.path = path;
     }
 

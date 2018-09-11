@@ -1,9 +1,10 @@
 package com.jancar.media.model;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.storage.StorageManager;
 
-import com.jancar.media.data.StorageInfo;
 import com.jancar.media.listener.IStorageListener;
 import com.jancar.media.utils.FlyLog;
 
@@ -12,16 +13,20 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
-public class StorageHandler implements IStorageHandler {
+public class Storage implements IStorage {
     private Context mContext;
-    private List<StorageInfo> mStorageList = new ArrayList<>();
+    private List<com.jancar.media.data.Storage> mStorageList = new ArrayList<>();
     private List<IStorageListener> listeners = new ArrayList<>();
+    private static final Executor executor = Executors.newSingleThreadExecutor();
+    private Handler mHandler = new Handler(Looper.getMainLooper());
 
-    private StorageHandler() {
+    private Storage() {
     }
 
-    public static StorageHandler getInstance() {
+    public static Storage getInstance() {
         return StorageManagerHolder.sInstance;
     }
 
@@ -37,26 +42,41 @@ public class StorageHandler implements IStorageHandler {
     }
 
     private static class StorageManagerHolder {
-        public static final StorageHandler sInstance = new StorageHandler();
+        public static final Storage sInstance = new Storage();
     }
 
 
     public void init(Context context) {
-        List<StorageInfo> list = getAvaliableStorage(listAllStorage(context));
-        if (list != null && !list.isEmpty()) {
-            mStorageList.clear();
-            mStorageList.addAll(list);
-            for (IStorageListener listener : listeners) {
-                listener.storageList(mStorageList);
+        this.mContext = context;
+        refresh();
+    }
+
+    public void refresh() {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                final List<com.jancar.media.data.Storage> list = getAvaliableStorage(listAllStorage(mContext));
+                if (list != null && !list.isEmpty()) {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mStorageList.clear();
+                            mStorageList.addAll(list);
+                            for (IStorageListener listener : listeners) {
+                                listener.storageList(mStorageList);
+                            }
+                        }
+                    });
+                }
             }
-        }
+        });
     }
 
     public void close() {
     }
 
-    public static List<StorageInfo> listAllStorage(Context context) {
-        ArrayList<StorageInfo> storages = new ArrayList<>();
+    public static List<com.jancar.media.data.Storage> listAllStorage(Context context) {
+        ArrayList<com.jancar.media.data.Storage> storages = new ArrayList<>();
         StorageManager storageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
         try {
             Class<?>[] paramClasses = {};
@@ -65,12 +85,12 @@ public class StorageHandler implements IStorageHandler {
             Object[] invokes = (Object[]) getVolumeList.invoke(storageManager, params);
 
             if (invokes != null) {
-                StorageInfo info = null;
+                com.jancar.media.data.Storage info = null;
                 for (int i = 0; i < invokes.length; i++) {
                     Object obj = invokes[i];
                     Method getPath = obj.getClass().getMethod("getPath");
                     String path = (String) getPath.invoke(obj, new Object[0]);
-                    info = new StorageInfo(path);
+                    info = new com.jancar.media.data.Storage(path);
 
                     Method getVolumeState = StorageManager.class.getMethod("getVolumeState", String.class);
                     info.state = (String) getVolumeState.invoke(storageManager, info.path);
@@ -108,10 +128,10 @@ public class StorageHandler implements IStorageHandler {
         return storages;
     }
 
-    public static List<StorageInfo> getAvaliableStorage(List<StorageInfo> infos) {
+    public static List<com.jancar.media.data.Storage> getAvaliableStorage(List<com.jancar.media.data.Storage> infos) {
         if (infos == null && infos.isEmpty()) return null;
-        List<StorageInfo> storages = new ArrayList<StorageInfo>();
-        for (StorageInfo info : infos) {
+        List<com.jancar.media.data.Storage> storages = new ArrayList<com.jancar.media.data.Storage>();
+        for (com.jancar.media.data.Storage info : infos) {
             File file = new File(info.path);
             if ((file.exists()) && (file.isDirectory()) && info.isMounted()) {
                 storages.add(info);

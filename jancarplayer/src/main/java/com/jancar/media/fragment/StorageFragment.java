@@ -3,25 +3,24 @@ package com.jancar.media.fragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.jancar.media.R;
 import com.jancar.media.adpater.StorageAdapater;
-import com.jancar.media.data.StorageInfo;
 import com.jancar.media.listener.IStorageListener;
-import com.jancar.media.model.StorageHandler;
+import com.jancar.media.model.Storage;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StorageFragment extends Fragment implements IStorageListener {
-    private RecyclerView recyclerView;
+public class StorageFragment extends Fragment implements IStorageListener,XRecyclerView.LoadingListener{
+    private XRecyclerView recyclerView;
     private StorageAdapater adapater;
-    private List<StorageInfo> mList = new ArrayList<>();
-    private StorageHandler storageHandler = StorageHandler.getInstance();
+    private List<com.jancar.media.data.Storage> mList = new ArrayList<>();
+    private Storage storageHandler = Storage.getInstance();
 
     public StorageFragment() {
     }
@@ -45,15 +44,18 @@ public class StorageFragment extends Fragment implements IStorageListener {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        recyclerView = (RecyclerView) view.findViewById(R.id.fm_storage_rv01);
+        recyclerView = (XRecyclerView) view.findViewById(R.id.fm_storage_rv01);
         adapater = new StorageAdapater(getActivity(), mList);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapater);
+        recyclerView.setPullRefreshEnabled(false);
+//        recyclerView.setLoadingListener(this);
     }
 
     @Override
-    public void storageList(List<StorageInfo> storageList) {
+    public void storageList(List<com.jancar.media.data.Storage> storageList) {
+        recyclerView.refreshComplete();
         if (storageList == null) return;
         mList.clear();
         mList.addAll(storageList);
@@ -71,5 +73,15 @@ public class StorageFragment extends Fragment implements IStorageListener {
     public void onStop() {
         storageHandler.removeListener(this);
         super.onStop();
+    }
+
+    @Override
+    public void onRefresh() {
+        storageHandler.refresh();
+    }
+
+    @Override
+    public void onLoadMore() {
+
     }
 }
