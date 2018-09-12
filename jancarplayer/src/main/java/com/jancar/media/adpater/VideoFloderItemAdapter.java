@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.jancar.media.R;
 import com.jancar.media.activity.VideoActivity;
 import com.jancar.media.module.DoubleBitmapCache;
 import com.jancar.media.utils.BitmapTools;
+import com.jancar.media.view.MarqueeTextView;
 
 import java.io.File;
 import java.util.HashSet;
@@ -24,7 +24,7 @@ import java.util.Set;
 /**
  * GridView 适配器
  */
-public class FileListGridViewAdapter extends BaseAdapter {
+public class VideoFloderItemAdapter extends BaseAdapter {
 
     private Context mContext;
     private Set<GetDvrVideoBitmatTask> tasks = new HashSet<>();
@@ -38,7 +38,7 @@ public class FileListGridViewAdapter extends BaseAdapter {
      */
     private List<String> itemGridList;
 
-    public FileListGridViewAdapter(Context mContext, List<String> itemGridList, GridView gridView) {
+    public VideoFloderItemAdapter(Context mContext, List<String> itemGridList, GridView gridView) {
         this.mContext = mContext;
         this.itemGridList = itemGridList;
         this.mGridView = gridView;
@@ -63,9 +63,9 @@ public class FileListGridViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (null == convertView) {
-            convertView = View.inflate(mContext, R.layout.gridview_item, null);
+            convertView = View.inflate(mContext, R.layout.item_video2, null);
         }
-        TextView textView = (TextView) convertView.findViewById(R.id.tv_gridview);
+        MarqueeTextView textView = (MarqueeTextView) convertView.findViewById(R.id.tv_gridview);
         String url = itemGridList.get(position);
         int start = url.lastIndexOf(File.separator)+1;
         int end = url.lastIndexOf('.');
@@ -86,11 +86,9 @@ public class FileListGridViewAdapter extends BaseAdapter {
             tasks.add(task);
         }
 
-        if(url.equals(VideoActivity.currentPlayUrl)){
-            textView.setTextColor(0xFF0370E5);
-        }else{
-            textView.setTextColor(0xFFFFFFFF);
-        }
+        boolean flag = url.equals(((VideoActivity)mContext).player.getPlayUrl());
+        textView.setTextColor(flag?0xFF0370E5:0xFFFFFFFF);
+        textView.enableMarquee(flag);
         return convertView;
     }
 

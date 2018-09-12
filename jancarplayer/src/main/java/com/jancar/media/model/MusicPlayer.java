@@ -4,21 +4,47 @@ import android.content.Context;
 import android.media.MediaPlayer;
 
 import com.jancar.media.listener.IMusicPlayerListener;
+import com.jancar.media.utils.FlyLog;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MusicPlayer implements IMusicPlayer{
+public class MusicPlayer implements IMusicPlayer,
+        MediaPlayer.OnCompletionListener,
+        MediaPlayer.OnErrorListener,
+        MediaPlayer.OnPreparedListener,
+        MediaPlayer.OnInfoListener {
     private Context mContext;
     private List<IMusicPlayerListener> listeners = new ArrayList<>();
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer mMediaPlayer;
+    public static final int STATUS_ERROR = -1;
+    public static final int STATUS_IDLE = 0;
+    public static final int STATUS_LOADING = 1;
+    public static final int STATUS_PLAYING = 2;
+    public static final int STATUS_PAUSE = 3;
+    public static final int STATUS_COMPLETED = 4;
+    private int status = STATUS_IDLE;
+    private String playUrl = "";
+
 
     private MusicPlayer() {
+    }
+
+    public void onPrepared(MediaPlayer mp) {
+        mp.start();
+        status = STATUS_PLAYING;
+        notifyStatus();
+    }
+
+    private static class MusicPlayerHolder {
+        public static final MusicPlayer sInstance = new MusicPlayer();
     }
 
     public static MusicPlayer getInstance() {
         return MusicPlayerHolder.sInstance;
     }
+
 
     @Override
     public void addListener(IMusicPlayerListener iMusicPlayerListener) {
@@ -32,16 +58,105 @@ public class MusicPlayer implements IMusicPlayer{
 
     @Override
     public void init(Context context) {
-        this.mContext = mContext;
-        mediaPlayer = new MediaPlayer();
+        this.mContext = context;
+
+    }
+
+    private void initMediaPlayer() {
+        mMediaPlayer = new MediaPlayer();
+        mMediaPlayer.setOnCompletionListener(this);
+        mMediaPlayer.setOnPreparedListener(this);
+        mMediaPlayer.setOnInfoListener(this);
     }
 
     @Override
-    public void close() {
-
+    public void play(String url) {
+        try {
+            this.playUrl = url;
+            if (mMediaPlayer == null) {
+                initMediaPlayer();
+            }else{
+                mMediaPlayer.reset();
+            }
+            mMediaPlayer.setDataSource(playUrl);
+            mMediaPlayer.prepareAsync();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private static class MusicPlayerHolder {
-        public static final MusicPlayer sInstance = new MusicPlayer();
+    @Override
+    public String getPlayUrl() {
+        return playUrl;
+    }
+
+    @Override
+    public void start() {
+        mMediaPlayer.start();
+        status = STATUS_PLAYING;
+        notifyStatus();
+    }
+
+    @Override
+    public void puase() {
+        mMediaPlayer.pause();
+        status = STATUS_PAUSE;
+        notifyStatus();
+    }
+
+    @Override
+    public void stop() {
+        mMediaPlayer.stop();
+        mMediaPlayer.release();
+        mMediaPlayer = null;
+        status = STATUS_IDLE;
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return mMediaPlayer != null && mMediaPlayer.isPlaying();
+    }
+
+    @Override
+    public MediaPlayer getMediaPlay() {
+        return mMediaPlayer;
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        FlyLog.d("onCompletion---");
+        status = STATUS_COMPLETED;
+        notifyStatus();
+    }
+
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        FlyLog.d("onError what=%d,extra=%d",what,extra);
+        status = STATUS_ERROR;
+        notifyStatus();
+        return false;
+    }
+
+    @Override
+    public boolean onInfo(MediaPlayer mp, int what, int extra) {
+        FlyLog.d("onInfo what=%d,extra=%d",what,extra);
+        switch (what) {
+            case MediaPlayer.MEDIA_INFO_BUFFERING_START:
+                status = STATUS_LOADING;
+                break;
+            case MediaPlayer.MEDIA_INFO_BUFFERING_END:
+            case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
+                status = STATUS_PLAYING;
+                break;
+        }
+        notifyStatus();
+        return false;
+    }
+
+    private void notifyStatus() {
+        for (IMusicPlayerListener iMusicPlayerListener : listeners) {
+            iMusicPlayerListener.statusChange(status);
+        }
     }
 }
+

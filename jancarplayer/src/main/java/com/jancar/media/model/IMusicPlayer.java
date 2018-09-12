@@ -1,6 +1,7 @@
 package com.jancar.media.model;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 
 import com.jancar.media.listener.IMusicPlayerListener;
 
@@ -12,5 +13,17 @@ public interface IMusicPlayer {
 
     void init(Context context);
 
-    void close();
+    void play(String url);
+
+    String getPlayUrl();
+
+    void start();
+
+    void puase();
+
+    boolean isPlaying();
+
+    void stop();
+
+    MediaPlayer getMediaPlay();
 }

@@ -221,11 +221,12 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/menu_play_fore"
+                    android:id="@+id/ac_music_play_fore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="20px"
+                    android:layout_marginRight="20px"
                     android:layout_centerVertical="true"
-                    android:padding="8dp"
                     android:src="@drawable/media_fore" />
 
                 <ImageView
@@ -233,15 +234,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:padding="8dp"
+                    android:layout_marginLeft="20px"
+                    android:layout_marginRight="20px"
                     android:src="@drawable/media_play" />
 
                 <ImageView
-                    android:id="@+id/menu_play_next"
+                    android:id="@+id/ac_music_play_next"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:padding="8dp"
+                    android:layout_marginLeft="20px"
+                    android:layout_marginRight="20px"
                     android:src="@drawable/media_next" />
             </LinearLayout>
 

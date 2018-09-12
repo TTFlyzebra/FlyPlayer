@@ -6,47 +6,23 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.jancar.media.R;
-import com.jancar.media.listener.IUsbMediaListener;
 import com.jancar.media.model.IUsbMediaScan;
 import com.jancar.media.model.UsbMedia;
 import com.jancar.media.utils.FlyLog;
 
 import java.lang.reflect.Constructor;
-import java.util.List;
 
-public class BaseActivity extends AppCompatActivity implements IUsbMediaListener{
+public class BaseActivity extends AppCompatActivity {
     protected IUsbMediaScan usbMediaScan = UsbMedia.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         usbMediaScan.init(this);
-        usbMediaScan.addListener(this);
-    }
-
-    @Override
-    public void musicUrlList(List<String> musicUrlList) {
-
-    }
-
-    @Override
-    public void videoUrlList(List<String> videoUrlList) {
-
-    }
-
-    @Override
-    public void imageUrlList(List<String> imageUrlList) {
-
-    }
-
-    @Override
-    public void usbRemove(String usbstore) {
-
     }
 
     @Override
     protected void onDestroy() {
-        usbMediaScan.removeListener(this);
         usbMediaScan.close();
         super.onDestroy();
     }

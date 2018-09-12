@@ -42,6 +42,10 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener{
 
     private void init(Context context) {
         this.context = context;
+        focusView = new View(context);
+        LayoutParams lpbak = new LayoutParams(childWidth,height-5);
+        addView(focusView,lpbak);
+        focusView.setBackgroundResource(R.drawable.bottom_line_blue);
     }
 
     public void setTitles(String[] strs) {
@@ -54,11 +58,6 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener{
                 width = getMeasuredWidth();
                 height = getMeasuredHeight();
                 childWidth = width/textViews.length;
-
-                focusView = new View(context);
-                LayoutParams lpbak = new LayoutParams(childWidth,height-5);
-                addView(focusView,lpbak);
-                focusView.setBackgroundResource(R.drawable.bottom_line_blue);
 
                 for(int i=0;i<textViews.length;i++){
                     LayoutParams lp = new LayoutParams(childWidth,height);
@@ -105,13 +104,16 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener{
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-    public void setSelectItem(int duration) {
+    private void setSelectItem(int duration) {
         focusView.animate().translationX(childWidth*focusPos).setDuration(duration).start();
         for(int i=0;i<textViews.length;i++){
             textViews[i].setEnabled(i!=focusPos);
         }
     }
 
+    public void setFocusPos(int pos){
+        focusPos = pos;
+    }
 
     public interface OnItemClickListener{
         void onItemClick(View v,int pos);

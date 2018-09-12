@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+
+    <item
+        android:drawable="@drawable/media_music_anim_play_01"
+        android:duration="150" />
+    <item
+        android:drawable="@drawable/media_music_anim_play_02"
+        android:duration="150" />
+    <item
+        android:drawable="@drawable/media_music_anim_play_03"
+        android:duration="150" />
+    <item
+        android:drawable="@drawable/media_music_anim_play_04"
+        android:duration="150" />
+
+
+</animation-list>

@@ -37,6 +37,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
  * Created by tcking on 15/10/27.
  */
 public class GiraffePlayer {
+
     public static boolean isShowVideoPlayList = false;
     /**
      * fitParent:scale the video uniformly (maintain the video's aspect ratio) so that both dimensions (width and height) of the video will be equal to or **less** than the corresponding dimension of the view. like ImageView's `CENTER_INSIDE`.等比缩放,画面填满view。
@@ -565,6 +566,10 @@ public class GiraffePlayer {
             videoView.setVideoPath(url);
             videoView.start();
         }
+    }
+
+    public String getPlayUrl(){
+        return url;
     }
 
     private String generateTime(long time) {

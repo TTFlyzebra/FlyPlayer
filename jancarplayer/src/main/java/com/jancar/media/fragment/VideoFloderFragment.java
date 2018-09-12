@@ -8,7 +8,7 @@ import android.widget.ExpandableListView;
 
 import com.jancar.media.R;
 import com.jancar.media.activity.VideoActivity;
-import com.jancar.media.adpater.FileListEListViewAdapter;
+import com.jancar.media.adpater.VideoFloderAdapter;
 import com.jancar.media.base.BaseFragment;
 import com.jancar.media.utils.FlyLog;
 
@@ -22,12 +22,12 @@ import java.util.Map;
 
 import tcking.github.com.giraffeplayer.GiraffePlayer;
 
-public class VideoFloderFragment extends BaseFragment implements FileListEListViewAdapter.OnItemClickListener,GiraffePlayer.OnPlayStatusChangeLiseter{
+public class VideoFloderFragment extends BaseFragment implements VideoFloderAdapter.OnItemClickListener,GiraffePlayer.OnPlayStatusChangeLiseter{
     private VideoActivity activity;
     private ExpandableListView expandableListView;
     private List<String> groupList = new ArrayList<>();
     private List<List<String>> itemList = new ArrayList<>();
-    private FileListEListViewAdapter adapter;
+    private VideoFloderAdapter adapter;
     private Map<String, List<String>> mHashMap = new HashMap<>();
 
     public static VideoFloderFragment newInstance(Bundle args) {
@@ -43,13 +43,13 @@ public class VideoFloderFragment extends BaseFragment implements FileListEListVi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         activity = (VideoActivity) getActivity();
-        return inflater.inflate(R.layout.fragment_file_list, null);
+        return inflater.inflate(R.layout.fragment_floder_grid_list, null);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         expandableListView = (ExpandableListView) view.findViewById(R.id.fm_file_list_el01);
-        adapter = new FileListEListViewAdapter(getActivity(), groupList, itemList);
+        adapter = new VideoFloderAdapter(getActivity(), groupList, itemList);
         expandableListView.setAdapter(adapter);
         expandableListView.setGroupIndicator(null);
         adapter.setOnItemClickListener(this);
@@ -94,8 +94,8 @@ public class VideoFloderFragment extends BaseFragment implements FileListEListVi
 
     @Override
     public void onItemClick(View view, String url) {
-        activity.currentPlayUrl = url;
-        activity.player.play(activity.currentPlayUrl);
+        //TODO:标记播放位置
+        activity.player.play(url);
         adapter.notifyDataSetChanged();
     }
 

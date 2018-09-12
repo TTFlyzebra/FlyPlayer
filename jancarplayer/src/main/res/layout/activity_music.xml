@@ -24,7 +24,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/app_video_currentTime"
+                android:id="@+id/ac_music_currentTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -34,7 +34,7 @@
                 android:textSize="12dp" />
 
             <SeekBar
-                android:id="@+id/app_video_seekBar"
+                android:id="@+id/ac_music_seekBar"
                 android:layout_width="880px"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -44,7 +44,7 @@
                 android:thumbOffset="5px" />
 
             <TextView
-                android:id="@+id/app_video_endTime"
+                android:id="@+id/ac_music_endTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -62,32 +62,35 @@
             android:gravity="center">
 
             <ImageView
-                android:id="@+id/menu_play_fore"
+                android:id="@+id/ac_music_play_fore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:padding="8dp"
+                android:layout_marginLeft="20px"
+                android:layout_marginRight="20px"
                 android:src="@drawable/media_fore" />
 
             <ImageView
-                android:id="@+id/app_video_play"
+                android:id="@+id/ac_music_play"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:padding="8dp"
+                android:layout_marginLeft="20px"
+                android:layout_marginRight="20px"
                 android:src="@drawable/media_play" />
 
             <ImageView
-                android:id="@+id/menu_play_next"
+                android:id="@+id/ac_music_play_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:padding="8dp"
+                android:layout_marginLeft="20px"
+                android:layout_marginRight="20px"
                 android:src="@drawable/media_next" />
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/menu_play_list"
+            android:id="@+id/ac_music_left_menu"
             android:layout_width="75px"
             android:layout_height="75px"
             android:layout_alignParentBottom="true"
@@ -99,12 +102,13 @@
 
 
     <RelativeLayout
-        android:id="@+id/ac_music_menulist"
+        android:id="@+id/ac_music_left_layout"
         android:layout_width="397px"
         android:layout_height="406px"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="135px"
+        android:layout_marginRight="-394px"
         android:orientation="vertical"
         android:paddingLeft="4px">
 

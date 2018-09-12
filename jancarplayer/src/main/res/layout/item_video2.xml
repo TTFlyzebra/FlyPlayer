@@ -12,16 +12,18 @@
         android:duplicateParentState="true"
         android:src="@drawable/media_default_image"/>
 
-    <TextView
+    <com.jancar.media.view.MarqueeTextView
         android:id="@+id/tv_gridview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_alignParentBottom="true"
         android:textColor="@drawable/textcolor_blue_white"
-        android:singleLine="true"
         android:duplicateParentState="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
         android:textSize="18px"
-        android:text="video "/>
+        android:text="video "
+        android:singleLine="true" />
 
 </RelativeLayout>

@@ -28,7 +28,7 @@ import java.util.Set;
  * Created by flyzebra on 18-3-29-下午3:06.
  */
 
-public class PlayFileAdapater extends RecyclerView.Adapter<PlayFileAdapater.ViewHolder> {
+public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAdapater.ViewHolder> {
     private static final int smallImageWidth = 101;
     private static final int smallImageHeight = 96;
     private List<String> mList;
@@ -46,7 +46,7 @@ public class PlayFileAdapater extends RecyclerView.Adapter<PlayFileAdapater.View
         this.onItemClickListener = onItemClickListener;
     }
 
-    public PlayFileAdapater(Context context, List<String> list, RecyclerView recyclerView) {
+    public VideoPlayListAdapater(Context context, List<String> list, RecyclerView recyclerView) {
         mContext = context;
         mList = list;
         mRecyclerView = recyclerView;
@@ -55,7 +55,7 @@ public class PlayFileAdapater extends RecyclerView.Adapter<PlayFileAdapater.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_photo_info, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_video, parent, false);
         return new ViewHolder(v);
     }
 
@@ -82,7 +82,7 @@ public class PlayFileAdapater extends RecyclerView.Adapter<PlayFileAdapater.View
             }
         });
 
-        if(dvrFile.equals(VideoActivity.currentPlayUrl)){
+        if(dvrFile.equals(((VideoActivity)mContext).player.getPlayUrl())){
             holder.itemView.setSelected(true);
         }else{
             holder.itemView.setSelected(false);

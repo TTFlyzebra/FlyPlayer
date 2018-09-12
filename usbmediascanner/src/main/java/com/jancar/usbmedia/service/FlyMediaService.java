@@ -186,14 +186,14 @@ public class FlyMediaService extends Service {
             switch (strSuffix) {
                 case ".mp4":
                 case ".mkv":
-                    if (isFirst) {
-                        isFirst = false;
-                        Utils.startActivity(this,"com.jancar.media","com.jancar.media.activity.VideoActivity");
-                    }
+                case ".mov":
+                case ".ts":
                     mVideoList.add(url);
                     FlyLog.d("add a video=%s", url);
                     break;
                 case ".mp3":
+                case ".flac":
+                case ".ape":
                     if (isFirst) {
                         isFirst = false;
                         Utils.startActivity(this,"com.jancar.media","com.jancar.media.activity.MusicActivity");

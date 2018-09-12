@@ -10,7 +10,7 @@ import com.jancar.media.model.UsbMedia;
 import java.util.List;
 
 public class BaseFragment extends Fragment implements IUsbMediaListener {
-    private IUsbMediaScan usbMediaScan = UsbMedia.getInstance();
+    protected IUsbMediaScan usbMediaScan = UsbMedia.getInstance();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

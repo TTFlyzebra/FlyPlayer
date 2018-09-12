@@ -8,6 +8,8 @@ import android.util.Log;
 public class FlyLog {
     public static final String TAG = "media.jancarplays";
     public static String[] filter = {
+            "FlyTabView",
+            "AnimationImageView"
     };
 
     public static void d() {
@@ -16,12 +18,12 @@ public class FlyLog {
     }
 
     public static void d(String logString, Object... args) {
+        String s = buildLogString(logString, args);
         for (String aFilter : filter) {
-            if (logString.indexOf(aFilter) == 0) {
+            if (s.contains(aFilter)) {
                 return;
             }
         }
-        String s = buildLogString(logString, args);
         Log.d(TAG, s);
     }
 
@@ -31,12 +33,12 @@ public class FlyLog {
     }
 
     public static void i(String logString, Object... args) {
+        String s = buildLogString(logString, args);
         for (String aFilter : filter) {
-            if (logString.indexOf(aFilter) == 0) {
+            if (s.contains(aFilter)) {
                 return;
             }
         }
-        String s = buildLogString(logString, args);
         Log.i(TAG, s);
     }
 
@@ -47,12 +49,12 @@ public class FlyLog {
     }
 
     public static void v(String logString, Object... args) {
+        String s = buildLogString(logString, args);
         for (String aFilter : filter) {
-            if (logString.indexOf(aFilter) == 0) {
+            if (s.contains(aFilter)) {
                 return;
             }
         }
-        String s = buildLogString(logString, args);
         Log.v(TAG, s);
     }
 
@@ -63,12 +65,12 @@ public class FlyLog {
     }
 
     public static void e(String logString, Object... args) {
+        String s = buildLogString(logString, args);
         for (String aFilter : filter) {
-            if (logString.indexOf(aFilter) == 0) {
+            if (s.contains(aFilter)) {
                 return;
             }
         }
-        String s = buildLogString(logString, args);
         Log.e(TAG, s);
     }
 

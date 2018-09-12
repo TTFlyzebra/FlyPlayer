@@ -18,13 +18,13 @@ import java.util.List;
 /**
  * ExpandableListView 适配器
  */
-public class FileListEListViewAdapter extends BaseExpandableListAdapter {
+public class VideoFloderAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private List<String> groupList;
     private List<List<String>> itemList;
     private GridView gridView;
-    public FileListEListViewAdapter(Context context, List<String> groupList,
-                                    List<List<String>> itemList) {
+    public VideoFloderAdapter(Context context, List<String> groupList,
+                              List<List<String>> itemList) {
         mContext = context;
         this.groupList = groupList;
         this.itemList = itemList;
@@ -91,10 +91,10 @@ public class FileListEListViewAdapter extends BaseExpandableListAdapter {
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View
             convertView, ViewGroup parent) {
         if (null == convertView) {
-            convertView = View.inflate(mContext, R.layout.expandablelist_item, null);
+            convertView = View.inflate(mContext, R.layout.expandablelist_grid_item, null);
         }
         gridView = (GridView) convertView;
-        FileListGridViewAdapter gridViewAdapter = new FileListGridViewAdapter(mContext, itemList.get(groupPosition),gridView);
+        VideoFloderItemAdapter gridViewAdapter = new VideoFloderItemAdapter(mContext, itemList.get(groupPosition),gridView);
         gridView.setAdapter(gridViewAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

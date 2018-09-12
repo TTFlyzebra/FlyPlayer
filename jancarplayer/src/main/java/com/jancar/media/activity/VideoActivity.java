@@ -22,10 +22,12 @@ import tcking.github.com.giraffeplayer.GiraffePlayer;
 
 import static tcking.github.com.giraffeplayer.GiraffePlayer.isShowVideoPlayList;
 
-public class VideoActivity extends BaseActivity implements IUsbMediaListener,View.OnClickListener,FlyTabView.OnItemClickListener {
+public class VideoActivity extends BaseActivity implements
+        IUsbMediaListener,
+        View.OnClickListener,
+        FlyTabView.OnItemClickListener {
     private ImageView play_fore, play_next, play_list;
     private RelativeLayout play_ll01_playlist;
-    public static String currentPlayUrl = "";
     public int currenPos = 0;
     public GiraffePlayer player;
     public List<String> videoList = new ArrayList<>();
@@ -38,13 +40,14 @@ public class VideoActivity extends BaseActivity implements IUsbMediaListener,Vie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
+
+        player = new GiraffePlayer(this);
         /**
          * 需支持多国语言
          */
         titles = new String[]{getString(R.string.disk_list),getString(R.string.play_list),getString(R.string.file_list)};
 
-        player = new GiraffePlayer(this);
-
+        usbMediaScan.addListener(this);
 
         replaceFragment(fmName[0]);
 
@@ -54,7 +57,6 @@ public class VideoActivity extends BaseActivity implements IUsbMediaListener,Vie
         final String playUrl = intent.getStringExtra(Const.PLAYURL_KEY);
         FlyLog.d("playurl=%s",playUrl);
         if(!TextUtils.isEmpty(playUrl)) {
-            currentPlayUrl = playUrl;
             player.play(playUrl);
         }
 
@@ -67,19 +69,41 @@ public class VideoActivity extends BaseActivity implements IUsbMediaListener,Vie
     }
 
     @Override
+    protected void onDestroy() {
+        usbMediaScan.removeListener(this);
+        super.onDestroy();
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        player.stop();
+        super.onStop();
+    }
+
+    @Override
+    public void musicUrlList(List<String> musicUrlList) {
+
+    }
+
+    @Override
     protected void onNewIntent(Intent intent) {
         final String playUrl = intent.getStringExtra(Const.PLAYURL_KEY);
         FlyLog.d("playurl=%s",playUrl);
         if(!TextUtils.isEmpty(playUrl)&&!player.isPlaying()) {
-            currentPlayUrl = playUrl;
             player.play(playUrl);
         }
         super.onNewIntent(intent);
     }
 
     private void initView() {
-        play_fore = (ImageView) findViewById(R.id.menu_play_fore);
-        play_next = (ImageView) findViewById(R.id.menu_play_next);
+        play_fore = (ImageView) findViewById(R.id.ac_music_play_fore);
+        play_next = (ImageView) findViewById(R.id.ac_music_play_next);
         play_list = (ImageView) findViewById(R.id.menu_play_list);
         play_ll01_playlist = (RelativeLayout) findViewById(R.id.play_ll01_playlist);
         tabView = (FlyTabView) findViewById(R.id.app_video_tabview);
@@ -96,8 +120,7 @@ public class VideoActivity extends BaseActivity implements IUsbMediaListener,Vie
         if(videoList!=null&&!videoList.isEmpty()){
             if(currenPos<videoList.size()-1){
                 currenPos++;;
-                currentPlayUrl = videoList.get(currenPos);
-                player.play(currentPlayUrl);
+                player.play(videoList.get(currenPos));
             }
         }
     }
@@ -106,8 +129,7 @@ public class VideoActivity extends BaseActivity implements IUsbMediaListener,Vie
         if(videoList!=null&&!videoList.isEmpty()){
             if(currenPos>0){
                 currenPos--;
-                currentPlayUrl = videoList.get(currenPos);
-                player.play(currentPlayUrl);
+                player.play(videoList.get(currenPos));
             }
         }
     }
@@ -118,10 +140,10 @@ public class VideoActivity extends BaseActivity implements IUsbMediaListener,Vie
             case R.id.menu_play_list:
                 showOrHideVideoPlayListLayout();
                 break;
-            case R.id.menu_play_fore:
+            case R.id.ac_music_play_fore:
                 playFore();
                 break;
-            case R.id.menu_play_next:
+            case R.id.ac_music_play_next:
                 playNext();
                 break;
         }
@@ -141,18 +163,30 @@ public class VideoActivity extends BaseActivity implements IUsbMediaListener,Vie
 
     @Override
     public void videoUrlList(List<String> videoUrlList) {
+        FlyLog.d("get videos size=%d", videoUrlList == null ? 0 : videoUrlList.size());
         if(videoUrlList==null) return;
         if (videoUrlList.isEmpty()) {
             if (player!=null&&!player.isPlaying()) {
                 player.stop();
             }
         } else {
+            videoList.clear();
+            videoList.addAll(videoUrlList);
             if (player!=null&&!player.isPlaying()) {
-                currentPlayUrl = videoUrlList.get(0);
                 currenPos = 0;
-                player.play(currentPlayUrl);
+                player.play(videoList.get(currenPos));
             }
         }
+    }
+
+    @Override
+    public void imageUrlList(List<String> imageUrlList) {
+
+    }
+
+    @Override
+    public void usbRemove(String usbstore) {
+
     }
 
 }
