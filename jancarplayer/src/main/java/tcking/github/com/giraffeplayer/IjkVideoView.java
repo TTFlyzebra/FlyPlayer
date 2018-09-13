@@ -332,7 +332,8 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
             }
 
             // TODO: create SubtitleController in MediaPlayer, but we need
-            // a context for the subtitle renderers
+            // a context for the subtitl
+            // e renderers
             final Context context = getContext();
             // REMOVED: SubtitleController
 

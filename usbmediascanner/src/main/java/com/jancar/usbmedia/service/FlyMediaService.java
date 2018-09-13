@@ -202,6 +202,9 @@ public class FlyMediaService extends Service {
                     FlyLog.d("add a music=%s", url);
                     break;
                 case ".png":
+                case ".bmp":
+                case ".gif":
+                case ".jpg":
                     mImageList.add(url);
                     FlyLog.d("add a image=%s", url);
                     break;

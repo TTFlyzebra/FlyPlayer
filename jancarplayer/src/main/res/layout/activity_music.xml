@@ -4,7 +4,128 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
+    android:fitsSystemWindows="true"
     tools:context=".activity.VideoActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ac_music_control"
+        android:layout_alignParentTop="true"
+        android:weightSum="1">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="160px"
+                android:layout_marginTop="68px"
+                android:src="@drawable/media_music_iv" />
+
+            <com.jancar.media.view.CircleImageView
+                android:id="@+id/ac_music_iv_image"
+                android:layout_width="150px"
+                android:layout_height="150px"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="223px"
+                android:layout_marginTop="125px"
+                android:src="@drawable/media_music" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="left|center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20px"
+                android:gravity="left|center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/media_music_single" />
+
+                <com.jancar.media.view.MarqueeTextView
+                    android:id="@+id/ac_music_single"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20px"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:text="我的滑板鞋"
+                    android:textColor="#FFF"
+                    android:textSize="34px" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20px"
+                android:gravity="left|center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/media_music_album" />
+
+                <com.jancar.media.view.MarqueeTextView
+                    android:id="@+id/ac_music_album"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20px"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:text="@string/no_album"
+                    android:textColor="#FFF"
+                    android:textSize="34px" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20px"
+                android:gravity="left|center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/media_music_singer" />
+
+                <com.jancar.media.view.MarqueeTextView
+                    android:id="@+id/ac_music_singer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20px"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:text="@string/no_artist"
+                    android:textColor="#FFF"
+                    android:textSize="34px" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 
     <RelativeLayout
         android:id="@+id/ac_music_control"
@@ -28,14 +149,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"
                 android:text="00:00"
                 android:textColor="@android:color/white"
-                android:textSize="12dp" />
+                android:textSize="22px" />
 
             <SeekBar
                 android:id="@+id/ac_music_seekBar"
-                android:layout_width="880px"
+                android:layout_width="870px"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:progressDrawable="@drawable/media_seekbar_style"
@@ -51,7 +171,7 @@
                 android:layout_centerVertical="true"
                 android:text="00:00"
                 android:textColor="@android:color/white"
-                android:textSize="12dp" />
+                android:textSize="22px" />
 
         </LinearLayout>
 

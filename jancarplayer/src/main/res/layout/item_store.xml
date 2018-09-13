@@ -13,13 +13,16 @@
         android:duplicateParentState="true"
         android:scaleType="centerInside" />
 
-    <TextView
+    <com.jancar.media.view.MarqueeTextView
         android:id="@+id/item_tv01"
         android:layout_alignParentBottom="true"
         android:gravity="center"
         android:textColor="@drawable/textcolor_blue_white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textSize="20px"
         android:duplicateParentState="true" />
 
 </RelativeLayout>

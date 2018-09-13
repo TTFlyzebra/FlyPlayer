@@ -25,6 +25,7 @@
         android:ellipsize="marquee"
         android:gravity="left|center"
         android:singleLine="true"
+        android:textSize="22px"
         android:textColor="@drawable/textcolor_blue_white" />
 
     <TextView
@@ -36,6 +37,7 @@
         android:gravity="center"
         android:paddingLeft="20px"
         android:text="佚名"
+        android:textSize="22px"
         android:textColor="@drawable/textcolor_blue_white" />
 
 </RelativeLayout>

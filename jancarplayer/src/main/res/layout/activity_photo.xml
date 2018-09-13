@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".activity.VideoActivity">
+
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/ac_photo_pv01"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:id="@+id/ac_music_control"
+        android:layout_width="match_parent"
+        android:layout_height="135px"
+        android:layout_alignParentBottom="true"
+        android:background="#B5343536"
+        android:padding="8dp"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/rl_01"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/ac_music_play_fore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20px"
+                android:layout_marginRight="20px"
+                android:src="@drawable/media_fore" />
+
+            <ImageView
+                android:id="@+id/ac_music_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20px"
+                android:layout_marginRight="20px"
+                android:src="@drawable/media_play" />
+
+            <ImageView
+                android:id="@+id/ac_music_play_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20px"
+                android:layout_marginRight="20px"
+                android:src="@drawable/media_next" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/ac_music_left_menu"
+            android:layout_width="75px"
+            android:layout_height="75px"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/media_video_list" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/ac_music_left_layout"
+        android:layout_width="397px"
+        android:layout_height="406px"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="135px"
+        android:layout_marginRight="-394px"
+        android:orientation="vertical"
+        android:paddingLeft="4px">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#EA212121" />
+
+        <com.jancar.media.view.FlyTabView
+            android:id="@+id/ac_music_tabview"
+            android:layout_width="match_parent"
+            android:layout_height="52px"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/media_list_header" />
+
+        <FrameLayout
+            android:id="@+id/ac_replace_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/ac_music_tabview" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

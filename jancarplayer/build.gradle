@@ -19,9 +19,11 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:23.+'
     implementation 'com.android.support:recyclerview-v7:23.+'
     implementation 'com.jcodecraeer:xrecyclerview:1.5.9'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation project(path: ':ijkplayer')
+    compile project(path: ':photoview')
 }

@@ -3,6 +3,7 @@ package com.jancar.media.view;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -42,10 +43,6 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener{
 
     private void init(Context context) {
         this.context = context;
-        focusView = new View(context);
-        LayoutParams lpbak = new LayoutParams(childWidth,height-5);
-        addView(focusView,lpbak);
-        focusView.setBackgroundResource(R.drawable.bottom_line_blue);
     }
 
     public void setTitles(String[] strs) {
@@ -67,9 +64,14 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener{
                     textViews[i].setText(titles[i]);
                     textViews[i].setTextColor(colorStateList);
                     textViews[i].setTag(i);
+                    textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_PX,22);
                     textViews[i].setOnClickListener(FlyTabView.this);
                     addView(textViews[i],lp);
                 }
+                focusView = new View(context);
+                LayoutParams lpbak = new LayoutParams(childWidth,height-5);
+                addView(focusView,lpbak);
+                focusView.setBackgroundResource(R.drawable.bottom_line_blue);
                 setSelectItem(0);
             }
         });

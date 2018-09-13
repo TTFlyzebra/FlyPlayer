@@ -106,9 +106,11 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void stop() {
-        mMediaPlayer.stop();
-        mMediaPlayer.release();
-        mMediaPlayer = null;
+        if(mMediaPlayer!=null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
         status = STATUS_IDLE;
     }
 
