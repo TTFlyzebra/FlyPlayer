@@ -42,14 +42,6 @@ public class VideoActivity extends BaseActivity implements
         setContentView(R.layout.activity_video);
 
         player = new GiraffePlayer(this);
-        /**
-         * 需支持多国语言
-         */
-        titles = new String[]{getString(R.string.disk_list),getString(R.string.play_list),getString(R.string.file_list)};
-
-        usbMediaScan.addListener(this);
-
-        replaceFragment(fmName[0]);
 
         initView();
 
@@ -66,6 +58,8 @@ public class VideoActivity extends BaseActivity implements
                 playNext();
             }
         });
+
+        usbMediaScan.addListener(this);
     }
 
     @Override
@@ -102,6 +96,10 @@ public class VideoActivity extends BaseActivity implements
     }
 
     private void initView() {
+        /**
+         * 需支持多国语言
+         */
+        titles = new String[]{getString(R.string.disk_list),getString(R.string.play_list),getString(R.string.file_list)};
         play_fore = (ImageView) findViewById(R.id.ac_music_play_fore);
         play_next = (ImageView) findViewById(R.id.ac_music_play_next);
         play_list = (ImageView) findViewById(R.id.menu_play_list);
@@ -114,6 +112,7 @@ public class VideoActivity extends BaseActivity implements
         play_next.setOnClickListener(this);
         play_list.setOnClickListener(this);
 
+        replaceFragment(fmName[0]);
     }
 
     private void playNext() {

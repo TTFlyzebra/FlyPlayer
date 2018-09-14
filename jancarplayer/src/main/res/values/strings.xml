@@ -7,6 +7,7 @@
     <string name="disk_list">磁盘列表</string>
     <string name="play_list">播放列表</string>
     <string name="file_list">文件列表</string>
+    <string name="photo_list">图片列表</string>
     <string name="storage">存储器</string>
     <string name="single">单曲</string>
     <string name="singer">歌手</string>

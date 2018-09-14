@@ -50,6 +50,12 @@ public class VideoPlayListFragment extends BaseFragment implements VideoPlayList
     }
 
     @Override
+    public void onDestroy() {
+        adapter.cancleAllTask();
+        super.onDestroy();
+    }
+
+    @Override
     public void videoUrlList(List<String> videoUrlList) {
         FlyLog.d("get videos size=%d", videoUrlList == null ? 0 : videoUrlList.size());
         if (videoUrlList != null && getActivity() != null && activity != null) {

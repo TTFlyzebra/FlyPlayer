@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-
 public class MarqueeTextView extends TextView {
     public final static String TAG = MarqueeTextView.class.getSimpleName();
 

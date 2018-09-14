@@ -14,9 +14,9 @@ import com.jancar.media.R;
 import com.jancar.media.activity.VideoActivity;
 import com.jancar.media.module.DoubleBitmapCache;
 import com.jancar.media.utils.BitmapTools;
+import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.MarqueeTextView;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,7 +25,6 @@ import java.util.Set;
  * GridView 适配器
  */
 public class VideoFloderItemAdapter extends BaseAdapter {
-
     private Context mContext;
     private Set<GetDvrVideoBitmatTask> tasks = new HashSet<>();
     private DoubleBitmapCache doubleBitmapCache;
@@ -67,28 +66,23 @@ public class VideoFloderItemAdapter extends BaseAdapter {
         }
         MarqueeTextView textView = (MarqueeTextView) convertView.findViewById(R.id.tv_gridview);
         String url = itemGridList.get(position);
-        int start = url.lastIndexOf(File.separator)+1;
-        int end = url.lastIndexOf('.');
-        start = Math.max(0,start);
-        end = Math.max(0,end);
-        start = Math.min(start,url.length()-1);
-        end = Math.min(end,url.length()-1);
-        String name = url.substring(start,end);
-        textView.setText(name);
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.iv_gridview);
-        imageView.setTag(itemGridList.get(position));
+        boolean flag = url.equals(((VideoActivity)mContext).player.getPlayUrl());
+        textView.setText(StringTools.getNameByPath(url));
+        textView.setTextColor(flag?0xFF0370E5:0xFFFFFFFF);
+        textView.enableMarquee(flag);
+
+        ImageView imageView1 = (ImageView) convertView.findViewById(R.id.iv_gridview);
+        imageView1.setTag(itemGridList.get(position));
         Bitmap bitmap = doubleBitmapCache.get(itemGridList.get(position));
         if (null != bitmap) {
-            imageView.setImageBitmap(bitmap);
+            imageView1.setImageBitmap(bitmap);
         }else{
             GetDvrVideoBitmatTask task = new GetDvrVideoBitmatTask(itemGridList.get(position));
             task.execute(itemGridList.get(position));
             tasks.add(task);
         }
-
-        boolean flag = url.equals(((VideoActivity)mContext).player.getPlayUrl());
-        textView.setTextColor(flag?0xFF0370E5:0xFFFFFFFF);
-        textView.enableMarquee(flag);
+        ImageView imageView2 = (ImageView) convertView.findViewById(R.id.item_iv01_back);
+        imageView2.setImageResource(flag?R.drawable.media_list_item_select_02:R.drawable.media_list_item_select_01);
         return convertView;
     }
 

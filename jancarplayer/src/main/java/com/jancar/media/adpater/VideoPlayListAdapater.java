@@ -12,16 +12,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.jancar.media.R;
 import com.jancar.media.activity.VideoActivity;
 import com.jancar.media.module.DoubleBitmapCache;
 import com.jancar.media.utils.BitmapTools;
 import com.jancar.media.utils.FlyLog;
+import com.jancar.media.utils.StringTools;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 /**
  * Author: FlyZebra
@@ -51,6 +55,24 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
         mList = list;
         mRecyclerView = recyclerView;
         doubleBitmapCache = DoubleBitmapCache.getInstance(context.getApplicationContext());
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                switch (newState) {
+                    case SCROLL_STATE_IDLE:
+                        int first = ((GridLayoutManager) (recyclerView.getLayoutManager())).findFirstVisibleItemPosition();
+                        int last = ((GridLayoutManager) (recyclerView.getLayoutManager())).findLastVisibleItemPosition();
+                        if (first >= 0) {
+                            loadImageView(first, last);
+                        }
+                        break;
+                    default:
+                        cancleAllTask();
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -61,13 +83,15 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        final String dvrFile = mList.get(position);
+        final String url = mList.get(position);
         holder.itemView.setTag(position);
-        holder.imageView.setTag(R.id.glideid, position);
-        Bitmap bitmap = doubleBitmapCache.get(dvrFile);
+        holder.imageView.setTag(url);
+        holder.textView.setText(StringTools.getNameByPath(url));
+        Bitmap bitmap = doubleBitmapCache.get(url);
         if (null != bitmap) {
             holder.imageView.setImageBitmap(bitmap);
-        }else{
+        } else {
+            holder.imageView.setImageResource(R.drawable.media_default_image);
             GetDvrVideoBitmatTask task = new GetDvrVideoBitmatTask(mList.get(position));
             task.execute(mList.get(position));
             tasks.add(task);
@@ -76,15 +100,15 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onItemClickListener!=null){
+                if (onItemClickListener != null) {
                     onItemClickListener.onItemClick(v, (Integer) v.getTag());
                 }
             }
         });
 
-        if(dvrFile.equals(((VideoActivity)mContext).player.getPlayUrl())){
+        if (url.equals(((VideoActivity) mContext).player.getPlayUrl())) {
             holder.itemView.setSelected(true);
-        }else{
+        } else {
             holder.itemView.setSelected(false);
         }
     }
@@ -128,10 +152,12 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        TextView textView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.item_iv01);
+            textView = (TextView) itemView.findViewById(R.id.item_tv01);
         }
     }
 
@@ -154,10 +180,10 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
 
 
     public class GetDvrVideoBitmatTask extends AsyncTask<String, Bitmap, Bitmap> {
-        private String dvrFile;
+        private String url;
 
         GetDvrVideoBitmatTask(String dvrFile) {
-            this.dvrFile = dvrFile;
+            this.url = dvrFile;
         }
 
         @Override
@@ -184,7 +210,7 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            ImageView imageView = (ImageView) mRecyclerView.findViewWithTag(dvrFile);
+            ImageView imageView = (ImageView) mRecyclerView.findViewWithTag(url);
             if (imageView != null) {
                 if (bitmap != null) {
                     imageView.setImageBitmap(bitmap);

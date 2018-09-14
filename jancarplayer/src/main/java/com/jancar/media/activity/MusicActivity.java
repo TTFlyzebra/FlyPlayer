@@ -76,15 +76,12 @@ public class MusicActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music);
         musicPlayer.init(getApplicationContext());
-        musicPlayer.addListener(this);
-        usbMediaScan.addListener(this);
-
         titles = new String[]{getString(R.string.storage), getString(R.string.single), getString(R.string.singer), getString(R.string.album), getString(R.string.folder)};
+
         initView();
 
-        tabView.setTitles(titles);
-        replaceFragment(fmName[1]);
-        tabView.setFocusPos(1);
+        musicPlayer.addListener(this);
+        usbMediaScan.addListener(this);
 
     }
 
@@ -112,6 +109,11 @@ public class MusicActivity extends BaseActivity implements
         seekBar.setOnSeekBarChangeListener(this);
         leftMenu.setOnClickListener(this);
         tabView.setOnItemClickListener(this);
+
+        tabView.setTitles(titles);
+
+        replaceFragment(fmName[1]);
+        tabView.setFocusPos(1);
     }
 
     @Override

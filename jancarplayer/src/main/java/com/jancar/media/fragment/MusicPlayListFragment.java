@@ -86,6 +86,11 @@ public class MusicPlayListFragment extends MusicFragment implements IMusicPlayer
         adapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onResume() {
+        scrollToCureentPlayItem();
+        super.onResume();
+    }
 
     @Override
     public void statusChange(int statu) {
@@ -111,7 +116,8 @@ public class MusicPlayListFragment extends MusicFragment implements IMusicPlayer
         if (musicList == null || musicList.isEmpty() || musicPlayer == null) return;
         for (int i = 0; i < musicList.size(); i++) {
             if (musicPlayer.getPlayUrl().equals(musicList.get(i))) {
-                ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(i-1,0);
+                ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPosition(i);
+//                recyclerView.smoothScrollToPosition(i);
                 break;
             }
         }
