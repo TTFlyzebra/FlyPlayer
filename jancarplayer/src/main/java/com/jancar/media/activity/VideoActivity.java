@@ -10,7 +10,6 @@ import android.widget.RelativeLayout;
 import com.jancar.media.R;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Const;
-import com.jancar.media.listener.IUsbMediaListener;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
@@ -23,7 +22,6 @@ import tcking.github.com.giraffeplayer.GiraffePlayer;
 import static tcking.github.com.giraffeplayer.GiraffePlayer.isShowVideoPlayList;
 
 public class VideoActivity extends BaseActivity implements
-        IUsbMediaListener,
         View.OnClickListener,
         FlyTabView.OnItemClickListener {
     private ImageView play_fore, play_next, play_list;
@@ -51,7 +49,6 @@ public class VideoActivity extends BaseActivity implements
         if(!TextUtils.isEmpty(playUrl)) {
             player.play(playUrl);
         }
-
         player.onComplete(new Runnable() {
             @Override
             public void run() {
@@ -59,15 +56,7 @@ public class VideoActivity extends BaseActivity implements
             }
         });
 
-        usbMediaScan.addListener(this);
     }
-
-    @Override
-    protected void onDestroy() {
-        usbMediaScan.removeListener(this);
-        super.onDestroy();
-    }
-
 
     @Override
     protected void onStart() {
@@ -78,11 +67,6 @@ public class VideoActivity extends BaseActivity implements
     protected void onStop() {
         player.stop();
         super.onStop();
-    }
-
-    @Override
-    public void musicUrlList(List<String> musicUrlList) {
-
     }
 
     @Override
@@ -176,16 +160,6 @@ public class VideoActivity extends BaseActivity implements
                 player.play(videoList.get(currenPos));
             }
         }
-    }
-
-    @Override
-    public void imageUrlList(List<String> imageUrlList) {
-
-    }
-
-    @Override
-    public void usbRemove(String usbstore) {
-
     }
 
 }

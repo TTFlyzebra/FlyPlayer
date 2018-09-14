@@ -10,7 +10,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -18,7 +17,7 @@ import com.github.chrisbanes.photoview.PhotoView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
 import com.jancar.media.R;
 import com.jancar.media.base.BaseActivity;
-import com.jancar.media.listener.IUsbMediaListener;
+import com.jancar.media.utils.FlyLog;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
 import com.jancar.media.view.TouchEventRelativeLayout;
@@ -28,14 +27,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PhotoActivity extends BaseActivity implements
-        IUsbMediaListener,
         View.OnClickListener,
         ViewPager.OnPageChangeListener,
         FlyTabView.OnItemClickListener,
         TouchEventRelativeLayout.OnTouchEventListener {
 
     private FlyTabView tabView;
-    private String titles[] = new String[]{"磁盘列表", "图片列表", "文件夹"};
+    private String titles[] = new String[]{"磁盘列表", "图片列表", "文件列表"};
     private String fmName[] = new String[]{"StorageFragment", "PhotoPlayListFragment", "PhotoFloderFragment"};
     public ViewPager viewPager;
     private MyPageAdapter adapter;
@@ -43,7 +41,7 @@ public class PhotoActivity extends BaseActivity implements
     private HashMap<Integer, Integer> imageResIDs = new HashMap<>();
     private ImageView photoFore, photoNext, photoRotate, photoZoomIn, photoZoomOut;
     private ImageView leftMenu;
-    private RelativeLayout controlLayout;
+    private TouchEventRelativeLayout controlLayout;
     private TouchEventRelativeLayout leftLayout;
     public int currentItem = 0;
     public String CRET_URL = "";
@@ -60,7 +58,7 @@ public class PhotoActivity extends BaseActivity implements
                 getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
                 isShowControl = false;
             } else {
-                mHandler.postDelayed(hideControlTask, time+100);
+                mHandler.postDelayed(hideControlTask, time + 100);
             }
         }
     };
@@ -70,10 +68,8 @@ public class PhotoActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        titles = new String[]{getString(R.string.disk_list), getString(R.string.photo_list), getString(R.string.folder)};
+        titles = new String[]{getString(R.string.disk_list), getString(R.string.photo_list), getString(R.string.file_list)};
         initView();
-
-        usbMediaScan.addListener(this);
 
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
             @Override
@@ -94,7 +90,7 @@ public class PhotoActivity extends BaseActivity implements
         photoZoomOut = (ImageView) findViewById(R.id.ac_photo_zoomout);
         leftMenu = (ImageView) findViewById(R.id.ac_photo_left_menu);
         leftLayout = (TouchEventRelativeLayout) findViewById(R.id.ac_photo_left_layout);
-        controlLayout = (RelativeLayout) findViewById(R.id.ac_photo_control);
+        controlLayout = (TouchEventRelativeLayout) findViewById(R.id.ac_photo_control);
         tabView = (FlyTabView) findViewById(R.id.ac_photo_tabview);
 
         adapter = new MyPageAdapter();
@@ -110,30 +106,20 @@ public class PhotoActivity extends BaseActivity implements
         tabView.setOnItemClickListener(this);
         controlLayout.setOnClickListener(this);
         leftLayout.setOnTouchEventListener(this);
+        controlLayout.setOnTouchEventListener(this);
         tabView.setTitles(titles);
         replaceFragment(fmName[0]);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
     protected void onStop() {
         mHandler.removeCallbacksAndMessages(null);
         super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        usbMediaScan.removeListener(this);
-        super.onDestroy();
-    }
-
-    @Override
-    public void musicUrlList(List<String> musicUrlList) {
-
-    }
-
-    @Override
-    public void videoUrlList(List<String> videoUrlList) {
-
     }
 
     @Override
@@ -144,17 +130,19 @@ public class PhotoActivity extends BaseActivity implements
             if (!photoList.isEmpty() && TextUtils.isEmpty(CRET_URL)) {
                 CRET_URL = photoList.get(0);
             }
-            for (int i = 0; i < 4; i++) {
-                photoList.addAll(photoList);
+
+            if(photoList.isEmpty()){
+                mHandler.removeCallbacks(hideControlTask);
+                controlLayout.animate().translationY(0).setDuration(300).start();
+                getWindow().getDecorView().setSystemUiVisibility(View.VISIBLE);
+                showLeftMenu(true);
+            }else{
+                showControlView(true);
             }
             if (adapter != null) {
                 adapter.notifyDataSetChanged();
             }
         }
-    }
-
-    @Override
-    public void usbRemove(String usbstore) {
     }
 
     @Override
@@ -202,7 +190,7 @@ public class PhotoActivity extends BaseActivity implements
 
     @Override
     public void onFlyTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()){
+        switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 touchTime = System.currentTimeMillis();
                 break;
@@ -243,12 +231,14 @@ public class PhotoActivity extends BaseActivity implements
      * 在Fragment中调用此方法，同步列表选择框
      */
     public void setSelectItem(String url) {
+        FlyLog.d("select start-----");
         for (int i = 0; i < photoList.size(); i++) {
             if (photoList.get(i).equals(url)) {
                 viewPager.setCurrentItem(i);
                 break;
             }
         }
+        FlyLog.d("select end-----");
     }
 
 
@@ -290,10 +280,12 @@ public class PhotoActivity extends BaseActivity implements
             photoView.setOnClickListener(PhotoActivity.this);
             imageResIDs.put(position, View.generateViewId());
             photoView.setId(imageResIDs.get(position));
+            photoView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             photoView.setZoomable(true);
             Glide.with(PhotoActivity.this)
                     .load(photoList.get(position))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .error(R.drawable.media_image_error)
                     .into(photoView);
             container.addView(photoView);
             return photoView;

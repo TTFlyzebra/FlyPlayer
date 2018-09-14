@@ -14,8 +14,6 @@ import com.jancar.media.utils.FlyLog;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,11 +73,11 @@ public class VideoFloderFragment extends BaseFragment implements VideoFloderAdap
                 }
                 groupList.addAll(mHashMap.keySet());
 
-                Collections.sort(groupList, new Comparator<String>() {
-                    public int compare(String p1, String p2) {
-                        return p1.compareToIgnoreCase(p2);
-                    }
-                });
+//                Collections.sort(groupList, new Comparator<String>() {
+//                    public int compare(String p1, String p2) {
+//                        return p1.compareToIgnoreCase(p2);
+//                    }
+//                });
 
                 for (String key : groupList) {
                     itemList.add(mHashMap.get(key));

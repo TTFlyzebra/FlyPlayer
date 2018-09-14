@@ -3,6 +3,7 @@ package com.jancar.media;
 import android.app.Application;
 import android.view.ViewConfiguration;
 
+import com.jancar.media.model.UsbMediaScan;
 import com.jancar.media.utils.FlyLog;
 
 import java.lang.reflect.Field;
@@ -12,6 +13,7 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        UsbMediaScan.getInstance().init(getApplicationContext());
         /**
          * 设置Marquee不显示省略号
          */

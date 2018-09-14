@@ -13,4 +13,6 @@ interface Notify {
     void notifyVideo(inout List<String> list);
 
     void notifyImage(inout List<String> list);
+
+    void notifyPath(String path);
 }

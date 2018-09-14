@@ -13,6 +13,8 @@ interface FlyMedia {
      */
     void scanDisk(String disk);
 
+    String getPath();
+
     List<String> getMusics();
 
     List<String> getVideos();

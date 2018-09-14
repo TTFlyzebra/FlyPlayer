@@ -1,6 +1,5 @@
 package com.jancar.media.fragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
@@ -9,17 +8,23 @@ import android.view.ViewGroup;
 
 import com.jancar.media.R;
 import com.jancar.media.adpater.StorageAdapater;
+import com.jancar.media.base.BaseFragment;
+import com.jancar.media.data.StorageInfo;
 import com.jancar.media.listener.IStorageListener;
 import com.jancar.media.model.Storage;
+import com.jancar.media.utils.FlyLog;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StorageFragment extends Fragment implements IStorageListener,XRecyclerView.LoadingListener{
+public class StorageFragment extends BaseFragment implements
+        IStorageListener,
+        XRecyclerView.LoadingListener,
+        StorageAdapater.OnItemClickListener{
     private XRecyclerView recyclerView;
     private StorageAdapater adapater;
-    private List<com.jancar.media.data.Storage> mList = new ArrayList<>();
+    private List<StorageInfo> mList = new ArrayList<>();
     private Storage storageHandler = Storage.getInstance();
 
     public StorageFragment() {
@@ -50,11 +55,12 @@ public class StorageFragment extends Fragment implements IStorageListener,XRecyc
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapater);
         recyclerView.setPullRefreshEnabled(false);
+        adapater.setOnItemClickListener(this);
 //        recyclerView.setLoadingListener(this);
     }
 
     @Override
-    public void storageList(List<com.jancar.media.data.Storage> storageList) {
+    public void storageList(List<StorageInfo> storageList) {
         recyclerView.refreshComplete();
         if (storageList == null) return;
         mList.clear();
@@ -83,5 +89,17 @@ public class StorageFragment extends Fragment implements IStorageListener,XRecyc
     @Override
     public void onLoadMore() {
 
+    }
+
+    @Override
+    public void changePath(String path) {
+        adapater.setCurrentPath(path);
+        adapater.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemClick(View view, int pos) {
+        FlyLog.d("openStorager storage mPath=%s",mList.get(pos));
+        usbMediaScan.openStorager(mList.get(pos));
     }
 }

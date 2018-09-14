@@ -11,13 +11,14 @@ import android.os.RemoteException;
 
 import com.jancar.media.FlyMedia;
 import com.jancar.media.Notify;
+import com.jancar.media.data.StorageInfo;
 import com.jancar.media.listener.IUsbMediaListener;
 import com.jancar.media.utils.FlyLog;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsbMedia implements IUsbMediaScan {
+public class UsbMediaScan implements IUsbMediaScan {
     private FlyMedia mFlyMedia;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private Context mContext;
@@ -34,6 +35,7 @@ public class UsbMedia implements IUsbMediaScan {
                     listener.musicUrlList(mFlyMedia.getMusics());
                     listener.imageUrlList(mFlyMedia.getImages());
                     listener.videoUrlList(mFlyMedia.getVideos());
+                    listener.changePath(mFlyMedia.getPath());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -85,18 +87,35 @@ public class UsbMedia implements IUsbMediaScan {
                 }
             });
         }
+
+        @Override
+        public void notifyPath(final String path) throws RemoteException {
+            FlyLog.d("get mPath=%s", path);
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    for (IUsbMediaListener listener : listeners) {
+                        listener.changePath(path);
+                    }
+                }
+            });
+        }
     };
 
 
-    private UsbMedia() {
+    private UsbMediaScan() {
     }
 
-    public static UsbMedia getInstance() {
+    public static UsbMediaScan getInstance() {
         return UsbMediaScanHolder.sInstance;
     }
 
+    public void init(Context applicationContext) {
+        this.mContext = applicationContext;
+    }
+
     private static class UsbMediaScanHolder {
-        public static final UsbMedia sInstance = new UsbMedia();
+        public static final UsbMediaScan sInstance = new UsbMediaScan();
     }
 
     private void bindService() {
@@ -124,14 +143,22 @@ public class UsbMedia implements IUsbMediaScan {
     }
 
     @Override
-    public void init(Context context) {
-        mContext = context;
+    public void open() {
         bindService();
     }
 
     @Override
     public void close() {
         unBindService();
+    }
+
+    @Override
+    public void openStorager(StorageInfo storageInfo) {
+        try {
+            mFlyMedia.scanDisk(storageInfo.mPath);
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
     }
 
     @Override
@@ -142,6 +169,7 @@ public class UsbMedia implements IUsbMediaScan {
                 iUsbMediaListener.musicUrlList(mFlyMedia.getMusics());
                 iUsbMediaListener.imageUrlList(mFlyMedia.getImages());
                 iUsbMediaListener.videoUrlList(mFlyMedia.getVideos());
+                iUsbMediaListener.changePath(mFlyMedia.getPath());
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

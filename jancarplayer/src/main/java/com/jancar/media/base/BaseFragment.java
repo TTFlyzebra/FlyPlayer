@@ -1,21 +1,15 @@
 package com.jancar.media.base;
 
 import android.app.Fragment;
-import android.os.Bundle;
 
 import com.jancar.media.listener.IUsbMediaListener;
 import com.jancar.media.model.IUsbMediaScan;
-import com.jancar.media.model.UsbMedia;
+import com.jancar.media.model.UsbMediaScan;
 
 import java.util.List;
 
 public class BaseFragment extends Fragment implements IUsbMediaListener {
-    protected IUsbMediaScan usbMediaScan = UsbMedia.getInstance();
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    protected IUsbMediaScan usbMediaScan = UsbMediaScan.getInstance();
 
     @Override
     public void onStart() {
@@ -27,13 +21,6 @@ public class BaseFragment extends Fragment implements IUsbMediaListener {
     public void onStop() {
         usbMediaScan.removeListener(this);
         super.onStop();
-    }
-
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     @Override
@@ -53,6 +40,11 @@ public class BaseFragment extends Fragment implements IUsbMediaListener {
 
     @Override
     public void usbRemove(String usbstore) {
+
+    }
+
+    @Override
+    public void changePath(String path) {
 
     }
 }

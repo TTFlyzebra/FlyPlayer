@@ -1,8 +1,8 @@
-package com.jancar.media.data;
+package com.jancar.usbmedia.model;
 
 import android.os.UserHandle;
 
-public class Storage {
+public class StorageInfo {
     public String path;
     public boolean isRemoveable;
     public String state;
@@ -17,7 +17,7 @@ public class Storage {
     public UserHandle mOwner;
     public String mFsUuid;
 
-    public Storage(String path) {
+    public StorageInfo(String path) {
         this.path = path;
     }
 

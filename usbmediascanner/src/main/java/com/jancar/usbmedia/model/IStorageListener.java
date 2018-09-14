@@ -1,6 +1,4 @@
-package com.jancar.media.listener;
-
-import com.jancar.media.data.StorageInfo;
+package com.jancar.usbmedia.model;
 
 import java.util.List;
 

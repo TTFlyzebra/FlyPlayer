@@ -12,7 +12,7 @@
         android:layout_height="match_parent" />
 
 
-    <RelativeLayout
+    <com.jancar.media.view.TouchEventRelativeLayout
         android:id="@+id/ac_photo_control"
         android:layout_width="match_parent"
         android:layout_height="120px"
@@ -88,7 +88,7 @@
             android:scaleType="centerInside"
             android:src="@drawable/media_video_list" />
 
-    </RelativeLayout>
+    </com.jancar.media.view.TouchEventRelativeLayout>
 
 
     <com.jancar.media.view.TouchEventRelativeLayout

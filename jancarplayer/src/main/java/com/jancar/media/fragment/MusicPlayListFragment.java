@@ -10,14 +10,14 @@ import android.view.ViewGroup;
 import com.jancar.media.R;
 import com.jancar.media.adpater.MusicPlayListAdapter;
 import com.jancar.media.base.MusicFragment;
-import com.jancar.media.listener.IMusicPlayerListener;
 import com.jancar.media.model.MusicPlayer;
 import com.jancar.media.module.RecycleViewDivider;
 import com.jancar.media.utils.FlyLog;
 
 import java.util.List;
 
-public class MusicPlayListFragment extends MusicFragment implements IMusicPlayerListener, MusicPlayListAdapter.OnItemClickListener {
+public class MusicPlayListFragment extends MusicFragment implements
+        MusicPlayListAdapter.OnItemClickListener {
     private RecyclerView recyclerView;
     private MusicPlayListAdapter adapter;
 
@@ -28,19 +28,6 @@ public class MusicPlayListFragment extends MusicFragment implements IMusicPlayer
     }
 
     public MusicPlayListFragment() {
-
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        musicPlayer.addListener(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        musicPlayer.removeListener(this);
-        super.onDestroy();
     }
 
     @Override
@@ -116,7 +103,7 @@ public class MusicPlayListFragment extends MusicFragment implements IMusicPlayer
         if (musicList == null || musicList.isEmpty() || musicPlayer == null) return;
         for (int i = 0; i < musicList.size(); i++) {
             if (musicPlayer.getPlayUrl().equals(musicList.get(i))) {
-                ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPosition(i);
+                recyclerView.getLayoutManager().scrollToPosition(i);
 //                recyclerView.smoothScrollToPosition(i);
                 break;
             }

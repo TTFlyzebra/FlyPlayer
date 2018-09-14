@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.jancar.media.R;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.listener.IMusicPlayerListener;
-import com.jancar.media.listener.IUsbMediaListener;
 import com.jancar.media.model.IMusicPlayer;
 import com.jancar.media.model.MusicPlayer;
 import com.jancar.media.utils.FlyLog;
@@ -33,7 +32,6 @@ import java.util.List;
 public class MusicActivity extends BaseActivity implements
         SeekBar.OnSeekBarChangeListener,
         IMusicPlayerListener,
-        IUsbMediaListener,
         FlyTabView.OnItemClickListener,
         View.OnClickListener {
     private FlyTabView tabView;
@@ -81,8 +79,6 @@ public class MusicActivity extends BaseActivity implements
         initView();
 
         musicPlayer.addListener(this);
-        usbMediaScan.addListener(this);
-
     }
 
     private void initView() {
@@ -119,7 +115,6 @@ public class MusicActivity extends BaseActivity implements
     @Override
     protected void onDestroy() {
         mHandler.removeCallbacksAndMessages(null);
-        usbMediaScan.removeListener(this);
         musicPlayer.removeListener(this);
         musicPlayer.stop();
         super.onDestroy();
@@ -134,22 +129,6 @@ public class MusicActivity extends BaseActivity implements
         }
 
     }
-
-    @Override
-    public void videoUrlList(List<String> videoUrlList) {
-
-    }
-
-    @Override
-    public void imageUrlList(List<String> imageUrlList) {
-
-    }
-
-    @Override
-    public void usbRemove(String usbstore) {
-
-    }
-
 
     @Override
     public void onItemClick(View v, int pos) {

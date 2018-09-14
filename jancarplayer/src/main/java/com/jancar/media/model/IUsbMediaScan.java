@@ -1,7 +1,6 @@
 package com.jancar.media.model;
 
-import android.content.Context;
-
+import com.jancar.media.data.StorageInfo;
 import com.jancar.media.listener.IUsbMediaListener;
 
 public interface IUsbMediaScan{
@@ -9,7 +8,9 @@ public interface IUsbMediaScan{
 
     void removeListener(IUsbMediaListener iUsbMediaListener);
 
-    void init(Context context);
+    void open();
 
     void close();
+
+    void openStorager(StorageInfo storageInfo);
 }

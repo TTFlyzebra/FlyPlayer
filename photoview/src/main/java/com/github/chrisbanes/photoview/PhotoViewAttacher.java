@@ -41,7 +41,7 @@ public class PhotoViewAttacher implements View.OnTouchListener,
 
     public static float DEFAULT_MAX_SCALE = 3.0f;
     private static float DEFAULT_MID_SCALE = 1.75f;
-    public static float DEFAULT_MIN_SCALE = 0.5f;
+    public static float DEFAULT_MIN_SCALE = 1f;
     private static int DEFAULT_ZOOM_DURATION = 200;
 
     private static final int EDGE_NONE = -1;

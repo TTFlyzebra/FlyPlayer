@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jancar.media.R;
-import com.jancar.media.data.Storage;
+import com.jancar.media.data.StorageInfo;
 
 import java.util.List;
 
@@ -19,9 +19,14 @@ import java.util.List;
  */
 
 public class StorageAdapater extends RecyclerView.Adapter<StorageAdapater.ViewHolder> {
-    private List<Storage> mList;
+    private List<StorageInfo> mList;
     private Context mContext;
     private OnItemClickListener onItemClickListener;
+    private String path = "";
+
+    public void setCurrentPath(String path) {
+        this.path = path == null ? "" : path;
+    }
 
     public interface OnItemClickListener {
         void onItemClick(View view, int pos);
@@ -31,7 +36,7 @@ public class StorageAdapater extends RecyclerView.Adapter<StorageAdapater.ViewHo
         this.onItemClickListener = onItemClickListener;
     }
 
-    public StorageAdapater(Context context, List<Storage> list) {
+    public StorageAdapater(Context context, List<StorageInfo> list) {
         mContext = context;
         mList = list;
     }
@@ -44,7 +49,7 @@ public class StorageAdapater extends RecyclerView.Adapter<StorageAdapater.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        Storage storage = mList.get(position);
+        StorageInfo storage = mList.get(position);
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,13 +60,9 @@ public class StorageAdapater extends RecyclerView.Adapter<StorageAdapater.ViewHo
             }
         });
 
-        if(storage.isRemoveable){
-            holder.imageView.setImageResource(R.drawable.media_usb);
-        }else{
-            holder.imageView.setImageResource(R.drawable.media_disk);
-        }
-
+        holder.imageView.setImageResource(storage.isRemoveable ? R.drawable.media_usb : R.drawable.media_disk);
         holder.textView.setText(storage.mDescription);
+        holder.itemView.setSelected(path.equals(storage.mPath));
     }
 
 

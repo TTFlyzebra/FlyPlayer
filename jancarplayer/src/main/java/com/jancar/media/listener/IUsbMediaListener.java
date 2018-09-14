@@ -28,4 +28,11 @@ public interface IUsbMediaListener {
      */
     void usbRemove(String usbstore);
 
+
+    /**
+     * 存储器改变
+     * @param path
+     */
+    void changePath(String path);
+
 }

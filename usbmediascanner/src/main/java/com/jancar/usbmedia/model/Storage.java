@@ -1,12 +1,10 @@
-package com.jancar.media.model;
+package com.jancar.usbmedia.model;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.jancar.media.data.StorageInfo;
-import com.jancar.media.listener.IStorageListener;
-import com.jancar.media.utils.StorageTools;
+import com.jancar.usbmedia.utils.StorageTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +71,6 @@ public class Storage implements IStorage {
         listeners.clear();
     }
 
-
+    
 
 }
