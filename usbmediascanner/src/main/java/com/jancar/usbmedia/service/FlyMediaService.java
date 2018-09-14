@@ -122,18 +122,18 @@ public class FlyMediaService extends Service {
     public void notifyAllListener() {
         Collections.sort(mVideoList, new Comparator<String>() {
             public int compare(String p1, String p2) {
-                return p2.compareToIgnoreCase(p1);
+                return p1.compareToIgnoreCase(p2);
             }
         });
         Collections.sort(mMusicList, new Comparator<String>() {
             public int compare(String p1, String p2) {
-                return p2.compareToIgnoreCase(p1);
+                return p1.compareToIgnoreCase(p2);
             }
         });
 
         Collections.sort(mImageList, new Comparator<String>() {
             public int compare(String p1, String p2) {
-                return p2.compareToIgnoreCase(p1);
+                return p1.compareToIgnoreCase(p2);
             }
         });
 
