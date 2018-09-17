@@ -122,13 +122,38 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     public void musicUrlList(List<String> musicUrlList) {
-        if (musicUrlList != null && !musicUrlList.isEmpty()) {
-            musicList.clear();
-            musicList.addAll(musicUrlList);
-            musicPlayer.play(musicList.get(0));
+        FlyLog.d("get music size=%d", musicUrlList == null ? 0 : musicUrlList.size());
+        if (musicUrlList == null) {
+            FlyLog.d("musicUrlList = null return");
+            return;
+        }
+        musicList.clear();
+        if (musicUrlList.isEmpty()&&musicPlayer.isPlaying()) {
+            currenPos = 0;
+            musicPlayer.stop();
+            FlyLog.d("musicPlayer stop");
+            return;
+        }
+        musicList.addAll(musicUrlList);
+        //TODO:判断当前列表有没更新，确定播放哪首歌曲
+        if(!musicPlayer.isPlaying()){
+            currenPos = 0;
+            musicPlayer.play(musicList.get(currenPos));
+            return;
         }
 
+        if (currenPos >= musicUrlList.size()) {
+            currenPos = 0;
+            musicPlayer.play(musicList.get(currenPos));
+            return;
+        }
+        String currentUrl = musicPlayer.getPlayUrl();
+        if (!musicList.get(currenPos).equals(currentUrl)) {
+            currenPos = 0;
+            musicPlayer.play(musicList.get(currenPos));
+        }
     }
+
 
     @Override
     public void onItemClick(View v, int pos) {
@@ -200,6 +225,7 @@ public class MusicActivity extends BaseActivity implements
 
     private void upPlayInfo() {
         tvSingle.setText(StringTools.getNameByPath(musicPlayer.getPlayUrl()));
+        currenPos = 0;
         for (int i = 0; i < musicList.size(); i++) {
             if (musicList.get(i).equals(musicPlayer.getPlayUrl())) {
                 currenPos = i;
@@ -209,8 +235,8 @@ public class MusicActivity extends BaseActivity implements
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if(defaultBitmap==null){
-                    defaultBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.media_music);
+                if (defaultBitmap == null) {
+                    defaultBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.media_music);
                 }
                 initID3();
             }
@@ -223,56 +249,39 @@ public class MusicActivity extends BaseActivity implements
             bitmap = null;
             artist = "";
             album = "";
-            if (url.endsWith(".mp3")) {
-                FlyLog.d("start get id3 info url=%s",url);
+            if (url.toLowerCase().endsWith(".mp3")) {
+                FlyLog.d("start get id3 info url=%s", url);
                 Mp3File mp3file = new Mp3File(url);
                 if (mp3file.hasId3v2Tag()) {
                     ID3v2 id3v2Tag = mp3file.getId3v2Tag();
                     artist = TextUtils.isEmpty(id3v2Tag.getArtist()) ? "" : id3v2Tag.getArtist();
                     album = TextUtils.isEmpty(id3v2Tag.getAlbum()) ? "" : id3v2Tag.getAlbum();
-                    FlyLog.d("ID3Info->Track: " + id3v2Tag.getTrack());
-                    FlyLog.d("ID3Info->Artist: " + artist);
-                    FlyLog.d("ID3Info->Title: " + id3v2Tag.getTitle());
-                    FlyLog.d("ID3Info->Album: " + album);
-                    FlyLog.d("ID3Info->Year: " + id3v2Tag.getYear());
-                    FlyLog.d("ID3Info->Genre: " + id3v2Tag.getGenre() + " (" + id3v2Tag.getGenreDescription() + ")");
-                    FlyLog.d("ID3Info->Comment: " + id3v2Tag.getComment());
-                    FlyLog.d("ID3Info->Lyrics: " + id3v2Tag.getLyrics());
-                    FlyLog.d("ID3Info->Composer: " + id3v2Tag.getComposer());
-                    FlyLog.d("ID3Info->Publisher: " + id3v2Tag.getPublisher());
-                    FlyLog.d("ID3Info->Original artist: " + id3v2Tag.getOriginalArtist());
-                    FlyLog.d("ID3Info->Album artist: " + id3v2Tag.getAlbumArtist());
-                    FlyLog.d("ID3Info->Copyright: " + id3v2Tag.getCopyright());
-                    FlyLog.d("ID3Info->URL: " + id3v2Tag.getUrl());
-                    FlyLog.d("ID3Info->Encoder: " + id3v2Tag.getEncoder());
                     byte[] albumImageData = id3v2Tag.getAlbumImage();
                     if (albumImageData != null) {
-                        FlyLog.d("ID3Info->Have album image data, length: " + albumImageData.length + " bytes");
-                        FlyLog.d("ID3Info->Album image mime type: " + id3v2Tag.getAlbumImageMimeType());
                         bitmap = BitmapFactory.decodeByteArray(albumImageData, 0, albumImageData.length);
                     }
                 } else if (mp3file.hasId3v1Tag()) {
                     ID3v1 id3v1Tag = mp3file.getId3v1Tag();
                     artist = TextUtils.isEmpty(id3v1Tag.getArtist()) ? "" : id3v1Tag.getArtist();
                     album = TextUtils.isEmpty(id3v1Tag.getAlbum()) ? "" : id3v1Tag.getAlbum();
-                    FlyLog.d("ID3Info->Track: " + id3v1Tag.getTrack());
-                    FlyLog.d("ID3Info->Artist: " + artist);
-                    FlyLog.d("ID3Info->Title: " + id3v1Tag.getTitle());
-                    FlyLog.d("ID3Info->Album: " + album);
-                    FlyLog.d("ID3Info->Year: " + id3v1Tag.getYear());
-                    FlyLog.d("ID3Info->Genre: " + id3v1Tag.getGenre() + " (" + id3v1Tag.getGenreDescription() + ")");
-                    FlyLog.d("ID3Info->Comment: " + id3v1Tag.getComment());
                 }
-                FlyLog.d("finish get id3 info url=%s",url);
+                FlyLog.d("finish get id3 info url=%s", url);
             }
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    ivImage.setImageBitmap(bitmap==null?defaultBitmap:bitmap);
-                    tvSinger.setText(TextUtils.isEmpty(artist) ? getString(R.string.no_artist) : artist);
-                    tvAlbum.setText(TextUtils.isEmpty(album) ? getString(R.string.no_album) : album);
-                }
-            });
+            if(!isStop) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if(isStop) return;
+                            ivImage.setImageBitmap(bitmap == null ? defaultBitmap : bitmap);
+                            tvSinger.setText(TextUtils.isEmpty(artist) ? getString(R.string.no_artist) : artist);
+                            tvAlbum.setText(TextUtils.isEmpty(album) ? getString(R.string.no_album) : album);
+                        } catch (Exception e) {
+                            FlyLog.e(e.toString());
+                        }
+                    }
+                });
+            }
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }
@@ -309,5 +318,19 @@ public class MusicActivity extends BaseActivity implements
                 musicPlayer.play(musicList.get(currenPos));
             }
         }
+    }
+
+
+    private boolean isStop = true;
+    @Override
+    protected void onStart() {
+        super.onStart();
+        isStop = false;
+    }
+
+    @Override
+    protected void onStop() {
+        isStop = true;
+        super.onStop();
     }
 }

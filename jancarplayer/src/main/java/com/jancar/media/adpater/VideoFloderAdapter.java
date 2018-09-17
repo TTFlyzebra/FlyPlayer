@@ -69,7 +69,7 @@ public class VideoFloderAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup
             parent) {
         if (null == convertView) {
-            convertView = View.inflate(mContext, R.layout.expandablelist_group, null);
+            convertView = View.inflate(mContext, R.layout.explist_video_item_group, null);
         }
         ImageView ivGroup = (ImageView) convertView.findViewById(R.id.iv_group);
         if (isExpanded) {
@@ -91,7 +91,7 @@ public class VideoFloderAdapter extends BaseExpandableListAdapter {
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View
             convertView, ViewGroup parent) {
         if (null == convertView) {
-            convertView = View.inflate(mContext, R.layout.expandablelist_grid_item, null);
+            convertView = View.inflate(mContext, R.layout.explist_video_item_child, null);
         }
         gridView = (GridView) convertView;
         VideoFloderItemAdapter gridViewAdapter = new VideoFloderItemAdapter(mContext, itemList.get(groupPosition),gridView);

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_gv01"
+    android:layout_width="match_parent"
+    android:layout_height="48px"
+    android:gravity="left|center"
+    android:orientation="horizontal">
+
+    <com.jancar.media.view.AnimationImageView
+        android:id="@+id/item_iv01"
+        android:layout_width="33px"
+        android:layout_height="48px"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10px"
+        android:layout_marginRight="10px"
+        android:duplicateParentState="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/media_music_anim_play" />
+
+    <com.jancar.media.view.MarqueeTextView
+        android:id="@+id/item_tv01"
+        android:layout_width="wrap_content"
+        android:layout_height="48px"
+        android:gravity="left|center"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:textColor="@drawable/textcolor_blue_white"
+        android:textSize="18px" />
+
+    <TextView
+        android:id="@+id/item_tv02"
+        android:layout_width="wrap_content"
+        android:layout_height="48px"
+        android:singleLine="true"
+        android:textColor="@drawable/textcolor_blue_white"
+        android:textSize="18px" />
+
+</LinearLayout>

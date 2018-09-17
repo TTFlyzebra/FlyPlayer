@@ -20,13 +20,38 @@ public class Music implements Parcelable{
     /**
      * 专辑
      */
-    public String lbum;
+    public String album;
+
+    /**
+     * 顺序
+     */
+    public int sort;
+
+
+    public Music(){
+
+    }
 
     protected Music(Parcel in) {
         url = in.readString();
         name = in.readString();
         artist = in.readString();
-        lbum = in.readString();
+        album = in.readString();
+        sort = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(url);
+        dest.writeString(name);
+        dest.writeString(artist);
+        dest.writeString(album);
+        dest.writeInt(sort);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Music> CREATOR = new Creator<Music>() {
@@ -40,17 +65,4 @@ public class Music implements Parcelable{
             return new Music[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(url);
-        dest.writeString(name);
-        dest.writeString(artist);
-        dest.writeString(lbum);
-    }
 }

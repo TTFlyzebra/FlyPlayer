@@ -32,6 +32,7 @@ public class UsbMediaScan implements IUsbMediaScan {
                 mFlyMedia = FlyMedia.Stub.asInterface(service);
                 if (mFlyMedia == null) return;
                 mFlyMedia.registerNotify(notify);
+                mFlyMedia.notify(notify);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -174,10 +175,7 @@ public class UsbMediaScan implements IUsbMediaScan {
         listeners.add(iUsbMediaListener);
         if (mFlyMedia != null) {
             try {
-                iUsbMediaListener.musicUrlList(mFlyMedia.getMusics());
-                iUsbMediaListener.imageUrlList(mFlyMedia.getImages());
-                iUsbMediaListener.videoUrlList(mFlyMedia.getVideos());
-                iUsbMediaListener.changePath(mFlyMedia.getPath());
+                mFlyMedia.notify(notify);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

@@ -4,26 +4,26 @@ package com.jancar.media.adpater;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jancar.media.R;
+import com.jancar.media.data.Music;
+import com.jancar.media.utils.StringTools;
+import com.jancar.media.view.AnimationImageView;
+import com.jancar.media.view.MarqueeTextView;
 
-import java.io.File;
 import java.util.List;
 
 /**
  * ExpandableListView 适配器
  */
-public class PhotoFloderAdapter extends BaseExpandableListAdapter {
+public class MusicSingerAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private List<String> groupList;
-    private List<List<String>> itemList;
-    public PhotoFloderAdapter(Context context, List<String> groupList,
-                              List<List<String>> itemList) {
+    private List<List<Music>> itemList;
+    public MusicSingerAdapter(Context context, List<String> groupList, List<List<Music>> itemList) {
         mContext = context;
         this.groupList = groupList;
         this.itemList = itemList;
@@ -36,7 +36,7 @@ public class PhotoFloderAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return 1;
+        return itemList.get(groupPosition).size();
     }
 
     @Override
@@ -67,47 +67,46 @@ public class PhotoFloderAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup
             parent) {
+
+        ViewHolderGroup holder = new ViewHolderGroup();
         if (null == convertView) {
-            convertView = View.inflate(mContext, R.layout.explist_video_item_group, null);
+            convertView = View.inflate(mContext, R.layout.explist_music_item_group, null);
+            holder.imageView1 = (ImageView) convertView.findViewById(R.id.item_iv01);
+            holder.textView1 = (MarqueeTextView) convertView.findViewById(R.id.item_tv01);
+            holder.imageView2 = (ImageView) convertView.findViewById(R.id.item_iv02);
+            convertView.setTag(holder);
         }
-        ImageView ivGroup = (ImageView) convertView.findViewById(R.id.iv_group);
+        else {
+            holder = (ViewHolderGroup) convertView.getTag();
+        }
         if (isExpanded) {
-            ivGroup.setImageResource(R.drawable.media_down);
+            holder.imageView2.setImageResource(R.drawable.media_down);
         } else {
-            ivGroup.setImageResource(R.drawable.media_right);
+            holder.imageView2.setImageResource(R.drawable.media_right);
         }
 
-        String path = groupList.get(groupPosition);
-        int last = path.lastIndexOf(File.separator);
-        TextView tvGroup1 = (TextView) convertView.findViewById(R.id.tv_group1);
-        TextView tvGroup2 = (TextView) convertView.findViewById(R.id.tv_group2);
-        tvGroup1.setText(path.substring(last+1,path.length()));
-        tvGroup2.setText(path.substring(0,last));
+        String str = groupList.get(groupPosition);
+        holder.textView1.setText(str+"("+itemList.get(groupPosition).size()+")");
         return convertView;
     }
 
     @Override
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View
             convertView, ViewGroup parent) {
-        ViewHolder holder = new ViewHolder();
+        ViewHolderChild holder = new ViewHolderChild();
         if (null == convertView) {
-            convertView = View.inflate(mContext, R.layout.explist_video_item_child, null);
-            holder.gridView = (GridView) convertView.findViewById(R.id.item_gv01);
+            convertView = View.inflate(mContext, R.layout.explist_music_item_child, null);
+            holder.imageView = (AnimationImageView) convertView.findViewById(R.id.item_iv01);
+            holder.textView1 = (MarqueeTextView) convertView.findViewById(R.id.item_tv01);
+            holder.textView2 = (TextView) convertView.findViewById(R.id.item_tv02);
             convertView.setTag(holder);
         }
         else {
-            holder = (ViewHolder) convertView.getTag();
+            holder = (ViewHolderChild) convertView.getTag();
         }
-        PhotoFloderItemAdapter gridViewAdapter = new PhotoFloderItemAdapter(mContext, itemList.get(groupPosition));
-        holder.gridView.setAdapter(gridViewAdapter);
-        holder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(onItemClickListener!=null){
-                    onItemClickListener.onItemClick(view,itemList.get(groupPosition).get((int) id));
-                }
-            }
-        });
+
+        holder.textView1.setText(StringTools.getNameByPath(itemList.get(groupPosition).get(childPosition).url));
+
         return convertView;
     }
 
@@ -126,8 +125,16 @@ public class PhotoFloderAdapter extends BaseExpandableListAdapter {
         this.onItemClickListener = onItemClickListener;
     }
 
-    private class ViewHolder {
-        public GridView gridView;
+    private class ViewHolderChild {
+        public AnimationImageView imageView;
+        public MarqueeTextView textView1;
+        public TextView textView2;
+    }
+
+    private class ViewHolderGroup {
+        public ImageView imageView1;
+        public MarqueeTextView textView1;
+        public ImageView imageView2;
     }
 
 }

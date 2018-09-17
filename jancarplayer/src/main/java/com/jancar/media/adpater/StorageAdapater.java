@@ -54,6 +54,7 @@ public class StorageAdapater extends RecyclerView.Adapter<StorageAdapater.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.setEnabled(false);
                 if (onItemClickListener != null) {
                     onItemClickListener.onItemClick(v, (Integer) v.getTag());
                 }
@@ -62,7 +63,9 @@ public class StorageAdapater extends RecyclerView.Adapter<StorageAdapater.ViewHo
 
         holder.imageView.setImageResource(storage.isRemoveable ? R.drawable.media_usb : R.drawable.media_disk);
         holder.textView.setText(storage.mDescription);
-        holder.itemView.setSelected(path.equals(storage.mPath));
+        boolean flag = path.equals(storage.mPath);
+        holder.itemView.setSelected(flag);
+        holder.itemView.setEnabled(!flag);
     }
 
 

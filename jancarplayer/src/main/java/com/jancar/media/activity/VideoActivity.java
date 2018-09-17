@@ -147,18 +147,34 @@ public class VideoActivity extends BaseActivity implements
     @Override
     public void videoUrlList(List<String> videoUrlList) {
         FlyLog.d("get videos size=%d", videoUrlList == null ? 0 : videoUrlList.size());
-        if(videoUrlList==null) return;
-        if (videoUrlList.isEmpty()) {
-            if (player!=null&&!player.isPlaying()) {
-                player.stop();
-            }
-        } else {
-            videoList.clear();
-            videoList.addAll(videoUrlList);
-            if (player!=null&&!player.isPlaying()) {
-                currenPos = 0;
-                player.play(videoList.get(currenPos));
-            }
+        if (videoUrlList == null) {
+            FlyLog.d("musicUrlList = null return");
+            return;
+        }
+        videoList.clear();
+        if (videoUrlList.isEmpty()&&player.isPlaying()) {
+            currenPos = 0;
+            player.stop();
+            FlyLog.d("musicPlayer stop");
+            return;
+        }
+        videoList.addAll(videoUrlList);
+        //TODO:判断当前列表有没更新，确定播放哪首歌曲
+        if(!player.isPlaying()){
+            currenPos = 0;
+            player.play(videoList.get(currenPos));
+            return;
+        }
+
+        if (currenPos >= videoList.size()) {
+            currenPos = 0;
+            player.play(videoList.get(currenPos));
+            return;
+        }
+        String currentUrl = player.getPlayUrl();
+        if (!videoList.get(currenPos).equals(currentUrl)) {
+            currenPos = 0;
+            player.play(videoList.get(currenPos));
         }
     }
 

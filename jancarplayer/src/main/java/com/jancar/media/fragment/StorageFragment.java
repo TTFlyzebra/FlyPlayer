@@ -25,7 +25,7 @@ public class StorageFragment extends BaseFragment implements
     private XRecyclerView recyclerView;
     private StorageAdapater adapater;
     private List<StorageInfo> mList = new ArrayList<>();
-    private Storage storageHandler = Storage.getInstance();
+    private Storage storage = Storage.getInstance();
 
     public StorageFragment() {
     }
@@ -39,7 +39,7 @@ public class StorageFragment extends BaseFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        storageHandler.init(getActivity());
+        storage.init(getActivity());
     }
 
     @Override
@@ -71,19 +71,19 @@ public class StorageFragment extends BaseFragment implements
     @Override
     public void onStart() {
         super.onStart();
-        storageHandler.addListener(this);
+        storage.addListener(this);
     }
 
 
     @Override
     public void onStop() {
-        storageHandler.removeListener(this);
+        storage.removeListener(this);
         super.onStop();
     }
 
     @Override
     public void onRefresh() {
-        storageHandler.refresh();
+        storage.refresh();
     }
 
     @Override
