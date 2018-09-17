@@ -20,13 +20,17 @@ public class Music implements Parcelable{
     /**
      * 专辑
      */
-    public String lbum;
+    public String album;
+
+    public Music(){
+
+    }
 
     protected Music(Parcel in) {
         url = in.readString();
         name = in.readString();
         artist = in.readString();
-        lbum = in.readString();
+        album = in.readString();
     }
 
     public static final Creator<Music> CREATOR = new Creator<Music>() {
@@ -51,6 +55,6 @@ public class Music implements Parcelable{
         dest.writeString(url);
         dest.writeString(name);
         dest.writeString(artist);
-        dest.writeString(lbum);
+        dest.writeString(album);
     }
 }

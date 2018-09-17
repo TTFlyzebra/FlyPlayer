@@ -2,7 +2,6 @@
 package com.jancar.media;
 
 import com.jancar.media.Notify;
-
 // Declare any non-default types here with import statements
 
 interface FlyMedia {
@@ -20,6 +19,8 @@ interface FlyMedia {
     List<String> getVideos();
 
     List<String> getImages();
+
+    void notify(Notify notify);
 
     void registerNotify(Notify notify);
 

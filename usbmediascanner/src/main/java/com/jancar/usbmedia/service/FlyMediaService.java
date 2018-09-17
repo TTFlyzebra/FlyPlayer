@@ -11,11 +11,18 @@ import android.text.TextUtils;
 
 import com.jancar.media.FlyMedia;
 import com.jancar.media.Notify;
+import com.jancar.media.data.Music;
 import com.jancar.usbmedia.data.Const;
 import com.jancar.usbmedia.utils.FlyLog;
 import com.jancar.usbmedia.utils.Utils;
+import com.mpatric.mp3agic.ID3v1;
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.UnsupportedTagException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,6 +36,7 @@ public class FlyMediaService extends Service {
     private AtomicBoolean isRunning = new AtomicBoolean(false);
     private AtomicBoolean isStoped = new AtomicBoolean(false);
     private List<String> mMusicList = Collections.synchronizedList(new ArrayList<String>());
+    private List<Music> mMusicID3List = Collections.synchronizedList(new ArrayList<Music>());
     private List<String> mVideoList = Collections.synchronizedList(new ArrayList<String>());
     private List<String> mImageList = Collections.synchronizedList(new ArrayList<String>());
     private RemoteCallbackList<Notify> mNotifys = new RemoteCallbackList<>();
@@ -73,7 +81,39 @@ public class FlyMediaService extends Service {
         }
 
         @Override
-        public void registerNotify(Notify notify) throws RemoteException {
+        public void notify(final Notify notify) throws RemoteException {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        notify.notifyID3Music(mMusicID3List);
+                        notify.notifyMusic(mMusicList);
+                        notify.notifyVideo(mVideoList);
+                        notify.notifyImage(mImageList);
+                        notify.notifyPath(currentPath);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void registerNotify(final Notify notify) throws RemoteException {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        notify.notifyID3Music(mMusicID3List);
+                        notify.notifyMusic(mMusicList);
+                        notify.notifyVideo(mVideoList);
+                        notify.notifyImage(mImageList);
+                        notify.notifyPath(currentPath);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
             mNotifys.register(notify);
         }
 
@@ -151,6 +191,8 @@ public class FlyMediaService extends Service {
                             l.notifyVideo(mVideoList);
                             FlyLog.d("notify music list size=%d", mMusicList == null ? 0 : mMusicList.size());
                             l.notifyMusic(mMusicList);
+                            FlyLog.d("notify musicid3 list size=%d", mMusicID3List == null ? 0 : mMusicID3List.size());
+                            l.notifyID3Music(mMusicID3List);
                             FlyLog.d("notify image list size=%d", mImageList == null ? 0 : mImageList.size());
                             l.notifyImage(mImageList);
                             FlyLog.d("notify path =%s", currentPath);
@@ -166,6 +208,28 @@ public class FlyMediaService extends Service {
     }
 
     public void notifyPath() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                FlyLog.d("notify id3 music list size=%d",mMusicID3List==null?0:mMusicID3List.size());
+                final int N = mNotifys.beginBroadcast();
+                FlyLog.d("start notify client, client sum=%d", N);
+                for (int i = 0; i < N; i++) {
+                    Notify l = mNotifys.getBroadcastItem(i);
+                    if (l != null) {
+                        try {
+                            l.notifyID3Music(mMusicID3List);
+                        } catch (RemoteException e) {
+                            FlyLog.e(e.toString());
+                        }
+                    }
+                }
+                mNotifys.finishBroadcast();
+            }
+        });
+    }
+
+    private void notifyID3Listener() {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -209,14 +273,17 @@ public class FlyMediaService extends Service {
                 mVideoList.clear();
                 mImageList.clear();
                 mMusicList.clear();
+                mMusicID3List.clear();
                 try {
                     getVideoFromPath(new File(path));
+                    notifyAllListener();
+                    getMusicID3Info(mMusicList);
+                    notifyID3Listener();
                 } catch (Exception e) {
                     FlyLog.e(e.toString());
                 }
                 isRunning.set(false);
                 FlyLog.d("finish scan path=%s", path);
-                notifyAllListener();
             }
         });
     }
@@ -252,12 +319,34 @@ public class FlyMediaService extends Service {
                 case ".mkv":
                 case ".mov":
                 case ".ts":
+                case ".avi":
+                case ".3gp":
+                case ".3gpp":
+                case ".3g2":
+                case ".flv":
+                case ".mpeg":
+                case ".mpg":
+                case ".rm":
+                case ".tp":
+                case ".vop":
+                case ".wmv":
                     mVideoList.add(url);
                     FlyLog.d("add a video=%s", url);
                     break;
-                case ".mp3":
-                case ".flac":
+                case ".aac":
+//                case ".ac3":
+//                case ".aiff":
+                case ".amr":
                 case ".ape":
+//                case ".au":
+                case ".flac":
+                case ".m4a":
+                case ".mka":
+                case ".mp3":
+                case ".ogg":
+//                case ".ra":
+                case ".wav":
+//                case ".wma":
                     if (isFirst) {
                         isFirst = false;
                         //OPEN FILE
@@ -270,10 +359,41 @@ public class FlyMediaService extends Service {
                 case ".bmp":
                 case ".gif":
                 case ".jpg":
+                case ".ico":
                     mImageList.add(url);
                     FlyLog.d("add a image=%s", url);
                     break;
             }
+        }
+    }
+
+    private void getMusicID3Info(List<String> mMusicList) {
+        mMusicID3List.clear();
+        for(String url:mMusicList){
+            if (isStoped.get()) return;
+            Music music = new Music();
+            music.url = url;
+            try {
+                Mp3File mp3file = new Mp3File(url);
+                if (mp3file.hasId3v2Tag()) {
+                    ID3v2 id3v2Tag = mp3file.getId3v2Tag();
+                    music.artist = TextUtils.isEmpty(id3v2Tag.getArtist()) ? "" : id3v2Tag.getArtist();
+                    music.album = TextUtils.isEmpty(id3v2Tag.getAlbum()) ? "" : id3v2Tag.getAlbum();
+                    music.name = TextUtils.isEmpty(id3v2Tag.getTitle()) ? "" : id3v2Tag.getTitle();
+                } else if (mp3file.hasId3v1Tag()) {
+                    ID3v1 id3v1Tag = mp3file.getId3v1Tag();
+                    music.artist = TextUtils.isEmpty(id3v1Tag.getArtist()) ? "" : id3v1Tag.getArtist();
+                    music.album = TextUtils.isEmpty(id3v1Tag.getAlbum()) ? "" : id3v1Tag.getAlbum();
+                    music.name = TextUtils.isEmpty(id3v1Tag.getTitle()) ? "" : id3v1Tag.getTitle();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (UnsupportedTagException e) {
+                e.printStackTrace();
+            } catch (InvalidDataException e) {
+                e.printStackTrace();
+            }
+            mMusicID3List.add(music);
         }
     }
 

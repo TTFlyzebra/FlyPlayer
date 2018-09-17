@@ -90,13 +90,18 @@ public class PhotoFloderAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View
             convertView, ViewGroup parent) {
+        ViewHolder holder = new ViewHolder();
         if (null == convertView) {
             convertView = View.inflate(mContext, R.layout.expandablelist_grid_item, null);
+            holder.gridView = (GridView) convertView.findViewById(R.id.item_gv01);
+            convertView.setTag(holder);
         }
-        gridView = (GridView) convertView;
+        else {
+            holder = (ViewHolder) convertView.getTag();
+        }
         PhotoFloderItemAdapter gridViewAdapter = new PhotoFloderItemAdapter(mContext, itemList.get(groupPosition));
-        gridView.setAdapter(gridViewAdapter);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        holder.gridView.setAdapter(gridViewAdapter);
+        holder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(onItemClickListener!=null){
@@ -120,6 +125,10 @@ public class PhotoFloderAdapter extends BaseExpandableListAdapter {
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+    }
+
+    private class ViewHolder {
+        public GridView gridView;
     }
 
 }

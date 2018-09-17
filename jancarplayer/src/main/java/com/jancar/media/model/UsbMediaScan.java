@@ -11,6 +11,7 @@ import android.os.RemoteException;
 
 import com.jancar.media.FlyMedia;
 import com.jancar.media.Notify;
+import com.jancar.media.data.Music;
 import com.jancar.media.data.StorageInfo;
 import com.jancar.media.listener.IUsbMediaListener;
 import com.jancar.media.utils.FlyLog;
@@ -31,12 +32,6 @@ public class UsbMediaScan implements IUsbMediaScan {
                 mFlyMedia = FlyMedia.Stub.asInterface(service);
                 if (mFlyMedia == null) return;
                 mFlyMedia.registerNotify(notify);
-                for (IUsbMediaListener listener : listeners) {
-                    listener.musicUrlList(mFlyMedia.getMusics());
-                    listener.imageUrlList(mFlyMedia.getImages());
-                    listener.videoUrlList(mFlyMedia.getVideos());
-                    listener.changePath(mFlyMedia.getPath());
-                }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -96,6 +91,19 @@ public class UsbMediaScan implements IUsbMediaScan {
                 public void run() {
                     for (IUsbMediaListener listener : listeners) {
                         listener.changePath(path);
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void notifyID3Music(final List<Music> list) throws RemoteException {
+            FlyLog.d("get music list size=%d", list == null ? 0 : list.size());
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    for (IUsbMediaListener listener : listeners) {
+                        listener.musicID3UrlList(list);
                     }
                 }
             });

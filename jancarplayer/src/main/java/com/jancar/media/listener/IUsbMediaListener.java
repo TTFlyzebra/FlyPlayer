@@ -1,5 +1,7 @@
 package com.jancar.media.listener;
 
+import com.jancar.media.data.Music;
+
 import java.util.List;
 
 public interface IUsbMediaListener {
@@ -8,6 +10,12 @@ public interface IUsbMediaListener {
      * @param musicUrlList 返回数据
      */
     void musicUrlList(List<String> musicUrlList);
+
+    /**
+     * 通知更新扫描U盘所得到的music列表
+     * @param musicUrlList 返回数据
+     */
+    void musicID3UrlList(List<Music> musicUrlList);
 
     /**
      * 通知更新扫描U盘所得到的video列表

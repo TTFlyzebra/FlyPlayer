@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.jancar.media.R;
+import com.jancar.media.data.Music;
 import com.jancar.media.listener.IUsbMediaListener;
 import com.jancar.media.model.IUsbMediaScan;
 import com.jancar.media.model.UsbMediaScan;
@@ -56,6 +57,11 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
 
     @Override
     public void musicUrlList(List<String> musicUrlList) {
+
+    }
+
+    @Override
+    public void musicID3UrlList(List<Music> musicUrlList) {
 
     }
 

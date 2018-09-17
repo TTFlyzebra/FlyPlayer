@@ -21,6 +21,8 @@ interface FlyMedia {
 
     List<String> getImages();
 
+    void notify(Notify notify);
+
     void registerNotify(Notify notify);
 
     void unregisterNotify(Notify notify);

@@ -2,6 +2,7 @@ package com.jancar.media.base;
 
 import android.app.Fragment;
 
+import com.jancar.media.data.Music;
 import com.jancar.media.listener.IUsbMediaListener;
 import com.jancar.media.model.IUsbMediaScan;
 import com.jancar.media.model.UsbMediaScan;
@@ -25,6 +26,11 @@ public class BaseFragment extends Fragment implements IUsbMediaListener {
 
     @Override
     public void musicUrlList(List<String> musicUrlList) {
+
+    }
+
+    @Override
+    public void musicID3UrlList(List<Music> musicUrlList) {
 
     }
 

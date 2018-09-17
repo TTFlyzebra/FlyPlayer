@@ -43,7 +43,7 @@ public class VideoFloderFragment extends BaseFragment implements VideoFloderAdap
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         activity = (VideoActivity) getActivity();
-        return inflater.inflate(R.layout.fragment_floder_grid_list, null);
+        return inflater.inflate(R.layout.fragment_ex_list, null);
     }
 
     @Override

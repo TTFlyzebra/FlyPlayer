@@ -48,7 +48,7 @@ public class PhotoFloderFragment extends BaseFragment implements PhotoFloderAdap
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         activity = (PhotoActivity) getActivity();
         photoList = activity.photoList;
-        return inflater.inflate(R.layout.fragment_floder_grid_list, null);
+        return inflater.inflate(R.layout.fragment_ex_list, null);
     }
 
     @Override

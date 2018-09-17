@@ -47,21 +47,31 @@ public class PhotoFloderItemAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder = new ViewHolder();
         if (null == convertView) {
             convertView = View.inflate(mContext, R.layout.item_video2, null);
+            viewHolder.textView = (MarqueeTextView) convertView.findViewById(R.id.tv_gridview);
+            viewHolder.imageView1 = (ImageView) convertView.findViewById(R.id.iv_gridview);
+            viewHolder.imageView2 = (ImageView) convertView.findViewById(R.id.item_iv01_back);
+            convertView.setTag(viewHolder);
+        }else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
-        MarqueeTextView textView = (MarqueeTextView) convertView.findViewById(R.id.tv_gridview);
         String url = itemGridList.get(position);
         boolean flag = url.equals(((PhotoActivity)mContext).photoList.get(((PhotoActivity)mContext).currentItem));
-        textView.setText(StringTools.getNameByPath(url));
-        textView.setTextColor(flag?0xFF0370E5:0xFFFFFFFF);
-        textView.enableMarquee(flag);
+        viewHolder.textView.setText(StringTools.getNameByPath(url));
+        viewHolder.textView.setTextColor(flag?0xFF0370E5:0xFFFFFFFF);
+        viewHolder.textView.enableMarquee(flag);
 
-        ImageView imageView1 = (ImageView) convertView.findViewById(R.id.iv_gridview);
-        Glide.with(mContext).load(url).placeholder(R.drawable.media_default_image).into(imageView1);
-        ImageView imageView2 = (ImageView) convertView.findViewById(R.id.item_iv01_back);
-        imageView2.setImageResource(flag?R.drawable.media_list_item_select_02:R.drawable.media_list_item_select_01);
+        Glide.with(mContext).load(url).placeholder(R.drawable.media_default_image).into(viewHolder.imageView1);
+        viewHolder.imageView2.setImageResource(flag?R.drawable.media_list_item_select_02:R.drawable.media_list_item_select_01);
         return convertView;
+    }
+
+    private class ViewHolder {
+        public MarqueeTextView textView;
+        public ImageView imageView1;
+        public ImageView imageView2;
     }
 
 }

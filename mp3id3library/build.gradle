@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 23
@@ -6,7 +6,6 @@ android {
 
 
     defaultConfig {
-        applicationId "com.jancar.usbmedia"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
@@ -22,11 +21,4 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-}
-
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:23.+'
-    implementation project(path: ':mp3id3library')
 }

@@ -1,1 +1,1 @@
-include ':jancarplayer', ':ijkplayer', ':usbmediascanner',':photoview'
+include ':jancarplayer', ':ijkplayer', ':usbmediascanner',':photoview', ':mp3id3library'

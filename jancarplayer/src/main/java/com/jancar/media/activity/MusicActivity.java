@@ -36,7 +36,7 @@ public class MusicActivity extends BaseActivity implements
         View.OnClickListener {
     private FlyTabView tabView;
     private String titles[] = new String[]{"存储器", "单曲", "歌手", "专辑", "文件夹"};
-    private String fmName[] = new String[]{"StorageFragment", "MusicPlayListFragment", "MusicPlayListFragment", "MusicPlayListFragment", "MusicPlayListFragment"};
+    private String fmName[] = new String[]{"StorageFragment", "MusicPlayListFragment", "MusicSingerFragment", "MusicPlayListFragment", "MusicPlayListFragment"};
     public List<String> musicList = new ArrayList<>();
     protected IMusicPlayer musicPlayer = MusicPlayer.getInstance();
 
