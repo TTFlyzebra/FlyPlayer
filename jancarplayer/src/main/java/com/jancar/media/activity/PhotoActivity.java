@@ -17,6 +17,7 @@ import com.github.chrisbanes.photoview.PhotoView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
 import com.jancar.media.R;
 import com.jancar.media.base.BaseActivity;
+import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
@@ -54,7 +55,7 @@ public class PhotoActivity extends BaseActivity implements
             long time = System.currentTimeMillis() - touchTime;
             if (time > hideTime) {
                 showLeftMenu(false);
-                controlLayout.animate().translationY(135).setDuration(300).start();
+                controlLayout.animate().translationY(150).setDuration(300).start();
                 getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
                 isShowControl = false;
             } else {
@@ -215,7 +216,10 @@ public class PhotoActivity extends BaseActivity implements
     private boolean isShowLeftMenu = false;
 
     private void showLeftMenu(boolean flag) {
-        leftLayout.animate().translationX(flag ? -394 : 0).setDuration(300).start();
+        leftLayout.animate().translationX(flag
+                ? -394* DisplayUtils.getMetrices(this).widthPixels/1024
+                : 0
+        ).setDuration(300).start();
     }
 
     /**

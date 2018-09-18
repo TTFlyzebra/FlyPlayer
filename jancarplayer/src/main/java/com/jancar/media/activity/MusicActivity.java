@@ -17,6 +17,7 @@ import com.jancar.media.base.BaseActivity;
 import com.jancar.media.listener.IMusicPlayerListener;
 import com.jancar.media.model.IMusicPlayer;
 import com.jancar.media.model.MusicPlayer;
+import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.FlyTabTextView;
@@ -54,7 +55,7 @@ public class MusicActivity extends BaseActivity implements
     private Runnable seekBarTask = new Runnable() {
         @Override
         public void run() {
-            seekPos = musicPlayer.getMediaPlay().getCurrentPosition();
+            seekPos = musicPlayer.getCurrentPosition();
             int min = seekPos / 1000 / 60;
             int sec = seekPos / 1000 % 60;
             String text = min + ":" + (sec > 9 ? sec : "0" + sec);
@@ -168,7 +169,9 @@ public class MusicActivity extends BaseActivity implements
 
     private void showOrHideLeftMenu() {
         isShowLeftMenu = !isShowLeftMenu;
-        leftLayout.animate().translationX(isShowLeftMenu ? -492 : 0).setDuration(300).start();
+        leftLayout.animate().translationX(isShowLeftMenu
+                ? -394* DisplayUtils.getMetrices(this).widthPixels/1024
+                : 0).setDuration(300).start();
     }
 
 
@@ -305,7 +308,7 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        musicPlayer.getMediaPlay().seekTo(seekPos);
+        musicPlayer.seekTo(seekPos);
     }
 
     private void playNext() {

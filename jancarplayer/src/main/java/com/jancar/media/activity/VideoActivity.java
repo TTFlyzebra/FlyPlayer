@@ -11,6 +11,7 @@ import com.jancar.media.R;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Const;
 import com.jancar.media.model.MusicPlayer;
+import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
@@ -138,7 +139,10 @@ public class VideoActivity extends BaseActivity implements
 
     private void showOrHideVideoPlayListLayout() {
         isShowVideoPlayList = !isShowVideoPlayList;
-        play_ll01_playlist.animate().translationX(isShowVideoPlayList ? -394 : 0).setDuration(300).start();
+        play_ll01_playlist.animate().translationX(isShowVideoPlayList
+                ? -394* DisplayUtils.getMetrices(this).widthPixels/1024
+                : 0)
+                .setDuration(300).start();
     }
 
     @Override
@@ -149,9 +153,11 @@ public class VideoActivity extends BaseActivity implements
             return;
         }
         videoList.clear();
-        if (videoUrlList.isEmpty() && player.isPlaying()) {
+        if (videoUrlList.isEmpty() ) {
             currenPos = 0;
-            player.stop();
+            if(player.isPlaying()){
+                player.stop();
+            }
             FlyLog.d("musicPlayer stop");
             return;
         }

@@ -30,4 +30,6 @@ public interface IMusicPlayer {
     void stop();
 
     MediaPlayer getMediaPlay();
+
+    void seekTo(int seekPos);
 }

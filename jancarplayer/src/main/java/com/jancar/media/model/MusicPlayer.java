@@ -92,16 +92,20 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void start() {
-        mMediaPlayer.start();
-        status = STATUS_PLAYING;
-        notifyStatus();
+        if(mMediaPlayer!=null) {
+            mMediaPlayer.start();
+            status = STATUS_PLAYING;
+            notifyStatus();
+        }
     }
 
     @Override
     public void puase() {
-        mMediaPlayer.pause();
-        status = STATUS_PAUSE;
-        notifyStatus();
+        if(mMediaPlayer!=null){
+            mMediaPlayer.pause();
+            status = STATUS_PAUSE;
+            notifyStatus();
+        }
     }
 
     @Override
@@ -132,6 +136,13 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public MediaPlayer getMediaPlay() {
         return mMediaPlayer;
+    }
+
+    @Override
+    public void seekTo(int seekPos) {
+        if(mMediaPlayer!=null){
+            mMediaPlayer.seekTo(seekPos);
+        }
     }
 
     @Override
