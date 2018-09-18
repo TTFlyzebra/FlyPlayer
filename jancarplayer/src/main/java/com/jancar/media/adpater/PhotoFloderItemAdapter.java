@@ -32,7 +32,7 @@ public class PhotoFloderItemAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return itemGridList==null?0:itemGridList.size();
+        return itemGridList == null ? 0 : itemGridList.size();
     }
 
     @Override
@@ -54,17 +54,17 @@ public class PhotoFloderItemAdapter extends BaseAdapter {
             viewHolder.imageView1 = (ImageView) convertView.findViewById(R.id.iv_gridview);
             viewHolder.imageView2 = (ImageView) convertView.findViewById(R.id.item_iv01_back);
             convertView.setTag(viewHolder);
-        }else {
+        } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         String url = itemGridList.get(position);
-        boolean flag = url.equals(((PhotoActivity)mContext).photoList.get(((PhotoActivity)mContext).currentItem));
+        boolean flag = url.equals(((PhotoActivity)mContext).CRET_URL);
         viewHolder.textView.setText(StringTools.getNameByPath(url));
-        viewHolder.textView.setTextColor(flag?0xFF0370E5:0xFFFFFFFF);
+        viewHolder.textView.setTextColor(flag ? 0xFF0370E5 : 0xFFFFFFFF);
         viewHolder.textView.enableMarquee(flag);
 
         Glide.with(mContext).load(url).placeholder(R.drawable.media_default_image).into(viewHolder.imageView1);
-        viewHolder.imageView2.setImageResource(flag?R.drawable.media_list_item_select_02:R.drawable.media_list_item_select_01);
+        viewHolder.imageView2.setImageResource(flag ? R.drawable.media_list_item_select_02 : R.drawable.media_list_item_select_01);
         return convertView;
     }
 

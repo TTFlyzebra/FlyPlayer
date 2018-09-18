@@ -11,8 +11,7 @@
         android:layout_width="33px"
         android:layout_height="48px"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10px"
-        android:layout_marginRight="10px"
+        android:layout_marginLeft="30px"
         android:duplicateParentState="true"
         android:scaleType="centerInside"
         android:src="@drawable/media_music_anim_play" />
@@ -22,18 +21,20 @@
         android:layout_width="wrap_content"
         android:layout_height="48px"
         android:gravity="left|center"
+        android:layout_marginLeft="10px"
+        android:layout_marginRight="30px"
         android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
+        android:marqueeRepeatLimit="1"
         android:singleLine="true"
-        android:textColor="@drawable/textcolor_blue_white"
-        android:textSize="18px" />
+        android:textColor="@color/textcolor_blue_white"
+        android:textSize="20px" />
 
     <TextView
         android:id="@+id/item_tv02"
         android:layout_width="wrap_content"
         android:layout_height="48px"
         android:singleLine="true"
-        android:textColor="@drawable/textcolor_blue_white"
-        android:textSize="18px" />
+        android:textColor="@color/textcolor_blue_white"
+        android:textSize="20px" />
 
 </LinearLayout>

@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import com.jancar.media.FlyMedia;
 import com.jancar.media.Notify;
 import com.jancar.media.data.Music;
+import com.jancar.usbmedia.R;
 import com.jancar.usbmedia.data.Const;
 import com.jancar.usbmedia.model.IStorage;
 import com.jancar.usbmedia.model.IStorageListener;
@@ -33,7 +34,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class FlyMediaService extends Service implements IStorageListener{
+public class FlyMediaService extends Service implements IStorageListener {
     private static final Executor executor = Executors.newSingleThreadExecutor();
     private AtomicBoolean isRunning = new AtomicBoolean(false);
     private AtomicBoolean isStoped = new AtomicBoolean(false);
@@ -400,11 +401,7 @@ public class FlyMediaService extends Service implements IStorageListener{
             music.url = url;
             music.sort = i;
             try {
-                if (!url.toLowerCase().endsWith(".mp3")) {
-                    music.artist = "未知艺术家";
-                    music.album = "未知专辑";
-                    music.name = StringTools.getNameByPath(url);
-                } else {
+                if (url.toLowerCase().endsWith(".mp3")) {
                     Mp3File mp3file = new Mp3File(url);
                     if (mp3file.hasId3v2Tag()) {
                         ID3v2 id3v2Tag = mp3file.getId3v2Tag();
@@ -417,6 +414,10 @@ public class FlyMediaService extends Service implements IStorageListener{
                         music.album = TextUtils.isEmpty(id3v1Tag.getAlbum()) ? "" : id3v1Tag.getAlbum();
                         music.name = TextUtils.isEmpty(id3v1Tag.getTitle()) ? "" : id3v1Tag.getTitle();
                     }
+                } else {
+                    music.artist = getString(R.string.no_artist);
+                    music.album = getString(R.string.no_album);
+                    music.name = StringTools.getNameByPath(url);
                 }
             } catch (Exception e) {
                 FlyLog.e(e.toString());
@@ -428,7 +429,7 @@ public class FlyMediaService extends Service implements IStorageListener{
 
     @Override
     public void storageList(List<StorageInfo> storageList) {
-        if(storageList!=null&&!storageList.isEmpty()){
+        if (storageList != null && !storageList.isEmpty()) {
             scanPath(storageList.get(0).path);
         }
     }

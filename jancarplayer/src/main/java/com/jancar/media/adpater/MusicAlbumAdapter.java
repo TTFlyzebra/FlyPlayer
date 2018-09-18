@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.jancar.media.R;
 import com.jancar.media.data.Music;
+import com.jancar.media.model.MusicPlayer;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.AnimationImageView;
 import com.jancar.media.view.MarqueeTextView;
@@ -19,14 +20,25 @@ import java.util.List;
 /**
  * ExpandableListView 适配器
  */
-public class MusicSingerAdapter extends BaseExpandableListAdapter {
+public class MusicAlbumAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private List<String> groupList;
     private List<List<Music>> itemList;
-    public MusicSingerAdapter(Context context, List<String> groupList, List<List<Music>> itemList) {
+
+    public MusicAlbumAdapter(Context context, List<String> groupList, List<List<Music>> itemList) {
         mContext = context;
         this.groupList = groupList;
         this.itemList = itemList;
+    }
+
+    private OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, Music music);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -65,28 +77,38 @@ public class MusicSingerAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
+        return true;
+    }
+
+    @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup
             parent) {
 
         ViewHolderGroup holder = new ViewHolderGroup();
         if (null == convertView) {
-            convertView = View.inflate(mContext, R.layout.explist_music_item_group, null);
+            convertView = View.inflate(mContext, R.layout.explist_music_album_item_group, null);
             holder.imageView1 = (ImageView) convertView.findViewById(R.id.item_iv01);
             holder.textView1 = (MarqueeTextView) convertView.findViewById(R.id.item_tv01);
+            holder.textView2 = (TextView) convertView.findViewById(R.id.item_tv02);
             holder.imageView2 = (ImageView) convertView.findViewById(R.id.item_iv02);
             convertView.setTag(holder);
-        }
-        else {
+        } else {
             holder = (ViewHolderGroup) convertView.getTag();
         }
-        if (isExpanded) {
-            holder.imageView2.setImageResource(R.drawable.media_down);
-        } else {
-            holder.imageView2.setImageResource(R.drawable.media_right);
+        holder.imageView1.setImageResource(isExpanded ? R.drawable.media_music_album_02 : R.drawable.media_music_album);
+        holder.imageView2.setImageResource(isExpanded ? R.drawable.media_down_02 : R.drawable.media_right);
+        if(isExpanded){
+            holder.textView1.setTextColor(0xFF0370E5);
+            holder.textView2.setTextColor(0xFF0370E5);
+        }else{
+            holder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor_blue_white));
+            holder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor_blue_white));
         }
-
         String str = groupList.get(groupPosition);
-        holder.textView1.setText(str+"("+itemList.get(groupPosition).size()+")");
+        holder.textView1.setText(str);
+        holder.textView1.enableMarquee(isExpanded);
+        holder.textView2.setText(String.format(mContext.getString(R.string.musicsumformat),itemList.get(groupPosition).size()));
         return convertView;
     }
 
@@ -100,29 +122,28 @@ public class MusicSingerAdapter extends BaseExpandableListAdapter {
             holder.textView1 = (MarqueeTextView) convertView.findViewById(R.id.item_tv01);
             holder.textView2 = (TextView) convertView.findViewById(R.id.item_tv02);
             convertView.setTag(holder);
-        }
-        else {
+        } else {
             holder = (ViewHolderChild) convertView.getTag();
         }
 
-        holder.textView1.setText(StringTools.getNameByPath(itemList.get(groupPosition).get(childPosition).url));
 
+        convertView.setTag(R.id.tag1,itemList.get(groupPosition).get(childPosition));
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(v, (Music) v.getTag(R.id.tag1));
+                }
+            }
+        });
+
+        String url = itemList.get(groupPosition).get(childPosition).url;
+        boolean flag = url.equals(MusicPlayer.getInstance().getPlayUrl());
+        holder.textView1.setText(StringTools.getNameByPath(url));
+        holder.textView1.setTextColor(flag ? 0xFF0370E5 : 0xFFFFFFFF);
+        holder.textView1.enableMarquee(flag);
+        holder.imageView.setVisibility(flag?View.VISIBLE:View.INVISIBLE);
         return convertView;
-    }
-
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
-    }
-
-    private OnItemClickListener onItemClickListener;
-
-    public interface OnItemClickListener {
-        void onItemClick(View view, String url);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
     }
 
     private class ViewHolderChild {
@@ -134,6 +155,7 @@ public class MusicSingerAdapter extends BaseExpandableListAdapter {
     private class ViewHolderGroup {
         public ImageView imageView1;
         public MarqueeTextView textView1;
+        public TextView textView2;
         public ImageView imageView2;
     }
 

@@ -21,6 +21,8 @@ public interface IMusicPlayer {
 
     void puase();
 
+    boolean isPuase();
+
     boolean isPlaying();
 
     void stop();

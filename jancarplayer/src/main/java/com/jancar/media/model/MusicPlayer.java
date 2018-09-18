@@ -105,6 +105,11 @@ public class MusicPlayer implements IMusicPlayer,
     }
 
     @Override
+    public boolean isPuase() {
+        return status==STATUS_PAUSE;
+    }
+
+    @Override
     public void stop() {
         if(mMediaPlayer!=null) {
             mMediaPlayer.stop();

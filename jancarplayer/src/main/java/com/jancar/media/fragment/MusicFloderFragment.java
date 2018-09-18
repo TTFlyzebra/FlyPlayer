@@ -7,11 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import com.jancar.media.R;
-import com.jancar.media.adpater.MusicSingerAdapter;
+import com.jancar.media.adpater.MusicFloderAdapter;
 import com.jancar.media.base.MusicFragment;
 import com.jancar.media.data.Music;
 import com.jancar.media.utils.FlyLog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,20 +21,22 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MusicSingerFragment extends MusicFragment{
+public class MusicFloderFragment extends MusicFragment implements
+        MusicFloderAdapter.OnItemClickListener {
     private ExpandableListView expandableListView;
     private List<String> groupList = new ArrayList<>();
     private List<List<Music>> itemList = new ArrayList<>();
     private Map<String, List<Music>> mHashMap = new HashMap<>();
-    private MusicSingerAdapter adapter;
+    private MusicFloderAdapter adapter;
+    private boolean isClick = false;
 
-    public static MusicSingerFragment newInstance(Bundle args) {
-        MusicSingerFragment musicSingerFragment = new MusicSingerFragment();
-        musicSingerFragment.setArguments(args);
-        return musicSingerFragment;
+    public static MusicFloderFragment newInstance(Bundle args) {
+        MusicFloderFragment musicAlbumFragment = new MusicFloderFragment();
+        musicAlbumFragment.setArguments(args);
+        return musicAlbumFragment;
     }
 
-    public MusicSingerFragment() {
+    public MusicFloderFragment() {
     }
 
     @Override
@@ -44,14 +47,49 @@ public class MusicSingerFragment extends MusicFragment{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         expandableListView = (ExpandableListView) view.findViewById(R.id.fm_file_list_el01);
-        adapter = new MusicSingerAdapter(getActivity(), groupList, itemList);
+        expandableListView.setItemsCanFocus(true);
+        adapter = new MusicFloderAdapter(getActivity(), groupList, itemList);
         expandableListView.setAdapter(adapter);
         expandableListView.setGroupIndicator(null);
+        adapter.setOnItemClickListener(this);
     }
 
 
     @Override
     public void statusChange(int statu) {
+        if (!isClick) {
+            scrollCurrentPos();
+        }
+        isClick = false;
+        adapter.notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        scrollCurrentPos();
+    }
+
+    private void scrollCurrentPos() {
+        int findPos1 = -1;
+        int findPos2 = -1;
+        for (int i = 0; i < itemList.size(); i++) {
+            if (findPos1 == -1) {
+                for (int j = 0; j < itemList.get(i).size(); j++) {
+                    if (itemList.get(i).get(j).url.equals(musicPlayer.getPlayUrl())) {
+                        expandableListView.expandGroup(i, false);
+                        findPos1 = i;
+                        findPos2 = j;
+                        break;
+                    }
+                }
+            }
+            if (i != findPos1) {
+                expandableListView.collapseGroup(i);
+            }
+        }
+        expandableListView.smoothScrollToPositionFromTop(findPos1, 0, 0);
     }
 
 
@@ -69,11 +107,13 @@ public class MusicSingerFragment extends MusicFragment{
                 groupList.clear();
                 itemList.clear();
                 for (int i = 0; i < musicUrlList.size(); i++) {
-                    String singer = musicUrlList.get(i).artist;
-                    if (mHashMap.get(singer) == null) {
-                        mHashMap.put(singer, new ArrayList<Music>());
+                    String url = musicUrlList.get(i).url;
+                    int last = url.lastIndexOf(File.separator);
+                    String path = url.substring(0, last);
+                    if (mHashMap.get(path) == null) {
+                        mHashMap.put(path, new ArrayList<Music>());
                     }
-                    mHashMap.get(singer).add(musicUrlList.get(i));
+                    mHashMap.get(path).add(musicUrlList.get(i));
                 }
                 groupList.addAll(mHashMap.keySet());
 
@@ -86,10 +126,17 @@ public class MusicSingerFragment extends MusicFragment{
                 for (String key : groupList) {
                     itemList.add(mHashMap.get(key));
                 }
+                scrollCurrentPos();
                 adapter.notifyDataSetChanged();
             }
         }catch (Exception e){
             FlyLog.e(e.toString());
         }
+    }
+
+    @Override
+    public void onItemClick(View view, Music music) {
+        isClick = true;
+        musicPlayer.play(music.url);
     }
 }

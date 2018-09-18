@@ -71,7 +71,7 @@ public class VideoFloderAdapter extends BaseExpandableListAdapter {
         if (null == convertView) {
             convertView = View.inflate(mContext, R.layout.explist_video_item_group, null);
         }
-        ImageView ivGroup = (ImageView) convertView.findViewById(R.id.iv_group);
+        ImageView ivGroup = (ImageView) convertView.findViewById(R.id.item_iv01);
         if (isExpanded) {
             ivGroup.setImageResource(R.drawable.media_down);
         } else {
@@ -80,8 +80,8 @@ public class VideoFloderAdapter extends BaseExpandableListAdapter {
 
         String path = groupList.get(groupPosition);
         int last = path.lastIndexOf(File.separator);
-        TextView tvGroup1 = (TextView) convertView.findViewById(R.id.tv_group1);
-        TextView tvGroup2 = (TextView) convertView.findViewById(R.id.tv_group2);
+        TextView tvGroup1 = (TextView) convertView.findViewById(R.id.item_tv01);
+        TextView tvGroup2 = (TextView) convertView.findViewById(R.id.item_tv02);
         tvGroup1.setText(path.substring(last+1,path.length()));
         tvGroup2.setText(path.substring(0,last));
         return convertView;

@@ -36,7 +36,7 @@ public class MusicActivity extends BaseActivity implements
         View.OnClickListener {
     private FlyTabView tabView;
     private String titles[] = new String[]{"存储器", "单曲", "歌手", "专辑", "文件夹"};
-    private String fmName[] = new String[]{"StorageFragment", "MusicPlayListFragment", "MusicSingerFragment", "MusicPlayListFragment", "MusicPlayListFragment"};
+    private String fmName[] = new String[]{"StorageFragment", "MusicPlayListFragment", "MusicArtistFragment", "MusicAlbumFragment", "MusicFloderFragment"};
     public List<String> musicList = new ArrayList<>();
     protected IMusicPlayer musicPlayer = MusicPlayer.getInstance();
 
@@ -44,7 +44,7 @@ public class MusicActivity extends BaseActivity implements
     private TextView seekBarSartTime, seekBarEndTime;
     private ImageView playFore, playNext, play, leftMenu;
     private RelativeLayout leftLayout;
-    private MarqueeTextView tvSingle, tvSinger, tvAlbum;
+    private MarqueeTextView tvSingle, tvArtist, tvAlbum;
     private ImageView ivImage;
     private int seekPos;
     private int currenPos = 0;
@@ -74,7 +74,7 @@ public class MusicActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music);
         musicPlayer.init(getApplicationContext());
-        titles = new String[]{getString(R.string.storage), getString(R.string.single), getString(R.string.singer), getString(R.string.album), getString(R.string.folder)};
+        titles = new String[]{getString(R.string.storage), getString(R.string.single), getString(R.string.artist), getString(R.string.album), getString(R.string.folder)};
 
         initView();
 
@@ -92,11 +92,11 @@ public class MusicActivity extends BaseActivity implements
         leftLayout = (RelativeLayout) findViewById(R.id.ac_music_left_layout);
         tabView = (FlyTabView) findViewById(R.id.ac_music_tabview);
         tvSingle = (MarqueeTextView) findViewById(R.id.ac_music_single);
-        tvSinger = (MarqueeTextView) findViewById(R.id.ac_music_singer);
+        tvArtist = (MarqueeTextView) findViewById(R.id.ac_music_artist);
         tvAlbum = (MarqueeTextView) findViewById(R.id.ac_music_album);
         ivImage = (ImageView) findViewById(R.id.ac_music_iv_image);
         tvSingle.enableMarquee(true);
-        tvSinger.enableMarquee(true);
+        tvArtist.enableMarquee(true);
         tvAlbum.enableMarquee(true);
 
         playFore.setOnClickListener(this);
@@ -274,7 +274,7 @@ public class MusicActivity extends BaseActivity implements
                         try {
                             if(isStop) return;
                             ivImage.setImageBitmap(bitmap == null ? defaultBitmap : bitmap);
-                            tvSinger.setText(TextUtils.isEmpty(artist) ? getString(R.string.no_artist) : artist);
+                            tvArtist.setText(TextUtils.isEmpty(artist) ? getString(R.string.no_artist) : artist);
                             tvAlbum.setText(TextUtils.isEmpty(album) ? getString(R.string.no_album) : album);
                         } catch (Exception e) {
                             FlyLog.e(e.toString());
@@ -325,11 +325,15 @@ public class MusicActivity extends BaseActivity implements
     @Override
     protected void onStart() {
         super.onStart();
+        if(musicPlayer.isPuase()){
+            musicPlayer.start();
+        }
         isStop = false;
     }
 
     @Override
     protected void onStop() {
+        musicPlayer.puase();
         isStop = true;
         super.onStop();
     }

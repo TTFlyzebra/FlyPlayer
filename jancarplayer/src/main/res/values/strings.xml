@@ -10,14 +10,16 @@
     <string name="photo_list">图片列表</string>
     <string name="storage">存储器</string>
     <string name="single">单曲</string>
-    <string name="singer">歌手</string>
+    <string name="artist">歌手</string>
     <string name="album">专辑</string>
     <string name="folder">文件夹</string>
     <string name="storage_local">本地存储</string>
     <string name="storage_usb">USB</string>
     <string name="no_artist">未知艺术家</string>
     <string name="no_album">未知专辑</string>
+    <string name="no_album_start">未知</string>
     <string name="photo">图片</string>
     <string name="video">视频</string>
     <string name="music">音乐</string>
+    <string name="musicsumformat">(%d首)</string>
 </resources>

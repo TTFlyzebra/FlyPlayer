@@ -3,6 +3,7 @@ package com.jancar.media.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import tcking.github.com.giraffeplayer.GiraffePlayer;
-
-public class PhotoFloderFragment extends BaseFragment implements PhotoFloderAdapter.OnItemClickListener,GiraffePlayer.OnPlayStatusChangeLiseter{
+public class PhotoFloderFragment extends BaseFragment implements
+        PhotoFloderAdapter.OnItemClickListener,
+        ViewPager.OnPageChangeListener{
     private PhotoActivity activity;
     private ExpandableListView expandableListView;
     private List<String> groupList = new ArrayList<>();
@@ -47,6 +48,7 @@ public class PhotoFloderFragment extends BaseFragment implements PhotoFloderAdap
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         activity = (PhotoActivity) getActivity();
+        activity.viewPager.addOnPageChangeListener(this);
         photoList = activity.photoList;
         return inflater.inflate(R.layout.fragment_ex_list, null);
     }
@@ -91,6 +93,7 @@ public class PhotoFloderFragment extends BaseFragment implements PhotoFloderAdap
                         for (String key : groupList) {
                             itemList.add(mHashMap.get(key));
                         }
+                        scrollCurrentPos();
                         adapter.notifyDataSetChanged();
                     }
                 }catch (Exception e){
@@ -102,12 +105,54 @@ public class PhotoFloderFragment extends BaseFragment implements PhotoFloderAdap
 
     @Override
     public void onItemClick(View view, String url) {
+        isClick = true;
         activity.setSelectItem(url);
         adapter.notifyDataSetChanged();
     }
 
+    private boolean isClick = false;
     @Override
-    public void statusChange(int statu) {
+    public void onResume() {
+        super.onResume();
+        scrollCurrentPos();
+    }
+
+    private void scrollCurrentPos() {
+        int findPos1 = -1;
+        int findPos2 = -1;
+        for (int i = 0; i < itemList.size(); i++) {
+            if (findPos1 == -1) {
+                for (int j = 0; j < itemList.get(i).size(); j++) {
+                    if (itemList.get(i).get(j).equals(activity.CRET_URL)) {
+                        expandableListView.expandGroup(i, false);
+                        findPos1 = i;
+                        findPos2 = j;
+                        break;
+                    }
+                }
+            }
+            if (i != findPos1) {
+                expandableListView.collapseGroup(i);
+            }
+        }
+        expandableListView.smoothScrollToPositionFromTop(findPos1, 0, 0);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        if (!isClick) {
+            scrollCurrentPos();
+        }
+        isClick = false;
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
     }
 }

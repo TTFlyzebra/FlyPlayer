@@ -26,7 +26,7 @@
         android:gravity="left|center"
         android:singleLine="true"
         android:textSize="22px"
-        android:textColor="@drawable/textcolor_blue_white" />
+        android:textColor="@color/textcolor_blue_white" />
 
     <TextView
         android:id="@+id/item_tv02"
@@ -38,6 +38,6 @@
         android:paddingLeft="20px"
         android:text="佚名"
         android:textSize="22px"
-        android:textColor="@drawable/textcolor_blue_white" />
+        android:textColor="@color/textcolor_blue_white" />
 
 </RelativeLayout>

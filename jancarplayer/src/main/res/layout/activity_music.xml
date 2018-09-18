@@ -82,7 +82,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/media_music_album" />
+                    android:src="@drawable/media_music_album_03" />
 
                 <com.jancar.media.view.MarqueeTextView
                     android:id="@+id/ac_music_album"
@@ -107,10 +107,10 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/media_music_singer" />
+                    android:src="@drawable/media_music_artist_03" />
 
                 <com.jancar.media.view.MarqueeTextView
-                    android:id="@+id/ac_music_singer"
+                    android:id="@+id/ac_music_artist"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20px"

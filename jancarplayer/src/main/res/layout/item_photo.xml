@@ -30,10 +30,10 @@
         android:duplicateParentState="true"
         android:ellipsize="marquee"
         android:gravity="center"
-        android:marqueeRepeatLimit="marquee_forever"
+        android:marqueeRepeatLimit="1"
         android:singleLine="true"
         android:text="video "
-        android:textColor="@drawable/textcolor_blue_white"
+        android:textColor="@color/textcolor_blue_white"
         android:textSize="18px" />
 
 </RelativeLayout>

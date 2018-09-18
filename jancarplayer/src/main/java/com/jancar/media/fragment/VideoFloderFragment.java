@@ -84,7 +84,7 @@ public class VideoFloderFragment extends BaseFragment implements VideoFloderAdap
                 for (String key : groupList) {
                     itemList.add(mHashMap.get(key));
                 }
-
+                scrollCurrentPos();
                 adapter.notifyDataSetChanged();
             }
         }catch (Exception e){
@@ -92,8 +92,10 @@ public class VideoFloderFragment extends BaseFragment implements VideoFloderAdap
         }
     }
 
+
     @Override
     public void onItemClick(View view, String url) {
+        isClick = true;
         //TODO:标记播放位置
         activity.player.play(url);
         adapter.notifyDataSetChanged();
@@ -101,6 +103,38 @@ public class VideoFloderFragment extends BaseFragment implements VideoFloderAdap
 
     @Override
     public void statusChange(int statu) {
+        if (!isClick) {
+            scrollCurrentPos();
+        }
+        isClick = false;
         adapter.notifyDataSetChanged();
+    }
+
+    private boolean isClick = false;
+    @Override
+    public void onResume() {
+        super.onResume();
+        scrollCurrentPos();
+    }
+
+    private void scrollCurrentPos() {
+        int findPos1 = -1;
+        int findPos2 = -1;
+        for (int i = 0; i < itemList.size(); i++) {
+            if (findPos1 == -1) {
+                for (int j = 0; j < itemList.get(i).size(); j++) {
+                    if (itemList.get(i).get(j).equals(activity.player.getPlayUrl())) {
+                        expandableListView.expandGroup(i, false);
+                        findPos1 = i;
+                        findPos2 = j;
+                        break;
+                    }
+                }
+            }
+            if (i != findPos1) {
+                expandableListView.collapseGroup(i);
+            }
+        }
+        expandableListView.smoothScrollToPositionFromTop(findPos1, 0, 0);
     }
 }
