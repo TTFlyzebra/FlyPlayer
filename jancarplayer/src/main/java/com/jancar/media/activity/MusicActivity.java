@@ -128,9 +128,11 @@ public class MusicActivity extends BaseActivity implements
             return;
         }
         musicList.clear();
-        if (musicUrlList.isEmpty()&&musicPlayer.isPlaying()) {
+        if (musicUrlList.isEmpty()) {
             currenPos = 0;
-            musicPlayer.stop();
+            if(musicPlayer.isPlaying()){
+                musicPlayer.stop();
+            }
             FlyLog.d("musicPlayer stop");
             return;
         }
@@ -166,7 +168,7 @@ public class MusicActivity extends BaseActivity implements
 
     private void showOrHideLeftMenu() {
         isShowLeftMenu = !isShowLeftMenu;
-        leftLayout.animate().translationX(isShowLeftMenu ? -394 : 0).setDuration(300).start();
+        leftLayout.animate().translationX(isShowLeftMenu ? -492 : 0).setDuration(300).start();
     }
 
 
@@ -183,10 +185,14 @@ public class MusicActivity extends BaseActivity implements
                 playNext();
                 break;
             case R.id.ac_music_play:
-                if (musicPlayer.getMediaPlay().isPlaying()) {
-                    musicPlayer.puase();
-                } else {
-                    musicPlayer.start();
+                try {
+                    if (musicPlayer.isPlaying()) {
+                        musicPlayer.puase();
+                    } else {
+                        musicPlayer.start();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
                 break;
         }

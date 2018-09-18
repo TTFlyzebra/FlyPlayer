@@ -125,6 +125,11 @@ public class MusicPlayer implements IMusicPlayer,
     }
 
     @Override
+    public int getCurrentPosition() {
+        return mMediaPlayer==null?0:mMediaPlayer.getCurrentPosition();
+    }
+
+    @Override
     public MediaPlayer getMediaPlay() {
         return mMediaPlayer;
     }

@@ -25,6 +25,8 @@ public interface IMusicPlayer {
 
     boolean isPlaying();
 
+    int getCurrentPosition();
+
     void stop();
 
     MediaPlayer getMediaPlay();
