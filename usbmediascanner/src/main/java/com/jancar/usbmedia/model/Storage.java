@@ -43,9 +43,9 @@ public class Storage implements IStorage {
 
     public void init(Context context) {
         this.mContext = context;
-        refresh();
     }
 
+    @Override
     public void refresh() {
         executor.execute(new Runnable() {
             @Override

@@ -17,7 +17,9 @@ import java.util.List;
 
 import tcking.github.com.giraffeplayer.GiraffePlayer;
 
-public class VideoPlayListFragment extends BaseFragment implements VideoPlayListAdapater.OnItemClickListener,GiraffePlayer.OnPlayStatusChangeLiseter {
+public class VideoPlayListFragment extends BaseFragment implements
+        VideoPlayListAdapater.OnItemClickListener,
+        GiraffePlayer.OnPlayStatusChangeLiseter {
     private VideoActivity activity;
     private VideoPlayListAdapater adapter;
     private RecyclerView recyclerView;
@@ -50,6 +52,12 @@ public class VideoPlayListFragment extends BaseFragment implements VideoPlayList
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        scrollToCureentPlayItem();
+    }
+
+    @Override
     public void onDestroy() {
         adapter.cancleAllTask();
         super.onDestroy();
@@ -58,21 +66,8 @@ public class VideoPlayListFragment extends BaseFragment implements VideoPlayList
     @Override
     public void videoUrlList(List<String> videoUrlList) {
         FlyLog.d("get videos size=%d", videoUrlList == null ? 0 : videoUrlList.size());
-        if (videoUrlList != null && getActivity() != null && activity != null) {
-            activity.videoList.clear();
-            activity.videoList.addAll(videoUrlList);
-            adapter.update();
-            if (videoUrlList.isEmpty()) {
-                if (!activity.player.isPlaying()) {
-                    activity.player.stop();
-                }
-            } else {
-                if (!activity.player.isPlaying()) {
-                    activity.player.play(activity.videoList.get(0));
-                    adapter.update();
-                }
-            }
-        }
+        scrollToCureentPlayItem();
+        adapter.update();
     }
 
     @Override
@@ -85,5 +80,13 @@ public class VideoPlayListFragment extends BaseFragment implements VideoPlayList
     @Override
     public void statusChange(int statu) {
         adapter.update();
+    }
+
+    private void scrollToCureentPlayItem() {
+        try {
+            recyclerView.getLayoutManager().scrollToPosition(activity.currenPos);
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
     }
 }

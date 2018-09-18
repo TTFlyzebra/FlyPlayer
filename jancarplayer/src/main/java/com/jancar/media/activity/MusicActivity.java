@@ -47,7 +47,7 @@ public class MusicActivity extends BaseActivity implements
     private MarqueeTextView tvSingle, tvArtist, tvAlbum;
     private ImageView ivImage;
     private int seekPos;
-    private int currenPos = 0;
+    public int currenPos = 0;
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
 

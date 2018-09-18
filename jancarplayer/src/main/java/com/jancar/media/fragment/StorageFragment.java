@@ -1,7 +1,11 @@
 package com.jancar.media.fragment;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,21 +15,22 @@ import com.jancar.media.adpater.StorageAdapater;
 import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.StorageInfo;
 import com.jancar.media.listener.IStorageListener;
+import com.jancar.media.model.IStorage;
 import com.jancar.media.model.Storage;
+import com.jancar.media.receiver.USBDiskReceiver;
 import com.jancar.media.utils.FlyLog;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StorageFragment extends BaseFragment implements
         IStorageListener,
-        XRecyclerView.LoadingListener,
-        StorageAdapater.OnItemClickListener{
-    private XRecyclerView recyclerView;
+        StorageAdapater.OnItemClickListener {
+    private RecyclerView recyclerView;
     private StorageAdapater adapater;
     private List<StorageInfo> mList = new ArrayList<>();
-    private Storage storage = Storage.getInstance();
+    private IStorage storage = Storage.getInstance();
+    private MyReceiver receiver ;
 
     public StorageFragment() {
     }
@@ -39,7 +44,18 @@ public class StorageFragment extends BaseFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        storage.init(getActivity());
+        storage.refresh();
+        receiver = new MyReceiver();
+        IntentFilter mFilter = new IntentFilter();
+        mFilter.addAction(Intent.ACTION_MEDIA_MOUNTED);
+        mFilter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
+        getActivity().registerReceiver(receiver,mFilter);
+    }
+
+    @Override
+    public void onDestroy() {
+        getActivity().unregisterReceiver(receiver);
+        super.onDestroy();
     }
 
     @Override
@@ -49,19 +65,17 @@ public class StorageFragment extends BaseFragment implements
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        recyclerView = (XRecyclerView) view.findViewById(R.id.fm_storage_rv01);
+        recyclerView = (RecyclerView) view.findViewById(R.id.fm_storage_rv01);
         adapater = new StorageAdapater(getActivity(), mList);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapater);
-        recyclerView.setPullRefreshEnabled(false);
         adapater.setOnItemClickListener(this);
 //        recyclerView.setLoadingListener(this);
     }
 
     @Override
     public void storageList(List<StorageInfo> storageList) {
-        recyclerView.refreshComplete();
         if (storageList == null) return;
         mList.clear();
         mList.addAll(storageList);
@@ -82,24 +96,29 @@ public class StorageFragment extends BaseFragment implements
     }
 
     @Override
-    public void onRefresh() {
-        storage.refresh();
-    }
-
-    @Override
-    public void onLoadMore() {
-
-    }
-
-    @Override
     public void changePath(String path) {
+        storage.refresh();
         adapater.setCurrentPath(path);
         adapater.notifyDataSetChanged();
     }
 
     @Override
     public void onItemClick(View view, int pos) {
-        FlyLog.d("openStorager storage mPath=%s",mList.get(pos));
+        FlyLog.d("openStorager storage mPath=%s", mList.get(pos));
         usbMediaScan.openStorager(mList.get(pos));
+    }
+
+    public class MyReceiver extends USBDiskReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            FlyLog.d(intent.toUri(0));
+            if (intent.getAction().equals(Intent.ACTION_MEDIA_MOUNTED)
+                    || intent.getAction().equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
+                FlyLog.d("onReceive");
+                if(storage!=null){
+                    storage.refresh();
+                }
+            }
+        }
     }
 }

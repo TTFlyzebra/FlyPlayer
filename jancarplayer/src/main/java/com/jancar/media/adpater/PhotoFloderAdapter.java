@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jancar.media.R;
+import com.jancar.media.view.MarqueeTextView;
 
 import java.io.File;
 import java.util.List;
@@ -67,36 +68,51 @@ public class PhotoFloderAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup
             parent) {
+        ViewHolderGroup holder = new ViewHolderGroup();
         if (null == convertView) {
-            convertView = View.inflate(mContext, R.layout.explist_video_item_group, null);
-        }
-        ImageView ivGroup = (ImageView) convertView.findViewById(R.id.item_iv01);
-        if (isExpanded) {
-            ivGroup.setImageResource(R.drawable.media_down);
+            convertView = View.inflate(mContext, R.layout.explist_music_floder_item_group, null);
+            holder.textView1 = (MarqueeTextView) convertView.findViewById(R.id.item_tv01);
+            holder.textView2 = (MarqueeTextView) convertView.findViewById(R.id.item_tv02);
+            holder.textView3 = (TextView) convertView.findViewById(R.id.item_tv03);
+            holder.imageView1 = (ImageView) convertView.findViewById(R.id.item_iv01);
+            holder.imageView2 = (ImageView) convertView.findViewById(R.id.item_iv02);
+            convertView.setTag(holder);
         } else {
-            ivGroup.setImageResource(R.drawable.media_right);
+            holder = (ViewHolderGroup) convertView.getTag();
         }
+        holder.imageView1.setImageResource(isExpanded ? R.drawable.media_file_02 : R.drawable.media_file);
+        holder.imageView2.setImageResource(isExpanded ? R.drawable.media_down_02 : R.drawable.media_right);
 
         String path = groupList.get(groupPosition);
         int last = path.lastIndexOf(File.separator);
-        TextView tvGroup1 = (TextView) convertView.findViewById(R.id.item_tv01);
-        TextView tvGroup2 = (TextView) convertView.findViewById(R.id.item_tv02);
-        tvGroup1.setText(path.substring(last+1,path.length()));
-        tvGroup2.setText(path.substring(0,last));
+        holder.textView1.setText(path.substring(last + 1, path.length()));
+        holder.textView2.setText(path.substring(0, last));
+        holder.textView1.enableMarquee(isExpanded);
+        holder.textView2.enableMarquee(isExpanded);
+        if (isExpanded) {
+            holder.textView1.setTextColor(0xFF0370E5);
+            holder.textView2.setTextColor(0xFF0370E5);
+            holder.textView3.setTextColor(0xFF0370E5);
+        } else {
+            holder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor_blue_white));
+            holder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor_blue_white));
+            holder.textView3.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor_blue_white));
+        }
+        holder.textView3.setText(String.format(mContext.getString(R.string.photosumformat),itemList.get(groupPosition).size()));
         return convertView;
     }
 
     @Override
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View
             convertView, ViewGroup parent) {
-        ViewHolder holder = new ViewHolder();
+        ViewHolderChild holder = new ViewHolderChild();
         if (null == convertView) {
             convertView = View.inflate(mContext, R.layout.explist_video_item_child, null);
             holder.gridView = (GridView) convertView.findViewById(R.id.item_gv01);
             convertView.setTag(holder);
         }
         else {
-            holder = (ViewHolder) convertView.getTag();
+            holder = (ViewHolderChild) convertView.getTag();
         }
         PhotoFloderItemAdapter gridViewAdapter = new PhotoFloderItemAdapter(mContext, itemList.get(groupPosition));
         holder.gridView.setAdapter(gridViewAdapter);
@@ -126,7 +142,15 @@ public class PhotoFloderAdapter extends BaseExpandableListAdapter {
         this.onItemClickListener = onItemClickListener;
     }
 
-    private class ViewHolder {
+    private class ViewHolderGroup {
+        public ImageView imageView1;
+        public ImageView imageView2;
+        public MarqueeTextView textView1;
+        public MarqueeTextView textView2;
+        public TextView textView3;
+    }
+
+    private class ViewHolderChild {
         public GridView gridView;
     }
 

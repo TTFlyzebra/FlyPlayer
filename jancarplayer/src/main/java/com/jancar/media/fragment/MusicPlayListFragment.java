@@ -50,21 +50,7 @@ public class MusicPlayListFragment extends MusicFragment implements
     @Override
     public void musicUrlList(List<String> musicUrlList) {
         FlyLog.d("get videos size=%d", musicUrlList == null ? 0 : musicUrlList.size());
-        if (musicUrlList != null && getActivity() != null && activity != null) {
-            musicList.clear();
-            musicList.addAll(musicUrlList);
-            adapter.notifyDataSetChanged();
-            if (musicList.isEmpty()) {
-                if (!musicPlayer.isPlaying()) {
-                    musicPlayer.stop();
-                }
-            } else {
-                if (!musicPlayer.isPlaying()) {
-                    musicPlayer.play(musicList.get(0));
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        }
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -100,13 +86,10 @@ public class MusicPlayListFragment extends MusicFragment implements
     }
 
     private void scrollToCureentPlayItem() {
-        if (musicList == null || musicList.isEmpty() || musicPlayer == null) return;
-        for (int i = 0; i < musicList.size(); i++) {
-            if (musicPlayer.getPlayUrl().equals(musicList.get(i))) {
-                recyclerView.getLayoutManager().scrollToPosition(i);
-//                recyclerView.smoothScrollToPosition(i);
-                break;
-            }
+        try {
+            recyclerView.getLayoutManager().scrollToPosition(activity.currenPos);
+        }catch (Exception e){
+            FlyLog.e(e.toString());
         }
 
     }

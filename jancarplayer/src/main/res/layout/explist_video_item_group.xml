@@ -6,6 +6,7 @@
     android:orientation="horizontal">
 
     <ImageView
+        android:id="@+id/item_iv01"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.15"
@@ -43,7 +44,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/item_iv01"
+        android:id="@+id/item_iv02"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.15"

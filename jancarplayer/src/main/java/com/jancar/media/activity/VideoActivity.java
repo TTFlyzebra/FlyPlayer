@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import com.jancar.media.R;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Const;
+import com.jancar.media.model.MusicPlayer;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
@@ -23,7 +24,8 @@ import static tcking.github.com.giraffeplayer.GiraffePlayer.isShowVideoPlayList;
 
 public class VideoActivity extends BaseActivity implements
         View.OnClickListener,
-        FlyTabView.OnItemClickListener {
+        FlyTabView.OnItemClickListener,
+        GiraffePlayer.OnPlayStatusChangeLiseter {
     private ImageView play_fore, play_next, play_list;
     private RelativeLayout play_ll01_playlist;
     public int currenPos = 0;
@@ -31,8 +33,8 @@ public class VideoActivity extends BaseActivity implements
     public List<String> videoList = new ArrayList<>();
     private FlyTabView tabView;
 
-    private String titles[] = new String[]{"磁盘列表","播放列表","文件列表"};
-    private String fmName[] = new String[]{"StorageFragment","VideoPlayListFragment","VideoFloderFragment"};
+    private String titles[] = new String[]{"磁盘列表", "播放列表", "文件列表"};
+    private String fmName[] = new String[]{"StorageFragment", "VideoPlayListFragment", "VideoFloderFragment"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,22 +42,16 @@ public class VideoActivity extends BaseActivity implements
         setContentView(R.layout.activity_video);
 
         player = new GiraffePlayer(this);
+        player.addStatusChangeLiseter(this);
 
         initView();
 
         Intent intent = getIntent();
         final String playUrl = intent.getStringExtra(Const.PLAYURL_KEY);
-        FlyLog.d("playurl=%s",playUrl);
-        if(!TextUtils.isEmpty(playUrl)) {
+        FlyLog.d("playurl=%s", playUrl);
+        if (!TextUtils.isEmpty(playUrl)) {
             player.play(playUrl);
         }
-        player.onComplete(new Runnable() {
-            @Override
-            public void run() {
-                playNext();
-            }
-        });
-
     }
 
     @Override
@@ -72,8 +68,8 @@ public class VideoActivity extends BaseActivity implements
     @Override
     protected void onNewIntent(Intent intent) {
         final String playUrl = intent.getStringExtra(Const.PLAYURL_KEY);
-        FlyLog.d("playurl=%s",playUrl);
-        if(!TextUtils.isEmpty(playUrl)&&!player.isPlaying()) {
+        FlyLog.d("playurl=%s", playUrl);
+        if (!TextUtils.isEmpty(playUrl) && !player.isPlaying()) {
             player.play(playUrl);
         }
         super.onNewIntent(intent);
@@ -83,7 +79,7 @@ public class VideoActivity extends BaseActivity implements
         /**
          * 需支持多国语言
          */
-        titles = new String[]{getString(R.string.disk_list),getString(R.string.play_list),getString(R.string.file_list)};
+        titles = new String[]{getString(R.string.disk_list), getString(R.string.play_list), getString(R.string.file_list)};
         play_fore = (ImageView) findViewById(R.id.ac_music_play_fore);
         play_next = (ImageView) findViewById(R.id.ac_music_play_next);
         play_list = (ImageView) findViewById(R.id.menu_play_list);
@@ -100,17 +96,18 @@ public class VideoActivity extends BaseActivity implements
     }
 
     private void playNext() {
-        if(videoList!=null&&!videoList.isEmpty()){
-            if(currenPos<videoList.size()-1){
-                currenPos++;;
+        if (videoList != null && !videoList.isEmpty()) {
+            if (currenPos < videoList.size() - 1) {
+                currenPos++;
+                ;
                 player.play(videoList.get(currenPos));
             }
         }
     }
 
     private void playFore() {
-        if(videoList!=null&&!videoList.isEmpty()){
-            if(currenPos>0){
+        if (videoList != null && !videoList.isEmpty()) {
+            if (currenPos > 0) {
                 currenPos--;
                 player.play(videoList.get(currenPos));
             }
@@ -134,14 +131,14 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     public void onItemClick(View v, int pos) {
-        if(v instanceof FlyTabTextView){
+        if (v instanceof FlyTabTextView) {
             replaceFragment(fmName[pos]);
         }
     }
 
     private void showOrHideVideoPlayListLayout() {
         isShowVideoPlayList = !isShowVideoPlayList;
-        play_ll01_playlist.animate().translationX(isShowVideoPlayList ? -341 : 0).setDuration(300).start();
+        play_ll01_playlist.animate().translationX(isShowVideoPlayList ? -394 : 0).setDuration(300).start();
     }
 
     @Override
@@ -152,7 +149,7 @@ public class VideoActivity extends BaseActivity implements
             return;
         }
         videoList.clear();
-        if (videoUrlList.isEmpty()&&player.isPlaying()) {
+        if (videoUrlList.isEmpty() && player.isPlaying()) {
             currenPos = 0;
             player.stop();
             FlyLog.d("musicPlayer stop");
@@ -160,7 +157,7 @@ public class VideoActivity extends BaseActivity implements
         }
         videoList.addAll(videoUrlList);
         //TODO:判断当前列表有没更新，确定播放哪首歌曲
-        if(!player.isPlaying()){
+        if (!player.isPlaying()) {
             currenPos = 0;
             player.play(videoList.get(currenPos));
             return;
@@ -178,4 +175,30 @@ public class VideoActivity extends BaseActivity implements
         }
     }
 
+    @Override
+    public void statusChange(int statu) {
+
+        switch (statu) {
+            case MusicPlayer.STATUS_COMPLETED:
+                playNext();
+                break;
+            case MusicPlayer.STATUS_PLAYING:
+                setCurrentPos();
+                break;
+            case MusicPlayer.STATUS_ERROR:
+            case MusicPlayer.STATUS_PAUSE:
+            case MusicPlayer.STATUS_LOADING:
+                playNext();
+                break;
+        }
+    }
+
+    private void setCurrentPos() {
+        for(int i=0;i<videoList.size();i++){
+            if(videoList.get(i).equals(player.getPlayUrl())){
+                currenPos = i;
+                break;
+            }
+        }
+    }
 }

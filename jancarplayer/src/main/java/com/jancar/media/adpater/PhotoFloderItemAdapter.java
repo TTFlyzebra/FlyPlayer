@@ -7,6 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jancar.media.R;
 import com.jancar.media.activity.PhotoActivity;
 import com.jancar.media.utils.StringTools;
@@ -49,7 +50,7 @@ public class PhotoFloderItemAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = new ViewHolder();
         if (null == convertView) {
-            convertView = View.inflate(mContext, R.layout.item_video2, null);
+            convertView = View.inflate(mContext, R.layout.item_photo2, null);
             viewHolder.textView = (MarqueeTextView) convertView.findViewById(R.id.tv_gridview);
             viewHolder.imageView1 = (ImageView) convertView.findViewById(R.id.iv_gridview);
             viewHolder.imageView2 = (ImageView) convertView.findViewById(R.id.item_iv01_back);
@@ -63,8 +64,12 @@ public class PhotoFloderItemAdapter extends BaseAdapter {
         viewHolder.textView.setTextColor(flag ? 0xFF0370E5 : 0xFFFFFFFF);
         viewHolder.textView.enableMarquee(flag);
 
-        Glide.with(mContext).load(url).placeholder(R.drawable.media_default_image).into(viewHolder.imageView1);
-        viewHolder.imageView2.setImageResource(flag ? R.drawable.media_list_item_select_02 : R.drawable.media_list_item_select_01);
+        Glide.with(mContext)
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .placeholder(R.drawable.media_default_image)
+                .into(viewHolder.imageView1);
+        viewHolder.imageView2.setImageResource(flag ? R.drawable.rectangle_blue : R.drawable.rectangle_select);
         return convertView;
     }
 

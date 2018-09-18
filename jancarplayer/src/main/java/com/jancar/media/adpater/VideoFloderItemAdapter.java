@@ -82,7 +82,7 @@ public class VideoFloderItemAdapter extends BaseAdapter {
             tasks.add(task);
         }
         ImageView imageView2 = (ImageView) convertView.findViewById(R.id.item_iv01_back);
-        imageView2.setImageResource(flag?R.drawable.media_list_item_select_02:R.drawable.media_list_item_select_01);
+        imageView2.setImageResource(flag?R.drawable.rectangle_blue:R.drawable.rectangle_select);
         return convertView;
     }
 

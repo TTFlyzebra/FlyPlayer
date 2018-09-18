@@ -133,6 +133,7 @@ public class FlyMediaService extends Service implements IStorageListener {
         FlyLog.d("start");
         super.onCreate();
         Storage.getInstance().init(getApplicationContext());
+        iStorage.refresh();
         iStorage.addListener(this);
     }
 
@@ -321,6 +322,7 @@ public class FlyMediaService extends Service implements IStorageListener {
             currentPath = NORMAL;
             notifyAllListener();
         }
+        iStorage.refresh();
     }
 
     private void getVideoFromPath(File file) throws Exception {
