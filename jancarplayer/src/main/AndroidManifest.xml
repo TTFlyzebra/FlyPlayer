@@ -14,9 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.VideoActivity"
+            android:name=".activity.MusicActivity"
             android:exported="true"
-            android:label="@string/video"
+            android:label="@string/music"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,9 +26,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MusicActivity"
+            android:name=".activity.VideoActivity"
             android:exported="true"
-            android:label="@string/music"
+            android:label="@string/video"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

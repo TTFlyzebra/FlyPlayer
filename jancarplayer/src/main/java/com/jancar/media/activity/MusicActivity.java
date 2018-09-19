@@ -62,7 +62,7 @@ public class MusicActivity extends BaseActivity implements
     private Bitmap defaultBitmap = null;
     private String artist = null;
     private String album = null;
-    private String lrc = null;
+    private String lyrics = null;
 
     private int HIDE_TIME = 5000;
     private static final int REFRESH_SEEK_LRC_TIME = 200;
@@ -286,7 +286,7 @@ public class MusicActivity extends BaseActivity implements
             bitmap = null;
             artist = "";
             album = "";
-            lrc = "";
+            lyrics = "";
             if (url.toLowerCase().endsWith(".mp3")) {
                 FlyLog.d("start get id3 info url=%s", url);
                 Mp3File mp3file = new Mp3File(url);
@@ -294,7 +294,7 @@ public class MusicActivity extends BaseActivity implements
                     ID3v2 id3v2Tag = mp3file.getId3v2Tag();
                     artist = TextUtils.isEmpty(id3v2Tag.getArtist()) ? "" : id3v2Tag.getArtist();
                     album = TextUtils.isEmpty(id3v2Tag.getAlbum()) ? "" : id3v2Tag.getAlbum();
-                    lrc = TextUtils.isEmpty(id3v2Tag.getLyrics()) ? "" : id3v2Tag.getLyrics();
+                    lyrics = TextUtils.isEmpty(id3v2Tag.getLyrics()) ? "" : id3v2Tag.getLyrics();
                     byte[] albumImageData = id3v2Tag.getAlbumImage();
                     if (albumImageData != null) {
                         bitmap = BitmapFactory.decodeByteArray(albumImageData, 0, albumImageData.length);
@@ -315,9 +315,9 @@ public class MusicActivity extends BaseActivity implements
                             ivImage.setImageBitmap(bitmap == null ? defaultBitmap : bitmap);
                             tvArtist.setText(TextUtils.isEmpty(artist) ? getString(R.string.no_artist) : artist);
                             tvAlbum.setText(TextUtils.isEmpty(album) ? getString(R.string.no_album) : album);
-                            if (!TextUtils.isEmpty(lrc)) {
-                                FlyLog.d("id3 lrc=%s", lrc);
-                                lrcView.loadLrc(lrc);
+                            if (!TextUtils.isEmpty(lyrics)) {
+                                FlyLog.d("id3 lrc=%s", lyrics);
+                                lrcView.loadLrc(lyrics);
                             } else {
                                 String lrcPath = StringTools.getlrcByPath(musicPlayer.getPlayUrl());
                                 lrcView.loadLrc(new File(lrcPath));

@@ -93,7 +93,6 @@
                     android:layout_marginLeft="20px"
                     android:ellipsize="marquee"
                     android:singleLine="true"
-                    android:text="@string/no_album"
                     android:textColor="#FFF"
                     android:textSize="34px" />
 
@@ -118,7 +117,6 @@
                     android:layout_marginLeft="20px"
                     android:ellipsize="marquee"
                     android:singleLine="true"
-                    android:text="@string/no_artist"
                     android:textColor="#FFF"
                     android:textSize="34px" />
             </LinearLayout>
