@@ -291,14 +291,13 @@
 
         <RelativeLayout
             android:id="@+id/play_ll01_playlist"
-            android:layout_width="397px"
-            android:layout_height="421px"
+            android:layout_width="400px"
+            android:layout_height="403px"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="120px"
-            android:layout_marginRight="-394px"
-            android:orientation="vertical"
-            android:paddingLeft="4px">
+            android:layout_marginBottom="138px"
+            android:layout_marginRight="-399px"
+            android:orientation="vertical">
 
             <View
                 android:layout_width="match_parent"

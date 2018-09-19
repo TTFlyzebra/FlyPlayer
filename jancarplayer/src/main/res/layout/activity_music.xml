@@ -227,12 +227,12 @@
 
     <com.jancar.media.view.TouchEventRelativeLayout
         android:id="@+id/ac_music_left_layout"
-        android:layout_width="442px"
+        android:layout_width="448px"
         android:layout_height="406px"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="135px"
-        android:layout_marginRight="-394px"
+        android:layout_marginRight="-401px"
         android:orientation="vertical">
 
         <ImageView
