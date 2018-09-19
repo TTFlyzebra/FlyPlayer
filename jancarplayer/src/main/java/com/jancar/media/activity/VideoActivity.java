@@ -1,5 +1,6 @@
 package com.jancar.media.activity;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -86,14 +87,15 @@ public class VideoActivity extends BaseActivity implements
         play_list = (ImageView) findViewById(R.id.menu_play_list);
         play_ll01_playlist = (RelativeLayout) findViewById(R.id.play_ll01_playlist);
         tabView = (FlyTabView) findViewById(R.id.app_video_tabview);
-        tabView.setTitles(titles);
         tabView.setOnItemClickListener(this);
 
         play_fore.setOnClickListener(this);
         play_next.setOnClickListener(this);
         play_list.setOnClickListener(this);
 
-        replaceFragment(fmName[0]);
+        tabView.setTitles(titles);
+        replaceFragment(fmName[1]);
+        tabView.setFocusPos(1);
     }
 
     private void playNext() {
@@ -137,11 +139,38 @@ public class VideoActivity extends BaseActivity implements
     }
 
     private void showOrHideVideoPlayListLayout() {
+        play_ll01_playlist.setVisibility(View.VISIBLE);
         isShowVideoPlayList = !isShowVideoPlayList;
         play_ll01_playlist.animate().translationX(isShowVideoPlayList
-                ? -394* DisplayUtils.getMetrices(this).widthPixels/1024
+                ? -394 * DisplayUtils.getMetrices(this).widthPixels / 1024
                 : 0)
-                .setDuration(300).start();
+                .setDuration(300)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        if (play_ll01_playlist.getX() > ((1024 - 394) * DisplayUtils.getMetrices(VideoActivity.this).widthPixels / 1024)) {
+                            play_ll01_playlist.setVisibility(View.GONE);
+                        } else {
+                            play_ll01_playlist.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                }).start();
+        play_list.setImageResource(isShowVideoPlayList ? R.drawable.media_list_menu_open : R.drawable.media_list_menu_close);
     }
 
     @Override
@@ -152,9 +181,9 @@ public class VideoActivity extends BaseActivity implements
             return;
         }
         videoList.clear();
-        if (videoUrlList.isEmpty() ) {
+        if (videoUrlList.isEmpty()) {
             currenPos = 0;
-            if(player.isPlaying()){
+            if (player.isPlaying()) {
                 player.stop();
             }
             FlyLog.d("musicPlayer stop");
@@ -184,23 +213,22 @@ public class VideoActivity extends BaseActivity implements
     public void statusChange(int statu) {
 
         switch (statu) {
+            case MusicPlayer.STATUS_ERROR:
             case MusicPlayer.STATUS_COMPLETED:
                 playNext();
                 break;
             case MusicPlayer.STATUS_PLAYING:
                 setCurrentPos();
                 break;
-            case MusicPlayer.STATUS_ERROR:
             case MusicPlayer.STATUS_PAUSE:
             case MusicPlayer.STATUS_LOADING:
-                playNext();
                 break;
         }
     }
 
     private void setCurrentPos() {
-        for(int i=0;i<videoList.size();i++){
-            if(videoList.get(i).equals(player.getPlayUrl())){
+        for (int i = 0; i < videoList.size(); i++) {
+            if (videoList.get(i).equals(player.getPlayUrl())) {
                 currenPos = i;
                 break;
             }

@@ -9,20 +9,25 @@ public interface IPlayStatus {
      * 未初始化
      */
     int STATUS_IDLE = 0;
+
+    /**
+     * 开始加载播放
+     */
+    int STATUS_STARTPLAY = 0;
     /**
      * 加载缓存准备播放
      */
-    int STATUS_LOADING = 1;
+    int STATUS_LOADING = 2;
     /**
      * 正在播放
      */
-    int STATUS_PLAYING = 2;
+    int STATUS_PLAYING = 3;
     /**
      * 暂停播放
      */
-    int STATUS_PAUSE = 3;
+    int STATUS_PAUSE = 4;
     /**
      * 播放完成
      */
-    int STATUS_COMPLETED = 4;
+    int STATUS_COMPLETED = 5;
 }

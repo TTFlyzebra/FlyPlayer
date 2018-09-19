@@ -1,5 +1,6 @@
 package tcking.github.com.giraffeplayer;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -22,10 +23,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.jancar.media.R;
+import com.jancar.media.utils.DisplayUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,6 +93,11 @@ public class GiraffePlayer {
     final private int initHeight;
     private int defaultTimeout = 10000;
     private int screenWidthPixels;
+
+
+    private RelativeLayout app_video_bottom_box;
+    private RelativeLayout play_ll01_playlist;
+    private ImageView menu_play_list;
 
 
     private final View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -201,11 +209,7 @@ public class GiraffePlayer {
 
 
     private void showBottomControl(boolean show) {
-//        $.id(R.id.app_video_play).visibility(show ? View.VISIBLE : View.GONE);
-//        $.id(R.id.app_video_currentTime).visibility(show ? View.VISIBLE : View.GONE);
-//        $.id(R.id.app_video_endTime).visibility(show ? View.VISIBLE : View.GONE);
-//        $.id(R.id.app_video_seekBar).visibility(show ? View.VISIBLE : View.GONE);
-        activity.findViewById(R.id.app_video_bottom_box).animate().translationY(show ? 0f : 150f).setDuration(show ? 300 : 300).start();
+        app_video_bottom_box.animate().translationY(show ? 0f : 150f).setDuration(show ? 300 : 300).start();
     }
 
 
@@ -298,6 +302,9 @@ public class GiraffePlayer {
             Log.e("GiraffePlayer", "loadLibraries error", e);
         }
         this.activity = activity;
+        app_video_bottom_box = (RelativeLayout) activity.findViewById(R.id.app_video_bottom_box);
+        play_ll01_playlist = (RelativeLayout) activity.findViewById(R.id.play_ll01_playlist);
+        menu_play_list = (ImageView) activity.findViewById(R.id.menu_play_list);
         screenWidthPixels = activity.getResources().getDisplayMetrics().widthPixels;
         $ = new Query(activity);
         videoView = (IjkVideoView) activity.findViewById(R.id.video_view);
@@ -458,8 +465,35 @@ public class GiraffePlayer {
     }
 
     private void hideAll() {
+        isShowVideoPlayList = false;
+        menu_play_list.setImageResource(R.drawable.media_list_menu_close);
+        play_ll01_playlist.animate().translationX(0).setDuration(300)
+                .setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (play_ll01_playlist.getX() > ((1024 - 394) * DisplayUtils.getMetrices(activity).widthPixels / 1024)) {
+                    play_ll01_playlist.setVisibility(View.GONE);
+                } else {
+                    play_ll01_playlist.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        }).start();
         activity.getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
-        $.id(R.id.play_ll01_playlist).view.animate().translationX(0).setDuration(300).start();
         $.id(R.id.app_video_replay).gone();
         $.id(R.id.app_video_top_box).gone();
         $.id(R.id.app_video_loading).gone();
@@ -750,7 +784,34 @@ public class GiraffePlayer {
 
     public void hide(boolean force) {
         isShowVideoPlayList = false;
-        $.id(R.id.play_ll01_playlist).view.animate().translationX(0).setDuration(300).start();
+        menu_play_list.setImageResource(R.drawable.media_list_menu_close);
+        play_ll01_playlist.animate().translationX(0).setDuration(300)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        if (play_ll01_playlist.getX() > ((1024 - 394) * DisplayUtils.getMetrices(activity).widthPixels / 1024)) {
+                            play_ll01_playlist.setVisibility(View.GONE);
+                        } else {
+                            play_ll01_playlist.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                })
+                .start();
         activity.getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
         if (force || isShowing) {
             handler.removeMessages(MESSAGE_SHOW_PROGRESS);

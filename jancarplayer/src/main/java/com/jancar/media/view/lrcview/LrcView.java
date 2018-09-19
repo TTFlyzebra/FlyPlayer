@@ -28,10 +28,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * 歌词
- * Created by wcy on 2015/11/9.
- */
 public class LrcView extends View {
     private static final long ADJUST_DURATION = 100;
     private static final long TIMELINE_KEEP_TIME = 4 * DateUtils.SECOND_IN_MILLIS;

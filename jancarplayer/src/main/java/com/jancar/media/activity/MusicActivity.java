@@ -6,9 +6,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
 import com.jancar.media.view.MarqueeTextView;
+import com.jancar.media.view.TouchEventRelativeLayout;
 import com.jancar.media.view.lrcview.LrcView;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
@@ -36,8 +38,8 @@ public class MusicActivity extends BaseActivity implements
         SeekBar.OnSeekBarChangeListener,
         IMusicPlayerListener,
         FlyTabView.OnItemClickListener,
-        View.OnClickListener {
-    private FlyTabView tabView;
+        View.OnClickListener,
+        TouchEventRelativeLayout.OnTouchEventListener {
     private String titles[] = new String[]{"存储器", "单曲", "歌手", "专辑", "文件夹"};
     private String fmName[] = new String[]{"StorageFragment", "MusicPlayListFragment", "MusicArtistFragment", "MusicAlbumFragment", "MusicFloderFragment"};
     public List<String> musicList = new ArrayList<>();
@@ -46,15 +48,24 @@ public class MusicActivity extends BaseActivity implements
     private SeekBar seekBar;
     private TextView seekBarSartTime, seekBarEndTime;
     private ImageView playFore, playNext, play, leftMenu;
-    private RelativeLayout leftLayout;
+    private TouchEventRelativeLayout leftLayout;
     private MarqueeTextView tvSingle, tvArtist, tvAlbum;
     private ImageView ivImage;
     private ImageView ivLoop;
     private LrcView lrcView;
-    private int seekBarPos;
-    private static final int REFRESH_SEEK_LRC_TIME = 200;
+    private FlyTabView tabView;
+    private LinearLayout llContent;
 
+    private int seekBarPos;
     private Handler mHandler = new Handler(Looper.getMainLooper());
+    private Bitmap bitmap = null;
+    private Bitmap defaultBitmap = null;
+    private String artist = null;
+    private String album = null;
+    private String lrc = null;
+
+    private int HIDE_TIME = 5000;
+    private static final int REFRESH_SEEK_LRC_TIME = 200;
 
     private Runnable seekBarTask = new Runnable() {
         @Override
@@ -66,12 +77,18 @@ public class MusicActivity extends BaseActivity implements
             mHandler.postDelayed(seekBarTask, REFRESH_SEEK_LRC_TIME);
         }
     };
-
-    private Bitmap bitmap = null;
-    private Bitmap defaultBitmap = null;
-    private String artist = null;
-    private String album = null;
-    private String lrc = null;
+    private Runnable hideLeftLayoutTask = new Runnable() {
+        @Override
+        public void run() {
+            long time = System.currentTimeMillis() - touchTime;
+            if (time > HIDE_TIME) {
+                isShowLeftMenu = false;
+                showLeftMenu(false);
+            } else {
+                mHandler.postDelayed(hideLeftLayoutTask, time + 100);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +110,7 @@ public class MusicActivity extends BaseActivity implements
         playNext = (ImageView) findViewById(R.id.ac_music_play_next);
         play = (ImageView) findViewById(R.id.ac_music_play);
         leftMenu = (ImageView) findViewById(R.id.ac_music_left_menu);
-        leftLayout = (RelativeLayout) findViewById(R.id.ac_music_left_layout);
+        leftLayout = (TouchEventRelativeLayout) findViewById(R.id.ac_music_left_layout);
         tabView = (FlyTabView) findViewById(R.id.ac_music_tabview);
         tvSingle = (MarqueeTextView) findViewById(R.id.ac_music_single);
         tvArtist = (MarqueeTextView) findViewById(R.id.ac_music_artist);
@@ -101,6 +118,7 @@ public class MusicActivity extends BaseActivity implements
         ivImage = (ImageView) findViewById(R.id.ac_music_iv_image);
         ivLoop = (ImageView) findViewById(R.id.ac_music_iv_loop);
         lrcView = (LrcView) findViewById(R.id.ac_music_lrcview);
+        llContent = (LinearLayout) findViewById(R.id.ac_music_content);
 
         tvSingle.enableMarquee(true);
         tvArtist.enableMarquee(true);
@@ -113,9 +131,10 @@ public class MusicActivity extends BaseActivity implements
         leftMenu.setOnClickListener(this);
         tabView.setOnItemClickListener(this);
         ivLoop.setOnClickListener(this);
+        leftLayout.setOnTouchEventListener(this);
+        llContent.setOnClickListener(this);
 
         tabView.setTitles(titles);
-
         replaceFragment(fmName[1]);
         tabView.setFocusPos(1);
     }
@@ -150,11 +169,28 @@ public class MusicActivity extends BaseActivity implements
 
     private boolean isShowLeftMenu = false;
 
-    private void showOrHideLeftMenu() {
-        isShowLeftMenu = !isShowLeftMenu;
-        leftLayout.animate().translationX(isShowLeftMenu
-                ? -394 * DisplayUtils.getMetrices(this).widthPixels / 1024
-                : 0).setDuration(300).start();
+
+    private void showLeftMenu(boolean flag) {
+        mHandler.removeCallbacks(hideLeftLayoutTask);
+        leftLayout.animate().translationX(flag
+                ? -394* DisplayUtils.getMetrices(this).widthPixels/1024
+                : 0
+        ).setDuration(300).start();
+        if(flag){
+            mHandler.postDelayed(hideLeftLayoutTask, HIDE_TIME);
+        }
+        leftMenu.setImageResource(flag?R.drawable.media_list_menu_open:R.drawable.media_list_menu_close);
+    }
+
+    private long touchTime;
+
+    @Override
+    public void onFlyTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                touchTime = System.currentTimeMillis();
+                break;
+        }
     }
 
 
@@ -162,7 +198,9 @@ public class MusicActivity extends BaseActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ac_music_left_menu:
-                showOrHideLeftMenu();
+            case R.id.ac_music_content:
+                isShowLeftMenu = !isShowLeftMenu;
+                showLeftMenu(isShowLeftMenu);
                 break;
             case R.id.ac_music_play_fore:
                 musicPlayer.playFore();
@@ -191,7 +229,8 @@ public class MusicActivity extends BaseActivity implements
     public void playStatusChange(int statu) {
         switch (statu) {
             case MusicPlayer.STATUS_COMPLETED:
-                lrcView.loadLrc("");
+            case MusicPlayer.STATUS_STARTPLAY:
+                lrcView.setVisibility(View.GONE);
                 break;
             case MusicPlayer.STATUS_PLAYING:
                 initSeekBar();
@@ -283,6 +322,7 @@ public class MusicActivity extends BaseActivity implements
                                 String lrcPath = StringTools.getlrcByPath(musicPlayer.getPlayUrl());
                                 lrcView.loadLrc(new File(lrcPath));
                             }
+                            lrcView.setVisibility(View.VISIBLE);
                         } catch (Exception e) {
                             FlyLog.e(e.toString());
                         }

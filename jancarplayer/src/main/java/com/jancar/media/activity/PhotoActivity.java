@@ -1,5 +1,6 @@
 package com.jancar.media.activity;
 
+import android.animation.Animator;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -55,6 +56,7 @@ public class PhotoActivity extends BaseActivity implements
             long time = System.currentTimeMillis() - touchTime;
             if (time > hideTime) {
                 showLeftMenu(false);
+                isShowLeftMenu = false;
                 controlLayout.animate().translationY(150).setDuration(300).start();
                 getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
                 isShowControl = false;
@@ -109,7 +111,8 @@ public class PhotoActivity extends BaseActivity implements
         leftLayout.setOnTouchEventListener(this);
         controlLayout.setOnTouchEventListener(this);
         tabView.setTitles(titles);
-        replaceFragment(fmName[0]);
+        replaceFragment(fmName[1]);
+        tabView.setFocusPos(1);
     }
 
     @Override
@@ -132,12 +135,13 @@ public class PhotoActivity extends BaseActivity implements
                 CRET_URL = photoList.get(0);
             }
 
-            if(photoList.isEmpty()){
+            if (photoList.isEmpty()) {
                 mHandler.removeCallbacks(hideControlTask);
                 controlLayout.animate().translationY(0).setDuration(300).start();
                 getWindow().getDecorView().setSystemUiVisibility(View.VISIBLE);
+                isShowControl = true;
                 showLeftMenu(true);
-            }else{
+            } else {
                 showControlView(true);
             }
             if (adapter != null) {
@@ -216,10 +220,38 @@ public class PhotoActivity extends BaseActivity implements
     private boolean isShowLeftMenu = false;
 
     private void showLeftMenu(boolean flag) {
-        leftLayout.animate().translationX(flag
-                ? -394* DisplayUtils.getMetrices(this).widthPixels/1024
-                : 0
-        ).setDuration(300).start();
+        leftLayout.setVisibility(View.VISIBLE);
+        leftLayout.animate()
+                .translationX(flag ? -394 * DisplayUtils.getMetrices(this).widthPixels / 1024
+                        : 0)
+                .setDuration(300)
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        if (leftLayout.getX() > ((1024-394) * DisplayUtils.getMetrices(PhotoActivity.this).widthPixels / 1024)) {
+                            leftLayout.setVisibility(View.GONE);
+                        } else {
+                            leftLayout.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                })
+                .start();
+        leftMenu.setImageResource(flag ? R.drawable.media_list_menu_open : R.drawable.media_list_menu_close);
     }
 
     /**

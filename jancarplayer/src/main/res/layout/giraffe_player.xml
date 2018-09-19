@@ -254,7 +254,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:scaleType="centerInside"
-                android:src="@drawable/media_video_list" />
+                android:src="@drawable/media_list_menu_close" />
 
         </RelativeLayout>
 

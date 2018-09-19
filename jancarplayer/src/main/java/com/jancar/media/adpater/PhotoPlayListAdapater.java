@@ -48,7 +48,7 @@ public class PhotoPlayListAdapater extends RecyclerView.Adapter<PhotoPlayListAda
     public void onBindViewHolder(ViewHolder holder, final int position) {
         final String url = mList.get(position);
         holder.itemView.setTag(position);
-        Glide.with(mContext).load(url).placeholder(R.drawable.media_default_image).into(holder.imageView);
+        Glide.with(mContext).load(url).error(R.drawable.media_image_error).into(holder.imageView);
         holder.textView.setText(StringTools.getNameByPath(url));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

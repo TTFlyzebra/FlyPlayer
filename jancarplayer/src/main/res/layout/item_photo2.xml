@@ -12,8 +12,7 @@
         android:layout_height="110px"
         android:minHeight="110px"
         android:duplicateParentState="true"
-        android:scaleType="centerInside"
-        android:src="@drawable/media_default_image" />
+        android:scaleType="centerInside" />
 
     <ImageView
         android:layout_margin="4px"

@@ -80,6 +80,8 @@ public class MusicPlayer implements IMusicPlayer,
             } else {
                 mMediaPlayer.reset();
             }
+            mPlayStatus=STATUS_STARTPLAY;
+            notifyStatus();
             mMediaPlayer.setDataSource(mPlayUrl);
             mMediaPlayer.prepareAsync();
         } catch (IOException e) {
