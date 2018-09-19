@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="LrcView">
+        <attr name="lrc" format="string"/>
+        <attr name="textSize" format="dimension"/>
+        <attr name="currentLineColor" format="color"/>
+        <attr name="beforeLineColor" format="color"/>
+        <attr name="afterLineColor" format="color"/>
+        <attr name="referenceLineColor" format="color"/>
+        <attr name="lineSpacing" format="float"/>
+    </declare-styleable>
+
+</resources>

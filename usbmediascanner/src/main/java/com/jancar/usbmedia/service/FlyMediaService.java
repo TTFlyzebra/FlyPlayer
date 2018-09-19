@@ -28,7 +28,6 @@ import com.mpatric.mp3agic.Mp3File;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -285,27 +284,11 @@ public class FlyMediaService extends Service implements IStorageListener {
                 } catch (Exception e) {
                     FlyLog.e(e.toString());
                 }
-                Collections.sort(mVideoList, new Comparator<String>() {
-                    public int compare(String p1, String p2) {
-                        return p1.compareToIgnoreCase(p2);
-                    }
-                });
-                Collections.sort(mMusicList, new Comparator<String>() {
-                    public int compare(String p1, String p2) {
-                        return p1.compareToIgnoreCase(p2);
-                    }
-                });
-
-                Collections.sort(mImageList, new Comparator<String>() {
-                    public int compare(String p1, String p2) {
-                        return p1.compareToIgnoreCase(p2);
-                    }
-                });
                 notifyAllListener();
                 getMusicID3Info(mMusicList);
-                if (!isStoped.get()) {
-                    notifyID3Listener();
-                }
+//                if (!isStoped.get()) {
+//                    notifyID3Listener();
+//                }
                 isRunning.set(false);
                 FlyLog.d("finish scan path=%s", path);
             }
@@ -426,6 +409,9 @@ public class FlyMediaService extends Service implements IStorageListener {
             }
 //            FlyLog.d("add id3info url=%s", url);
             mMusicID3List.add(music);
+            if(!isStoped.get()){
+                notifyID3Listener();
+            }
         }
     }
 

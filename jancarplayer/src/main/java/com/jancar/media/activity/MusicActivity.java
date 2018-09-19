@@ -151,6 +151,7 @@ public class MusicActivity extends BaseActivity implements
             return;
         }
         String currentUrl = musicPlayer.getPlayUrl();
+        //TODO:第一首扫到的歌曲不是按顺序排列的第一首歌的情况怎么处理
         if (!musicList.get(currenPos).equals(currentUrl)) {
             currenPos = 0;
             musicPlayer.play(musicList.get(currenPos));

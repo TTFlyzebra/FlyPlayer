@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -38,6 +39,12 @@
                 android:layout_marginTop="125px"
                 android:src="@drawable/media_music" />
 
+            <com.jancar.media.view.LrcView
+                android:layout_width="match_parent"
+                android:layout_height="56px"
+                android:layout_alignParentBottom="true"
+                app:lrc="@string/lrc" />
+
         </RelativeLayout>
 
         <LinearLayout
@@ -66,7 +73,6 @@
                     android:layout_marginLeft="20px"
                     android:ellipsize="marquee"
                     android:singleLine="true"
-                    android:text="我的滑板鞋"
                     android:textColor="#FFF"
                     android:textSize="34px" />
 

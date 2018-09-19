@@ -71,6 +71,7 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void play(String url) {
+        FlyLog.d("play url=%s",url);
         try {
             this.playUrl = url;
             if (mMediaPlayer == null) {

@@ -25,8 +25,8 @@ public class MusicFloderFragment extends MusicFragment implements
         MusicFloderAdapter.OnItemClickListener {
     private ExpandableListView expandableListView;
     private List<String> groupList = new ArrayList<>();
-    private List<List<Music>> itemList = new ArrayList<>();
-    private Map<String, List<Music>> mHashMap = new HashMap<>();
+    private List<List<String>> itemList = new ArrayList<>();
+    private Map<String, List<String>> mHashMap = new HashMap<>();
     private MusicFloderAdapter adapter;
     private boolean isClick = false;
 
@@ -77,7 +77,7 @@ public class MusicFloderFragment extends MusicFragment implements
         for (int i = 0; i < itemList.size(); i++) {
             if (findPos1 == -1) {
                 for (int j = 0; j < itemList.get(i).size(); j++) {
-                    if (itemList.get(i).get(j).url.equals(musicPlayer.getPlayUrl())) {
+                    if (itemList.get(i).get(j).equals(musicPlayer.getPlayUrl())) {
                         expandableListView.expandGroup(i, false);
                         findPos1 = i;
                         findPos2 = j;
@@ -96,24 +96,19 @@ public class MusicFloderFragment extends MusicFragment implements
     @Override
     public void musicUrlList(List<String> musicUrlList) {
         FlyLog.d("get musics size=%d", musicUrlList == null ? 0 : musicUrlList.size());
-    }
-
-    @Override
-    public void musicID3UrlList(List<Music> musicUrlList) {
-        FlyLog.d("get id3musics size=%d", musicUrlList == null ? 0 : musicUrlList.size());
         try {
             if (musicUrlList != null && getActivity() != null && activity != null) {
                 mHashMap.clear();
                 groupList.clear();
                 itemList.clear();
                 for (int i = 0; i < musicUrlList.size(); i++) {
-                    String url = musicUrlList.get(i).url;
+                    String url = musicUrlList.get(i);
                     int last = url.lastIndexOf(File.separator);
                     String path = url.substring(0, last);
                     if (mHashMap.get(path) == null) {
-                        mHashMap.put(path, new ArrayList<Music>());
+                        mHashMap.put(path, new ArrayList<String>());
                     }
-                    mHashMap.get(path).add(musicUrlList.get(i));
+                    mHashMap.get(path).add(url);
                 }
                 groupList.addAll(mHashMap.keySet());
 
@@ -126,12 +121,21 @@ public class MusicFloderFragment extends MusicFragment implements
                 for (String key : groupList) {
                     itemList.add(mHashMap.get(key));
                 }
+
+                /**
+                 * 首次定位到当前播放位置
+                 */
                 scrollCurrentPos();
                 adapter.notifyDataSetChanged();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
+    }
+
+    @Override
+    public void musicID3UrlList(List<Music> musicUrlList) {
+        FlyLog.d("get id3musics size=%d", musicUrlList == null ? 0 : musicUrlList.size());
     }
 
     @Override

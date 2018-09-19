@@ -97,6 +97,7 @@ public class MusicAlbumFragment extends MusicFragment implements
         FlyLog.d("get musics size=%d", musicUrlList == null ? 0 : musicUrlList.size());
     }
 
+    private boolean isFistGet = true;
     @Override
     public void musicID3UrlList(List<Music> musicUrlList) {
         FlyLog.d("get id3musics size=%d", musicUrlList == null ? 0 : musicUrlList.size());
@@ -129,7 +130,10 @@ public class MusicAlbumFragment extends MusicFragment implements
                 for (String key : groupList) {
                     itemList.add(mHashMap.get(key));
                 }
-                scrollCurrentPos();
+                if(isFistGet){
+                    isFistGet = false;
+                    scrollCurrentPos();
+                }
                 adapter.notifyDataSetChanged();
             }
         } catch (Exception e) {

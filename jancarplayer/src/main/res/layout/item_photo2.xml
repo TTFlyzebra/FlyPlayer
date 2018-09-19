@@ -27,12 +27,11 @@
 
     <com.jancar.media.view.MarqueeTextView
         android:id="@+id/tv_gridview"
-        android:layout_marginLeft="4px"
-        android:layout_marginRight="4px"
-        android:layout_marginBottom="10px"
+        android:layout_marginLeft="8px"
+        android:layout_marginRight="8px"
+        android:layout_marginTop="84px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:background="#2F000000"
         android:duplicateParentState="true"
         android:ellipsize="marquee"
