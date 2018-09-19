@@ -173,13 +173,13 @@ public class MusicActivity extends BaseActivity implements
     private void showLeftMenu(boolean flag) {
         mHandler.removeCallbacks(hideLeftLayoutTask);
         leftLayout.animate().translationX(flag
-                ? -394* DisplayUtils.getMetrices(this).widthPixels/1024
+                ? -394 * DisplayUtils.getMetrices(this).widthPixels / 1024
                 : 0
         ).setDuration(300).start();
-        if(flag){
+        if (flag) {
             mHandler.postDelayed(hideLeftLayoutTask, HIDE_TIME);
         }
-        leftMenu.setImageResource(flag?R.drawable.media_list_menu_open:R.drawable.media_list_menu_close);
+        leftMenu.setImageResource(flag ? R.drawable.media_list_menu_open : R.drawable.media_list_menu_close);
     }
 
     private long touchTime;
@@ -259,9 +259,12 @@ public class MusicActivity extends BaseActivity implements
     private void initSeekBar() {
         int sumTime = musicPlayer.getDuration();
         seekBar.setMax(sumTime);
-        int min = sumTime / 1000 / 60;
+        int hou = sumTime / 360000;
+        int min = sumTime / 60000 % 60;
         int sec = sumTime / 1000 % 60;
-        String text = min + ":" + (sec > 9 ? sec : "0" + sec);
+        String text = (hou == 0 ? "" : ((hou > 9 ? hou : "0" + hou)+":")) + ""
+                + (min > 9 ? min : "0" + min) + ":"
+                + (sec > 9 ? sec : "0" + sec);
         seekBarEndTime.setText(text);
         mHandler.removeCallbacks(seekBarTask);
         mHandler.post(seekBarTask);
@@ -374,9 +377,12 @@ public class MusicActivity extends BaseActivity implements
     }
 
     public void setSeekStartText(int seekPos) {
-        int min = seekPos / 1000 / 60;
+        int hou = seekPos / 360000;
+        int min = seekPos / 60000 % 60;
         int sec = seekPos / 1000 % 60;
-        String text = min + ":" + (sec > 9 ? sec : "0" + sec);
+        String text = (hou == 0 ? "" : ((hou > 9 ? hou : "0" + hou)+":")) + ""
+                + (min > 9 ? min : "0" + min) + ":"
+                + (sec > 9 ? sec : "0" + sec);
         seekBarSartTime.setText(text);
     }
 }

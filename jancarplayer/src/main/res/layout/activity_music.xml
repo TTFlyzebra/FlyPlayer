@@ -153,12 +153,13 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="00:00"
+                android:layout_marginRight="-10px"
                 android:textColor="@android:color/white"
-                android:textSize="22px" />
+                android:textSize="20px" />
 
             <SeekBar
                 android:id="@+id/ac_music_seekBar"
-                android:layout_width="870px"
+                android:layout_width="868px"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:progressDrawable="@drawable/media_seekbar_style"
@@ -173,8 +174,9 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:text="00:00"
+                android:layout_marginLeft="-10px"
                 android:textColor="@android:color/white"
-                android:textSize="22px" />
+                android:textSize="20px" />
 
         </LinearLayout>
 
