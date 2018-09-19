@@ -14,9 +14,9 @@ import com.jancar.media.R;
 import com.jancar.media.adpater.StorageAdapater;
 import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.StorageInfo;
-import com.jancar.media.listener.IStorageListener;
-import com.jancar.media.model.IStorage;
-import com.jancar.media.model.Storage;
+import com.jancar.media.model.listener.IStorageListener;
+import com.jancar.media.model.storage.IStorage;
+import com.jancar.media.model.storage.Storage;
 import com.jancar.media.receiver.USBDiskReceiver;
 import com.jancar.media.utils.FlyLog;
 

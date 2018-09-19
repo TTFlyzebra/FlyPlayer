@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 import com.jancar.media.R;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Const;
-import com.jancar.media.model.MusicPlayer;
+import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.view.FlyTabTextView;
@@ -100,7 +100,6 @@ public class VideoActivity extends BaseActivity implements
         if (videoList != null && !videoList.isEmpty()) {
             if (currenPos < videoList.size() - 1) {
                 currenPos++;
-                ;
                 player.play(videoList.get(currenPos));
             }
         }

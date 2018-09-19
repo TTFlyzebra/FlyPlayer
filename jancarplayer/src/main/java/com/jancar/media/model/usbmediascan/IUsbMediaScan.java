@@ -1,7 +1,7 @@
-package com.jancar.media.model;
+package com.jancar.media.model.usbmediascan;
 
 import com.jancar.media.data.StorageInfo;
-import com.jancar.media.listener.IUsbMediaListener;
+import com.jancar.media.model.listener.IUsbMediaListener;
 
 public interface IUsbMediaScan{
     void addListener(IUsbMediaListener iUsbMediaListener);

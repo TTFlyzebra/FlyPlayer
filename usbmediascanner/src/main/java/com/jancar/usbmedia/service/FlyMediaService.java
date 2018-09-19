@@ -186,7 +186,7 @@ public class FlyMediaService extends Service implements IStorageListener {
                             l.notifyImage(mImageList);
                             FlyLog.d("notify id3music list size=%d", mMusicID3List == null ? 0 : mMusicID3List.size());
                             l.notifyID3Music(mMusicID3List);
-                            FlyLog.d("notify path =%s", currentPath);
+                            FlyLog.d("notify mPath =%s", currentPath);
                             l.notifyPath(currentPath);
                         }
                     }
@@ -234,7 +234,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     private Runnable notifyPathTask = new Runnable() {
         @Override
         public synchronized void run() {
-            FlyLog.d("notify path=%s", currentPath);
+            FlyLog.d("notify mPath=%s", currentPath);
             final int N = mNotifys.beginBroadcast();
             FlyLog.d("start notify client, client sum=%d", N);
             try {
@@ -257,12 +257,12 @@ public class FlyMediaService extends Service implements IStorageListener {
     }
 
     private void scanPath(final String path) {
-        FlyLog.d("scan path=%s", path);
+        FlyLog.d("scan mPath=%s", path);
         isStoped.set(true);
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                FlyLog.d("start scan path=%s", path);
+                FlyLog.d("start scan mPath=%s", path);
                 while (isRunning.get()) {
                     FlyLog.d("wait another scan finish=%s", path);
                     try {
@@ -290,13 +290,13 @@ public class FlyMediaService extends Service implements IStorageListener {
 //                    notifyID3Listener();
 //                }
                 isRunning.set(false);
-                FlyLog.d("finish scan path=%s", path);
+                FlyLog.d("finish scan mPath=%s", path);
             }
         });
     }
 
     private void removePath(String path) {
-        FlyLog.d("remove path=%s", path);
+        FlyLog.d("remove mPath=%s", path);
         if (currentPath.equals(path)) {
             FlyLog.d("clear all list");
             mVideoList.clear();
@@ -418,7 +418,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     @Override
     public void storageList(List<StorageInfo> storageList) {
         if (storageList != null && !storageList.isEmpty()) {
-            scanPath(storageList.get(0).path);
+            scanPath(storageList.get(0).mPath);
         }
     }
 }

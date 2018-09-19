@@ -3,9 +3,9 @@ package com.jancar.media.base;
 import android.app.Fragment;
 
 import com.jancar.media.data.Music;
-import com.jancar.media.listener.IUsbMediaListener;
-import com.jancar.media.model.IUsbMediaScan;
-import com.jancar.media.model.UsbMediaScan;
+import com.jancar.media.model.listener.IUsbMediaListener;
+import com.jancar.media.model.usbmediascan.IUsbMediaScan;
+import com.jancar.media.model.usbmediascan.UsbMediaScan;
 
 import java.util.List;
 

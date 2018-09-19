@@ -35,25 +35,34 @@ public class StorageTools {
                     Method isRemovable = obj.getClass().getMethod("isRemovable");
                     info.isRemoveable = (Boolean) isRemovable.invoke(obj, new Object[0]);
 
-                    Field mDescription = obj.getClass().getDeclaredField("mDescription");
-                    mDescription.setAccessible(true);
-                    info.mDescription = path;
+                    try {
+                        Field mDescription = obj.getClass().getDeclaredField("mDescription");
+                        mDescription.setAccessible(true);
+                        info.mDescription = (String) mDescription.get(obj);
+                    }catch (Exception e){
+                        info.mDescription = path;
+                        FlyLog.e(e.toString());
+                    }
 
-                    Field mMtpReserveSize = obj.getClass().getDeclaredField("mMtpReserveSize");
-                    mMtpReserveSize.setAccessible(true);
-                    info.mMtpReserveSize = (long) mMtpReserveSize.get(obj);
+                    try {
+                        Field mMtpReserveSize = obj.getClass().getDeclaredField("mMtpReserveSize");
+                        mMtpReserveSize.setAccessible(true);
+                        info.mMtpReserveSize = (long) mMtpReserveSize.get(obj);
 
-                    Field mId = obj.getClass().getDeclaredField("mId");
-                    mId.setAccessible(true);
-                    info.mId = (String) mId.get(obj);
+                        Field mId = obj.getClass().getDeclaredField("mId");
+                        mId.setAccessible(true);
+                        info.mId = (String) mId.get(obj);
 
-                    Field mStorageId = obj.getClass().getDeclaredField("mStorageId");
-                    mStorageId.setAccessible(true);
-                    info.mStorageId = (int) mStorageId.get(obj);
+                        Field mStorageId = obj.getClass().getDeclaredField("mStorageId");
+                        mStorageId.setAccessible(true);
+                        info.mStorageId = (int) mStorageId.get(obj);
 
-                    Field mMaxFileSize = obj.getClass().getDeclaredField("mMaxFileSize");
-                    mMaxFileSize.setAccessible(true);
-                    info.mMaxFileSize = (int) mStorageId.get(obj);
+                        Field mMaxFileSize = obj.getClass().getDeclaredField("mMaxFileSize");
+                        mMaxFileSize.setAccessible(true);
+                        info.mMaxFileSize = (int) mStorageId.get(obj);
+                    }catch (Exception e){
+                        FlyLog.e(e.toString());
+                    }
 
                     storages.add(info);
                 }

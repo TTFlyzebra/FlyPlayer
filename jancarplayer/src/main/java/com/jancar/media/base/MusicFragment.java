@@ -3,9 +3,9 @@ package com.jancar.media.base;
 import android.os.Bundle;
 
 import com.jancar.media.activity.MusicActivity;
-import com.jancar.media.listener.IMusicPlayerListener;
-import com.jancar.media.model.IMusicPlayer;
-import com.jancar.media.model.MusicPlayer;
+import com.jancar.media.model.listener.IMusicPlayerListener;
+import com.jancar.media.model.musicplayer.IMusicPlayer;
+import com.jancar.media.model.musicplayer.MusicPlayer;
 
 import java.util.List;
 
@@ -36,7 +36,12 @@ public class MusicFragment extends BaseFragment implements
     }
 
     @Override
-    public void statusChange(int statu) {
+    public void playStatusChange(int statu) {
+
+    }
+
+    @Override
+    public void loopStatusChange(int staut) {
 
     }
 }

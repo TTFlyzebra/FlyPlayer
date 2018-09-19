@@ -7,9 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.jancar.media.R;
 import com.jancar.media.data.Music;
-import com.jancar.media.listener.IUsbMediaListener;
-import com.jancar.media.model.IUsbMediaScan;
-import com.jancar.media.model.UsbMediaScan;
+import com.jancar.media.model.listener.IUsbMediaListener;
+import com.jancar.media.model.usbmediascan.IUsbMediaScan;
+import com.jancar.media.model.usbmediascan.UsbMediaScan;
 import com.jancar.media.utils.FlyLog;
 
 import java.lang.reflect.Constructor;

@@ -56,7 +56,7 @@ public class MusicFloderFragment extends MusicFragment implements
 
 
     @Override
-    public void statusChange(int statu) {
+    public void playStatusChange(int statu) {
         if (!isClick) {
             scrollCurrentPos();
         }
@@ -139,8 +139,8 @@ public class MusicFloderFragment extends MusicFragment implements
     }
 
     @Override
-    public void onItemClick(View view, Music music) {
+    public void onItemClick(View view, String string) {
         isClick = true;
-        musicPlayer.play(music.url);
+        musicPlayer.play(string);
     }
 }

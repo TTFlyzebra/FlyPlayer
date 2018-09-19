@@ -14,19 +14,21 @@ import android.widget.TextView;
 
 import com.jancar.media.R;
 import com.jancar.media.base.BaseActivity;
-import com.jancar.media.listener.IMusicPlayerListener;
-import com.jancar.media.model.IMusicPlayer;
-import com.jancar.media.model.MusicPlayer;
+import com.jancar.media.model.listener.IMusicPlayerListener;
+import com.jancar.media.model.musicplayer.IMusicPlayer;
+import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
 import com.jancar.media.view.MarqueeTextView;
+import com.jancar.media.view.lrcview.LrcView;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,21 +49,21 @@ public class MusicActivity extends BaseActivity implements
     private RelativeLayout leftLayout;
     private MarqueeTextView tvSingle, tvArtist, tvAlbum;
     private ImageView ivImage;
-    private int seekPos;
-    public int currenPos = 0;
+    private ImageView ivLoop;
+    private LrcView lrcView;
+    private int seekBarPos;
+    private static final int REFRESH_SEEK_LRC_TIME = 200;
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private Runnable seekBarTask = new Runnable() {
         @Override
         public void run() {
-            seekPos = musicPlayer.getCurrentPosition();
-            int min = seekPos / 1000 / 60;
-            int sec = seekPos / 1000 % 60;
-            String text = min + ":" + (sec > 9 ? sec : "0" + sec);
-            seekBarSartTime.setText(text);
-            seekBar.setProgress(seekPos);
-            mHandler.postDelayed(seekBarTask, 1000);
+            seekBarPos = musicPlayer.getCurrentPosition();
+            lrcView.updateTime(seekBarPos);
+            setSeekStartText(seekBarPos);
+            seekBar.setProgress(seekBarPos);
+            mHandler.postDelayed(seekBarTask, REFRESH_SEEK_LRC_TIME);
         }
     };
 
@@ -69,6 +71,7 @@ public class MusicActivity extends BaseActivity implements
     private Bitmap defaultBitmap = null;
     private String artist = null;
     private String album = null;
+    private String lrc = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +99,9 @@ public class MusicActivity extends BaseActivity implements
         tvArtist = (MarqueeTextView) findViewById(R.id.ac_music_artist);
         tvAlbum = (MarqueeTextView) findViewById(R.id.ac_music_album);
         ivImage = (ImageView) findViewById(R.id.ac_music_iv_image);
+        ivLoop = (ImageView) findViewById(R.id.ac_music_iv_loop);
+        lrcView = (LrcView) findViewById(R.id.ac_music_lrcview);
+
         tvSingle.enableMarquee(true);
         tvArtist.enableMarquee(true);
         tvAlbum.enableMarquee(true);
@@ -106,6 +112,7 @@ public class MusicActivity extends BaseActivity implements
         seekBar.setOnSeekBarChangeListener(this);
         leftMenu.setOnClickListener(this);
         tabView.setOnItemClickListener(this);
+        ivLoop.setOnClickListener(this);
 
         tabView.setTitles(titles);
 
@@ -129,33 +136,8 @@ public class MusicActivity extends BaseActivity implements
             return;
         }
         musicList.clear();
-        if (musicUrlList.isEmpty()) {
-            currenPos = 0;
-            if(musicPlayer.isPlaying()){
-                musicPlayer.stop();
-            }
-            FlyLog.d("musicPlayer stop");
-            return;
-        }
         musicList.addAll(musicUrlList);
-        //TODO:判断当前列表有没更新，确定播放哪首歌曲
-        if(!musicPlayer.isPlaying()){
-            currenPos = 0;
-            musicPlayer.play(musicList.get(currenPos));
-            return;
-        }
-
-        if (currenPos >= musicUrlList.size()) {
-            currenPos = 0;
-            musicPlayer.play(musicList.get(currenPos));
-            return;
-        }
-        String currentUrl = musicPlayer.getPlayUrl();
-        //TODO:第一首扫到的歌曲不是按顺序排列的第一首歌的情况怎么处理
-        if (!musicList.get(currenPos).equals(currentUrl)) {
-            currenPos = 0;
-            musicPlayer.play(musicList.get(currenPos));
-        }
+        musicPlayer.setPlayUrls(musicList);
     }
 
 
@@ -171,7 +153,7 @@ public class MusicActivity extends BaseActivity implements
     private void showOrHideLeftMenu() {
         isShowLeftMenu = !isShowLeftMenu;
         leftLayout.animate().translationX(isShowLeftMenu
-                ? -394* DisplayUtils.getMetrices(this).widthPixels/1024
+                ? -394 * DisplayUtils.getMetrices(this).widthPixels / 1024
                 : 0).setDuration(300).start();
     }
 
@@ -183,10 +165,10 @@ public class MusicActivity extends BaseActivity implements
                 showOrHideLeftMenu();
                 break;
             case R.id.ac_music_play_fore:
-                playFore();
+                musicPlayer.playFore();
                 break;
             case R.id.ac_music_play_next:
-                playNext();
+                musicPlayer.playNext();
                 break;
             case R.id.ac_music_play:
                 try {
@@ -195,35 +177,48 @@ public class MusicActivity extends BaseActivity implements
                     } else {
                         musicPlayer.start();
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
+                break;
+            case R.id.ac_music_iv_loop:
+                musicPlayer.switchLoopStatus();
                 break;
         }
     }
 
     @Override
-    public void statusChange(int statu) {
+    public void playStatusChange(int statu) {
         switch (statu) {
             case MusicPlayer.STATUS_COMPLETED:
-                playNext();
+                lrcView.loadLrc("");
                 break;
             case MusicPlayer.STATUS_PLAYING:
                 initSeekBar();
                 upPlayInfo();
                 break;
-            case MusicPlayer.STATUS_ERROR:
-            case MusicPlayer.STATUS_PAUSE:
-            case MusicPlayer.STATUS_LOADING:
-                break;
         }
-
         play.setImageResource(musicPlayer.isPlaying() ? R.drawable.media_pause : R.drawable.media_play);
 
     }
 
+    @Override
+    public void loopStatusChange(int staut) {
+        switch (staut) {
+            case MusicPlayer.LOOP_ALL:
+                ivLoop.setImageResource(R.drawable.media_loop_all);
+                break;
+            case MusicPlayer.LOOP_ONE:
+                ivLoop.setImageResource(R.drawable.media_loop_one);
+                break;
+            case MusicPlayer.LOOP_RAND:
+                ivLoop.setImageResource(R.drawable.media_loop_rand);
+                break;
+        }
+    }
+
     private void initSeekBar() {
-        int sumTime = musicPlayer.getMediaPlay().getDuration();
+        int sumTime = musicPlayer.getDuration();
         seekBar.setMax(sumTime);
         int min = sumTime / 1000 / 60;
         int sec = sumTime / 1000 % 60;
@@ -235,30 +230,24 @@ public class MusicActivity extends BaseActivity implements
 
     private void upPlayInfo() {
         tvSingle.setText(StringTools.getNameByPath(musicPlayer.getPlayUrl()));
-        currenPos = 0;
-        for (int i = 0; i < musicList.size(); i++) {
-            if (musicList.get(i).equals(musicPlayer.getPlayUrl())) {
-                currenPos = i;
-                break;
-            }
-        }
         new Thread(new Runnable() {
             @Override
             public void run() {
                 if (defaultBitmap == null) {
                     defaultBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.media_music);
                 }
-                initID3();
+                loadID3Info();
             }
         }).start();
     }
 
-    private void initID3() {
+    private void loadID3Info() {
         try {
-            String url = musicPlayer.getPlayUrl();
+            final String url = musicPlayer.getPlayUrl();
             bitmap = null;
             artist = "";
             album = "";
+            lrc = "";
             if (url.toLowerCase().endsWith(".mp3")) {
                 FlyLog.d("start get id3 info url=%s", url);
                 Mp3File mp3file = new Mp3File(url);
@@ -266,6 +255,7 @@ public class MusicActivity extends BaseActivity implements
                     ID3v2 id3v2Tag = mp3file.getId3v2Tag();
                     artist = TextUtils.isEmpty(id3v2Tag.getArtist()) ? "" : id3v2Tag.getArtist();
                     album = TextUtils.isEmpty(id3v2Tag.getAlbum()) ? "" : id3v2Tag.getAlbum();
+                    lrc = TextUtils.isEmpty(id3v2Tag.getLyrics()) ? "" : id3v2Tag.getLyrics();
                     byte[] albumImageData = id3v2Tag.getAlbumImage();
                     if (albumImageData != null) {
                         bitmap = BitmapFactory.decodeByteArray(albumImageData, 0, albumImageData.length);
@@ -277,15 +267,22 @@ public class MusicActivity extends BaseActivity implements
                 }
                 FlyLog.d("finish get id3 info url=%s", url);
             }
-            if(!isStop) {
+            if (!isStop) {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            if(isStop) return;
+                            if (isStop) return;
                             ivImage.setImageBitmap(bitmap == null ? defaultBitmap : bitmap);
                             tvArtist.setText(TextUtils.isEmpty(artist) ? getString(R.string.no_artist) : artist);
                             tvAlbum.setText(TextUtils.isEmpty(album) ? getString(R.string.no_album) : album);
+                            if (!TextUtils.isEmpty(lrc)) {
+                                FlyLog.d("id3 lrc=%s", lrc);
+                                lrcView.loadLrc(lrc);
+                            } else {
+                                String lrcPath = StringTools.getlrcByPath(musicPlayer.getPlayUrl());
+                                lrcView.loadLrc(new File(lrcPath));
+                            }
                         } catch (Exception e) {
                             FlyLog.e(e.toString());
                         }
@@ -300,42 +297,30 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        seekPos = progress;
+        seekBarPos = progress;
+        setSeekStartText(seekBarPos);
     }
+
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
+        mHandler.removeCallbacks(seekBarTask);
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        musicPlayer.seekTo(seekPos);
-    }
-
-    private void playNext() {
-        if (musicList != null && !musicList.isEmpty()) {
-            if (currenPos < musicList.size() - 1) {
-                currenPos++;
-                musicPlayer.play(musicList.get(currenPos));
-            }
-        }
-    }
-
-    private void playFore() {
-        if (musicList != null && !musicList.isEmpty()) {
-            if (currenPos > 0) {
-                currenPos--;
-                musicPlayer.play(musicList.get(currenPos));
-            }
-        }
+        musicPlayer.seekTo(seekBarPos);
+        lrcView.updateTime(seekBarPos);
+        mHandler.postDelayed(seekBarTask, REFRESH_SEEK_LRC_TIME);
     }
 
 
     private boolean isStop = true;
+
     @Override
     protected void onStart() {
         super.onStart();
-        if(musicPlayer.isPuase()){
+        if (musicPlayer.isPuase()) {
             musicPlayer.start();
         }
         isStop = false;
@@ -346,5 +331,12 @@ public class MusicActivity extends BaseActivity implements
         musicPlayer.puase();
         isStop = true;
         super.onStop();
+    }
+
+    public void setSeekStartText(int seekPos) {
+        int min = seekPos / 1000 / 60;
+        int sec = seekPos / 1000 % 60;
+        String text = min + ":" + (sec > 9 ? sec : "0" + sec);
+        seekBarSartTime.setText(text);
     }
 }

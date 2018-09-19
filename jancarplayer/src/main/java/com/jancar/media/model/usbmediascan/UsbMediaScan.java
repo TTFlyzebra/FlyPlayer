@@ -1,4 +1,4 @@
-package com.jancar.media.model;
+package com.jancar.media.model.usbmediascan;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -13,7 +13,7 @@ import com.jancar.media.FlyMedia;
 import com.jancar.media.Notify;
 import com.jancar.media.data.Music;
 import com.jancar.media.data.StorageInfo;
-import com.jancar.media.listener.IUsbMediaListener;
+import com.jancar.media.model.listener.IUsbMediaListener;
 import com.jancar.media.utils.FlyLog;
 
 import java.util.ArrayList;

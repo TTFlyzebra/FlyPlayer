@@ -1,35 +1,47 @@
-package com.jancar.media.model;
+package com.jancar.media.model.musicplayer;
 
 import android.content.Context;
-import android.media.MediaPlayer;
 
-import com.jancar.media.listener.IMusicPlayerListener;
+import com.jancar.media.model.listener.IMusicPlayerListener;
+
+import java.util.List;
 
 
 public interface IMusicPlayer {
+
     void addListener(IMusicPlayerListener iMusicPlayerListener);
 
     void removeListener(IMusicPlayerListener iMusicPlayerListener);
 
     void init(Context context);
 
-    void play(String url);
-
     String getPlayUrl();
+
+    void play(String url);
 
     void start();
 
     void puase();
 
+    void stop();
+
     boolean isPuase();
 
     boolean isPlaying();
 
+    void seekTo(int seekPos);
+
     int getCurrentPosition();
 
-    void stop();
+    int getDuration();
 
-    MediaPlayer getMediaPlay();
+    void setPlayUrls(List<String> urls);
 
-    void seekTo(int seekPos);
+    void playNext();
+
+    void playFore();
+
+    int getPlayPos();
+
+    void switchLoopStatus();
 }

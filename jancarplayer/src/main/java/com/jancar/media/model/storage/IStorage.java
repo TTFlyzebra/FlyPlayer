@@ -1,7 +1,7 @@
-package com.jancar.media.model;
+package com.jancar.media.model.storage;
 
 
-import com.jancar.media.listener.IStorageListener;
+import com.jancar.media.model.listener.IStorageListener;
 
 public interface IStorage {
 

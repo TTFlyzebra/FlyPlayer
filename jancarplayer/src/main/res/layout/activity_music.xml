@@ -8,6 +8,7 @@
     android:fitsSystemWindows="true"
     tools:context=".activity.VideoActivity">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,12 +39,6 @@
                 android:layout_marginLeft="223px"
                 android:layout_marginTop="125px"
                 android:src="@drawable/media_music" />
-
-            <com.jancar.media.view.LrcView
-                android:layout_width="match_parent"
-                android:layout_height="56px"
-                android:layout_alignParentBottom="true"
-                app:lrc="@string/lrc" />
 
         </RelativeLayout>
 
@@ -125,13 +120,16 @@
                     android:text="@string/no_artist"
                     android:textColor="#FFF"
                     android:textSize="34px" />
-
             </LinearLayout>
-
         </LinearLayout>
-
     </LinearLayout>
 
+    <com.jancar.media.view.lrcview.LrcView
+        android:id="@+id/ac_music_lrcview"
+        android:layout_width="580px"
+        android:layout_height="56px"
+        app:lrcTextSize="22px"
+        android:layout_above="@+id/ac_music_control" />
 
     <RelativeLayout
         android:id="@+id/ac_music_control"
@@ -226,21 +224,28 @@
 
     </RelativeLayout>
 
-
     <RelativeLayout
         android:id="@+id/ac_music_left_layout"
-        android:layout_width="397px"
+        android:layout_width="442px"
         android:layout_height="406px"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="135px"
         android:layout_marginRight="-394px"
-        android:orientation="vertical"
-        android:paddingLeft="4px">
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ac_music_iv_loop"
+            android:layout_width="48px"
+            android:layout_height="32px"
+            android:layout_marginTop="10px"
+            android:scaleType="fitXY"
+            android:src="@drawable/media_loop_all" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="48px"
             android:background="#EA212121" />
 
         <com.jancar.media.view.FlyTabView
@@ -248,14 +253,15 @@
             android:layout_width="match_parent"
             android:layout_height="52px"
             android:layout_alignParentTop="true"
+            android:layout_marginLeft="48px"
             android:background="@drawable/media_list_header" />
 
         <FrameLayout
             android:id="@+id/ac_replace_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/ac_music_tabview" />
+            android:layout_below="@id/ac_music_tabview"
+            android:layout_marginLeft="48px" />
     </RelativeLayout>
-
 
 </RelativeLayout>

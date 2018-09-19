@@ -9,8 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jancar.media.R;
-import com.jancar.media.data.Music;
-import com.jancar.media.model.MusicPlayer;
+import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.AnimationImageView;
 import com.jancar.media.view.MarqueeTextView;
@@ -130,7 +129,7 @@ public class MusicFloderAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(v, (Music) v.getTag(R.id.tag1));
+                    onItemClickListener.onItemClick(v, (String) v.getTag(R.id.tag1));
                 }
             }
         });
@@ -152,7 +151,7 @@ public class MusicFloderAdapter extends BaseExpandableListAdapter {
     private OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
-        void onItemClick(View view, Music music);
+        void onItemClick(View view, String string);
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

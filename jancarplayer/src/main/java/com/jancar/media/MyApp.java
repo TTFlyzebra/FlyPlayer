@@ -3,8 +3,8 @@ package com.jancar.media;
 import android.app.Application;
 import android.view.ViewConfiguration;
 
-import com.jancar.media.model.Storage;
-import com.jancar.media.model.UsbMediaScan;
+import com.jancar.media.model.storage.Storage;
+import com.jancar.media.model.usbmediascan.UsbMediaScan;
 import com.jancar.media.utils.FlyLog;
 
 import java.lang.reflect.Field;

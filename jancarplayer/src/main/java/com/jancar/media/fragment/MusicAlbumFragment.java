@@ -55,7 +55,7 @@ public class MusicAlbumFragment extends MusicFragment implements
 
 
     @Override
-    public void statusChange(int statu) {
+    public void playStatusChange(int statu) {
         if (!isClick) {
             scrollCurrentPos();
         }

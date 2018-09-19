@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.jancar.media.R;
 import com.jancar.media.adpater.MusicPlayListAdapter;
 import com.jancar.media.base.MusicFragment;
-import com.jancar.media.model.MusicPlayer;
+import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.module.RecycleViewDivider;
 import com.jancar.media.utils.FlyLog;
 
@@ -66,7 +66,7 @@ public class MusicPlayListFragment extends MusicFragment implements
     }
 
     @Override
-    public void statusChange(int statu) {
+    public void playStatusChange(int statu) {
 
         switch (statu) {
             case MusicPlayer.STATUS_COMPLETED:
@@ -87,7 +87,7 @@ public class MusicPlayListFragment extends MusicFragment implements
 
     private void scrollToCureentPlayItem() {
         try {
-            recyclerView.getLayoutManager().scrollToPosition(activity.currenPos);
+            recyclerView.getLayoutManager().scrollToPosition(musicPlayer.getPlayPos());
         }catch (Exception e){
             FlyLog.e(e.toString());
         }

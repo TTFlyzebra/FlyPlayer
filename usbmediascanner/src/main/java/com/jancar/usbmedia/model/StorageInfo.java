@@ -3,7 +3,7 @@ package com.jancar.usbmedia.model;
 import android.os.UserHandle;
 
 public class StorageInfo {
-    public String path;
+    public String mPath;
     public boolean isRemoveable;
     public String state;
     public String mDescription;
@@ -18,7 +18,7 @@ public class StorageInfo {
     public String mFsUuid;
 
     public StorageInfo(String path) {
-        this.path = path;
+        this.mPath = path;
     }
 
     public boolean isMounted() {
