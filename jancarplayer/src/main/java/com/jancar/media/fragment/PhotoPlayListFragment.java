@@ -1,8 +1,6 @@
 package com.jancar.media.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,11 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.jancar.media.R;
 import com.jancar.media.activity.PhotoActivity;
 import com.jancar.media.adpater.PhotoPlayListAdapater;
 import com.jancar.media.base.BaseFragment;
+import com.jancar.media.data.Music;
 import com.jancar.media.utils.FlyLog;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class PhotoPlayListFragment extends BaseFragment implements
     private PhotoActivity activity;
     private PhotoPlayListAdapater adapter;
     private RecyclerView recyclerView;
-    private Handler mHandler = new Handler(Looper.getMainLooper());
+    private TextView textView;
 
     public static PhotoPlayListFragment newInstance(Bundle args) {
         PhotoPlayListFragment listPlayFileFragment = new PhotoPlayListFragment();
@@ -41,12 +41,14 @@ public class PhotoPlayListFragment extends BaseFragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         activity = (PhotoActivity) getActivity();
         activity.viewPager.addOnPageChangeListener(this);
-        return inflater.inflate(R.layout.fragment_photo_list, null);
+        return inflater.inflate(R.layout.fragment_rv_list, null);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        recyclerView = (RecyclerView) view.findViewById(R.id.fm_photo_list_rv01);
+        recyclerView = (RecyclerView) view.findViewById(R.id.fm_rv01);
+        textView = (TextView) view.findViewById(R.id.fm_tv01);
+        textView.setText(R.string.music_scan1);
         adapter = new PhotoPlayListAdapater(getActivity(), activity.photoList);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -88,6 +90,7 @@ public class PhotoPlayListFragment extends BaseFragment implements
     @Override
     public void imageUrlList(List<String> imageUrlList) {
         try {
+            textView.setText(R.string.music_scan1);
             if (imageUrlList != null) {
                 activity.photoList.clear();
                 activity.photoList.addAll(imageUrlList);
@@ -95,15 +98,23 @@ public class PhotoPlayListFragment extends BaseFragment implements
                     adapter.notifyDataSetChanged();
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
 
     }
 
     @Override
+    public void musicID3UrlList(List<Music> musicUrlList) {
+        try {
+            textView.setText(String.format(getString(R.string.photo_scan2), activity.photoList.size()));
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
+    }
+
+    @Override
     public void onDestroy() {
-        mHandler.removeCallbacksAndMessages(null);
         super.onDestroy();
     }
 }

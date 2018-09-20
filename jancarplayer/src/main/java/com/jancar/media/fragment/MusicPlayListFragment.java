@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.jancar.media.R;
 import com.jancar.media.adpater.MusicPlayListAdapter;
@@ -21,6 +22,7 @@ import java.util.List;
 public class MusicPlayListFragment extends MusicFragment implements
         MusicPlayListAdapter.OnItemClickListener {
     private RecyclerView recyclerView;
+    private TextView textView;
     private MusicPlayListAdapter adapter;
     private List<Music> mMusicList = new ArrayList<>();
 
@@ -35,12 +37,14 @@ public class MusicPlayListFragment extends MusicFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_music_list, null);
+        return inflater.inflate(R.layout.fragment_rv_list, null);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        recyclerView = (RecyclerView) view.findViewById(R.id.fm_music_list_rv01);
+        recyclerView = (RecyclerView) view.findViewById(R.id.fm_rv01);
+        textView = (TextView) view.findViewById(R.id.fm_tv01);
+        textView.setText(R.string.music_scan1);
         adapter = new MusicPlayListAdapter(activity, mMusicList, recyclerView);
         adapter.setOnItemClickListener(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -53,7 +57,8 @@ public class MusicPlayListFragment extends MusicFragment implements
 
     @Override
     public void musicUrlList(List<String> musicUrlList) {
-        FlyLog.d("get videos size=%d", musicUrlList == null ? 0 : musicUrlList.size());
+        FlyLog.d("get music size=%d", musicUrlList == null ? 0 : musicUrlList.size());
+        textView.setText(R.string.music_scan1);
         mMusicList.clear();
         for (int i = 0; i < musicUrlList.size(); i++) {
             Music music = new Music();
@@ -66,7 +71,9 @@ public class MusicPlayListFragment extends MusicFragment implements
 
     @Override
     public void musicID3UrlList(List<Music> musicUrlList) {
-        if(musicUrlList==null||musicUrlList.isEmpty()){
+        FlyLog.d("get musicid3 size=%d", musicUrlList == null ? 0 : musicUrlList.size());
+        textView.setText(String.format(getString(R.string.music_scan2), mMusicList.size()));
+        if (musicUrlList == null || musicUrlList.isEmpty()) {
             return;
         }
         try {

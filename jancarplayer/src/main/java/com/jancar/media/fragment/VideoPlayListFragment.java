@@ -6,11 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.jancar.media.R;
 import com.jancar.media.activity.VideoActivity;
 import com.jancar.media.adpater.VideoPlayListAdapater;
 import com.jancar.media.base.BaseFragment;
+import com.jancar.media.data.Music;
 import com.jancar.media.utils.FlyLog;
 
 import java.util.List;
@@ -23,6 +25,7 @@ public class VideoPlayListFragment extends BaseFragment implements
     private VideoActivity activity;
     private VideoPlayListAdapater adapter;
     private RecyclerView recyclerView;
+    private TextView textView;
 
     public static VideoPlayListFragment newInstance(Bundle args) {
         VideoPlayListFragment listPlayFileFragment = new VideoPlayListFragment();
@@ -37,12 +40,14 @@ public class VideoPlayListFragment extends BaseFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         activity = (VideoActivity) getActivity();
-        return inflater.inflate(R.layout.fragment_video_list, null);
+        return inflater.inflate(R.layout.fragment_rv_list, null);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        recyclerView = (RecyclerView) view.findViewById(R.id.fm_photo_list_rv01);
+        recyclerView = (RecyclerView) view.findViewById(R.id.fm_rv01);
+        textView = (TextView) view.findViewById(R.id.fm_tv01);
+        textView.setText(R.string.music_scan1);
         adapter = new VideoPlayListAdapater(getActivity(), activity.videoList, recyclerView);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -65,9 +70,19 @@ public class VideoPlayListFragment extends BaseFragment implements
 
     @Override
     public void videoUrlList(List<String> videoUrlList) {
+        textView.setText(R.string.music_scan1);
         FlyLog.d("get videos size=%d", videoUrlList == null ? 0 : videoUrlList.size());
         scrollToCureentPlayItem();
         adapter.update();
+    }
+
+    @Override
+    public void musicID3UrlList(List<Music> musicUrlList) {
+        try {
+            textView.setText(String.format(getString(R.string.video_scan2), activity.videoList.size()));
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
     }
 
     @Override
