@@ -10,6 +10,7 @@ import com.jancar.media.R;
 import com.jancar.media.adpater.MusicAlbumAdapter;
 import com.jancar.media.base.MusicFragment;
 import com.jancar.media.data.Music;
+import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.FlyLog;
 
 import java.util.ArrayList;
@@ -56,11 +57,15 @@ public class MusicAlbumFragment extends MusicFragment implements
 
     @Override
     public void playStatusChange(int statu) {
-        if (!isClick) {
-            scrollCurrentPos();
+        switch (statu) {
+            case MusicPlayer.STATUS_PLAYING:
+                if (!isClick) {
+                    scrollCurrentPos();
+                }
+                isClick = false;
+                adapter.notifyDataSetChanged();
+                break;
         }
-        isClick = false;
-        adapter.notifyDataSetChanged();
 
     }
 

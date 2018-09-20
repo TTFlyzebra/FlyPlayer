@@ -262,7 +262,7 @@ public class MusicActivity extends BaseActivity implements
         int hou = sumTime / 360000;
         int min = sumTime / 60000 % 60;
         int sec = sumTime / 1000 % 60;
-        String text = (hou == 0 ? "" : ((hou > 9 ? hou : "0" + hou)+":")) + ""
+        String text = (hou == 0 ? "" : ((hou > 9 ? hou : "0" + hou) + ":")) + ""
                 + (min > 9 ? min : "0" + min) + ":"
                 + (sec > 9 ? sec : "0" + sec);
         seekBarEndTime.setText(text);
@@ -309,29 +309,27 @@ public class MusicActivity extends BaseActivity implements
                 }
                 FlyLog.d("finish get id3 info url=%s", url);
             }
-            if (!isStop) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            if (isStop) return;
-                            ivImage.setImageBitmap(bitmap == null ? defaultBitmap : bitmap);
-                            tvArtist.setText(TextUtils.isEmpty(artist) ? getString(R.string.no_artist) : artist);
-                            tvAlbum.setText(TextUtils.isEmpty(album) ? getString(R.string.no_album) : album);
-                            if (!TextUtils.isEmpty(lyrics)) {
-                                FlyLog.d("id3 lrc=%s", lyrics);
-                                lrcView.loadLrc(lyrics);
-                            } else {
-                                String lrcPath = StringTools.getlrcByPath(musicPlayer.getPlayUrl());
-                                lrcView.loadLrc(new File(lrcPath));
-                            }
-                            lrcView.setVisibility(View.VISIBLE);
-                        } catch (Exception e) {
-                            FlyLog.e(e.toString());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (isStop) return;
+                        ivImage.setImageBitmap(bitmap == null ? defaultBitmap : bitmap);
+                        tvArtist.setText(TextUtils.isEmpty(artist) ? getString(R.string.no_artist) : artist);
+                        tvAlbum.setText(TextUtils.isEmpty(album) ? getString(R.string.no_album) : album);
+                        if (!TextUtils.isEmpty(lyrics)) {
+                            FlyLog.d("id3 lrc=%s", lyrics);
+                            lrcView.loadLrc(lyrics);
+                        } else {
+                            String lrcPath = StringTools.getlrcByPath(musicPlayer.getPlayUrl());
+                            lrcView.loadLrc(new File(lrcPath));
                         }
+                        lrcView.setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                        FlyLog.e(e.toString());
                     }
-                });
-            }
+                }
+            });
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }
@@ -380,7 +378,7 @@ public class MusicActivity extends BaseActivity implements
         int hou = seekPos / 360000;
         int min = seekPos / 60000 % 60;
         int sec = seekPos / 1000 % 60;
-        String text = (hou == 0 ? "" : ((hou > 9 ? hou : "0" + hou)+":")) + ""
+        String text = (hou == 0 ? "" : ((hou > 9 ? hou : "0" + hou) + ":")) + ""
                 + (min > 9 ? min : "0" + min) + ":"
                 + (sec > 9 ? sec : "0" + sec);
         seekBarSartTime.setText(text);
