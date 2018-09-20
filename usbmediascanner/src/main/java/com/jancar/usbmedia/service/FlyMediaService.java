@@ -47,6 +47,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     private RemoteCallbackList<Notify> mNotifys = new RemoteCallbackList<>();
     private MusicDoubleCache mDoubleMusicCache;
     private ListDiskCache mListDiskCache;
+    private String localPaths = "T";
     private boolean isFirst = true;
     private static final String NORMAL = "NORMAL";
     private String currentPath = NORMAL;
@@ -363,7 +364,7 @@ public class FlyMediaService extends Service implements IStorageListener {
                 mMusicID3List.clear();
                 notifyAllListener();
 
-                if (path.startsWith("/storage/emulated/0")) {
+                if (localPaths.contains(path)) {
                     if (!mVideoList.isEmpty())
                         mListDiskCache.put(path + "video", mVideoList);
                     if (!mMusicList.isEmpty())
@@ -525,6 +526,13 @@ public class FlyMediaService extends Service implements IStorageListener {
     @Override
     public void storageList(List<StorageInfo> storageList) {
         if (storageList != null && !storageList.isEmpty()) {
+            localPaths = "T";
+            for (StorageInfo storageInfo : storageList) {
+                if (!storageInfo.isRemoveable) {
+                    localPaths = localPaths + "#T#S#Y#" + storageInfo.mPath;
+                }
+            }
+            FlyLog.d("localPaths=%s",localPaths);
             scanPath(storageList.get(0).mPath);
         }
     }
