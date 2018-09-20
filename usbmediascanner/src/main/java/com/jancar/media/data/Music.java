@@ -72,4 +72,16 @@ public class Music implements Parcelable{
             return new Music[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "Music{" +
+                "url='" + url + '\'' +
+                ", name='" + name + '\'' +
+                ", artist='" + artist + '\'' +
+                ", album='" + album + '\'' +
+                ", time=" + time +
+                ", sort=" + sort +
+                '}';
+    }
 }

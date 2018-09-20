@@ -26,7 +26,9 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:23.+'
+    implementation 'com.jakewharton:disklrucache:2.0.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
     implementation project(path: ':mp3id3library')
 }

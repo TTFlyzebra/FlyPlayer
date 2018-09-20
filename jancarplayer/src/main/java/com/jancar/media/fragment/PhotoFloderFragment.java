@@ -1,8 +1,6 @@
 package com.jancar.media.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,15 +23,13 @@ import java.util.Map;
 
 public class PhotoFloderFragment extends BaseFragment implements
         PhotoFloderAdapter.OnItemClickListener,
-        ViewPager.OnPageChangeListener{
+        ViewPager.OnPageChangeListener {
     private PhotoActivity activity;
     private ExpandableListView expandableListView;
     private List<String> groupList = new ArrayList<>();
     private List<List<String>> itemList = new ArrayList<>();
     private PhotoFloderAdapter adapter;
     private Map<String, List<String>> mHashMap = new HashMap<>();
-    private Handler mHandler = new Handler(Looper.getMainLooper());
-    private List<String> photoList;
 
     public static PhotoFloderFragment newInstance(Bundle args) {
         PhotoFloderFragment listPlayFileFragment = new PhotoFloderFragment();
@@ -49,7 +45,6 @@ public class PhotoFloderFragment extends BaseFragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         activity = (PhotoActivity) getActivity();
         activity.viewPager.addOnPageChangeListener(this);
-        photoList = activity.photoList;
         return inflater.inflate(R.layout.fragment_ex_list, null);
     }
 
@@ -64,43 +59,38 @@ public class PhotoFloderFragment extends BaseFragment implements
 
     @Override
     public void imageUrlList(List<String> imageUrlList) {
-        FlyLog.d("get videos size=%d", imageUrlList == null ? 0 : imageUrlList.size());
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (photoList != null && getActivity() != null && activity != null) {
-                        mHashMap.clear();
-                        groupList.clear();
-                        itemList.clear();
-                        for (int i = 0; i < photoList.size(); i++) {
-                            String url = photoList.get(i);
-                            int last = url.lastIndexOf(File.separator);
-                            String path = url.substring(0, last);
-                            if (mHashMap.get(path) == null) {
-                                mHashMap.put(path, new ArrayList<String>());
-                            }
-                            mHashMap.get(path).add(url);
-                        }
-                        groupList.addAll(mHashMap.keySet());
-
-                        Collections.sort(groupList, new Comparator<String>() {
-                            public int compare(String p1, String p2) {
-                                return p1.compareToIgnoreCase(p2);
-                            }
-                        });
-
-                        for (String key : groupList) {
-                            itemList.add(mHashMap.get(key));
-                        }
-                        scrollCurrentPos();
-                        adapter.notifyDataSetChanged();
+        FlyLog.d("get images size=%d", imageUrlList == null ? 0 : imageUrlList.size());
+        try {
+            if (imageUrlList != null && getActivity() != null && activity != null) {
+                mHashMap.clear();
+                groupList.clear();
+                itemList.clear();
+                for (int i = 0; i < imageUrlList.size(); i++) {
+                    String url = imageUrlList.get(i);
+                    int last = url.lastIndexOf(File.separator);
+                    String path = url.substring(0, last);
+                    if (mHashMap.get(path) == null) {
+                        mHashMap.put(path, new ArrayList<String>());
                     }
-                }catch (Exception e){
-                    FlyLog.e(e.toString());
+                    mHashMap.get(path).add(url);
                 }
+                groupList.addAll(mHashMap.keySet());
+
+                Collections.sort(groupList, new Comparator<String>() {
+                    public int compare(String p1, String p2) {
+                        return p1.compareToIgnoreCase(p2);
+                    }
+                });
+
+                for (String key : groupList) {
+                    itemList.add(mHashMap.get(key));
+                }
+                scrollCurrentPos();
+                adapter.notifyDataSetChanged();
             }
-        },200);
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
     }
 
     @Override
@@ -111,6 +101,7 @@ public class PhotoFloderFragment extends BaseFragment implements
     }
 
     private boolean isClick = false;
+
     @Override
     public void onResume() {
         super.onResume();

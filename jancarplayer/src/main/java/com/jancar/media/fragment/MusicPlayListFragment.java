@@ -66,6 +66,9 @@ public class MusicPlayListFragment extends MusicFragment implements
 
     @Override
     public void musicID3UrlList(List<Music> musicUrlList) {
+        if(musicUrlList==null||musicUrlList.isEmpty()){
+            return;
+        }
         try {
             for (int i = 0; i < musicUrlList.size(); i++) {
                 mMusicList.get(i).artist = musicUrlList.get(i).artist;

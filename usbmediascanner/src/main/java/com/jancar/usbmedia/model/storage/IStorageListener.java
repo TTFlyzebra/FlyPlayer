@@ -1,4 +1,4 @@
-package com.jancar.usbmedia.model;
+package com.jancar.usbmedia.model.storage;
 
 import java.util.List;
 

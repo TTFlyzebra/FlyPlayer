@@ -1,14 +1,15 @@
-package com.jancar.media.module;
+package com.jancar.usbmedia.model.cache;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 
 import com.jakewharton.disklrucache.DiskLruCache;
-import com.jancar.media.utils.EncodeHelper;
-import com.jancar.media.utils.FlyLog;
+import com.jancar.media.data.Music;
+import com.jancar.usbmedia.utils.EncodeHelper;
+import com.jancar.usbmedia.utils.FlyLog;
+import com.jancar.usbmedia.utils.GsonUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,12 +23,13 @@ import java.io.OutputStream;
  * Discription: This is BitmapMemoryCache
  */
 
-public class BitmapDiskCache implements ICache<Bitmap> {
+public class MusicDiskCache implements ICache<Music> {
     private final int max_size = 100 * 1024 * 1024;
+    private static byte[] bytes = new byte[4096];
     private DiskLruCache mDiskLruCache;
     private Context mContext;
 
-    public BitmapDiskCache(Context context) {
+    public MusicDiskCache(Context context) {
         mContext = context;
         init();
     }
@@ -37,75 +39,66 @@ public class BitmapDiskCache implements ICache<Bitmap> {
             mDiskLruCache = DiskLruCache.open(new File(getSavePath(mContext)), getAppVersion(mContext), 1, max_size);
             return mDiskLruCache != null;
         } catch (IOException e) {
-            e.printStackTrace();
+            FlyLog.e(e.toString());
             return false;
         }
     }
 
     @Override
-    public Bitmap get(String key) {
-        if (mDiskLruCache == null) {
-            FlyLog.d("disklrucache is null!");
-            return null;
-        }
-        Bitmap bitmap = null;
+    public Music get(String key) {
+        Music music = null;
         DiskLruCache.Snapshot snapShot = null;
-        InputStream is = null;
+        InputStream in = null;
         try {
             snapShot = mDiskLruCache.get(EncodeHelper.md5(key));
             if (snapShot != null) {
-                is = snapShot.getInputStream(0);
-                bitmap = BitmapFactory.decodeStream(is);
+                in = snapShot.getInputStream(0);
+                int len = in.read(bytes);
+                String json = new String(bytes, 0, len);
+                music = GsonUtils.json2Object(json, Music.class);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            FlyLog.e(e.toString());
         } finally {
             try {
+                if (in != null) {
+                    in.close();
+                }
                 if (snapShot != null) {
                     snapShot.close();
                 }
-                if (is != null) {
-                    is.close();
-                }
             } catch (IOException e) {
-                e.printStackTrace();
+                FlyLog.e(e.toString());
             }
         }
-        FlyLog.d("get bitmap from file, bitmap = " + bitmap);
-        return bitmap;
+        return music;
     }
 
     @Override
-    public void put(String key, Bitmap bitmap) {
-        if (mDiskLruCache == null) {
-            FlyLog.d("disklrucache is null!");
-            return;
-        }
-        boolean flag = false;
+    public void put(String key, Music music) {
+        String str = GsonUtils.obj2Json(music);
+        if (TextUtils.isEmpty(str)) return;
         OutputStream outputStream = null;
         try {
             DiskLruCache.Editor editor = mDiskLruCache.edit(EncodeHelper.md5(key));
             if (editor == null) return;
             outputStream = editor.newOutputStream(0);
-            if (bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)) {
-                editor.commit();
-            } else {
-                editor.abort();
-            }
+            byte[] bytes = str.getBytes();
+            outputStream.write(bytes);
+            outputStream.flush();
+            editor.commit();
             mDiskLruCache.flush();
-            flag = true;
         } catch (IOException e) {
-            e.printStackTrace();
+            FlyLog.e(e.toString());
         } finally {
             try {
                 if (outputStream != null) {
                     outputStream.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                FlyLog.e(e.toString());
             }
         }
-//        FlyLog.d("create bitmap url = %s, success=" + flag,key);
     }
 
     private int getAppVersion(Context context) {
@@ -113,14 +106,14 @@ public class BitmapDiskCache implements ICache<Bitmap> {
             PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
             return info.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            FlyLog.e(e.toString());
         }
         return 1;
     }
 
     private String getSavePath(Context context) {
         File str = context.getCacheDir();
-        String savePath = str.getAbsolutePath() + File.separator + "jancar" + File.separator + "video";
+        String savePath = str.getAbsolutePath() + File.separator + "jancar" + File.separator + "musicid3";
         return savePath;
     }
 }

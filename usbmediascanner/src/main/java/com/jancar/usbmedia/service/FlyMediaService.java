@@ -2,9 +2,7 @@ package com.jancar.usbmedia.service;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.text.TextUtils;
@@ -14,10 +12,11 @@ import com.jancar.media.Notify;
 import com.jancar.media.data.Music;
 import com.jancar.usbmedia.R;
 import com.jancar.usbmedia.data.Const;
-import com.jancar.usbmedia.model.IStorage;
-import com.jancar.usbmedia.model.IStorageListener;
-import com.jancar.usbmedia.model.Storage;
-import com.jancar.usbmedia.model.StorageInfo;
+import com.jancar.usbmedia.model.cache.MusicDoubleCache;
+import com.jancar.usbmedia.model.storage.IStorage;
+import com.jancar.usbmedia.model.storage.IStorageListener;
+import com.jancar.usbmedia.model.storage.Storage;
+import com.jancar.usbmedia.model.storage.StorageInfo;
 import com.jancar.usbmedia.utils.FlyLog;
 import com.jancar.usbmedia.utils.StringTools;
 import com.jancar.usbmedia.utils.Utils;
@@ -42,11 +41,12 @@ public class FlyMediaService extends Service implements IStorageListener {
     private List<String> mVideoList = Collections.synchronizedList(new ArrayList<String>());
     private List<String> mImageList = Collections.synchronizedList(new ArrayList<String>());
     private RemoteCallbackList<Notify> mNotifys = new RemoteCallbackList<>();
+    private MusicDoubleCache mDoubleMusicCache;
     private boolean isFirst = true;
     private static final String NORMAL = "NORMAL";
     private String currentPath = NORMAL;
     private static final int UPDATE_DENSITY = 100;
-    private static final int ID3_UPDATE_DENSITY = 100;
+    private static final int ID3_UPDATE_DENSITY = 20;
     private static final int THREAD_WAIT_TIME = 20;
     private IStorage iStorage = Storage.getInstance();
     private IBinder mBinder = new FlyMedia.Stub() {
@@ -54,13 +54,7 @@ public class FlyMediaService extends Service implements IStorageListener {
         public void scanDisk(final String disk) throws RemoteException {
             isFirst = false;
             FlyLog.d("start scan disk!");
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    FlyLog.d("start scan disk!");
-                    scanPath(disk);
-                }
-            });
+            scanPath(disk);
 
         }
 
@@ -86,32 +80,47 @@ public class FlyMediaService extends Service implements IStorageListener {
 
         @Override
         public void notify(final Notify notify) throws RemoteException {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        FlyLog.d("notify client=%s", notify.toString());
-                        notify.notifyMusic(mMusicList);
-                        notify.notifyVideo(mVideoList);
-                        notify.notifyImage(mImageList);
-                        notify.notifyPath(currentPath);
-                        notify.notifyID3Music(mMusicID3List);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
+            FlyLog.d("notify client=%s", notify.toString());
+            try {
+                synchronized (mMusicList) {
+                    notify.notifyMusic(mMusicList);
                 }
-            });
+                synchronized (mVideoList) {
+                    notify.notifyVideo(mVideoList);
+                }
+                synchronized (mImageList) {
+                    notify.notifyImage(mImageList);
+                }
+                synchronized (mMusicID3List) {
+                    notify.notifyID3Music(mMusicID3List);
+                }
+                notify.notifyPath(currentPath);
+            } catch (RemoteException e) {
+                FlyLog.e(e.toString());
+            }
         }
 
         @Override
         public void registerNotify(final Notify notify) throws RemoteException {
             mNotifys.register(notify);
             FlyLog.d("registerNotify client=%s", notify.toString());
-            notify.notifyID3Music(mMusicID3List);
-            notify.notifyMusic(mMusicList);
-            notify.notifyVideo(mVideoList);
-            notify.notifyImage(mImageList);
-            notify.notifyPath(currentPath);
+            try {
+                synchronized (mMusicList) {
+                    notify.notifyMusic(mMusicList);
+                }
+                synchronized (mVideoList) {
+                    notify.notifyVideo(mVideoList);
+                }
+                synchronized (mImageList) {
+                    notify.notifyImage(mImageList);
+                }
+                synchronized (mMusicID3List) {
+                    notify.notifyID3Music(mMusicID3List);
+                }
+                notify.notifyPath(currentPath);
+            } catch (RemoteException e) {
+                FlyLog.e(e.toString());
+            }
         }
 
         @Override
@@ -120,43 +129,43 @@ public class FlyMediaService extends Service implements IStorageListener {
         }
 
     };
-    private Handler mHandler = new Handler(Looper.getMainLooper());
-    private Runnable notifyAllTask = new Runnable() {
-        @Override
-        public synchronized void run() {
-            FlyLog.d("notify all list");
-            try {
-                final int N = mNotifys.beginBroadcast();
-                FlyLog.d("start notify client, client sum=%d", N);
-                try {
-                    for (int i = 0; i < N; i++) {
-                        Notify l = mNotifys.getBroadcastItem(i);
-                        if (l != null) {
-                            FlyLog.d("notify video list size=%d", mVideoList == null ? 0 : mVideoList.size());
-                            l.notifyVideo(mVideoList);
-                            FlyLog.d("notify music list size=%d", mMusicList == null ? 0 : mMusicList.size());
-                            l.notifyMusic(mMusicList);
-                            FlyLog.d("notify image list size=%d", mImageList == null ? 0 : mImageList.size());
-                            l.notifyImage(mImageList);
-                            FlyLog.d("notify mPath =%s", currentPath);
-                            l.notifyPath(currentPath);
-                            FlyLog.d("notify id3music list size=%d", mMusicID3List == null ? 0 : mMusicID3List.size());
-                            l.notifyID3Music(mMusicID3List);
-                        }
+
+    public void notifyAllListener() {
+        final int N = mNotifys.beginBroadcast();
+        FlyLog.d("start notify client, client sum=%d", N);
+        try {
+            for (int i = 0; i < N; i++) {
+                Notify l = mNotifys.getBroadcastItem(i);
+                if (l != null) {
+                    synchronized (mVideoList) {
+                        FlyLog.d("notify video list size=%d", mVideoList == null ? 0 : mVideoList.size());
+                        l.notifyVideo(mVideoList);
                     }
-                } catch (Exception e) {
-                    FlyLog.e(e.toString());
+                    synchronized (mMusicList) {
+                        FlyLog.d("notify music list size=%d", mMusicList == null ? 0 : mMusicList.size());
+                        l.notifyMusic(mMusicList);
+                    }
+                    synchronized (mImageList) {
+                        FlyLog.d("notify image list size=%d", mImageList == null ? 0 : mImageList.size());
+                        l.notifyImage(mImageList);
+                    }
+                    synchronized (mMusicID3List) {
+                        FlyLog.d("notify id3music list size=%d", mMusicID3List == null ? 0 : mMusicID3List.size());
+                        l.notifyID3Music(mMusicID3List);
+                    }
+                    FlyLog.d("notify mPath =%s", currentPath);
+                    l.notifyPath(currentPath);
                 }
-                mNotifys.finishBroadcast();
-            } catch (Exception e) {
-                FlyLog.e(e.toString());
             }
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
         }
-    };
-    private Runnable notifyVideoTask = new Runnable() {
-        @Override
-        public synchronized void run() {
-            FlyLog.d("notify id3 video list size=%d", mVideoList == null ? 0 : mVideoList.size());
+        mNotifys.finishBroadcast();
+    }
+
+    public void notifyVideoListener() {
+        synchronized (mVideoList) {
+            FlyLog.d("notify video list size=%d", mVideoList == null ? 0 : mVideoList.size());
             final int N = mNotifys.beginBroadcast();
             FlyLog.d("start notify client, client sum=%d", N);
             try {
@@ -171,11 +180,11 @@ public class FlyMediaService extends Service implements IStorageListener {
             }
             mNotifys.finishBroadcast();
         }
-    };
-    private Runnable notifyMusicTask = new Runnable() {
-        @Override
-        public synchronized void run() {
-            FlyLog.d("notify id3 music list size=%d", mMusicList == null ? 0 : mMusicList.size());
+    }
+
+    public void notifyMusicListener() {
+        synchronized (mMusicList) {
+            FlyLog.d("notify music list size=%d", mMusicList.size());
             final int N = mNotifys.beginBroadcast();
             FlyLog.d("start notify client, client sum=%d", N);
             try {
@@ -190,11 +199,11 @@ public class FlyMediaService extends Service implements IStorageListener {
             }
             mNotifys.finishBroadcast();
         }
-    };
-    private Runnable notifyImageTask = new Runnable() {
-        @Override
-        public synchronized void run() {
-            FlyLog.d("notify id3 image list size=%d", mImageList == null ? 0 : mImageList.size());
+    }
+
+    public void notifyImageListener() {
+        synchronized (mImageList) {
+            FlyLog.d("notify image list size=%d", mImageList == null ? 0 : mImageList.size());
             final int N = mNotifys.beginBroadcast();
             FlyLog.d("start notify client, client sum=%d", N);
             try {
@@ -209,11 +218,11 @@ public class FlyMediaService extends Service implements IStorageListener {
             }
             mNotifys.finishBroadcast();
         }
-    };
-    private Runnable notifyMusicId3Task = new Runnable() {
-        @Override
-        public synchronized void run() {
-            FlyLog.d("notify id3 music list size=%d", mMusicID3List == null ? 0 : mMusicID3List.size());
+    }
+
+    public void notifyMusicID3Listener() {
+        synchronized (mMusicID3List) {
+            FlyLog.d("notify id3music list size=%d", mMusicID3List == null ? 0 : mMusicID3List.size());
             final int N = mNotifys.beginBroadcast();
             FlyLog.d("start notify client, client sum=%d", N);
             try {
@@ -228,55 +237,23 @@ public class FlyMediaService extends Service implements IStorageListener {
             }
             mNotifys.finishBroadcast();
         }
-    };
-    private Runnable notifyPathTask = new Runnable() {
-        @Override
-        public synchronized void run() {
-            FlyLog.d("notify mPath=%s", currentPath);
-            final int N = mNotifys.beginBroadcast();
-            FlyLog.d("start notify client, client sum=%d", N);
-            try {
-                for (int i = 0; i < N; i++) {
-                    Notify l = mNotifys.getBroadcastItem(i);
-                    if (l != null) {
-                        l.notifyPath(currentPath);
-                    }
-                }
-            } catch (Exception e) {
-                FlyLog.e(e.toString());
-            }
-            mNotifys.finishBroadcast();
-        }
-    };
-
-    public void notifyAllListener() {
-        mHandler.removeCallbacks(notifyAllTask);
-        mHandler.post(notifyAllTask);
-    }
-
-    public void notifyVideoListener() {
-        mHandler.removeCallbacks(notifyVideoTask);
-        mHandler.post(notifyVideoTask);
-    }
-
-    public void notifyMusicListener() {
-        mHandler.removeCallbacks(notifyMusicTask);
-        mHandler.post(notifyMusicTask);
-    }
-
-    public void notifyImageListener() {
-        mHandler.removeCallbacks(notifyImageTask);
-        mHandler.post(notifyImageTask);
-    }
-
-    public void notifyMusicID3Listener() {
-        mHandler.removeCallbacks(notifyMusicId3Task);
-        mHandler.post(notifyMusicId3Task);
     }
 
     private void notifyPathListener() {
-        mHandler.removeCallbacks(notifyPathTask);
-        mHandler.post(notifyPathTask);
+        FlyLog.d("notify mPath=%s", currentPath);
+        final int N = mNotifys.beginBroadcast();
+        FlyLog.d("start notify client, client sum=%d", N);
+        try {
+            for (int i = 0; i < N; i++) {
+                Notify l = mNotifys.getBroadcastItem(i);
+                if (l != null) {
+                    l.notifyPath(currentPath);
+                }
+            }
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
+        mNotifys.finishBroadcast();
     }
 
     private void scanPath(final String path) {
@@ -301,12 +278,12 @@ public class FlyMediaService extends Service implements IStorageListener {
                 mVideoList.clear();
                 mImageList.clear();
                 mMusicList.clear();
-                mMusicID3List.clear();
                 try {
                     getVideoFromPath(new File(path));
                 } catch (Exception e) {
                     FlyLog.e(e.toString());
                 }
+                mMusicID3List.clear();
                 notifyAllListener();
                 getMusicID3Info(mMusicList);
                 if (!isStoped.get()) {
@@ -361,11 +338,13 @@ public class FlyMediaService extends Service implements IStorageListener {
                 case ".tp":
                 case ".vop":
                 case ".wmv":
-                    mVideoList.add(url);
-//                    FlyLog.d("add a video=%s", url);
-                    if((mVideoList.size()%UPDATE_DENSITY)==1){
-                        notifyVideoListener();
+                    synchronized (mVideoList) {
+                        mVideoList.add(url);
+                        if ((mVideoList.size() % UPDATE_DENSITY) == 1) {
+                            notifyVideoListener();
+                        }
                     }
+//                    FlyLog.d("add a video=%s", url);
                     break;
                 case ".aac":
 //                case ".ac3":
@@ -386,9 +365,11 @@ public class FlyMediaService extends Service implements IStorageListener {
                         //OPEN FILE
                         Utils.startActivity(this, "com.jancar.media", "com.jancar.media.activity.MusicActivity");
                     }
-                    mMusicList.add(url);
-                    if((mMusicList.size()%UPDATE_DENSITY)==1){
-                        notifyMusicListener();
+                    synchronized (mMusicList) {
+                        mMusicList.add(url);
+                        if ((mMusicList.size() % UPDATE_DENSITY) == 1) {
+                            notifyMusicListener();
+                        }
                     }
 //                    FlyLog.d("add a music=%s", url);
                     break;
@@ -397,9 +378,11 @@ public class FlyMediaService extends Service implements IStorageListener {
                 case ".gif":
                 case ".jpg":
                 case ".ico":
-                    mImageList.add(url);
-                    if((mImageList.size()%UPDATE_DENSITY)==1){
-                        notifyImageListener();
+                    synchronized (mImageList) {
+                        mImageList.add(url);
+                        if ((mImageList.size() % UPDATE_DENSITY) == 1) {
+                            notifyImageListener();
+                        }
                     }
 //                    FlyLog.d("add a image=%s", url);
                     break;
@@ -414,34 +397,38 @@ public class FlyMediaService extends Service implements IStorageListener {
         for (int i = 0; i < mMusicList.size(); i++) {
             if (isStoped.get()) return;
             String url = mMusicList.get(i);
-            Music music = new Music();
-            music.url = url;
-            music.sort = i;
-            try {
-                if (url.toLowerCase().endsWith(".mp3")) {
-                    Mp3File mp3file = new Mp3File(url);
-                    if (mp3file.hasId3v2Tag()) {
-                        ID3v2 id3v2Tag = mp3file.getId3v2Tag();
-                        music.artist = TextUtils.isEmpty(id3v2Tag.getArtist()) ? "" : id3v2Tag.getArtist();
-                        music.album = TextUtils.isEmpty(id3v2Tag.getAlbum()) ? "" : id3v2Tag.getAlbum();
-                        music.name = TextUtils.isEmpty(id3v2Tag.getTitle()) ? "" : id3v2Tag.getTitle();
-                    } else if (mp3file.hasId3v1Tag()) {
-                        ID3v1 id3v1Tag = mp3file.getId3v1Tag();
-                        music.artist = TextUtils.isEmpty(id3v1Tag.getArtist()) ? "" : id3v1Tag.getArtist();
-                        music.album = TextUtils.isEmpty(id3v1Tag.getAlbum()) ? "" : id3v1Tag.getAlbum();
-                        music.name = TextUtils.isEmpty(id3v1Tag.getTitle()) ? "" : id3v1Tag.getTitle();
+            Music music = mDoubleMusicCache.get(url);
+            if (music == null) {
+                music = new Music();
+                music.url = url;
+                music.sort = i;
+                try {
+                    if (url.toLowerCase().endsWith(".mp3")) {
+                        Mp3File mp3file = new Mp3File(url);
+                        if (mp3file.hasId3v2Tag()) {
+                            ID3v2 id3v2Tag = mp3file.getId3v2Tag();
+                            music.artist = TextUtils.isEmpty(id3v2Tag.getArtist()) ? "" : id3v2Tag.getArtist();
+                            music.album = TextUtils.isEmpty(id3v2Tag.getAlbum()) ? "" : id3v2Tag.getAlbum();
+                            music.name = TextUtils.isEmpty(id3v2Tag.getTitle()) ? "" : id3v2Tag.getTitle();
+                        } else if (mp3file.hasId3v1Tag()) {
+                            ID3v1 id3v1Tag = mp3file.getId3v1Tag();
+                            music.artist = TextUtils.isEmpty(id3v1Tag.getArtist()) ? "" : id3v1Tag.getArtist();
+                            music.album = TextUtils.isEmpty(id3v1Tag.getAlbum()) ? "" : id3v1Tag.getAlbum();
+                            music.name = TextUtils.isEmpty(id3v1Tag.getTitle()) ? "" : id3v1Tag.getTitle();
+                        }
+                    } else {
+                        music.artist = getString(R.string.no_artist);
+                        music.album = getString(R.string.no_album);
+                        music.name = StringTools.getNameByPath(url);
                     }
-                } else {
-                    music.artist = getString(R.string.no_artist);
-                    music.album = getString(R.string.no_album);
-                    music.name = StringTools.getNameByPath(url);
+                } catch (Exception e) {
+                    FlyLog.e(e.toString());
                 }
-            } catch (Exception e) {
-                FlyLog.e(e.toString());
+                mDoubleMusicCache.put(url, music);
             }
 //            FlyLog.d("add id3info url=%s", url);
             mMusicID3List.add(music);
-            if(!isStoped.get()&&(mMusicID3List.size()%ID3_UPDATE_DENSITY==1)){
+            if (!isStoped.get() && (mMusicID3List.size() % ID3_UPDATE_DENSITY == 1)) {
                 notifyMusicID3Listener();
             }
         }
@@ -462,6 +449,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     @Override
     public void onCreate() {
         super.onCreate();
+        mDoubleMusicCache = MusicDoubleCache.getInstance(getApplicationContext());
         Storage.getInstance().init(getApplicationContext());
         iStorage.refresh();
         iStorage.addListener(this);
@@ -483,14 +471,11 @@ public class FlyMediaService extends Service implements IStorageListener {
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }
-
         return Service.START_STICKY;
     }
 
-
     @Override
     public void onDestroy() {
-        mHandler.removeCallbacksAndMessages(null);
         iStorage.removeListener(this);
         super.onDestroy();
     }

@@ -23,6 +23,9 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:23.+'
     implementation 'com.android.support:recyclerview-v7:23.+'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.jakewharton:disklrucache:2.0.2'
+//    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.14'
+//    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever-armeabi:1.0.14'
     implementation project(path: ':ijkplayer')
     implementation project(path: ':photoview')
     implementation project(path: ':mp3id3library')

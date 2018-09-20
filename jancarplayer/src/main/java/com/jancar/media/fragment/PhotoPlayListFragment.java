@@ -74,8 +74,8 @@ public class PhotoPlayListFragment extends BaseFragment implements
     public void onPageSelected(int position) {
         try {
             adapter.notifyDataSetChanged();
-            ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPosition(position);
-        }catch (Exception e){
+            recyclerView.getLayoutManager().scrollToPosition(position);
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
     }
@@ -87,14 +87,17 @@ public class PhotoPlayListFragment extends BaseFragment implements
 
     @Override
     public void imageUrlList(List<String> imageUrlList) {
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        try {
+            if (imageUrlList != null) {
+                activity.photoList.clear();
+                activity.photoList.addAll(imageUrlList);
                 if (adapter != null) {
                     adapter.notifyDataSetChanged();
                 }
             }
-        },200);
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
 
     }
 
