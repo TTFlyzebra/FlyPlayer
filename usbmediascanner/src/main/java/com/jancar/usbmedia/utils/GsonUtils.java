@@ -35,7 +35,7 @@ public class GsonUtils {
         }
     }
 
-    public static <T> List<T> json2ListObject(String jsonStr, Class<T> cls){
+    public static <T> List<T> json2ListObj(String jsonStr, Class<T> cls){
         if(TextUtils.isEmpty(jsonStr)){
             return null;
         }
