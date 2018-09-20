@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jancar.media.R;
+import com.jancar.media.data.Music;
 import com.jancar.media.model.musicplayer.MusicPlayer;
+import com.jancar.media.view.MarqueeTextView;
 
 import java.io.File;
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.List;
  */
 
 public class MusicPlayListAdapter extends RecyclerView.Adapter<MusicPlayListAdapter.ViewHolder> {
-    private List<String> mList;
+    private List<Music> mList;
     private Context mContext;
     private RecyclerView mRecyclerView;
     private OnItemClickListener onItemClickListener;
@@ -33,7 +35,7 @@ public class MusicPlayListAdapter extends RecyclerView.Adapter<MusicPlayListAdap
         this.onItemClickListener = onItemClickListener;
     }
 
-    public MusicPlayListAdapter(Context context, List<String> list, RecyclerView recyclerView) {
+    public MusicPlayListAdapter(Context context, List<Music> list, RecyclerView recyclerView) {
         mContext = context;
         mList = list;
         mRecyclerView = recyclerView;
@@ -47,7 +49,7 @@ public class MusicPlayListAdapter extends RecyclerView.Adapter<MusicPlayListAdap
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        String url = mList.get(position);
+        String url = mList.get(position).url;
         int start = url.lastIndexOf(File.separator)+1;
         int end = url.lastIndexOf('.');
         start = Math.max(0,start);
@@ -56,6 +58,8 @@ public class MusicPlayListAdapter extends RecyclerView.Adapter<MusicPlayListAdap
         end = Math.min(end,url.length()-1);
         String name = url.substring(start,end);
         holder.textView01.setText(name);
+        String artist = mList.get(position).artist;
+        holder.textView02.setText(artist==null?"":artist);
 
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -80,12 +84,12 @@ public class MusicPlayListAdapter extends RecyclerView.Adapter<MusicPlayListAdap
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView textView01;
-        TextView textView02;
+        MarqueeTextView textView02;
         public ViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.item_iv01);
             textView01 = (TextView) itemView.findViewById(R.id.item_tv01);
-            textView02 = (TextView) itemView.findViewById(R.id.item_tv02);
+            textView02 = (MarqueeTextView) itemView.findViewById(R.id.item_tv02);
 
         }
     }

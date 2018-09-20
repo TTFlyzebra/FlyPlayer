@@ -1,6 +1,9 @@
 <ExpandableListView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fm_file_list_el01"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:divider="@color/divider"
+    android:dividerHeight="1px"
+    android:childDivider="@color/child_divider">
 
 </ExpandableListView>

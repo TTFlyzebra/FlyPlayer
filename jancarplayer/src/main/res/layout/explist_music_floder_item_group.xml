@@ -8,14 +8,15 @@
     <ImageView
         android:id="@+id/item_iv01"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="64px"
         android:layout_weight="0.15"
         android:duplicateParentState="true"
+        android:scaleType="centerInside"
         android:src="@drawable/media_file" />
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="64px"
         android:layout_weight="0.7"
         android:gravity="left|center"
         android:duplicateParentState="true"
@@ -24,7 +25,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0px"
-            android:gravity="left|center"
+            android:gravity="left|bottom"
             android:layout_weight="0.6">
 
             <com.jancar.media.view.MarqueeTextView
@@ -34,7 +35,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_toLeftOf="@+id/item_tv03"
                 android:duplicateParentState="true"
-                android:gravity="left|center"
+                android:gravity="left|bottom"
                 android:ellipsize="marquee"
                 android:singleLine="true"
                 android:textColor="@color/textcolor_blue_white"
@@ -45,7 +46,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:duplicateParentState="true"
-                android:gravity="left|center"
+                android:gravity="left|bottom"
                 android:singleLine="true"
                 android:textColor="@color/textcolor_blue_white"
                 android:textSize="22px" />
@@ -57,7 +58,7 @@
             android:layout_height="0px"
             android:layout_weight="0.4"
             android:duplicateParentState="true"
-            android:gravity="left|center"
+            android:gravity="left|top"
             android:ellipsize="marquee"
             android:singleLine="true"
             android:textColor="@color/textcolor_blue_white"
@@ -67,9 +68,10 @@
     <ImageView
         android:id="@+id/item_iv02"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="64px"
         android:layout_weight="0.15"
         android:duplicateParentState="true"
+        android:scaleType="centerInside"
         android:src="@drawable/media_down_01" />
 
 </LinearLayout>

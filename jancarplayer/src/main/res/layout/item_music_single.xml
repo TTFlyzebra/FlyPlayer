@@ -25,19 +25,21 @@
         android:ellipsize="marquee"
         android:gravity="left|center"
         android:singleLine="true"
-        android:textSize="22px"
-        android:textColor="@color/textcolor_blue_white" />
+        android:textColor="@color/textcolor_blue_white"
+        android:textSize="22px" />
 
-    <TextView
+    <com.jancar.media.view.MarqueeTextView
         android:id="@+id/item_tv02"
         android:layout_width="120px"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:duplicateParentState="true"
+        android:ellipsize="marquee"
         android:gravity="center"
-        android:paddingLeft="20px"
-        android:text="佚名"
-        android:textSize="22px"
-        android:textColor="@color/textcolor_blue_white" />
+        android:paddingLeft="10px"
+        android:paddingRight="10px"
+        android:singleLine="true"
+        android:textColor="@color/textcolor_blue_white"
+        android:textSize="22px" />
 
 </RelativeLayout>

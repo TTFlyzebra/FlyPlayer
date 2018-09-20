@@ -99,7 +99,7 @@ public class UsbMediaScan implements IUsbMediaScan {
 
         @Override
         public void notifyID3Music(final List<Music> list) throws RemoteException {
-            FlyLog.d("get music list size=%d", list == null ? 0 : list.size());
+            FlyLog.d("get musicid3 list size=%d", list == null ? 0 : list.size());
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {

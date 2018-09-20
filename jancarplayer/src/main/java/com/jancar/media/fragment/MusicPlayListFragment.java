@@ -10,16 +10,19 @@ import android.view.ViewGroup;
 import com.jancar.media.R;
 import com.jancar.media.adpater.MusicPlayListAdapter;
 import com.jancar.media.base.MusicFragment;
+import com.jancar.media.data.Music;
 import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.module.RecycleViewDivider;
 import com.jancar.media.utils.FlyLog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MusicPlayListFragment extends MusicFragment implements
         MusicPlayListAdapter.OnItemClickListener {
     private RecyclerView recyclerView;
     private MusicPlayListAdapter adapter;
+    private List<Music> mMusicList = new ArrayList<>();
 
     public static MusicPlayListFragment newInstance(Bundle args) {
         MusicPlayListFragment musicPlayListFragment = new MusicPlayListFragment();
@@ -38,11 +41,12 @@ public class MusicPlayListFragment extends MusicFragment implements
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         recyclerView = (RecyclerView) view.findViewById(R.id.fm_music_list_rv01);
-        adapter = new MusicPlayListAdapter(activity, musicList, recyclerView);
+        adapter = new MusicPlayListAdapter(activity, mMusicList, recyclerView);
         adapter.setOnItemClickListener(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.addItemDecoration(new RecycleViewDivider(getActivity(), LinearLayoutManager.HORIZONTAL, 2, 0x1FFFFFFF));
+        recyclerView.addItemDecoration(new RecycleViewDivider(getActivity(),
+                LinearLayoutManager.HORIZONTAL, 1, getActivity().getResources().getColor(R.color.divider)));
         recyclerView.setAdapter(adapter);
 
     }
@@ -50,6 +54,25 @@ public class MusicPlayListFragment extends MusicFragment implements
     @Override
     public void musicUrlList(List<String> musicUrlList) {
         FlyLog.d("get videos size=%d", musicUrlList == null ? 0 : musicUrlList.size());
+        mMusicList.clear();
+        for (int i = 0; i < musicUrlList.size(); i++) {
+            Music music = new Music();
+            music.url = musicUrlList.get(i);
+            music.artist = "-";
+            mMusicList.add(music);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void musicID3UrlList(List<Music> musicUrlList) {
+        try {
+            for (int i = 0; i < musicUrlList.size(); i++) {
+                mMusicList.get(i).artist = musicUrlList.get(i).artist;
+            }
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
         adapter.notifyDataSetChanged();
     }
 
@@ -88,9 +111,11 @@ public class MusicPlayListFragment extends MusicFragment implements
     private void scrollToCureentPlayItem() {
         try {
             recyclerView.getLayoutManager().scrollToPosition(musicPlayer.getPlayPos());
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
 
     }
+
+
 }

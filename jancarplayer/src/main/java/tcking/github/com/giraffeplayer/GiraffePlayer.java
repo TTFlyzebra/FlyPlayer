@@ -80,12 +80,12 @@ public class GiraffePlayer {
     private boolean playerSupport;
     private String url;
     private Query $;
-    private int STATUS_ERROR = -1;
-    private int STATUS_IDLE = 0;
-    private int STATUS_LOADING = 1;
-    private int STATUS_PLAYING = 2;
-    private int STATUS_PAUSE = 3;
-    private int STATUS_COMPLETED = 4;
+    public static final int STATUS_ERROR = -1;
+    public static final int STATUS_IDLE = 0;
+    public static final int STATUS_LOADING = 1;
+    public static final int STATUS_PLAYING = 2;
+    public static final int STATUS_PAUSE = 3;
+    public static final int STATUS_COMPLETED = 4;
     private long pauseTime;
     private int status = STATUS_IDLE;
     private boolean isLive = false;//是否为直播
@@ -435,7 +435,7 @@ public class GiraffePlayer {
 
     private void statusChange(int newStatus) {
         status = newStatus;
-        for(OnPlayStatusChangeLiseter onPlayStatusChangeLiseter : onPlayStatusChangeLiseters){
+        for (OnPlayStatusChangeLiseter onPlayStatusChangeLiseter : onPlayStatusChangeLiseters) {
             onPlayStatusChangeLiseter.statusChange(newStatus);
         }
         if (!isLive && newStatus == STATUS_COMPLETED) {
@@ -469,30 +469,30 @@ public class GiraffePlayer {
         menu_play_list.setImageResource(R.drawable.media_list_menu_close);
         play_ll01_playlist.animate().translationX(0).setDuration(300)
                 .setListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
 
-            }
+                    }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if (play_ll01_playlist.getX() > ((1024 - 394) * DisplayUtils.getMetrices(activity).widthPixels / 1024)) {
-                    play_ll01_playlist.setVisibility(View.GONE);
-                } else {
-                    play_ll01_playlist.setVisibility(View.VISIBLE);
-                }
-            }
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        if (play_ll01_playlist.getX() > ((1024 - 394) * DisplayUtils.getMetrices(activity).widthPixels / 1024)) {
+                            play_ll01_playlist.setVisibility(View.GONE);
+                        } else {
+                            play_ll01_playlist.setVisibility(View.VISIBLE);
+                        }
+                    }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
 
-            }
+                    }
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
 
-            }
-        }).start();
+                    }
+                }).start();
         activity.getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
         $.id(R.id.app_video_replay).gone();
         $.id(R.id.app_video_top_box).gone();
@@ -602,7 +602,7 @@ public class GiraffePlayer {
         }
     }
 
-    public String getPlayUrl(){
+    public String getPlayUrl() {
         return url;
     }
 
@@ -1180,11 +1180,11 @@ public class GiraffePlayer {
 
     private List<OnPlayStatusChangeLiseter> onPlayStatusChangeLiseters = new ArrayList<>();
 
-    public void addStatusChangeLiseter(OnPlayStatusChangeLiseter onPlayStatusChangeLiseter){
-       onPlayStatusChangeLiseters.add(onPlayStatusChangeLiseter);
+    public void addStatusChangeLiseter(OnPlayStatusChangeLiseter onPlayStatusChangeLiseter) {
+        onPlayStatusChangeLiseters.add(onPlayStatusChangeLiseter);
     }
 
-    public void removeStatusChangeLiseter(OnPlayStatusChangeLiseter onPlayStatusChangeLiseter){
+    public void removeStatusChangeLiseter(OnPlayStatusChangeLiseter onPlayStatusChangeLiseter) {
         onPlayStatusChangeLiseters.remove(onPlayStatusChangeLiseter);
     }
 

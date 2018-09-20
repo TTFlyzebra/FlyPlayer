@@ -10,4 +10,7 @@
     <color name="lrc_timeline_text_color">#8007AAFF</color>
     <color name="lrc_timeline_color">#209E9E9E</color>
     <color name="lrc_time_text_color">#209E9E9E</color>
+
+    <color name="divider">#2FFFFFFF</color>
+    <color name="child_divider">#0FFFFFFF</color>
 </resources>

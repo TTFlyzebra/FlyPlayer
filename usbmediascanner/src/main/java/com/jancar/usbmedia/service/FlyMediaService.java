@@ -43,12 +43,12 @@ public class FlyMediaService extends Service implements IStorageListener {
     private List<String> mImageList = Collections.synchronizedList(new ArrayList<String>());
     private RemoteCallbackList<Notify> mNotifys = new RemoteCallbackList<>();
     private boolean isFirst = true;
-    private static String NORMAL = "NORMAL";
+    private static final String NORMAL = "NORMAL";
     private String currentPath = NORMAL;
-
+    private static final int UPDATE_DENSITY = 100;
+    private static final int ID3_UPDATE_DENSITY = 100;
+    private static final int THREAD_WAIT_TIME = 20;
     private IStorage iStorage = Storage.getInstance();
-
-
     private IBinder mBinder = new FlyMedia.Stub() {
         @Override
         public void scanDisk(final String disk) throws RemoteException {
@@ -91,11 +91,11 @@ public class FlyMediaService extends Service implements IStorageListener {
                 public void run() {
                     try {
                         FlyLog.d("notify client=%s", notify.toString());
-                        notify.notifyID3Music(mMusicID3List);
                         notify.notifyMusic(mMusicList);
                         notify.notifyVideo(mVideoList);
                         notify.notifyImage(mImageList);
                         notify.notifyPath(currentPath);
+                        notify.notifyID3Music(mMusicID3List);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -120,53 +120,7 @@ public class FlyMediaService extends Service implements IStorageListener {
         }
 
     };
-
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
-
-    @Override
-    public void onCreate() {
-        FlyLog.d("start");
-        super.onCreate();
-        Storage.getInstance().init(getApplicationContext());
-        iStorage.refresh();
-        iStorage.addListener(this);
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        try {
-            String str1 = intent.getStringExtra(Const.SCAN_PATH_KEY);
-            if (!TextUtils.isEmpty(str1)) {
-                isFirst = true;
-                scanPath(str1);
-            }
-
-            String str2 = intent.getStringExtra(Const.UMOUNT_STORE);
-            if (!TextUtils.isEmpty(str2)) {
-                removePath(str2);
-            }
-        } catch (Exception e) {
-            //TODO:检测此处抛出空异常
-            FlyLog.e(e.toString());
-        }
-
-        return Service.START_STICKY;
-    }
-
-
-    @Override
-    public void onDestroy() {
-        mHandler.removeCallbacksAndMessages(null);
-        iStorage.removeListener(this);
-        super.onDestroy();
-    }
-
     private Handler mHandler = new Handler(Looper.getMainLooper());
-
     private Runnable notifyAllTask = new Runnable() {
         @Override
         public synchronized void run() {
@@ -184,10 +138,10 @@ public class FlyMediaService extends Service implements IStorageListener {
                             l.notifyMusic(mMusicList);
                             FlyLog.d("notify image list size=%d", mImageList == null ? 0 : mImageList.size());
                             l.notifyImage(mImageList);
-                            FlyLog.d("notify id3music list size=%d", mMusicID3List == null ? 0 : mMusicID3List.size());
-                            l.notifyID3Music(mMusicID3List);
                             FlyLog.d("notify mPath =%s", currentPath);
                             l.notifyPath(currentPath);
+                            FlyLog.d("notify id3music list size=%d", mMusicID3List == null ? 0 : mMusicID3List.size());
+                            l.notifyID3Music(mMusicID3List);
                         }
                     }
                 } catch (Exception e) {
@@ -199,14 +153,64 @@ public class FlyMediaService extends Service implements IStorageListener {
             }
         }
     };
-
-    public void notifyAllListener() {
-        mHandler.removeCallbacks(notifyAllTask);
-        mHandler.post(notifyAllTask);
-    }
-
-
-    private Runnable notifyID3Task = new Runnable() {
+    private Runnable notifyVideoTask = new Runnable() {
+        @Override
+        public synchronized void run() {
+            FlyLog.d("notify id3 video list size=%d", mVideoList == null ? 0 : mVideoList.size());
+            final int N = mNotifys.beginBroadcast();
+            FlyLog.d("start notify client, client sum=%d", N);
+            try {
+                for (int i = 0; i < N; i++) {
+                    Notify l = mNotifys.getBroadcastItem(i);
+                    if (l != null) {
+                        l.notifyVideo(mVideoList);
+                    }
+                }
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+            mNotifys.finishBroadcast();
+        }
+    };
+    private Runnable notifyMusicTask = new Runnable() {
+        @Override
+        public synchronized void run() {
+            FlyLog.d("notify id3 music list size=%d", mMusicList == null ? 0 : mMusicList.size());
+            final int N = mNotifys.beginBroadcast();
+            FlyLog.d("start notify client, client sum=%d", N);
+            try {
+                for (int i = 0; i < N; i++) {
+                    Notify l = mNotifys.getBroadcastItem(i);
+                    if (l != null) {
+                        l.notifyMusic(mMusicList);
+                    }
+                }
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+            mNotifys.finishBroadcast();
+        }
+    };
+    private Runnable notifyImageTask = new Runnable() {
+        @Override
+        public synchronized void run() {
+            FlyLog.d("notify id3 image list size=%d", mImageList == null ? 0 : mImageList.size());
+            final int N = mNotifys.beginBroadcast();
+            FlyLog.d("start notify client, client sum=%d", N);
+            try {
+                for (int i = 0; i < N; i++) {
+                    Notify l = mNotifys.getBroadcastItem(i);
+                    if (l != null) {
+                        l.notifyImage(mImageList);
+                    }
+                }
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+            mNotifys.finishBroadcast();
+        }
+    };
+    private Runnable notifyMusicId3Task = new Runnable() {
         @Override
         public synchronized void run() {
             FlyLog.d("notify id3 music list size=%d", mMusicID3List == null ? 0 : mMusicID3List.size());
@@ -225,12 +229,6 @@ public class FlyMediaService extends Service implements IStorageListener {
             mNotifys.finishBroadcast();
         }
     };
-
-    public void notifyID3Listener() {
-        mHandler.removeCallbacks(notifyID3Task);
-        mHandler.post(notifyID3Task);
-    }
-
     private Runnable notifyPathTask = new Runnable() {
         @Override
         public synchronized void run() {
@@ -251,7 +249,32 @@ public class FlyMediaService extends Service implements IStorageListener {
         }
     };
 
-    private void notifyPath() {
+    public void notifyAllListener() {
+        mHandler.removeCallbacks(notifyAllTask);
+        mHandler.post(notifyAllTask);
+    }
+
+    public void notifyVideoListener() {
+        mHandler.removeCallbacks(notifyVideoTask);
+        mHandler.post(notifyVideoTask);
+    }
+
+    public void notifyMusicListener() {
+        mHandler.removeCallbacks(notifyMusicTask);
+        mHandler.post(notifyMusicTask);
+    }
+
+    public void notifyImageListener() {
+        mHandler.removeCallbacks(notifyImageTask);
+        mHandler.post(notifyImageTask);
+    }
+
+    public void notifyMusicID3Listener() {
+        mHandler.removeCallbacks(notifyMusicId3Task);
+        mHandler.post(notifyMusicId3Task);
+    }
+
+    private void notifyPathListener() {
         mHandler.removeCallbacks(notifyPathTask);
         mHandler.post(notifyPathTask);
     }
@@ -266,13 +289,13 @@ public class FlyMediaService extends Service implements IStorageListener {
                 while (isRunning.get()) {
                     FlyLog.d("wait another scan finish=%s", path);
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(THREAD_WAIT_TIME);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
                 currentPath = path;
-                notifyPath();
+                notifyPathListener();
                 isRunning.set(true);
                 isStoped.set(false);
                 mVideoList.clear();
@@ -286,9 +309,9 @@ public class FlyMediaService extends Service implements IStorageListener {
                 }
                 notifyAllListener();
                 getMusicID3Info(mMusicList);
-//                if (!isStoped.get()) {
-//                    notifyID3Listener();
-//                }
+                if (!isStoped.get()) {
+                    notifyMusicID3Listener();
+                }
                 isRunning.set(false);
                 FlyLog.d("finish scan mPath=%s", path);
             }
@@ -340,6 +363,9 @@ public class FlyMediaService extends Service implements IStorageListener {
                 case ".wmv":
                     mVideoList.add(url);
 //                    FlyLog.d("add a video=%s", url);
+                    if((mVideoList.size()%UPDATE_DENSITY)==1){
+                        notifyVideoListener();
+                    }
                     break;
                 case ".aac":
 //                case ".ac3":
@@ -361,6 +387,9 @@ public class FlyMediaService extends Service implements IStorageListener {
                         Utils.startActivity(this, "com.jancar.media", "com.jancar.media.activity.MusicActivity");
                     }
                     mMusicList.add(url);
+                    if((mMusicList.size()%UPDATE_DENSITY)==1){
+                        notifyMusicListener();
+                    }
 //                    FlyLog.d("add a music=%s", url);
                     break;
                 case ".png":
@@ -369,6 +398,9 @@ public class FlyMediaService extends Service implements IStorageListener {
                 case ".jpg":
                 case ".ico":
                     mImageList.add(url);
+                    if((mImageList.size()%UPDATE_DENSITY)==1){
+                        notifyImageListener();
+                    }
 //                    FlyLog.d("add a image=%s", url);
                     break;
             }
@@ -409,8 +441,8 @@ public class FlyMediaService extends Service implements IStorageListener {
             }
 //            FlyLog.d("add id3info url=%s", url);
             mMusicID3List.add(music);
-            if(!isStoped.get()){
-                notifyID3Listener();
+            if(!isStoped.get()&&(mMusicID3List.size()%ID3_UPDATE_DENSITY==1)){
+                notifyMusicID3Listener();
             }
         }
     }
@@ -420,5 +452,46 @@ public class FlyMediaService extends Service implements IStorageListener {
         if (storageList != null && !storageList.isEmpty()) {
             scanPath(storageList.get(0).mPath);
         }
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Storage.getInstance().init(getApplicationContext());
+        iStorage.refresh();
+        iStorage.addListener(this);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        try {
+            String str1 = intent.getStringExtra(Const.SCAN_PATH_KEY);
+            if (!TextUtils.isEmpty(str1)) {
+                isFirst = true;
+                scanPath(str1);
+            }
+
+            String str2 = intent.getStringExtra(Const.UMOUNT_STORE);
+            if (!TextUtils.isEmpty(str2)) {
+                removePath(str2);
+            }
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
+
+        return Service.START_STICKY;
+    }
+
+
+    @Override
+    public void onDestroy() {
+        mHandler.removeCallbacksAndMessages(null);
+        iStorage.removeListener(this);
+        super.onDestroy();
     }
 }

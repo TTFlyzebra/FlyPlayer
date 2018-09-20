@@ -23,6 +23,11 @@ public class Music implements Parcelable{
     public String album;
 
     /**
+     * 时间
+     */
+    public long time;
+
+    /**
      * 顺序
      */
     public int sort;
@@ -37,6 +42,7 @@ public class Music implements Parcelable{
         name = in.readString();
         artist = in.readString();
         album = in.readString();
+        time = in.readLong();
         sort = in.readInt();
     }
 
@@ -46,6 +52,7 @@ public class Music implements Parcelable{
         dest.writeString(name);
         dest.writeString(artist);
         dest.writeString(album);
+        dest.writeLong(time);
         dest.writeInt(sort);
     }
 

@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 import com.jancar.media.R;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Const;
-import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.view.FlyTabTextView;
@@ -211,17 +210,18 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     public void statusChange(int statu) {
+        FlyLog.d("Statu = %d",statu);
 
         switch (statu) {
-            case MusicPlayer.STATUS_ERROR:
-            case MusicPlayer.STATUS_COMPLETED:
+            case GiraffePlayer.STATUS_ERROR:
+            case GiraffePlayer.STATUS_COMPLETED:
                 playNext();
                 break;
-            case MusicPlayer.STATUS_PLAYING:
+            case GiraffePlayer.STATUS_PLAYING:
                 setCurrentPos();
                 break;
-            case MusicPlayer.STATUS_PAUSE:
-            case MusicPlayer.STATUS_LOADING:
+            case GiraffePlayer.STATUS_PAUSE:
+            case GiraffePlayer.STATUS_LOADING:
                 break;
         }
     }
