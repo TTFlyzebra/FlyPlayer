@@ -95,6 +95,7 @@ public class PhotoPlayListFragment extends BaseFragment implements
     @Override
     public void changePath(String path) {
         activity.imageList.clear();
+        adapter.notifyDataSetChanged();
     }
 
     @Override

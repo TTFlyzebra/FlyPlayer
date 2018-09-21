@@ -61,6 +61,9 @@ public class VideoFloderFragment extends BaseFragment implements VideoFloderAdap
     @Override
     public void changePath(String path) {
         mHashMap.clear();
+        groupList.clear();
+        itemList.clear();
+        adapter.notifyDataSetChanged();
     }
 
     @Override

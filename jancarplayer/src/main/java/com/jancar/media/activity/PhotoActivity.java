@@ -130,6 +130,8 @@ public class PhotoActivity extends BaseActivity implements
     @Override
     public void changePath(String path) {
         imageList.clear();
+        currentItem = 0;
+        CRET_URL = "";
         adapter.notifyDataSetChanged();
         super.changePath(path);
     }

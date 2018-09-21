@@ -62,6 +62,9 @@ public class PhotoFloderFragment extends BaseFragment implements
     @Override
     public void changePath(String path) {
         mHashMap.clear();
+        groupList.clear();
+        itemList.clear();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
