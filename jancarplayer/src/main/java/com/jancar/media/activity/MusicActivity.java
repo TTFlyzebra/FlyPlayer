@@ -167,6 +167,24 @@ public class MusicActivity extends BaseActivity implements
         super.musicUrlList(musicUrlList);
     }
 
+    @Override
+    public void musicID3UrlList(List<Music> musicUrlList) {
+        try {
+            if (musicUrlList == null || musicUrlList.isEmpty()) {
+                return;
+            }
+            try {
+                for (int i = 0; i < musicUrlList.size(); i++) {
+                    musicList.get(i).artist = musicUrlList.get(i).artist;
+                }
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
+        super.musicID3UrlList(musicUrlList);
+    }
 
     @Override
     public void onItemClick(View v, int pos) {

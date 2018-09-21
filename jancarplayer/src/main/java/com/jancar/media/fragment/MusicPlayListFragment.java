@@ -71,16 +71,6 @@ public class MusicPlayListFragment extends MusicFragment implements
     public void musicID3UrlList(List<Music> musicUrlList) {
         FlyLog.d("get musicid3 size=%d", musicUrlList == null ? 0 : musicUrlList.size());
         textView.setText(String.format(getString(R.string.music_scan2), mMusicList.size()));
-        if (musicUrlList == null || musicUrlList.isEmpty()) {
-            return;
-        }
-        try {
-            for (int i = 0; i < musicUrlList.size(); i++) {
-                mMusicList.get(i).artist = musicUrlList.get(i).artist;
-            }
-        } catch (Exception e) {
-            FlyLog.e(e.toString());
-        }
         adapter.notifyDataSetChanged();
     }
 
