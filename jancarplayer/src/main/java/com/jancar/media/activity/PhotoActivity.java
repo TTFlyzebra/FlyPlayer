@@ -269,6 +269,8 @@ public class PhotoActivity extends BaseActivity implements
      * @param pos
      */
     public void setSelectItem(int pos) {
+        currentItem = pos;
+        CRET_URL = imageList.get(currentItem).url;
         viewPager.setCurrentItem(pos);
     }
 

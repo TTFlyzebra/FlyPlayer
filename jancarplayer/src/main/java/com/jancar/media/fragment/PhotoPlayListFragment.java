@@ -69,6 +69,7 @@ public class PhotoPlayListFragment extends BaseFragment implements
     @Override
     public void onItemClick(View view, int pos) {
         activity.setSelectItem(pos);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
