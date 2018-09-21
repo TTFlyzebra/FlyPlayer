@@ -14,6 +14,8 @@ import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.FlyLog;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +25,8 @@ public class MusicAlbumFragment extends MusicFragment implements
         MusicAlbumAdapter.OnItemClickListener {
     private ExpandableListView expandableListView;
     private List<String> groupList = new ArrayList<>();
-    private List<List<Music>> itemList = new ArrayList<>();
-    private Map<String, List<Music>> mHashMap = new HashMap<>();
+    private List<List<String>> itemList = new ArrayList<>();
+    private Map<String, List<String>> mHashMap = new HashMap<>();
     private MusicAlbumAdapter adapter;
     private boolean isClick = false;
 
@@ -50,6 +52,7 @@ public class MusicAlbumFragment extends MusicFragment implements
         expandableListView.setAdapter(adapter);
         expandableListView.setGroupIndicator(null);
         adapter.setOnItemClickListener(this);
+        mHashMap.clear();
         musicID3UrlList(mMusicList);
     }
 
@@ -80,7 +83,7 @@ public class MusicAlbumFragment extends MusicFragment implements
         for (int i = 0; i < itemList.size(); i++) {
             if (findPos1 == -1) {
                 for (int j = 0; j < itemList.get(i).size(); j++) {
-                    if (itemList.get(i).get(j).url.equals(musicPlayer.getPlayUrl())) {
+                    if (itemList.get(i).get(j).equals(musicPlayer.getPlayUrl())) {
                         expandableListView.expandGroup(i, false);
                         findPos1 = i;
                         findPos2 = j;
@@ -108,6 +111,7 @@ public class MusicAlbumFragment extends MusicFragment implements
     }
 
     private boolean isFistGet = true;
+
     @Override
     public void musicID3UrlList(List<Music> musicUrlList) {
         FlyLog.d("get id3musics size=%d", musicUrlList == null ? 0 : musicUrlList.size());
@@ -118,28 +122,28 @@ public class MusicAlbumFragment extends MusicFragment implements
                 for (int i = 0; i < musicUrlList.size(); i++) {
                     String album = musicUrlList.get(i).album;
                     if (mHashMap.get(album) == null) {
-                        mHashMap.put(album, new ArrayList<Music>());
+                        mHashMap.put(album, new ArrayList<String>());
                     }
-                    mHashMap.get(album).add(musicUrlList.get(i));
+                    mHashMap.get(album).add(musicUrlList.get(i).url);
                 }
                 groupList.addAll(mHashMap.keySet());
 
-//                Collections.sort(groupList, new Comparator<String>() {
-//                    public int compare(String p1, String p2) {
-//                        if (p1.startsWith(getString(R.string.no_album_start))) {
-//                            return 1;
-//                        }else if (p2.startsWith(getString(R.string.no_album_start))) {
-//                            return -1;
-//                        } else {
-//                            return p1.compareToIgnoreCase(p2);
-//                        }
-//                    }
-//                });
+                Collections.sort(groupList, new Comparator<String>() {
+                    public int compare(String p1, String p2) {
+                        if (p1.startsWith(getString(R.string.no_album_start))) {
+                            return 1;
+                        } else if (p2.startsWith(getString(R.string.no_album_start))) {
+                            return -1;
+                        } else {
+                            return p1.compareToIgnoreCase(p2);
+                        }
+                    }
+                });
 
                 for (String key : groupList) {
                     itemList.add(mHashMap.get(key));
                 }
-                if(isFistGet){
+                if (isFistGet) {
                     isFistGet = false;
                     scrollCurrentPos();
                 }

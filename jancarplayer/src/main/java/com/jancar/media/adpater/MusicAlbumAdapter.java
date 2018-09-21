@@ -23,9 +23,9 @@ import java.util.List;
 public class MusicAlbumAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private List<String> groupList;
-    private List<List<Music>> itemList;
+    private List<List<String>> itemList;
 
-    public MusicAlbumAdapter(Context context, List<String> groupList, List<List<Music>> itemList) {
+    public MusicAlbumAdapter(Context context, List<String> groupList, List<List<String>> itemList) {
         mContext = context;
         this.groupList = groupList;
         this.itemList = itemList;
@@ -137,7 +137,7 @@ public class MusicAlbumAdapter extends BaseExpandableListAdapter {
             }
         });
 
-        String url = itemList.get(groupPosition).get(childPosition).url;
+        String url = itemList.get(groupPosition).get(childPosition);
         boolean flag = url.equals(MusicPlayer.getInstance().getPlayUrl());
         holder.textView1.setText(StringTools.getNameByPath(url));
         holder.textView1.setTextColor(flag ? 0xFF0370E5 : 0xFFFFFFFF);

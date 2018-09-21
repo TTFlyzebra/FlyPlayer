@@ -175,7 +175,10 @@ public class MusicActivity extends BaseActivity implements
             }
             try {
                 for (int i = 0; i < musicUrlList.size(); i++) {
-                    musicList.get(i).artist = musicUrlList.get(i).artist;
+                    int sort = musicUrlList.get(i).sort;
+                    musicList.get(sort).artist = musicUrlList.get(i).artist;
+                    musicList.get(sort).album = musicUrlList.get(i).album;
+                    musicList.get(sort).name = musicUrlList.get(i).name;
                 }
             } catch (Exception e) {
                 FlyLog.e(e.toString());

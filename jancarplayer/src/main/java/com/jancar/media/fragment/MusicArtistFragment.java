@@ -14,6 +14,8 @@ import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.FlyLog;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +52,7 @@ public class MusicArtistFragment extends MusicFragment implements
         expandableListView.setAdapter(adapter);
         expandableListView.setGroupIndicator(null);
         adapter.setOnItemClickListener(this);
+        mHashMap.clear();
         musicID3UrlList(mMusicList);
     }
 
@@ -100,6 +103,7 @@ public class MusicArtistFragment extends MusicFragment implements
     public void musicUrlList(List<Music> musicUrlList) {
         FlyLog.d("get musics size=%d", musicUrlList == null ? 0 : musicUrlList.size());
     }
+
     private boolean isFistGet = true;
 
     @Override
@@ -122,23 +126,23 @@ public class MusicArtistFragment extends MusicFragment implements
                 }
                 groupList.clear();
                 groupList.addAll(mHashMap.keySet());
-//                Collections.sort(groupList, new Comparator<String>() {
-//                    public int compare(String p1, String p2) {
-//                        if (p1.startsWith(getString(R.string.no_album_start))) {
-//                            return 1;
-//                        }else if (p2.startsWith(getString(R.string.no_album_start))) {
-//                            return -1;
-//                        } else {
-//                            return p1.compareToIgnoreCase(p2);
-//                        }
-//                    }
-//                });
+                Collections.sort(groupList, new Comparator<String>() {
+                    public int compare(String p1, String p2) {
+                        if (p1.startsWith(getString(R.string.no_album_start))) {
+                            return 1;
+                        } else if (p2.startsWith(getString(R.string.no_album_start))) {
+                            return -1;
+                        } else {
+                            return p1.compareToIgnoreCase(p2);
+                        }
+                    }
+                });
                 itemList.clear();
                 for (String key : groupList) {
                     itemList.add(mHashMap.get(key));
                 }
 
-                if(isFistGet){
+                if (isFistGet) {
                     isFistGet = false;
                     scrollCurrentPos();
                 }
