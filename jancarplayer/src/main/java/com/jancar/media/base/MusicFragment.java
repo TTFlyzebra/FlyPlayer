@@ -12,7 +12,7 @@ import java.util.List;
 
 public class MusicFragment extends BaseFragment implements
         IMusicPlayerListener {
-    protected List<Music> musicList;
+    protected List<Music> mMusicList;
     protected MusicActivity activity;
     protected IMusicPlayer musicPlayer = MusicPlayer.getInstance();
 
@@ -21,7 +21,7 @@ public class MusicFragment extends BaseFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MusicActivity) getActivity();
-        musicList = activity.musicList;
+        mMusicList = activity.musicList;
     }
 
     @Override

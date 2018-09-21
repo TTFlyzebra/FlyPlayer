@@ -51,6 +51,7 @@ public class MusicFloderFragment extends MusicFragment implements
         expandableListView.setAdapter(adapter);
         expandableListView.setGroupIndicator(null);
         adapter.setOnItemClickListener(this);
+        musicUrlList(mMusicList);
     }
 
 

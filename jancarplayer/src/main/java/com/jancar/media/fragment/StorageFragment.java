@@ -12,11 +12,13 @@ import android.view.ViewGroup;
 
 import com.jancar.media.R;
 import com.jancar.media.adpater.StorageAdapater;
+import com.jancar.media.base.BaseActivity;
 import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.StorageInfo;
 import com.jancar.media.model.listener.IStorageListener;
 import com.jancar.media.model.storage.IStorage;
 import com.jancar.media.model.storage.Storage;
+import com.jancar.media.model.usbmediascan.UsbMediaScan;
 import com.jancar.media.receiver.USBDiskReceiver;
 import com.jancar.media.utils.FlyLog;
 
@@ -71,7 +73,7 @@ public class StorageFragment extends BaseFragment implements
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapater);
         adapater.setOnItemClickListener(this);
-//        recyclerView.setLoadingListener(this);
+        adapater.setCurrentPath(((BaseActivity)getActivity()).currenPath);
     }
 
     @Override
@@ -105,7 +107,7 @@ public class StorageFragment extends BaseFragment implements
     @Override
     public void onItemClick(View view, int pos) {
         FlyLog.d("openStorager storage mPath=%s", mList.get(pos));
-        usbMediaScan.openStorager(mList.get(pos));
+        UsbMediaScan.getInstance().openStorager(mList.get(pos));
     }
 
     public class MyReceiver extends USBDiskReceiver {

@@ -50,6 +50,7 @@ public class MusicArtistFragment extends MusicFragment implements
         expandableListView.setAdapter(adapter);
         expandableListView.setGroupIndicator(null);
         adapter.setOnItemClickListener(this);
+        musicID3UrlList(mMusicList);
     }
 
 

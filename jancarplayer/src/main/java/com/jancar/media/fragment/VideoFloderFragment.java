@@ -55,6 +55,7 @@ public class VideoFloderFragment extends BaseFragment implements VideoFloderAdap
         expandableListView.setGroupIndicator(null);
         adapter.setOnItemClickListener(this);
         activity.player.addStatusChangeLiseter(this);
+        videoUrlList(activity.videoList);
     }
 
     @Override

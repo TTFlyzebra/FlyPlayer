@@ -16,7 +16,6 @@ import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.module.RecycleViewDivider;
 import com.jancar.media.utils.FlyLog;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MusicPlayListFragment extends MusicFragment implements
@@ -24,7 +23,6 @@ public class MusicPlayListFragment extends MusicFragment implements
     private RecyclerView recyclerView;
     private TextView textView;
     private MusicPlayListAdapter adapter;
-    private List<Music> mMusicList = new ArrayList<>();
 
     public static MusicPlayListFragment newInstance(Bundle args) {
         MusicPlayListFragment musicPlayListFragment = new MusicPlayListFragment();
@@ -44,7 +42,7 @@ public class MusicPlayListFragment extends MusicFragment implements
     public void onViewCreated(View view, Bundle savedInstanceState) {
         recyclerView = (RecyclerView) view.findViewById(R.id.fm_rv01);
         textView = (TextView) view.findViewById(R.id.fm_tv01);
-        textView.setText(R.string.music_scan1);
+        textView.setText(String.format(getString(R.string.music_scan2), mMusicList.size()));
         adapter = new MusicPlayListAdapter(activity, mMusicList, recyclerView);
         adapter.setOnItemClickListener(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -58,13 +56,14 @@ public class MusicPlayListFragment extends MusicFragment implements
     @Override
     public void changePath(String path) {
         mMusicList.clear();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void musicUrlList(List<Music> musicUrlList) {
         FlyLog.d("get music size=%d", musicUrlList == null ? 0 : musicUrlList.size());
         textView.setText(R.string.music_scan1);
-        mMusicList.addAll(musicUrlList);
+//        mMusicList.addAll(musicUrlList);
         adapter.notifyDataSetChanged();
     }
 
@@ -87,7 +86,7 @@ public class MusicPlayListFragment extends MusicFragment implements
 
     @Override
     public void onItemClick(View view, int pos) {
-        musicPlayer.play(musicList.get(pos).url);
+        musicPlayer.play(mMusicList.get(pos).url);
         adapter.notifyDataSetChanged();
     }
 

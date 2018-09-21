@@ -15,10 +15,13 @@ import com.jancar.media.model.usbmediascan.UsbMediaScan;
 import com.jancar.media.utils.FlyLog;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BaseActivity extends AppCompatActivity implements IUsbMediaListener{
     protected IUsbMediaScan usbMediaScan = UsbMediaScan.getInstance();
+    public String currenPath = "NORMAL";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,26 +62,52 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
 
     @Override
     public void musicUrlList(List<Music> musicUrlList) {
-
+        for(IUsbMediaListener listener:listeners){
+            listener.musicUrlList(musicUrlList);
+        }
     }
 
     @Override
     public void musicID3UrlList(List<Music> musicUrlList) {
+        for(IUsbMediaListener listener:listeners){
+            listener.musicID3UrlList(musicUrlList);
+        }
 
     }
 
     @Override
     public void videoUrlList(List<Video> videoUrlList) {
+        for(IUsbMediaListener listener:listeners){
+            listener.videoUrlList(videoUrlList);
+        }
 
     }
 
     @Override
     public void imageUrlList(List<Image> imageUrlList) {
+        for(IUsbMediaListener listener:listeners){
+            listener.imageUrlList(imageUrlList);
+        }
 
     }
 
     @Override
     public void changePath(String path) {
+        currenPath = path;
+        for(IUsbMediaListener listener:listeners){
+            listener.changePath(path);
+        }
 
+    }
+
+
+    private List<IUsbMediaListener> listeners = new ArrayList<>();
+
+    public void addListener(IUsbMediaListener iUsbMediaListener) {
+        listeners.add(iUsbMediaListener);
+    }
+
+    public void removeListener(IUsbMediaListener iUsbMediaListener) {
+        listeners.remove(iUsbMediaListener);
     }
 }

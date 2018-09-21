@@ -52,7 +52,7 @@ public class PhotoPlayListFragment extends BaseFragment implements
     public void onViewCreated(View view, Bundle savedInstanceState) {
         recyclerView = (RecyclerView) view.findViewById(R.id.fm_rv01);
         textView = (TextView) view.findViewById(R.id.fm_tv01);
-        textView.setText(R.string.music_scan1);
+        textView.setText(String.format(getString(R.string.video_scan2), activity.imageList.size()));
         adapter = new PhotoPlayListAdapater(getActivity(), activity.imageList);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -94,19 +94,13 @@ public class PhotoPlayListFragment extends BaseFragment implements
     @Override
     public void changePath(String path) {
         activity.imageList.clear();
-        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void imageUrlList(List<Image> imageUrlList) {
         try {
             textView.setText(R.string.music_scan1);
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.notifyDataSetChanged();
-                }
-            }, 500);
+            adapter.notifyDataSetChanged();
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }

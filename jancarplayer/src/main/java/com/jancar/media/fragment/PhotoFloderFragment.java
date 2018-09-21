@@ -56,11 +56,12 @@ public class PhotoFloderFragment extends BaseFragment implements
         expandableListView.setAdapter(adapter);
         expandableListView.setGroupIndicator(null);
         adapter.setOnItemClickListener(this);
+        imageUrlList(activity.imageList);
     }
 
     @Override
     public void changePath(String path) {
-//        mHashMap.clear();
+        mHashMap.clear();
     }
 
     @Override

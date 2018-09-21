@@ -6,23 +6,20 @@ import com.jancar.media.data.Image;
 import com.jancar.media.data.Music;
 import com.jancar.media.data.Video;
 import com.jancar.media.model.listener.IUsbMediaListener;
-import com.jancar.media.model.usbmediascan.IUsbMediaScan;
-import com.jancar.media.model.usbmediascan.UsbMediaScan;
 
 import java.util.List;
 
 public class BaseFragment extends Fragment implements IUsbMediaListener {
-    protected IUsbMediaScan usbMediaScan = UsbMediaScan.getInstance();
 
     @Override
     public void onStart() {
         super.onStart();
-        usbMediaScan.addListener(this);
+        ((BaseActivity)getActivity()).addListener(this);
     }
 
     @Override
     public void onStop() {
-        usbMediaScan.removeListener(this);
+        ((BaseActivity)getActivity()).removeListener(this);
         super.onStop();
     }
 

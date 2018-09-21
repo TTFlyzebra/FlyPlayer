@@ -151,6 +151,7 @@ public class MusicActivity extends BaseActivity implements
     @Override
     public void changePath(String path) {
         musicList.clear();
+        super.changePath(path);
     }
 
     @Override
@@ -158,10 +159,12 @@ public class MusicActivity extends BaseActivity implements
         FlyLog.d("get music size=%d", musicUrlList == null ? 0 : musicUrlList.size());
         if (musicUrlList == null) {
             FlyLog.d("musicUrlList = null return");
+            super.musicUrlList(null);
             return;
         }
         musicList.addAll(musicUrlList);
         musicPlayer.setPlayUrls(musicList);
+        super.musicUrlList(musicUrlList);
     }
 
 

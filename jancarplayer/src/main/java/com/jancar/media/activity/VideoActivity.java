@@ -176,6 +176,7 @@ public class VideoActivity extends BaseActivity implements
     @Override
     public void changePath(String path) {
         videoList.clear();
+        super.changePath(path);
     }
 
     @Override
@@ -183,6 +184,7 @@ public class VideoActivity extends BaseActivity implements
         FlyLog.d("get videos size=%d", videoUrlList == null ? 0 : videoUrlList.size());
         if (videoUrlList == null) {
             FlyLog.d("musicUrlList = null return");
+            super.videoUrlList(videoUrlList);
             return;
         }
         if (videoUrlList.isEmpty()) {
@@ -191,6 +193,7 @@ public class VideoActivity extends BaseActivity implements
                 player.stop();
             }
             FlyLog.d("musicPlayer stop");
+            super.videoUrlList(videoUrlList);
             return;
         }
         videoList.addAll(videoUrlList);
@@ -198,12 +201,14 @@ public class VideoActivity extends BaseActivity implements
         if (!player.isPlaying()) {
             currenPos = 0;
             player.play(videoList.get(currenPos).url);
+            super.videoUrlList(videoUrlList);
             return;
         }
 
         if (currenPos >= videoList.size()) {
             currenPos = 0;
             player.play(videoList.get(currenPos).url);
+            super.videoUrlList(videoUrlList);
             return;
         }
         String currentUrl = player.getPlayUrl();
@@ -211,6 +216,7 @@ public class VideoActivity extends BaseActivity implements
             currenPos = 0;
             player.play(videoList.get(currenPos).url);
         }
+        super.videoUrlList(videoUrlList);
     }
 
     @Override

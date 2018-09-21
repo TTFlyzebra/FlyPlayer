@@ -131,6 +131,7 @@ public class PhotoActivity extends BaseActivity implements
     public void changePath(String path) {
         imageList.clear();
         adapter.notifyDataSetChanged();
+        super.changePath(path);
     }
 
     @Override
@@ -155,6 +156,7 @@ public class PhotoActivity extends BaseActivity implements
                 adapter.notifyDataSetChanged();
             }
         }
+        super.imageUrlList(imageUrlList);
     }
 
     @Override
@@ -276,7 +278,7 @@ public class PhotoActivity extends BaseActivity implements
     public void setSelectItem(String url) {
         FlyLog.d("select start-----");
         for (int i = 0; i < imageList.size(); i++) {
-            if (imageList.get(i).equals(url)) {
+            if (imageList.get(i).url.equals(url)) {
                 viewPager.setCurrentItem(i);
                 break;
             }

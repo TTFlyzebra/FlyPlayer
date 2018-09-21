@@ -48,7 +48,7 @@ public class VideoPlayListFragment extends BaseFragment implements
     public void onViewCreated(View view, Bundle savedInstanceState) {
         recyclerView = (RecyclerView) view.findViewById(R.id.fm_rv01);
         textView = (TextView) view.findViewById(R.id.fm_tv01);
-        textView.setText(R.string.music_scan1);
+        textView.setText(String.format(getString(R.string.video_scan2), activity.videoList.size()));
         adapter = new VideoPlayListAdapater(getActivity(), activity.videoList, recyclerView);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -70,10 +70,15 @@ public class VideoPlayListFragment extends BaseFragment implements
     }
 
     @Override
+    public void changePath(String path) {
+        adapter.update();
+    }
+
+    @Override
     public void videoUrlList(List<Video> videoUrlList) {
         textView.setText(R.string.music_scan1);
         FlyLog.d("get videos size=%d", videoUrlList == null ? 0 : videoUrlList.size());
-        scrollToCureentPlayItem();
+//        scrollToCureentPlayItem();
         adapter.update();
     }
 
