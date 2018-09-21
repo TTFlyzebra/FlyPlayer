@@ -12,14 +12,6 @@ interface FlyMedia {
      */
     void scanDisk(String disk);
 
-    String getPath();
-
-    List<String> getMusics();
-
-    List<String> getVideos();
-
-    List<String> getImages();
-
     void notify(Notify notify);
 
     void registerNotify(Notify notify);

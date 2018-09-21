@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.jancar.media.R;
 import com.jancar.media.activity.PhotoActivity;
+import com.jancar.media.data.Image;
 import com.jancar.media.utils.StringTools;
 
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.List;
  */
 
 public class PhotoPlayListAdapater extends RecyclerView.Adapter<PhotoPlayListAdapater.ViewHolder> {
-    private List<String> mList;
+    private List<Image> mList;
     private Context mContext;
     private OnItemClickListener onItemClickListener;
 
@@ -33,7 +34,7 @@ public class PhotoPlayListAdapater extends RecyclerView.Adapter<PhotoPlayListAda
         this.onItemClickListener = onItemClickListener;
     }
 
-    public PhotoPlayListAdapater(Context context, List<String> list) {
+    public PhotoPlayListAdapater(Context context, List<Image> list) {
         mContext = context;
         mList = list;
     }
@@ -46,7 +47,7 @@ public class PhotoPlayListAdapater extends RecyclerView.Adapter<PhotoPlayListAda
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        final String url = mList.get(position);
+        final String url = mList.get(position).url;
         holder.itemView.setTag(position);
         Glide.with(mContext).load(url).error(R.drawable.media_image_error).into(holder.imageView);
         holder.textView.setText(StringTools.getNameByPath(url));

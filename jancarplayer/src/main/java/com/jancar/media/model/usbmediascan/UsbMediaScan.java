@@ -11,8 +11,10 @@ import android.os.RemoteException;
 
 import com.jancar.media.FlyMedia;
 import com.jancar.media.Notify;
+import com.jancar.media.data.Image;
 import com.jancar.media.data.Music;
 import com.jancar.media.data.StorageInfo;
+import com.jancar.media.data.Video;
 import com.jancar.media.model.listener.IUsbMediaListener;
 import com.jancar.media.utils.FlyLog;
 
@@ -32,7 +34,6 @@ public class UsbMediaScan implements IUsbMediaScan {
                 mFlyMedia = FlyMedia.Stub.asInterface(service);
                 if (mFlyMedia == null) return;
                 mFlyMedia.registerNotify(notify);
-                mFlyMedia.notify(notify);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -46,7 +47,7 @@ public class UsbMediaScan implements IUsbMediaScan {
 
     private Notify notify = new Notify.Stub() {
         @Override
-        public void notifyMusic(final List<String> list) throws RemoteException {
+        public void notifyMusic(final List<Music> list) throws RemoteException {
             FlyLog.d("get music list size=%d", list == null ? 0 : list.size());
             mHandler.post(new Runnable() {
                 @Override
@@ -59,7 +60,7 @@ public class UsbMediaScan implements IUsbMediaScan {
         }
 
         @Override
-        public void notifyVideo(final List<String> list) throws RemoteException {
+        public void notifyVideo(final List<Video> list) throws RemoteException {
             FlyLog.d("get video list size=%d", list == null ? 0 : list.size());
             mHandler.post(new Runnable() {
                 @Override
@@ -72,7 +73,7 @@ public class UsbMediaScan implements IUsbMediaScan {
         }
 
         @Override
-        public void notifyImage(final List<String> list) throws RemoteException {
+        public void notifyImage(final List<Image> list) throws RemoteException {
             FlyLog.d("get image list size=%d", list == null ? 0 : list.size());
             mHandler.post(new Runnable() {
                 @Override

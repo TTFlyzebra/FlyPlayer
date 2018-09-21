@@ -10,6 +10,7 @@ import com.jancar.media.R;
 import com.jancar.media.activity.VideoActivity;
 import com.jancar.media.adpater.VideoFloderAdapter;
 import com.jancar.media.base.BaseFragment;
+import com.jancar.media.data.Video;
 import com.jancar.media.utils.FlyLog;
 
 import java.io.File;
@@ -57,15 +58,19 @@ public class VideoFloderFragment extends BaseFragment implements VideoFloderAdap
     }
 
     @Override
-    public void videoUrlList(List<String> videoUrlList) {
+    public void changePath(String path) {
+        mHashMap.clear();
+    }
+
+    @Override
+    public void videoUrlList(List<Video> videoUrlList) {
         FlyLog.d("get videos size=%d", videoUrlList == null ? 0 : videoUrlList.size());
         try {
             if (videoUrlList != null && getActivity() != null && activity != null) {
-                mHashMap.clear();
                 groupList.clear();
                 itemList.clear();
                 for (int i = 0; i < videoUrlList.size(); i++) {
-                    String url = videoUrlList.get(i);
+                    String url = videoUrlList.get(i).url;
                     int last = url.lastIndexOf(File.separator);
                     String path = url.substring(0, last);
                     if (mHashMap.get(path) == null) {

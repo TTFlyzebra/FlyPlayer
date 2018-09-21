@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jancar.media.R;
-import com.jancar.media.data.Music;
 import com.jancar.media.model.musicplayer.MusicPlayer;
+import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.AnimationImageView;
 import com.jancar.media.view.MarqueeTextView;
@@ -23,9 +23,9 @@ import java.util.List;
 public class MusicArtistAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private List<String> groupList;
-    private List<List<Music>> itemList;
+    private List<List<String>> itemList;
 
-    public MusicArtistAdapter(Context context, List<String> groupList, List<List<Music>> itemList) {
+    public MusicArtistAdapter(Context context, List<String> groupList, List<List<String>> itemList) {
         mContext = context;
         this.groupList = groupList;
         this.itemList = itemList;
@@ -34,7 +34,7 @@ public class MusicArtistAdapter extends BaseExpandableListAdapter {
     private OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
-        void onItemClick(View view, Music music);
+        void onItemClick(View view, String string);
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -109,7 +109,12 @@ public class MusicArtistAdapter extends BaseExpandableListAdapter {
         String str = groupList.get(groupPosition);
         holder.textView1.setText(str);
         holder.textView1.enableMarquee(isExpanded);
-        holder.textView2.setText(String.format(mContext.getString(R.string.musicsumformat),itemList.get(groupPosition).size()));
+        try {
+            int size = itemList == null ? 0 : itemList.get(groupPosition) == null ? 0 : itemList.get(groupPosition).size();
+            holder.textView2.setText(String.format(mContext.getString(R.string.musicsumformat), size));
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
         return convertView;
     }
 
@@ -127,18 +132,17 @@ public class MusicArtistAdapter extends BaseExpandableListAdapter {
             holder = (ViewHolderChild) convertView.getTag();
         }
 
-
         convertView.setTag(R.id.tag1,itemList.get(groupPosition).get(childPosition));
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(v, (Music) v.getTag(R.id.tag1));
+                    onItemClickListener.onItemClick(v, (String) v.getTag(R.id.tag1));
                 }
             }
         });
 
-        String url = itemList.get(groupPosition).get(childPosition).url;
+        String url = itemList.get(groupPosition).get(childPosition);
         boolean flag = url.equals(MusicPlayer.getInstance().getPlayUrl());
         holder.textView1.setText(StringTools.getNameByPath(url));
         holder.textView1.setTextColor(flag ? 0xFF0370E5 : 0xFFFFFFFF);

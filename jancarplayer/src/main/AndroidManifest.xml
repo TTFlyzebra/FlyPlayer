@@ -17,6 +17,7 @@
             android:name=".activity.MusicActivity"
             android:exported="true"
             android:label="@string/music"
+            android:screenOrientation="landscape"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,6 +30,7 @@
             android:name=".activity.VideoActivity"
             android:exported="true"
             android:label="@string/video"
+            android:screenOrientation="landscape"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,6 +43,7 @@
             android:name=".activity.PhotoActivity"
             android:exported="true"
             android:label="@string/photo"
+            android:screenOrientation="landscape"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -49,7 +52,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <receiver android:name="com.jancar.media.receiver.USBDiskReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_MOUNTED" />

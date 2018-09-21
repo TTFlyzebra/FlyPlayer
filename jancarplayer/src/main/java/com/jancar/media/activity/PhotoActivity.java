@@ -18,6 +18,7 @@ import com.github.chrisbanes.photoview.PhotoView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
 import com.jancar.media.R;
 import com.jancar.media.base.BaseActivity;
+import com.jancar.media.data.Image;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.view.FlyTabTextView;
@@ -39,7 +40,7 @@ public class PhotoActivity extends BaseActivity implements
     private String fmName[] = new String[]{"StorageFragment", "PhotoPlayListFragment", "PhotoFloderFragment"};
     public ViewPager viewPager;
     private MyPageAdapter adapter;
-    public List<String> photoList = new ArrayList<>();
+    public List<Image> imageList = new ArrayList<>();
     private HashMap<Integer, Integer> imageResIDs = new HashMap<>();
     private ImageView photoFore, photoNext, photoRotate, photoZoomIn, photoZoomOut;
     private ImageView leftMenu;
@@ -127,15 +128,21 @@ public class PhotoActivity extends BaseActivity implements
     }
 
     @Override
-    public void imageUrlList(List<String> imageUrlList) {
+    public void changePath(String path) {
+        imageList.clear();
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void imageUrlList(List<Image> imageUrlList) {
         if (imageUrlList != null) {
-            photoList.clear();
-            photoList.addAll(imageUrlList);
-            if (!photoList.isEmpty() && TextUtils.isEmpty(CRET_URL)) {
-                CRET_URL = photoList.get(0);
+//            imageList.clear();
+            imageList.addAll(imageUrlList);
+            if (!imageList.isEmpty() && TextUtils.isEmpty(CRET_URL)) {
+                CRET_URL = imageList.get(0).url;
             }
 
-            if (photoList.isEmpty()) {
+            if (imageList.isEmpty()) {
                 mHandler.removeCallbacks(hideControlTask);
                 controlLayout.animate().translationY(0).setDuration(300).start();
                 getWindow().getDecorView().setSystemUiVisibility(View.VISIBLE);
@@ -157,7 +164,7 @@ public class PhotoActivity extends BaseActivity implements
                 viewPager.setCurrentItem(Math.max(0, currentItem - 1));
                 break;
             case R.id.ac_photo_play_next:
-                viewPager.setCurrentItem(Math.min(photoList == null ? 0 : photoList.size() - 1, currentItem + 1));
+                viewPager.setCurrentItem(Math.min(imageList == null ? 0 : imageList.size() - 1, currentItem + 1));
                 break;
             case R.id.ac_photo_rotate:
                 PhotoView photoView1 = (PhotoView) viewPager.findViewById(imageResIDs.get(currentItem));
@@ -268,8 +275,8 @@ public class PhotoActivity extends BaseActivity implements
      */
     public void setSelectItem(String url) {
         FlyLog.d("select start-----");
-        for (int i = 0; i < photoList.size(); i++) {
-            if (photoList.get(i).equals(url)) {
+        for (int i = 0; i < imageList.size(); i++) {
+            if (imageList.get(i).equals(url)) {
                 viewPager.setCurrentItem(i);
                 break;
             }
@@ -286,7 +293,7 @@ public class PhotoActivity extends BaseActivity implements
     @Override
     public void onPageSelected(int position) {
         currentItem = position;
-        CRET_URL = photoList.get(currentItem);
+        CRET_URL = imageList.get(currentItem).url;
     }
 
     @Override
@@ -297,7 +304,7 @@ public class PhotoActivity extends BaseActivity implements
     private class MyPageAdapter extends PagerAdapter {
         @Override
         public int getCount() {
-            return photoList == null ? 0 : photoList.size();
+            return imageList == null ? 0 : imageList.size();
         }
 
         @Override
@@ -319,7 +326,7 @@ public class PhotoActivity extends BaseActivity implements
             photoView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             photoView.setZoomable(true);
             Glide.with(PhotoActivity.this)
-                    .load(photoList.get(position))
+                    .load(imageList.get(position).url)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .error(R.drawable.media_image_error)
                     .into(photoView);

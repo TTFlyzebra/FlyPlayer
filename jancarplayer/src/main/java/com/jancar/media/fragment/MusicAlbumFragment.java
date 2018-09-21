@@ -14,8 +14,6 @@ import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.FlyLog;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,8 +96,14 @@ public class MusicAlbumFragment extends MusicFragment implements
 
 
     @Override
-    public void musicUrlList(List<String> musicUrlList) {
+    public void musicUrlList(List<Music> musicUrlList) {
         FlyLog.d("get musics size=%d", musicUrlList == null ? 0 : musicUrlList.size());
+    }
+
+    @Override
+    public void changePath(String path) {
+        mHashMap.clear();
+        adapter.notifyDataSetChanged();
     }
 
     private boolean isFistGet = true;
@@ -108,7 +112,6 @@ public class MusicAlbumFragment extends MusicFragment implements
         FlyLog.d("get id3musics size=%d", musicUrlList == null ? 0 : musicUrlList.size());
         try {
             if (musicUrlList != null && getActivity() != null && activity != null) {
-                mHashMap.clear();
                 groupList.clear();
                 itemList.clear();
                 for (int i = 0; i < musicUrlList.size(); i++) {
@@ -120,17 +123,17 @@ public class MusicAlbumFragment extends MusicFragment implements
                 }
                 groupList.addAll(mHashMap.keySet());
 
-                Collections.sort(groupList, new Comparator<String>() {
-                    public int compare(String p1, String p2) {
-                        if (p1.startsWith(getString(R.string.no_album_start))) {
-                            return 1;
-                        }else if (p2.startsWith(getString(R.string.no_album_start))) {
-                            return -1;
-                        } else {
-                            return p1.compareToIgnoreCase(p2);
-                        }
-                    }
-                });
+//                Collections.sort(groupList, new Comparator<String>() {
+//                    public int compare(String p1, String p2) {
+//                        if (p1.startsWith(getString(R.string.no_album_start))) {
+//                            return 1;
+//                        }else if (p2.startsWith(getString(R.string.no_album_start))) {
+//                            return -1;
+//                        } else {
+//                            return p1.compareToIgnoreCase(p2);
+//                        }
+//                    }
+//                });
 
                 for (String key : groupList) {
                     itemList.add(mHashMap.get(key));

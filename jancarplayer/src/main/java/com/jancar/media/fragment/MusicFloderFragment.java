@@ -15,8 +15,6 @@ import com.jancar.media.utils.FlyLog;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,17 +94,21 @@ public class MusicFloderFragment extends MusicFragment implements
         expandableListView.smoothScrollToPositionFromTop(findPos1, 0, 0);
     }
 
+    @Override
+    public void changePath(String path) {
+        mHashMap.clear();
+        adapter.notifyDataSetChanged();
+    }
 
     @Override
-    public void musicUrlList(List<String> musicUrlList) {
+    public void musicUrlList(List<Music> musicUrlList) {
         FlyLog.d("get musics size=%d", musicUrlList == null ? 0 : musicUrlList.size());
         try {
             if (musicUrlList != null && getActivity() != null && activity != null) {
-                mHashMap.clear();
                 groupList.clear();
                 itemList.clear();
                 for (int i = 0; i < musicUrlList.size(); i++) {
-                    String url = musicUrlList.get(i);
+                    String url = musicUrlList.get(i).url;
                     int last = url.lastIndexOf(File.separator);
                     String path = url.substring(0, last);
                     if (mHashMap.get(path) == null) {
@@ -116,11 +118,11 @@ public class MusicFloderFragment extends MusicFragment implements
                 }
                 groupList.addAll(mHashMap.keySet());
 
-                Collections.sort(groupList, new Comparator<String>() {
-                    public int compare(String p1, String p2) {
-                        return p1.compareToIgnoreCase(p2);
-                    }
-                });
+//                Collections.sort(groupList, new Comparator<String>() {
+//                    public int compare(String p1, String p2) {
+//                        return p1.compareToIgnoreCase(p2);
+//                    }
+//                });
 
                 for (String key : groupList) {
                     itemList.add(mHashMap.get(key));

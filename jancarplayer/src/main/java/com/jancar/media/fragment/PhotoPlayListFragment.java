@@ -1,6 +1,8 @@
 package com.jancar.media.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +16,7 @@ import com.jancar.media.R;
 import com.jancar.media.activity.PhotoActivity;
 import com.jancar.media.adpater.PhotoPlayListAdapater;
 import com.jancar.media.base.BaseFragment;
+import com.jancar.media.data.Image;
 import com.jancar.media.data.Music;
 import com.jancar.media.utils.FlyLog;
 
@@ -26,6 +29,7 @@ public class PhotoPlayListFragment extends BaseFragment implements
     private PhotoPlayListAdapater adapter;
     private RecyclerView recyclerView;
     private TextView textView;
+    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     public static PhotoPlayListFragment newInstance(Bundle args) {
         PhotoPlayListFragment listPlayFileFragment = new PhotoPlayListFragment();
@@ -49,7 +53,7 @@ public class PhotoPlayListFragment extends BaseFragment implements
         recyclerView = (RecyclerView) view.findViewById(R.id.fm_rv01);
         textView = (TextView) view.findViewById(R.id.fm_tv01);
         textView.setText(R.string.music_scan1);
-        adapter = new PhotoPlayListAdapater(getActivity(), activity.photoList);
+        adapter = new PhotoPlayListAdapater(getActivity(), activity.imageList);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapter);
@@ -88,16 +92,21 @@ public class PhotoPlayListFragment extends BaseFragment implements
     }
 
     @Override
-    public void imageUrlList(List<String> imageUrlList) {
+    public void changePath(String path) {
+        activity.imageList.clear();
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void imageUrlList(List<Image> imageUrlList) {
         try {
             textView.setText(R.string.music_scan1);
-            if (imageUrlList != null) {
-                activity.photoList.clear();
-                activity.photoList.addAll(imageUrlList);
-                if (adapter != null) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
                     adapter.notifyDataSetChanged();
                 }
-            }
+            }, 500);
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }
@@ -106,15 +115,17 @@ public class PhotoPlayListFragment extends BaseFragment implements
 
     @Override
     public void musicID3UrlList(List<Music> musicUrlList) {
+        FlyLog.d("========================");
         try {
-            textView.setText(String.format(getString(R.string.photo_scan2), activity.photoList.size()));
-        }catch (Exception e){
+            textView.setText(String.format(getString(R.string.photo_scan2), activity.imageList.size()));
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
     }
 
     @Override
     public void onDestroy() {
+        mHandler.removeCallbacksAndMessages(null);
         super.onDestroy();
     }
 }

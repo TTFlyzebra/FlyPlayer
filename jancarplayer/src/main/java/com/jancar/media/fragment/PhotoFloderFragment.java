@@ -11,6 +11,7 @@ import com.jancar.media.R;
 import com.jancar.media.activity.PhotoActivity;
 import com.jancar.media.adpater.PhotoFloderAdapter;
 import com.jancar.media.base.BaseFragment;
+import com.jancar.media.data.Image;
 import com.jancar.media.utils.FlyLog;
 
 import java.io.File;
@@ -58,15 +59,19 @@ public class PhotoFloderFragment extends BaseFragment implements
     }
 
     @Override
-    public void imageUrlList(List<String> imageUrlList) {
+    public void changePath(String path) {
+//        mHashMap.clear();
+    }
+
+    @Override
+    public void imageUrlList(List<Image> imageUrlList) {
         FlyLog.d("get images size=%d", imageUrlList == null ? 0 : imageUrlList.size());
         try {
             if (imageUrlList != null && getActivity() != null && activity != null) {
-                mHashMap.clear();
                 groupList.clear();
                 itemList.clear();
                 for (int i = 0; i < imageUrlList.size(); i++) {
-                    String url = imageUrlList.get(i);
+                    String url = imageUrlList.get(i).url;
                     int last = url.lastIndexOf(File.separator);
                     String path = url.substring(0, last);
                     if (mHashMap.get(path) == null) {

@@ -56,16 +56,15 @@ public class MusicPlayListFragment extends MusicFragment implements
     }
 
     @Override
-    public void musicUrlList(List<String> musicUrlList) {
+    public void changePath(String path) {
+        mMusicList.clear();
+    }
+
+    @Override
+    public void musicUrlList(List<Music> musicUrlList) {
         FlyLog.d("get music size=%d", musicUrlList == null ? 0 : musicUrlList.size());
         textView.setText(R.string.music_scan1);
-        mMusicList.clear();
-        for (int i = 0; i < musicUrlList.size(); i++) {
-            Music music = new Music();
-            music.url = musicUrlList.get(i);
-            music.artist = "-";
-            mMusicList.add(music);
-        }
+        mMusicList.addAll(musicUrlList);
         adapter.notifyDataSetChanged();
     }
 
@@ -88,7 +87,7 @@ public class MusicPlayListFragment extends MusicFragment implements
 
     @Override
     public void onItemClick(View view, int pos) {
-        musicPlayer.play(musicList.get(pos));
+        musicPlayer.play(musicList.get(pos).url);
         adapter.notifyDataSetChanged();
     }
 

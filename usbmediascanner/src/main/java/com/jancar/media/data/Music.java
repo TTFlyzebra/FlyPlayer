@@ -37,6 +37,11 @@ public class Music implements Parcelable{
 
     }
 
+    public Music(String url,int sort){
+        this.url = url;
+        this.sort = sort;
+    }
+
     protected Music(Parcel in) {
         url = in.readString();
         name = in.readString();

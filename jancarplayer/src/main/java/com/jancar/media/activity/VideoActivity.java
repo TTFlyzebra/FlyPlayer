@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import com.jancar.media.R;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Const;
+import com.jancar.media.data.Video;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.view.FlyTabTextView;
@@ -31,7 +32,7 @@ public class VideoActivity extends BaseActivity implements
     private RelativeLayout play_ll01_playlist;
     public int currenPos = 0;
     public GiraffePlayer player;
-    public List<String> videoList = new ArrayList<>();
+    public List<Video> videoList = new ArrayList<>();
     private FlyTabView tabView;
 
     private String titles[] = new String[]{"磁盘列表", "播放列表", "文件列表"};
@@ -101,7 +102,7 @@ public class VideoActivity extends BaseActivity implements
         if (videoList != null && !videoList.isEmpty()) {
             if (currenPos < videoList.size() - 1) {
                 currenPos++;
-                player.play(videoList.get(currenPos));
+                player.play(videoList.get(currenPos).url);
             }
         }
     }
@@ -110,7 +111,7 @@ public class VideoActivity extends BaseActivity implements
         if (videoList != null && !videoList.isEmpty()) {
             if (currenPos > 0) {
                 currenPos--;
-                player.play(videoList.get(currenPos));
+                player.play(videoList.get(currenPos).url);
             }
         }
     }
@@ -173,13 +174,17 @@ public class VideoActivity extends BaseActivity implements
     }
 
     @Override
-    public void videoUrlList(List<String> videoUrlList) {
+    public void changePath(String path) {
+        videoList.clear();
+    }
+
+    @Override
+    public void videoUrlList(List<Video> videoUrlList) {
         FlyLog.d("get videos size=%d", videoUrlList == null ? 0 : videoUrlList.size());
         if (videoUrlList == null) {
             FlyLog.d("musicUrlList = null return");
             return;
         }
-        videoList.clear();
         if (videoUrlList.isEmpty()) {
             currenPos = 0;
             if (player.isPlaying()) {
@@ -192,19 +197,19 @@ public class VideoActivity extends BaseActivity implements
         //TODO:判断当前列表有没更新，确定播放哪首歌曲
         if (!player.isPlaying()) {
             currenPos = 0;
-            player.play(videoList.get(currenPos));
+            player.play(videoList.get(currenPos).url);
             return;
         }
 
         if (currenPos >= videoList.size()) {
             currenPos = 0;
-            player.play(videoList.get(currenPos));
+            player.play(videoList.get(currenPos).url);
             return;
         }
         String currentUrl = player.getPlayUrl();
         if (!videoList.get(currenPos).equals(currentUrl)) {
             currenPos = 0;
-            player.play(videoList.get(currenPos));
+            player.play(videoList.get(currenPos).url);
         }
     }
 

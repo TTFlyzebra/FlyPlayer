@@ -13,6 +13,7 @@ import com.jancar.media.activity.VideoActivity;
 import com.jancar.media.adpater.VideoPlayListAdapater;
 import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.Music;
+import com.jancar.media.data.Video;
 import com.jancar.media.utils.FlyLog;
 
 import java.util.List;
@@ -69,7 +70,7 @@ public class VideoPlayListFragment extends BaseFragment implements
     }
 
     @Override
-    public void videoUrlList(List<String> videoUrlList) {
+    public void videoUrlList(List<Video> videoUrlList) {
         textView.setText(R.string.music_scan1);
         FlyLog.d("get videos size=%d", videoUrlList == null ? 0 : videoUrlList.size());
         scrollToCureentPlayItem();
@@ -88,7 +89,7 @@ public class VideoPlayListFragment extends BaseFragment implements
     @Override
     public void onItemClick(View view, int pos) {
         activity.currenPos = pos;
-        activity.player.play(activity.videoList.get(activity.currenPos));
+        activity.player.play(activity.videoList.get(activity.currenPos).url);
         adapter.update();
     }
 

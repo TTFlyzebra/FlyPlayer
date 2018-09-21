@@ -2,6 +2,7 @@ package com.jancar.media.model.musicplayer;
 
 import android.content.Context;
 
+import com.jancar.media.data.Music;
 import com.jancar.media.model.listener.IMusicPlayerListener;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public interface IMusicPlayer {
 
     int getDuration();
 
-    void setPlayUrls(List<String> urls);
+    void setPlayUrls(List<Music> urls);
 
     void playNext();
 

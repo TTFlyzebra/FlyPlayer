@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.jancar.media.R;
 import com.jancar.media.base.BaseActivity;
+import com.jancar.media.data.Music;
 import com.jancar.media.model.listener.IMusicPlayerListener;
 import com.jancar.media.model.musicplayer.IMusicPlayer;
 import com.jancar.media.model.musicplayer.MusicPlayer;
@@ -42,7 +43,7 @@ public class MusicActivity extends BaseActivity implements
         TouchEventRelativeLayout.OnTouchEventListener {
     private String titles[] = new String[]{"存储器", "单曲", "歌手", "专辑", "文件夹"};
     private String fmName[] = new String[]{"StorageFragment", "MusicPlayListFragment", "MusicArtistFragment", "MusicAlbumFragment", "MusicFloderFragment"};
-    public List<String> musicList = new ArrayList<>();
+    public List<Music> musicList = new ArrayList<>();
     protected IMusicPlayer musicPlayer = MusicPlayer.getInstance();
 
     private SeekBar seekBar;
@@ -148,13 +149,17 @@ public class MusicActivity extends BaseActivity implements
     }
 
     @Override
-    public void musicUrlList(List<String> musicUrlList) {
+    public void changePath(String path) {
+        musicList.clear();
+    }
+
+    @Override
+    public void musicUrlList(List<Music> musicUrlList) {
         FlyLog.d("get music size=%d", musicUrlList == null ? 0 : musicUrlList.size());
         if (musicUrlList == null) {
             FlyLog.d("musicUrlList = null return");
             return;
         }
-        musicList.clear();
         musicList.addAll(musicUrlList);
         musicPlayer.setPlayUrls(musicList);
     }

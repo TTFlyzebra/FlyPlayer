@@ -14,8 +14,6 @@ import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.FlyLog;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +23,8 @@ public class MusicArtistFragment extends MusicFragment implements
         MusicArtistAdapter.OnItemClickListener {
     private ExpandableListView expandableListView;
     private List<String> groupList = new ArrayList<>();
-    private List<List<Music>> itemList = new ArrayList<>();
-    private Map<String, List<Music>> mHashMap = new HashMap<>();
+    private List<List<String>> itemList = new ArrayList<>();
+    private Map<String, List<String>> mHashMap = new HashMap<>();
     private MusicArtistAdapter adapter;
     private boolean isClick = false;
 
@@ -81,7 +79,7 @@ public class MusicArtistFragment extends MusicFragment implements
         for (int i = 0; i < itemList.size(); i++) {
             if (findPos1 == -1) {
                 for (int j = 0; j < itemList.get(i).size(); j++) {
-                    if (itemList.get(i).get(j).url.equals(musicPlayer.getPlayUrl())) {
+                    if (itemList.get(i).get(j).equals(musicPlayer.getPlayUrl())) {
                         expandableListView.expandGroup(i, false);
                         findPos1 = i;
                         findPos2 = j;
@@ -98,43 +96,47 @@ public class MusicArtistFragment extends MusicFragment implements
 
 
     @Override
-    public void musicUrlList(List<String> musicUrlList) {
+    public void musicUrlList(List<Music> musicUrlList) {
         FlyLog.d("get musics size=%d", musicUrlList == null ? 0 : musicUrlList.size());
     }
     private boolean isFistGet = true;
+
+    @Override
+    public void changePath(String path) {
+        mHashMap.clear();
+        adapter.notifyDataSetChanged();
+    }
 
     @Override
     public void musicID3UrlList(List<Music> musicUrlList) {
         FlyLog.d("get id3musics size=%d", musicUrlList == null ? 0 : musicUrlList.size());
         try {
             if (musicUrlList != null && getActivity() != null && activity != null) {
-                mHashMap.clear();
-                groupList.clear();
-                itemList.clear();
                 for (int i = 0; i < musicUrlList.size(); i++) {
                     String artist = musicUrlList.get(i).artist;
                     if (mHashMap.get(artist) == null) {
-                        mHashMap.put(artist, new ArrayList<Music>());
+                        mHashMap.put(artist, new ArrayList<String>());
                     }
-                    mHashMap.get(artist).add(musicUrlList.get(i));
+                    mHashMap.get(artist).add(musicUrlList.get(i).url);
                 }
+                groupList.clear();
                 groupList.addAll(mHashMap.keySet());
-
-                Collections.sort(groupList, new Comparator<String>() {
-                    public int compare(String p1, String p2) {
-                        if (p1.startsWith(getString(R.string.no_album_start))) {
-                            return 1;
-                        }else if (p2.startsWith(getString(R.string.no_album_start))) {
-                            return -1;
-                        } else {
-                            return p1.compareToIgnoreCase(p2);
-                        }
-                    }
-                });
-
+//                Collections.sort(groupList, new Comparator<String>() {
+//                    public int compare(String p1, String p2) {
+//                        if (p1.startsWith(getString(R.string.no_album_start))) {
+//                            return 1;
+//                        }else if (p2.startsWith(getString(R.string.no_album_start))) {
+//                            return -1;
+//                        } else {
+//                            return p1.compareToIgnoreCase(p2);
+//                        }
+//                    }
+//                });
+                itemList.clear();
                 for (String key : groupList) {
                     itemList.add(mHashMap.get(key));
                 }
+
                 if(isFistGet){
                     isFistGet = false;
                     scrollCurrentPos();
@@ -147,8 +149,8 @@ public class MusicArtistFragment extends MusicFragment implements
     }
 
     @Override
-    public void onItemClick(View view, Music music) {
+    public void onItemClick(View view, String url) {
         isClick = true;
-        musicPlayer.play(music.url);
+        musicPlayer.play(url);
     }
 }

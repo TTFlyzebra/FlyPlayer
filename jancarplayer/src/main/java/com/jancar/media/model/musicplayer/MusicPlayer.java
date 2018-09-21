@@ -3,6 +3,7 @@ package com.jancar.media.model.musicplayer;
 import android.content.Context;
 import android.media.MediaPlayer;
 
+import com.jancar.media.data.Music;
 import com.jancar.media.model.listener.IMusicPlayerListener;
 import com.jancar.media.utils.FlyLog;
 
@@ -25,7 +26,7 @@ public class MusicPlayer implements IMusicPlayer,
     private int mPlayStatus = STATUS_IDLE;
     private int mLoopStatus = LOOP_ALL;
     private String mPlayUrl = "";
-    private List<String> mPlayUrls = new ArrayList<>();
+    private List<Music> mPlayUrls = new ArrayList<>();
     private int mPlayPos = -1;
     private Map<String, Integer> mPosMap = new HashMap<>();
 
@@ -144,7 +145,7 @@ public class MusicPlayer implements IMusicPlayer,
     }
 
     @Override
-    public void setPlayUrls(List<String> urls) {
+    public void setPlayUrls(List<Music> urls) {
         mPlayUrls.clear();
         if (urls == null || urls.isEmpty()) {
             mPlayPos = -1;
@@ -153,17 +154,17 @@ public class MusicPlayer implements IMusicPlayer,
             mPlayUrls.addAll(urls);
             mPosMap.clear();
             for (int i = 0; i < mPlayUrls.size(); i++) {
-                mPosMap.put(mPlayUrls.get(i), i);
+                mPosMap.put(mPlayUrls.get(i).url, i);
             }
             if (isPlaying()) {
                 mPlayPos = getPlayPos();
                 if (mPlayPos == -1) {
                     mPlayPos = 0;
-                    play(mPlayUrls.get(0));
+                    play(mPlayUrls.get(0).url);
                 }
             } else {
                 mPlayPos = 0;
-                play(mPlayUrls.get(0));
+                play(mPlayUrls.get(0).url);
             }
         }
         FlyLog.d("setPlayUrls mPlayPos=%d", mPlayPos);
@@ -180,7 +181,7 @@ public class MusicPlayer implements IMusicPlayer,
                 mPlayPos = (mPlayPos + 1) % (mPlayUrls.size() - 1);
                 break;
         }
-        play(mPlayUrls.get(mPlayPos));
+        play(mPlayUrls.get(mPlayPos).url);
     }
 
     @Override
@@ -194,7 +195,7 @@ public class MusicPlayer implements IMusicPlayer,
                 mPlayPos = Math.max(0, mPlayPos - 1);
                 break;
         }
-        play(mPlayUrls.get(mPlayPos));
+        play(mPlayUrls.get(mPlayPos).url);
     }
 
     @Override

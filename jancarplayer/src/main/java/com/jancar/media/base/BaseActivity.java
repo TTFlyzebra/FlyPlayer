@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.jancar.media.R;
+import com.jancar.media.data.Image;
 import com.jancar.media.data.Music;
+import com.jancar.media.data.Video;
 import com.jancar.media.model.listener.IUsbMediaListener;
 import com.jancar.media.model.usbmediascan.IUsbMediaScan;
 import com.jancar.media.model.usbmediascan.UsbMediaScan;
@@ -56,7 +58,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     }
 
     @Override
-    public void musicUrlList(List<String> musicUrlList) {
+    public void musicUrlList(List<Music> musicUrlList) {
 
     }
 
@@ -66,17 +68,12 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     }
 
     @Override
-    public void videoUrlList(List<String> videoUrlList) {
+    public void videoUrlList(List<Video> videoUrlList) {
 
     }
 
     @Override
-    public void imageUrlList(List<String> imageUrlList) {
-
-    }
-
-    @Override
-    public void usbRemove(String usbstore) {
+    public void imageUrlList(List<Image> imageUrlList) {
 
     }
 
