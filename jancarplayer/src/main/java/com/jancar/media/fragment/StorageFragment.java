@@ -16,10 +16,10 @@ import com.jancar.media.base.BaseActivity;
 import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.StorageInfo;
 import com.jancar.media.model.listener.IStorageListener;
+import com.jancar.media.model.mediascan.MediaScan;
 import com.jancar.media.model.storage.IStorage;
 import com.jancar.media.model.storage.Storage;
-import com.jancar.media.model.usbmediascan.UsbMediaScan;
-import com.jancar.media.receiver.USBDiskReceiver;
+import com.jancar.media.receiver.DiskReceiver;
 import com.jancar.media.utils.FlyLog;
 
 import java.util.ArrayList;
@@ -107,10 +107,10 @@ public class StorageFragment extends BaseFragment implements
     @Override
     public void onItemClick(View view, int pos) {
         FlyLog.d("openStorager storage mPath=%s", mList.get(pos));
-        UsbMediaScan.getInstance().openStorager(mList.get(pos));
+        MediaScan.getInstance().openStorager(mList.get(pos));
     }
 
-    public class MyReceiver extends USBDiskReceiver {
+    public class MyReceiver extends DiskReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             FlyLog.d(intent.toUri(0));

@@ -6,7 +6,7 @@ import android.content.Intent;
 
 import com.jancar.media.utils.FlyLog;
 
-public class USBDiskReceiver extends BroadcastReceiver {
+public class DiskReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         FlyLog.d(intent.toUri(0));

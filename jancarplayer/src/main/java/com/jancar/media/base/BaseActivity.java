@@ -10,8 +10,8 @@ import com.jancar.media.data.Image;
 import com.jancar.media.data.Music;
 import com.jancar.media.data.Video;
 import com.jancar.media.model.listener.IUsbMediaListener;
-import com.jancar.media.model.usbmediascan.IUsbMediaScan;
-import com.jancar.media.model.usbmediascan.UsbMediaScan;
+import com.jancar.media.model.mediascan.IMediaScan;
+import com.jancar.media.model.mediascan.MediaScan;
 import com.jancar.media.utils.FlyLog;
 
 import java.lang.reflect.Constructor;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BaseActivity extends AppCompatActivity implements IUsbMediaListener{
-    protected IUsbMediaScan usbMediaScan = UsbMediaScan.getInstance();
+    protected IMediaScan usbMediaScan = MediaScan.getInstance();
     public String currenPath = "NORMAL";
 
 

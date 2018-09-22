@@ -10,7 +10,7 @@ import com.jancar.mediascan.service.FlyMediaService;
 import com.jancar.mediascan.utils.FlyLog;
 
 
-public class USBDiskReceiver extends BroadcastReceiver {
+public class DiskReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         FlyLog.d(intent.toUri(0));

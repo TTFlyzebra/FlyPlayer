@@ -1,4 +1,4 @@
-package com.jancar.media.model.usbmediascan;
+package com.jancar.media.model.mediascan;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -21,7 +21,7 @@ import com.jancar.media.utils.FlyLog;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsbMediaScan implements IUsbMediaScan {
+public class MediaScan implements IMediaScan {
     private FlyMedia mFlyMedia;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private Context mContext;
@@ -113,10 +113,10 @@ public class UsbMediaScan implements IUsbMediaScan {
     };
 
 
-    private UsbMediaScan() {
+    private MediaScan() {
     }
 
-    public static UsbMediaScan getInstance() {
+    public static MediaScan getInstance() {
         return UsbMediaScanHolder.sInstance;
     }
 
@@ -125,15 +125,15 @@ public class UsbMediaScan implements IUsbMediaScan {
     }
 
     private static class UsbMediaScanHolder {
-        public static final UsbMediaScan sInstance = new UsbMediaScan();
+        public static final MediaScan sInstance = new MediaScan();
     }
 
     private void bindService() {
         FlyLog.d("bindService");
         try {
             Intent intent = new Intent();
-            intent.setPackage("com.jancar.usbmedia");
-            intent.setAction("com.jancar.usbmedia.FlyMediaService");
+            intent.setPackage("com.jancar.mediascan");
+            intent.setAction("com.jancar.mediascan.FlyMediaService");
             mContext.bindService(intent, conn, Context.BIND_AUTO_CREATE);
         } catch (Exception e) {
             FlyLog.e(e.toString());
