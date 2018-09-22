@@ -22,7 +22,6 @@ LOCAL_STATIC_JAVA_LIBRARIES :=  glide-3.7.0 \
 LOCAL_AAPT_FLAGS := \
     --auto-add-overlay \
     --extra-packages android.support.v7.recyclerview
-LOCAL_PRIVILEGED_MODULE := true
 LOCAL_PACKAGE_NAME := JAC-MediaPlayers
 LOCAL_CERTIFICATE := platform
 include $(BUILD_PACKAGE)
