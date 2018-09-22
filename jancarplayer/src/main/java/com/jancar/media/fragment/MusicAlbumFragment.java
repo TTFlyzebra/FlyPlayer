@@ -155,8 +155,8 @@ public class MusicAlbumFragment extends MusicFragment implements
     }
 
     @Override
-    public void onItemClick(View view, Music music) {
+    public void onItemClick(View view, String url) {
         isClick = true;
-        musicPlayer.play(music.url);
+        musicPlayer.play(url);
     }
 }

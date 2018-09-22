@@ -58,7 +58,9 @@ public class PhotoActivity extends BaseActivity implements
             if (time > hideTime) {
                 showLeftMenu(false);
                 isShowLeftMenu = false;
-                controlLayout.animate().translationY(150).setDuration(300).start();
+                controlLayout.animate()
+                        .translationY(150*DisplayUtils.getMetrices(PhotoActivity.this).heightPixels/600)
+                        .setDuration(300).start();
                 getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
                 isShowControl = false;
             } else {

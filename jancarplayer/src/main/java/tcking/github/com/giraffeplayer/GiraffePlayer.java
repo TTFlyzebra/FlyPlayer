@@ -209,7 +209,10 @@ public class GiraffePlayer {
 
 
     private void showBottomControl(boolean show) {
-        app_video_bottom_box.animate().translationY(show ? 0f : 150f).setDuration(show ? 300 : 300).start();
+        app_video_bottom_box.animate()
+                .translationY(show ? 0 : 150 * DisplayUtils.getMetrices(activity).heightPixels / 600)
+                .setDuration(show ? 300 : 300)
+                .start();
     }
 
 
