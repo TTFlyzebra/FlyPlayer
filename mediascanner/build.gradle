@@ -28,7 +28,8 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:23.+'
-    implementation 'com.jakewharton:disklrucache:2.0.2'
-    implementation 'com.google.code.gson:gson:2.8.5'
     implementation project(path: ':mp3id3library')
+    implementation files('libs/gson-2.8.5.jar')
+    implementation files('libs/glide-3.7.0.jar')
+    implementation files('libs/disklrucache.jar')
 }
