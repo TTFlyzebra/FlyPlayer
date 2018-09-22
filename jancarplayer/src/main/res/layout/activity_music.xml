@@ -29,6 +29,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="160px"
                 android:layout_marginTop="68px"
+                android:scaleType="fitXY"
                 android:src="@drawable/media_music_iv" />
 
             <com.jancar.media.view.CircleImageView
@@ -39,6 +40,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="223px"
                 android:layout_marginTop="125px"
+                android:scaleType="fitXY"
                 android:src="@drawable/media_music" />
 
         </RelativeLayout>
@@ -58,8 +60,9 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50px"
+                    android:layout_height="50px"
+                    android:scaleType="fitXY"
                     android:src="@drawable/media_music_single" />
 
                 <com.jancar.media.view.MarqueeTextView
@@ -83,8 +86,9 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50px"
+                    android:layout_height="50px"
+                    android:scaleType="fitXY"
                     android:src="@drawable/media_music_album_03" />
 
                 <com.jancar.media.view.MarqueeTextView
@@ -108,8 +112,9 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50px"
+                    android:scaleType="fitXY"
+                    android:layout_height="50px"
                     android:src="@drawable/media_music_artist_03" />
 
                 <com.jancar.media.view.MarqueeTextView
@@ -191,40 +196,49 @@
 
             <ImageView
                 android:id="@+id/ac_music_play_fore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="70px"
+                android:layout_height="70px"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20px"
+                android:scaleType="fitXY"
                 android:layout_marginRight="20px"
                 android:src="@drawable/media_fore" />
 
             <ImageView
                 android:id="@+id/ac_music_play"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="70px"
+                android:layout_height="70px"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20px"
+                android:scaleType="fitXY"
                 android:layout_marginRight="20px"
                 android:src="@drawable/media_play" />
 
             <ImageView
                 android:id="@+id/ac_music_play_next"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="70px"
+                android:layout_height="70px"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20px"
                 android:layout_marginRight="20px"
+                android:scaleType="fitXY"
                 android:src="@drawable/media_next" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/ac_music_left_menu"
+        <RelativeLayout
             android:layout_width="75px"
             android:layout_height="75px"
+            android:gravity="center"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:scaleType="centerInside"
+            android:layout_alignParentRight="true">
+
+        <ImageView
+            android:id="@+id/ac_music_left_menu"
+            android:layout_width="45px"
+            android:layout_height="45px"
+            android:scaleType="fitXY"
             android:src="@drawable/media_list_menu_close" />
+        </RelativeLayout>
 
     </RelativeLayout>
 

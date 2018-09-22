@@ -7,4 +7,6 @@
     <dimen name="lrc_timeline_height">10px</dimen>
     <dimen name="lrc_drawable_width">45px</dimen>
     <dimen name="lrc_time_width">60px</dimen>
+
+    <dimen name="flytab_text_size">22px</dimen>
 </resources>

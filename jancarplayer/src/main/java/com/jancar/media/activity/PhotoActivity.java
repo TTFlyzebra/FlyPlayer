@@ -163,35 +163,39 @@ public class PhotoActivity extends BaseActivity implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.ac_photo_play_fore:
-                viewPager.setCurrentItem(Math.max(0, currentItem - 1));
-                break;
-            case R.id.ac_photo_play_next:
-                viewPager.setCurrentItem(Math.min(imageList == null ? 0 : imageList.size() - 1, currentItem + 1));
-                break;
-            case R.id.ac_photo_rotate:
-                PhotoView photoView1 = (PhotoView) viewPager.findViewById(imageResIDs.get(currentItem));
-                photoView1.setRotationBy(90);
-                break;
-            case R.id.ac_photo_zoomin:
-                PhotoView photoView2 = (PhotoView) viewPager.findViewById(imageResIDs.get(currentItem));
-                photoView2.setScale(Math.max(PhotoViewAttacher.DEFAULT_MIN_SCALE, photoView2.getScale() - 0.25f), true);
-                break;
-            case R.id.ac_photo_zoomout:
-                PhotoView photoView3 = (PhotoView) viewPager.findViewById(imageResIDs.get(currentItem));
-                photoView3.setScale(Math.min(PhotoViewAttacher.DEFAULT_MAX_SCALE, photoView3.getScale() + 0.25f), true);
-                break;
-            case R.id.ac_photo_left_menu:
-                isShowLeftMenu = !isShowLeftMenu;
-                showLeftMenu(isShowLeftMenu);
-                break;
-            default:
-                if (v instanceof PhotoView) {
-                    touchTime = 0;
-                    showControlView(!isShowControl);
-                }
-                break;
+        try {
+            switch (v.getId()) {
+                case R.id.ac_photo_play_fore:
+                    viewPager.setCurrentItem(Math.max(0, currentItem - 1));
+                    break;
+                case R.id.ac_photo_play_next:
+                    viewPager.setCurrentItem(Math.min(imageList == null ? 0 : imageList.size() - 1, currentItem + 1));
+                    break;
+                case R.id.ac_photo_rotate:
+                    PhotoView photoView1 = (PhotoView) viewPager.findViewById(imageResIDs.get(currentItem));
+                    photoView1.setRotationBy(90);
+                    break;
+                case R.id.ac_photo_zoomin:
+                    PhotoView photoView2 = (PhotoView) viewPager.findViewById(imageResIDs.get(currentItem));
+                    photoView2.setScale(Math.max(PhotoViewAttacher.DEFAULT_MIN_SCALE, photoView2.getScale() - 0.25f), true);
+                    break;
+                case R.id.ac_photo_zoomout:
+                    PhotoView photoView3 = (PhotoView) viewPager.findViewById(imageResIDs.get(currentItem));
+                    photoView3.setScale(Math.min(PhotoViewAttacher.DEFAULT_MAX_SCALE, photoView3.getScale() + 0.25f), true);
+                    break;
+                case R.id.ac_photo_left_menu:
+                    isShowLeftMenu = !isShowLeftMenu;
+                    showLeftMenu(isShowLeftMenu);
+                    break;
+                default:
+                    if (v instanceof PhotoView) {
+                        touchTime = 0;
+                        showControlView(!isShowControl);
+                    }
+                    break;
+            }
+        }catch (Exception e){
+            FlyLog.e(e.toString());
         }
     }
 

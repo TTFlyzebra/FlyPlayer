@@ -53,8 +53,9 @@
 
             <ImageView
                 android:id="@+id/ac_photo_play_fore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="70px"
+                android:layout_height="70px"
+                android:scaleType="fitXY"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20px"
                 android:layout_marginRight="20px"
@@ -62,8 +63,9 @@
 
             <ImageView
                 android:id="@+id/ac_photo_rotate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="70px"
+                android:layout_height="70px"
+                android:scaleType="fitXY"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20px"
                 android:layout_marginRight="20px"
@@ -71,22 +73,29 @@
 
             <ImageView
                 android:id="@+id/ac_photo_play_next"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="70px"
+                android:layout_height="70px"
+                android:scaleType="fitXY"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20px"
                 android:layout_marginRight="20px"
                 android:src="@drawable/media_next" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/ac_photo_left_menu"
+        <RelativeLayout
             android:layout_width="75px"
             android:layout_height="75px"
+            android:gravity="center"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:scaleType="centerInside"
-            android:src="@drawable/media_list_menu_close" />
+            android:layout_alignParentRight="true">
+
+            <ImageView
+                android:id="@+id/ac_photo_left_menu"
+                android:layout_width="45px"
+                android:layout_height="45px"
+                android:scaleType="fitXY"
+                android:src="@drawable/media_list_menu_close" />
+        </RelativeLayout>
 
     </com.jancar.media.view.TouchEventRelativeLayout>
 
