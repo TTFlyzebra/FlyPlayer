@@ -1,4 +1,4 @@
-package com.jancar.usbmedia.utils;
+package com.jancar.mediascan.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

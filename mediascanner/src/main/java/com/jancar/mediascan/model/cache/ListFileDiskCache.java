@@ -1,4 +1,4 @@
-package com.jancar.usbmedia.model.cache;
+package com.jancar.mediascan.model.cache;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -6,9 +6,9 @@ import android.content.pm.PackageManager;
 import android.text.TextUtils;
 
 import com.jakewharton.disklrucache.DiskLruCache;
-import com.jancar.usbmedia.utils.EncodeHelper;
-import com.jancar.usbmedia.utils.FlyLog;
-import com.jancar.usbmedia.utils.GsonUtils;
+import com.jancar.mediascan.utils.EncodeHelper;
+import com.jancar.mediascan.utils.FlyLog;
+import com.jancar.mediascan.utils.GsonUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,13 +23,13 @@ import java.util.List;
  * Discription: This is BitmapMemoryCache
  */
 
-public class ListDiskCache implements ICache<List<String>> {
+public class ListFileDiskCache {
     private final int max_size = 10 * 1024 * 1024;
     private static byte[] bytes = new byte[4 * 1024 * 1024];
     private DiskLruCache mDiskLruCache;
     private Context mContext;
 
-    public ListDiskCache(Context context) {
+    public ListFileDiskCache(Context context) {
         mContext = context;
         init();
     }
@@ -44,9 +44,8 @@ public class ListDiskCache implements ICache<List<String>> {
         }
     }
 
-    @Override
-    public List<String> get(String key) {
-        List<String> list = null;
+    public <T> List<T> get(String key,Class<T> cls) {
+        List<T> list = null;
         DiskLruCache.Snapshot snapShot = null;
         InputStream in = null;
         try {
@@ -55,7 +54,7 @@ public class ListDiskCache implements ICache<List<String>> {
                 in = snapShot.getInputStream(0);
                 int len = in.read(bytes);
                 String json = new String(bytes, 0, len);
-                list = GsonUtils.json2ListObj(json, String.class);
+                list = GsonUtils.json2ListObj(json, cls);
             }
         } catch (IOException e) {
             FlyLog.e(e.toString());
@@ -74,16 +73,14 @@ public class ListDiskCache implements ICache<List<String>> {
         return list;
     }
 
-    @Override
-    public void put(String key, List<String> music) {
-        String str = GsonUtils.obj2Json(music);
-        if (TextUtils.isEmpty(str)) return;
+    public void put(String key, String json) {
+        if (TextUtils.isEmpty(json)) return;
         OutputStream outputStream = null;
         try {
             DiskLruCache.Editor editor = mDiskLruCache.edit(EncodeHelper.md5(key));
             if (editor == null) return;
             outputStream = editor.newOutputStream(0);
-            byte[] bytes = str.getBytes();
+            byte[] bytes = json.getBytes();
             outputStream.write(bytes);
             outputStream.flush();
             editor.commit();

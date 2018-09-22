@@ -1,4 +1,4 @@
-package com.jancar.usbmedia.model.cache;
+package com.jancar.mediascan.model.cache;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -6,15 +6,15 @@ import android.content.pm.PackageManager;
 import android.text.TextUtils;
 
 import com.jakewharton.disklrucache.DiskLruCache;
-import com.jancar.usbmedia.utils.EncodeHelper;
-import com.jancar.usbmedia.utils.FlyLog;
-import com.jancar.usbmedia.utils.GsonUtils;
+import com.jancar.media.data.Music;
+import com.jancar.mediascan.utils.EncodeHelper;
+import com.jancar.mediascan.utils.FlyLog;
+import com.jancar.mediascan.utils.GsonUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
 
 
 /**
@@ -23,13 +23,13 @@ import java.util.List;
  * Discription: This is BitmapMemoryCache
  */
 
-public class ListFileDiskCache {
+public class MusicDiskCache implements ICache<Music> {
     private final int max_size = 10 * 1024 * 1024;
-    private static byte[] bytes = new byte[4 * 1024 * 1024];
+    private static byte[] bytes = new byte[4096];
     private DiskLruCache mDiskLruCache;
     private Context mContext;
 
-    public ListFileDiskCache(Context context) {
+    public MusicDiskCache(Context context) {
         mContext = context;
         init();
     }
@@ -44,8 +44,9 @@ public class ListFileDiskCache {
         }
     }
 
-    public <T> List<T> get(String key,Class<T> cls) {
-        List<T> list = null;
+    @Override
+    public Music get(String key) {
+        Music music = null;
         DiskLruCache.Snapshot snapShot = null;
         InputStream in = null;
         try {
@@ -54,7 +55,7 @@ public class ListFileDiskCache {
                 in = snapShot.getInputStream(0);
                 int len = in.read(bytes);
                 String json = new String(bytes, 0, len);
-                list = GsonUtils.json2ListObj(json, cls);
+                music = GsonUtils.json2Object(json, Music.class);
             }
         } catch (IOException e) {
             FlyLog.e(e.toString());
@@ -70,17 +71,19 @@ public class ListFileDiskCache {
                 FlyLog.e(e.toString());
             }
         }
-        return list;
+        return music;
     }
 
-    public void put(String key, String json) {
-        if (TextUtils.isEmpty(json)) return;
+    @Override
+    public void put(String key, Music music) {
+        String str = GsonUtils.obj2Json(music);
+        if (TextUtils.isEmpty(str)) return;
         OutputStream outputStream = null;
         try {
             DiskLruCache.Editor editor = mDiskLruCache.edit(EncodeHelper.md5(key));
             if (editor == null) return;
             outputStream = editor.newOutputStream(0);
-            byte[] bytes = json.getBytes();
+            byte[] bytes = str.getBytes();
             outputStream.write(bytes);
             outputStream.flush();
             editor.commit();
@@ -110,7 +113,7 @@ public class ListFileDiskCache {
 
     private String getSavePath(Context context) {
         File str = context.getCacheDir();
-        String savePath = str.getAbsolutePath() + File.separator + "jancar" + File.separator + "disklist";
+        String savePath = str.getAbsolutePath() + File.separator + "jancar" + File.separator + "musicid3";
         return savePath;
     }
 }

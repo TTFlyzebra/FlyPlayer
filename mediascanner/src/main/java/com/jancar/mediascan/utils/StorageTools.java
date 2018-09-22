@@ -1,9 +1,9 @@
-package com.jancar.usbmedia.utils;
+package com.jancar.mediascan.utils;
 
 import android.content.Context;
 import android.os.storage.StorageManager;
 
-import com.jancar.usbmedia.model.storage.StorageInfo;
+import com.jancar.mediascan.model.storage.StorageInfo;
 
 import java.io.File;
 import java.lang.reflect.Field;

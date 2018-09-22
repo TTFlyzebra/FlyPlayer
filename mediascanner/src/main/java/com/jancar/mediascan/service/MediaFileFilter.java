@@ -1,4 +1,4 @@
-package com.jancar.usbmedia.service;
+package com.jancar.mediascan.service;
 
 import java.io.File;
 import java.io.FilenameFilter;

@@ -1,4 +1,4 @@
-package com.jancar.usbmedia.model.storage;
+package com.jancar.mediascan.model.storage;
 
 import android.os.UserHandle;
 

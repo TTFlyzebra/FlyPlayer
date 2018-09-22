@@ -1,10 +1,10 @@
-package com.jancar.usbmedia;
+package com.jancar.mediascan;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.jancar.usbmedia.service.FlyMediaService;
+import com.jancar.mediascan.service.FlyMediaService;
 
 public class MainActivity extends AppCompatActivity {
 

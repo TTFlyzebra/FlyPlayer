@@ -1,4 +1,4 @@
-package com.jancar.usbmedia.model.cache;
+package com.jancar.mediascan.model.cache;
 
 /**
  * Author: FlyZebra

@@ -1,4 +1,4 @@
-package com.jancar.usbmedia.data;
+package com.jancar.mediascan.data;
 
 public class Const {
     public static final String PLAYURL_KEY="PLAYURL";

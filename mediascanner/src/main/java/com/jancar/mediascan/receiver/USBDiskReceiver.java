@@ -1,13 +1,13 @@
-package com.jancar.usbmedia.receiver;
+package com.jancar.mediascan.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.jancar.usbmedia.data.Const;
-import com.jancar.usbmedia.service.FlyMediaService;
-import com.jancar.usbmedia.utils.FlyLog;
+import com.jancar.mediascan.data.Const;
+import com.jancar.mediascan.service.FlyMediaService;
+import com.jancar.mediascan.utils.FlyLog;
 
 
 public class USBDiskReceiver extends BroadcastReceiver {

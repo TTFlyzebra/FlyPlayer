@@ -1,10 +1,10 @@
-package com.jancar.usbmedia.model.storage;
+package com.jancar.mediascan.model.storage;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.jancar.usbmedia.utils.StorageTools;
+import com.jancar.mediascan.utils.StorageTools;
 
 import java.util.ArrayList;
 import java.util.List;

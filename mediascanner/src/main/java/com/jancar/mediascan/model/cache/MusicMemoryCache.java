@@ -1,4 +1,4 @@
-package com.jancar.usbmedia.model.cache;
+package com.jancar.mediascan.model.cache;
 
 import android.content.Context;
 import android.util.LruCache;

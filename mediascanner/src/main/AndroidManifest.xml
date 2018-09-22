@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jancar.usbmedia">
+    package="com.jancar.mediascan">
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -28,7 +28,7 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="com.jancar.usbmedia.receiver.USBDiskReceiver">
+        <receiver android:name="com.jancar.mediascan.receiver.USBDiskReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_MOUNTED" />
                 <action android:name="android.intent.action.MEDIA_UNMOUNTED" />
