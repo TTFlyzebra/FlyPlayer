@@ -52,7 +52,7 @@ public class PhotoPlayListFragment extends BaseFragment implements
     public void onViewCreated(View view, Bundle savedInstanceState) {
         recyclerView = (RecyclerView) view.findViewById(R.id.fm_rv01);
         textView = (TextView) view.findViewById(R.id.fm_tv01);
-        textView.setText(String.format(getString(R.string.video_scan2), activity.imageList.size()));
+        textView.setText(String.format(getString(R.string.photo_scan2), activity.imageList.size()));
         adapter = new PhotoPlayListAdapater(getActivity(), activity.imageList);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(gridLayoutManager);
