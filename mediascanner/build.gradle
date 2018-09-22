@@ -6,7 +6,7 @@ android {
 
 
     defaultConfig {
-        applicationId "com.jancar.usbmedia"
+        applicationId "com.jancar.mediascan"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
