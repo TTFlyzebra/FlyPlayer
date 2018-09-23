@@ -22,7 +22,7 @@ public class StorageTools {
             Object[] invokes = (Object[]) getVolumeList.invoke(storageManager, params);
 
             if (invokes != null) {
-               StorageInfo info = null;
+                StorageInfo info = null;
                 for (int i = 0; i < invokes.length; i++) {
                     Object obj = invokes[i];
                     Method getPath = obj.getClass().getMethod("getPath");
@@ -39,7 +39,7 @@ public class StorageTools {
                         Field mDescription = obj.getClass().getDeclaredField("mDescription");
                         mDescription.setAccessible(true);
                         info.mDescription = (String) mDescription.get(obj);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         info.mDescription = path;
                         FlyLog.e(e.toString());
                     }
@@ -60,15 +60,15 @@ public class StorageTools {
                         Field mMaxFileSize = obj.getClass().getDeclaredField("mMaxFileSize");
                         mMaxFileSize.setAccessible(true);
                         info.mMaxFileSize = (int) mStorageId.get(obj);
-                    }catch (Exception e){
-                        FlyLog.e(e.toString());
+                    } catch (Exception e) {
+                        FlyLog.i(e.toString());
                     }
 
                     storages.add(info);
                 }
             }
         } catch (Exception e) {
-            FlyLog.e(e.toString());
+            FlyLog.i(e.toString());
         }
 //        storages.trimToSize();
         return storages;
@@ -84,5 +84,29 @@ public class StorageTools {
             }
         }
         return storages;
+    }
+
+    /**
+     * 判断是否是本地存储设备
+     *
+     * @param context
+     * @param path
+     * @return
+     */
+    public static boolean isRemoved(Context context, String path) {
+        boolean flag = false;
+        List<StorageInfo> list = getAvaliableStorage(listAllStorage(context));
+        if (list == null || list.size() == 0) {
+            flag = false;
+        } else {
+            for (StorageInfo info : list) {
+                if (path.equals(info.mPath)) {
+                    flag = info.isRemoveable;
+                    break;
+                }
+            }
+        }
+        FlyLog.d("%s is removeable = %b", path, flag);
+        return flag;
     }
 }

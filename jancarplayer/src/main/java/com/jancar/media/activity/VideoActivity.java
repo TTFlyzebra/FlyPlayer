@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tcking.github.com.giraffeplayer.GiraffePlayer;
+import tcking.github.com.giraffeplayer.GiraffePlayerActivity;
 
 import static tcking.github.com.giraffeplayer.GiraffePlayer.isShowVideoPlayList;
 
@@ -35,16 +37,26 @@ public class VideoActivity extends BaseActivity implements
     public List<Video> videoList = new ArrayList<>();
     private FlyTabView tabView;
 
+
     private String titles[] = new String[]{"磁盘列表", "播放列表", "文件列表"};
     private String fmName[] = new String[]{"StorageFragment", "VideoPlayListFragment", "VideoFloderFragment"};
+
+    private float scaleX = 1.0f;
+    private float scaleY = 1.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video);
-
+        setContentView(R.layout.giraffe_player);
         player = new GiraffePlayer(this);
+        player.setScaleType(GiraffePlayer.SCALETYPE_FITPARENT);
         player.addStatusChangeLiseter(this);
+
+
+        DisplayMetrics dm = DisplayUtils.getMetrices(this);
+        FlyLog.d("DisplayMetrics width=%d,heigth=%d",dm.widthPixels,dm.heightPixels);
+        scaleX = dm.widthPixels/1024f;
+        scaleY = dm.heightPixels/600f;
 
         initView();
 

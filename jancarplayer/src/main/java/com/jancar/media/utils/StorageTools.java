@@ -41,7 +41,7 @@ public class StorageTools {
                         info.mDescription = (String) mDescription.get(obj);
                     }catch (Exception e){
                         info.mDescription = path;
-                        FlyLog.e(e.toString());
+                        FlyLog.i(e.toString());
                     }
 
                     try {
@@ -61,21 +61,20 @@ public class StorageTools {
                         mMaxFileSize.setAccessible(true);
                         info.mMaxFileSize = (int) mStorageId.get(obj);
                     }catch (Exception e){
-                        FlyLog.e(e.toString());
+                        FlyLog.i(e.toString());
                     }
 
                     storages.add(info);
                 }
             }
         } catch (Exception e) {
-            FlyLog.e(e.toString());
+            FlyLog.i(e.toString());
         }
-//        storages.trimToSize();
         return storages;
     }
 
     public static List<StorageInfo> getAvaliableStorage(List<StorageInfo> infos) {
-        if (infos == null && infos.isEmpty()) return null;
+        if (infos == null || infos.isEmpty()) return null;
         List<StorageInfo> storages = new ArrayList<StorageInfo>();
         for (StorageInfo info : infos) {
             File file = new File(info.mPath);
@@ -84,5 +83,29 @@ public class StorageTools {
             }
         }
         return storages;
+    }
+
+    /**
+     * 判断是否是本地存储设备
+     *
+     * @param context
+     * @param path
+     * @return
+     */
+    public static boolean isRemoved(Context context, String path) {
+        boolean flag = false;
+        List<StorageInfo> list = getAvaliableStorage(listAllStorage(context));
+        if (list == null || list.size() == 0) {
+            flag = false;
+        } else {
+            for (StorageInfo info : list) {
+                if (path.equals(info.mPath)) {
+                    flag = info.isRemoveable;
+                    break;
+                }
+            }
+        }
+        FlyLog.d("%s is removeable = %b", path, flag);
+        return flag;
     }
 }

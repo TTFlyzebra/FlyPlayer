@@ -22,6 +22,7 @@ import com.jancar.mediascan.model.storage.Storage;
 import com.jancar.mediascan.model.storage.StorageInfo;
 import com.jancar.mediascan.utils.FlyLog;
 import com.jancar.mediascan.utils.GsonUtils;
+import com.jancar.mediascan.utils.StorageTools;
 import com.jancar.mediascan.utils.StringTools;
 import com.jancar.mediascan.utils.Utils;
 import com.mpatric.mp3agic.ID3v1;
@@ -39,30 +40,29 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class FlyMediaService extends Service implements IStorageListener {
     private static final Executor executor = Executors.newSingleThreadExecutor();
-    private AtomicBoolean isRunning = new AtomicBoolean(false);
-    private AtomicBoolean isStoped = new AtomicBoolean(false);
-    private AtomicBoolean isNotifyVideo = new AtomicBoolean(false);
-    private AtomicBoolean isNotifyMusic = new AtomicBoolean(false);
-    private AtomicBoolean isNotifyImage = new AtomicBoolean(false);
-    private List<Music> mMusicList = Collections.synchronizedList(new ArrayList<Music>());
-    private List<Music> mMusicID3List = Collections.synchronizedList(new ArrayList<Music>());
-    private List<Video> mVideoList = Collections.synchronizedList(new ArrayList<Video>());
-    private List<Image> mImageList = Collections.synchronizedList(new ArrayList<Image>());
-    private AtomicInteger mMusicStart = new AtomicInteger(0);
-    private AtomicInteger mMusicID3Start = new AtomicInteger(0);
-    private AtomicInteger mVideoStart = new AtomicInteger(0);
-    private AtomicInteger mImageStart = new AtomicInteger(0);
+    private static AtomicBoolean isRunning = new AtomicBoolean(false);
+    private static AtomicBoolean isStoped = new AtomicBoolean(false);
+    private static AtomicBoolean isNotifyVideo = new AtomicBoolean(false);
+    private static AtomicBoolean isNotifyMusic = new AtomicBoolean(false);
+    private static AtomicBoolean isNotifyImage = new AtomicBoolean(false);
+    private static List<Music> mMusicList = Collections.synchronizedList(new ArrayList<Music>());
+    private static List<Music> mMusicID3List = Collections.synchronizedList(new ArrayList<Music>());
+    private static List<Video> mVideoList = Collections.synchronizedList(new ArrayList<Video>());
+    private static List<Image> mImageList = Collections.synchronizedList(new ArrayList<Image>());
+    private static AtomicInteger mMusicStart = new AtomicInteger(0);
+    private static AtomicInteger mMusicID3Start = new AtomicInteger(0);
+    private static AtomicInteger mVideoStart = new AtomicInteger(0);
+    private static AtomicInteger mImageStart = new AtomicInteger(0);
 
-    private AtomicInteger mMusicEnd = new AtomicInteger(0);
-    private AtomicInteger mMusicID3End = new AtomicInteger(0);
-    private AtomicInteger mVideoEnd = new AtomicInteger(0);
-    private AtomicInteger mImageEnd = new AtomicInteger(0);
+    private static AtomicInteger mMusicEnd = new AtomicInteger(0);
+    private static AtomicInteger mMusicID3End = new AtomicInteger(0);
+    private static AtomicInteger mVideoEnd = new AtomicInteger(0);
+    private static AtomicInteger mImageEnd = new AtomicInteger(0);
 
-    private RemoteCallbackList<Notify> mNotifys = new RemoteCallbackList<>();
+    private static RemoteCallbackList<Notify> mNotifys = new RemoteCallbackList<>();
     private MusicDoubleCache mDoubleMusicCache;
     private ListFileDiskCache mListDiskCache;
-    private String localPaths = "T";
-    private boolean isFirst = false;
+    private static String localPaths = "T";
     private static final String NORMAL = "NORMAL";
     private String currentPath = NORMAL;
     private static final int UPDATE_DENSITY = 100;
@@ -72,8 +72,8 @@ public class FlyMediaService extends Service implements IStorageListener {
     private IBinder mBinder = new FlyMedia.Stub() {
         @Override
         public void scanDisk(final String disk) throws RemoteException {
-            isFirst = false;
             FlyLog.d("start scan disk!");
+            isStoped.set(true);
             scanPath(disk);
         }
 
@@ -123,9 +123,10 @@ public class FlyMediaService extends Service implements IStorageListener {
                 public void run() {
                     while (isRunning.get()) {
                         try {
+                            FlyLog.d("wait scan finish!");
                             Thread.sleep(THREAD_WAIT_TIME);
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            FlyLog.d(e.toString());
                         }
                     }
                     try {
@@ -160,11 +161,13 @@ public class FlyMediaService extends Service implements IStorageListener {
     };
 
     private void notifyMusic(List<Music> mMusicList, Notify notify) {
+        FlyLog.d("notifyMusic size=%d", mMusicList.size());
         int start = 0;
         int sum = mMusicList.size();
         while (start < sum) {
             int end = Math.min(sum, start + UPDATE_DENSITY);
             try {
+                FlyLog.d("notifyMusic start=%d,end=%d", start, end);
                 notify.notifyMusic(mMusicList.subList(start, end));
             } catch (RemoteException e) {
                 FlyLog.e();
@@ -175,11 +178,13 @@ public class FlyMediaService extends Service implements IStorageListener {
     }
 
     private void notifyVideo(List<Video> mVideoList, Notify notify) {
+        FlyLog.d("notifyVideo size=%d", mVideoList.size());
         int start = 0;
         int sum = mVideoList.size();
         while (start < sum) {
             int end = Math.min(sum, start + UPDATE_DENSITY);
             try {
+                FlyLog.d("notifyVideo start=%d,end=%d", start, end);
                 notify.notifyVideo(mVideoList.subList(start, end));
             } catch (RemoteException e) {
                 FlyLog.e();
@@ -190,11 +195,13 @@ public class FlyMediaService extends Service implements IStorageListener {
     }
 
     private void notifyImage(List<Image> mImageList, Notify notify) {
+        FlyLog.d("notifyImage size=%d", mVideoList.size());
         int start = 0;
         int sum = mImageList.size();
         while (start < sum) {
             int end = Math.min(sum, start + UPDATE_DENSITY);
             try {
+                FlyLog.d("notifyImage start=%d,end=%d", start, end);
                 notify.notifyImage(mImageList.subList(start, end));
             } catch (RemoteException e) {
                 FlyLog.e();
@@ -205,11 +212,13 @@ public class FlyMediaService extends Service implements IStorageListener {
     }
 
     private void notifyID3Music(List<Music> mMusicID3List, Notify notify) {
+        FlyLog.d("notifyID3Music size=%d", mVideoList.size());
         int start = 0;
         int sum = mMusicID3List.size();
         while (start < sum) {
             int end = Math.min(sum, start + UPDATE_DENSITY);
             try {
+                FlyLog.d("notifyID3Music start=%d,end=%d", start, end);
                 notify.notifyID3Music(mMusicID3List.subList(start, end));
             } catch (RemoteException e) {
                 FlyLog.e();
@@ -369,11 +378,53 @@ public class FlyMediaService extends Service implements IStorageListener {
 
     private void scanPath(final String path) {
         FlyLog.d("scan mPath=%s", path);
-        isStoped.set(true);
+        clearData();
+        currentPath = path;
         executor.execute(new Runnable() {
             @Override
             public void run() {
+                while (isRunning.get()) {
+                    FlyLog.d("wait another scan finish=%s", path);
+                    try {
+                        Thread.sleep(THREAD_WAIT_TIME);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                isRunning.set(true);
+                isStoped.set(false);
+                notifyPathListener();
                 FlyLog.d("start scan mPath=%s", path);
+                File file = new File(path);
+                if (file.exists()) {
+                    File files[] = file.listFiles();
+                    if (files == null || files.length < 1) {
+                        FlyLog.d("start scan %s no file list", path);
+                        try {
+                            Thread.sleep(1000);
+                            if (!isStoped.get()) {
+                                scanPath(path);
+                            }
+                            isRunning.set(false);
+                            return;
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else {
+                    FlyLog.d("start scan %s no file", path);
+                    try {
+                        Thread.sleep(1000);
+                        if (!isStoped.get()) {
+                            scanPath(path);
+                        }
+                        isRunning.set(false);
+                        return;
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 isNotifyMusic.set(false);
                 List<Music> musics = mListDiskCache.get(path + "music", Music.class);
                 if (musics != null) {
@@ -398,19 +449,6 @@ public class FlyMediaService extends Service implements IStorageListener {
                     FlyLog.d("loading save images size=%d", images.size());
                 }
 
-                while (isRunning.get()) {
-                    FlyLog.d("wait another scan finish=%s", path);
-                    try {
-                        Thread.sleep(THREAD_WAIT_TIME);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                currentPath = path;
-                notifyPathListener();
-                isRunning.set(true);
-                isStoped.set(false);
-                initListCount();
                 try {
                     getVideoFromPath(new File(path));
                 } catch (Exception e) {
@@ -459,7 +497,8 @@ public class FlyMediaService extends Service implements IStorageListener {
         });
     }
 
-    private void initListCount() {
+    private void clearData() {
+        FlyLog.d("clear all data--------");
         synchronized (mVideoList) {
             mVideoList.clear();
         }
@@ -487,7 +526,7 @@ public class FlyMediaService extends Service implements IStorageListener {
         FlyLog.d("remove mPath=%s", path);
         if (currentPath.equals(path)) {
             FlyLog.d("clear all list");
-            initListCount();
+            clearData();
             currentPath = NORMAL;
             notifyMusicListener(0);
             notifyVideoListener(0);
@@ -498,6 +537,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     }
 
     private void getVideoFromPath(File file) throws Exception {
+//        FlyLog.d("getVideoFromPath-------------");
         if (isStoped.get()) return;
         if (file.isDirectory()) {
             File[] files = file.listFiles();
@@ -551,13 +591,13 @@ public class FlyMediaService extends Service implements IStorageListener {
 //                case ".ra":
                 case ".wav":
 //                case ".wma":
-                    if (isFirst) {
-                        isFirst = false;
-                        //OPEN FILE
-                        Utils.startActivity(this, "com.jancar.media", "com.jancar.media.activity.MusicActivity");
-                    }
                     synchronized (mMusicList) {
                         mMusicList.add(new Music(url, mMusicEnd.get()));
+                        if (mMusicList.size() == 1 &&
+                                StorageTools.isRemoved(FlyMediaService.this, currentPath)) {
+                            FlyLog.d("start playmusic acitivty");
+                            Utils.startActivity(this, "com.jancar.media", "com.jancar.media.activity.MusicActivity");
+                        }
                         mMusicEnd.getAndIncrement();
                         if (!isNotifyMusic.get() && (mMusicList.size() % UPDATE_DENSITY) == 1) {
                             notifyMusicListener(mMusicStart.get());
@@ -653,6 +693,7 @@ public class FlyMediaService extends Service implements IStorageListener {
                 }
             }
             FlyLog.d("localPaths=%s", localPaths);
+            isStoped.set(true);
             scanPath(storageList.get(0).mPath);
         }
     }
@@ -665,6 +706,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     @Override
     public void onCreate() {
         super.onCreate();
+        FlyLog.d("onCreate");
         mDoubleMusicCache = MusicDoubleCache.getInstance(getApplicationContext());
         mListDiskCache = new ListFileDiskCache(this);
         Storage.getInstance().init(getApplicationContext());
@@ -674,15 +716,19 @@ public class FlyMediaService extends Service implements IStorageListener {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        FlyLog.d("onStartCommand");
         try {
             String str1 = intent.getStringExtra(Const.SCAN_PATH_KEY);
-            if (!TextUtils.isEmpty(str1)) {
-                isFirst = true;
+            if (!TextUtils.isEmpty(str1) && !StorageTools.isRemoved(this, str1)) {
+                FlyLog.d("scan path=%s", str1);
+                isStoped.set(true);
                 scanPath(str1);
             }
 
             String str2 = intent.getStringExtra(Const.UMOUNT_STORE);
             if (!TextUtils.isEmpty(str2)) {
+                FlyLog.d();
+                FlyLog.d("remove path=%s", str2);
                 removePath(str2);
             }
         } catch (Exception e) {

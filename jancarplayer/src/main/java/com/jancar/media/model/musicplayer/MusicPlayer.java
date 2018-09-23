@@ -195,7 +195,9 @@ public class MusicPlayer implements IMusicPlayer,
                 mPlayPos = Math.max(0, mPlayPos - 1);
                 break;
         }
-        play(mPlayUrls.get(mPlayPos).url);
+        if(mPlayUrls!=null&&mPlayUrls.size()>mPlayPos) {
+            play(mPlayUrls.get(mPlayPos).url);
+        }
     }
 
     @Override
