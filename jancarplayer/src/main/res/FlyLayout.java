@@ -75,7 +75,7 @@ public class FlyLayout {
                                 ||line.contains("paddingBottom")
                                 ||line.contains("paddingTop")
                          ){
-                            num = Integer.valueOf(str.substring(2,str.length()-3))*800/600;
+                            num = Integer.valueOf(str.substring(2,str.length()-3))*1280/1024;
                         }else{
                             num = Integer.valueOf(str.substring(2,str.length()-3))*1280/1024;
                         }

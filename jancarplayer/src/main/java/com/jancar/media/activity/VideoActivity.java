@@ -32,6 +32,7 @@ public class VideoActivity extends BaseActivity implements
         GiraffePlayer.OnPlayStatusChangeLiseter {
     private ImageView play_fore, play_next, play_list;
     private RelativeLayout play_ll01_playlist;
+    private RelativeLayout app_video_bottom_box;
     public int currenPos = 0;
     public GiraffePlayer player;
     public List<Video> videoList = new ArrayList<>();
@@ -98,12 +99,14 @@ public class VideoActivity extends BaseActivity implements
         play_next = (ImageView) findViewById(R.id.ac_music_play_next);
         play_list = (ImageView) findViewById(R.id.menu_play_list);
         play_ll01_playlist = (RelativeLayout) findViewById(R.id.play_ll01_playlist);
+        app_video_bottom_box = (RelativeLayout) findViewById(R.id.app_video_bottom_box);
         tabView = (FlyTabView) findViewById(R.id.app_video_tabview);
         tabView.setOnItemClickListener(this);
 
         play_fore.setOnClickListener(this);
         play_next.setOnClickListener(this);
         play_list.setOnClickListener(this);
+        app_video_bottom_box.setOnClickListener(this);
 
         tabView.setTitles(titles);
         replaceFragment(fmName[1]);

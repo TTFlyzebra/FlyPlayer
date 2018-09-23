@@ -22,7 +22,11 @@ public class RootPlayView extends RelativeLayout{
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        TOUCHTIME = System.currentTimeMillis();
+        switch (ev.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                TOUCHTIME = System.currentTimeMillis();
+                break;
+        }
         return super.dispatchTouchEvent(ev);
     }
 }
