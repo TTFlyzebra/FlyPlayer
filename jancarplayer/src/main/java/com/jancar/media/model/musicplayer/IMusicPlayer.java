@@ -22,11 +22,11 @@ public interface IMusicPlayer {
 
     void start();
 
-    void puase();
+    void pause();
 
     void stop();
 
-    boolean isPuase();
+    boolean isPause();
 
     boolean isPlaying();
 

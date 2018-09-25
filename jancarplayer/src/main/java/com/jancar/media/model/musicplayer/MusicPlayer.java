@@ -105,7 +105,7 @@ public class MusicPlayer implements IMusicPlayer,
     }
 
     @Override
-    public void puase() {
+    public void pause() {
         if (mMediaPlayer != null) {
             mMediaPlayer.pause();
             mPlayStatus = STATUS_PAUSE;
@@ -114,7 +114,7 @@ public class MusicPlayer implements IMusicPlayer,
     }
 
     @Override
-    public boolean isPuase() {
+    public boolean isPause() {
         return mPlayStatus == STATUS_PAUSE;
     }
 

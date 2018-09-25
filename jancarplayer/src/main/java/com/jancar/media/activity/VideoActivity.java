@@ -1,7 +1,9 @@
 package com.jancar.media.activity;
 
 import android.animation.Animator;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -43,20 +45,23 @@ public class VideoActivity extends BaseActivity implements
 
     private float scaleX = 1.0f;
     private float scaleY = 1.0f;
+    private AudioManager mAudioManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.giraffe_player);
+
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         player = new GiraffePlayer(this);
         player.setScaleType(GiraffePlayer.SCALETYPE_FITPARENT);
         player.addStatusChangeLiseter(this);
 
 
         DisplayMetrics dm = DisplayUtils.getMetrices(this);
-        FlyLog.d("DisplayMetrics width=%d,heigth=%d",dm.widthPixels,dm.heightPixels);
-        scaleX = dm.widthPixels/1024f;
-        scaleY = dm.heightPixels/600f;
+        FlyLog.d("DisplayMetrics width=%d,heigth=%d", dm.widthPixels, dm.heightPixels);
+        scaleX = dm.widthPixels / 1024f;
+        scaleY = dm.heightPixels / 600f;
 
         initView();
 
@@ -71,6 +76,44 @@ public class VideoActivity extends BaseActivity implements
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    private AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
+        public void onAudioFocusChange(int focusChange) {
+            try {
+                switch (focusChange) {
+                    case AudioManager.AUDIOFOCUS_LOSS:
+                        player.pause();
+                        break;
+                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                        if (player.isPlaying()) {
+                            player.pause();
+                        }
+                        break;
+                    case AudioManager.AUDIOFOCUS_GAIN:
+                        player.start();
+                        break;
+                }
+            }catch (Exception e){
+                FlyLog.e(e.toString());
+            }
+        }
+    };
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC,
+                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+    }
+
+
+    @Override
+    protected void onPause() {
+        mAudioManager.abandonAudioFocus(mAudioFocusListener);
+        super.onPause();
     }
 
     @Override
@@ -235,7 +278,7 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     public void statusChange(int statu) {
-        FlyLog.d("Statu = %d",statu);
+        FlyLog.d("Statu = %d", statu);
 
         switch (statu) {
             case GiraffePlayer.STATUS_ERROR:
