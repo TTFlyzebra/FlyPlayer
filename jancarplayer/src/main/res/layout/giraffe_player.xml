@@ -150,7 +150,7 @@
                 android:id="@+id/app_video_status_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/small_problem"
+                android:text=""
                 android:textColor="@android:color/white"
                 android:textSize="14dp" />
         </LinearLayout>
@@ -268,35 +268,6 @@
             </RelativeLayout>
 
         </RelativeLayout>
-
-
-        <LinearLayout
-            android:id="@+id/app_video_top_box"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <ImageView
-                android:id="@+id/app_video_finish"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_chevron_left_white_36dp"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/app_video_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="marquee"
-                android:padding="8dp"
-                android:singleLine="true"
-                android:textColor="@android:color/white"
-                android:textSize="12dp"
-                android:visibility="gone" />
-
-        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/play_ll01_playlist"

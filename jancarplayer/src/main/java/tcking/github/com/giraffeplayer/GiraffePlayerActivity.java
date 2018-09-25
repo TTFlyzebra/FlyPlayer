@@ -28,12 +28,9 @@ public class GiraffePlayerActivity extends Activity {
             Toast.makeText(this, R.string.giraffe_player_url_empty, Toast.LENGTH_SHORT).show();
         } else {
             player = new GiraffePlayer(this);
-            player.setTitle(config.title);
             player.setDefaultRetryTime(config.defaultRetryTime);
             player.setFullScreenOnly(config.fullScreenOnly);
             player.setScaleType(TextUtils.isEmpty(config.scaleType) ? GiraffePlayer.SCALETYPE_FITPARENT : config.scaleType);
-            player.setTitle(TextUtils.isEmpty(config.title) ? "" : config.title);
-            player.setShowNavIcon(config.showNavIcon);
             player.play(config.url);
         }
     }

@@ -643,14 +643,14 @@ public class FlyMediaService extends Service implements IStorageListener {
                                 Mp3File mp3file = new Mp3File(music.url);
                                 if (mp3file.hasId3v2Tag()) {
                                     ID3v2 id3v2Tag = mp3file.getId3v2Tag();
-                                    music.artist = TextUtils.isEmpty(id3v2Tag.getArtist()) ? "" : id3v2Tag.getArtist();
-                                    music.album = TextUtils.isEmpty(id3v2Tag.getAlbum()) ? "" : id3v2Tag.getAlbum();
-                                    music.name = TextUtils.isEmpty(id3v2Tag.getTitle()) ? "" : id3v2Tag.getTitle();
+                                    music.artist = TextUtils.isEmpty(id3v2Tag.getArtist()) ? getString(R.string.no_artist) : id3v2Tag.getArtist();
+                                    music.album = TextUtils.isEmpty(id3v2Tag.getAlbum()) ? getString(R.string.no_album) : id3v2Tag.getAlbum();
+                                    music.name = TextUtils.isEmpty(id3v2Tag.getTitle()) ? StringTools.getNameByPath(music.url) : id3v2Tag.getTitle();
                                 } else if (mp3file.hasId3v1Tag()) {
                                     ID3v1 id3v1Tag = mp3file.getId3v1Tag();
-                                    music.artist = TextUtils.isEmpty(id3v1Tag.getArtist()) ? "" : id3v1Tag.getArtist();
-                                    music.album = TextUtils.isEmpty(id3v1Tag.getAlbum()) ? "" : id3v1Tag.getAlbum();
-                                    music.name = TextUtils.isEmpty(id3v1Tag.getTitle()) ? "" : id3v1Tag.getTitle();
+                                    music.artist = TextUtils.isEmpty(id3v1Tag.getArtist()) ? getString(R.string.no_artist) : id3v1Tag.getArtist();
+                                    music.album = TextUtils.isEmpty(id3v1Tag.getAlbum()) ? getString(R.string.no_album) : id3v1Tag.getAlbum();
+                                    music.name = TextUtils.isEmpty(id3v1Tag.getTitle()) ? StringTools.getNameByPath(music.url) : id3v1Tag.getTitle();
                                 }
                             } catch (Exception e) {
                                 music.artist = getString(R.string.no_artist);
@@ -665,8 +665,8 @@ public class FlyMediaService extends Service implements IStorageListener {
                         }
                         mDoubleMusicCache.put(music.url, music);
                     } else {
-                        music.artist = id3music.artist;
-                        music.album = id3music.album;
+                        music.artist = TextUtils.isEmpty(id3music.artist)?getString(R.string.no_artist):id3music.artist;
+                        music.album = TextUtils.isEmpty(id3music.album)?getString(R.string.no_album):id3music.album;
                         music.name = StringTools.getNameByPath(music.url);
                     }
                     synchronized (mMusicID3List) {

@@ -86,7 +86,6 @@ public class GiraffePlayer {
     public static final int STATUS_PLAYING = 2;
     public static final int STATUS_PAUSE = 3;
     public static final int STATUS_COMPLETED = 4;
-    private long pauseTime;
     private int status = STATUS_IDLE;
     private boolean isLive = false;//是否为直播
     private OrientationEventListener orientationEventListener;
@@ -110,8 +109,6 @@ public class GiraffePlayer {
                 videoView.seekTo(0);
                 videoView.start();
                 doPauseResume();
-            } else if (v.getId() == R.id.app_video_finish) {
-                activity.finish();
             }
         }
     };
@@ -158,11 +155,6 @@ public class GiraffePlayer {
     private int currentPosition;
     private boolean fullScreenOnly;
 
-    public void setTitle(CharSequence title) {
-        $.id(R.id.app_video_title).text(title);
-    }
-
-
     private void doPauseResume() {
         if (status == STATUS_COMPLETED) {
             $.id(R.id.app_video_replay).gone();
@@ -186,13 +178,14 @@ public class GiraffePlayer {
     }
 
 
+    public boolean isFirstShow = true;
+
     /**
      * @param timeout
      */
     public void show(int timeout) {
         activity.getWindow().getDecorView().setSystemUiVisibility(View.VISIBLE);
         if (!isShowing) {
-            $.id(R.id.app_video_top_box).visible();
             if (!isLive) {
                 showBottomControl(true);
             }
@@ -353,7 +346,6 @@ public class GiraffePlayer {
         seekBar.setMax(1000);
         seekBar.setOnSeekBarChangeListener(mSeekListener);
         $.id(R.id.app_video_play).clicked(onClickListener);
-        $.id(R.id.app_video_finish).clicked(onClickListener);
         $.id(R.id.app_video_replay_icon).clicked(onClickListener);
 
 
@@ -498,7 +490,6 @@ public class GiraffePlayer {
                 }).start();
         activity.getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
         $.id(R.id.app_video_replay).gone();
-        $.id(R.id.app_video_top_box).gone();
         $.id(R.id.app_video_loading).gone();
         $.id(R.id.app_video_status).gone();
         showBottomControl(false);
@@ -506,7 +497,6 @@ public class GiraffePlayer {
     }
 
     public void onPause() {
-        pauseTime = System.currentTimeMillis();
         show(0);//把系统状态栏显示出来
         if (status == STATUS_PLAYING) {
             videoView.pause();
@@ -517,7 +507,6 @@ public class GiraffePlayer {
     }
 
     public void onResume() {
-        pauseTime = 0;
         if (status == STATUS_PLAYING) {
             if (isLive) {
                 videoView.seekTo(0);
@@ -786,6 +775,9 @@ public class GiraffePlayer {
     }
 
     public void hide(boolean force) {
+        if(force){
+            handler.removeCallbacksAndMessages(null);
+        }
         isShowVideoPlayList = false;
         menu_play_list.setImageResource(R.drawable.media_list_menu_close);
         play_ll01_playlist.animate().translationX(0).setDuration(300)
@@ -819,7 +811,6 @@ public class GiraffePlayer {
         if (force || isShowing) {
             handler.removeMessages(MESSAGE_SHOW_PROGRESS);
             showBottomControl(false);
-            $.id(R.id.app_video_top_box).gone();
             isShowing = false;
             onControlPanelVisibilityChangeListener.change(false);
         }
@@ -856,15 +847,6 @@ public class GiraffePlayer {
         } else if (SCALETYPE_4_3.equals(scaleType)) {
             videoView.setAspectRatio(IRenderView.AR_4_3_FIT_PARENT);
         }
-    }
-
-    /**
-     * 是否显示左上导航图标(一般有actionbar or appToolbar时需要隐藏)
-     *
-     * @param show
-     */
-    public void setShowNavIcon(boolean show) {
-        $.id(R.id.app_video_finish).visibility(show ? View.VISIBLE : View.GONE);
     }
 
     public void start() {

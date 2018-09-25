@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tcking.github.com.giraffeplayer.GiraffePlayer;
-import tcking.github.com.giraffeplayer.GiraffePlayerActivity;
 
 import static tcking.github.com.giraffeplayer.GiraffePlayer.isShowVideoPlayList;
 
