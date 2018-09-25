@@ -20,6 +20,7 @@ public class DiskReceiver extends BroadcastReceiver {
             if (!uri.getScheme().equals("file")) return;
             String path = uri.getPath();
             if (path == null) return;
+            FlyLog.d("MEDIA_MOUNTED path=%s",path);
             Intent scanService = new Intent(context, FlyMediaService.class);
             scanService.putExtra(Const.SCAN_PATH_KEY, path);
             context.startService(scanService);
@@ -29,6 +30,7 @@ public class DiskReceiver extends BroadcastReceiver {
             if (!uri.getScheme().equals("file")) return;
             String path = uri.getPath();
             if (path == null) return;
+            FlyLog.d("MEDIA_UNMOUNTED path=%s",path);
             Intent removeService = new Intent(context, FlyMediaService.class);
             removeService.putExtra(Const.UMOUNT_STORE, path);
             context.startService(removeService);

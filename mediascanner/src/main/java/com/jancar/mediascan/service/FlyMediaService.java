@@ -24,7 +24,6 @@ import com.jancar.mediascan.utils.FlyLog;
 import com.jancar.mediascan.utils.GsonUtils;
 import com.jancar.mediascan.utils.StorageTools;
 import com.jancar.mediascan.utils.StringTools;
-import com.jancar.mediascan.utils.Utils;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
@@ -593,11 +592,11 @@ public class FlyMediaService extends Service implements IStorageListener {
 //                case ".wma":
                     synchronized (mMusicList) {
                         mMusicList.add(new Music(url, mMusicEnd.get()));
-                        if (mMusicList.size() == 1 &&
-                                StorageTools.isRemoved(FlyMediaService.this, currentPath)) {
-                            FlyLog.d("start playmusic acitivty");
-                            Utils.startActivity(this, "com.jancar.media", "com.jancar.media.activity.MusicActivity");
-                        }
+//                        if (mMusicList.size() == 1 &&
+//                                StorageTools.isRemoved(FlyMediaService.this, currentPath)) {
+//                            FlyLog.d("start playmusic acitivty");
+//                            Utils.startActivity(this, "com.jancar.media", "com.jancar.media.activity.MusicActivity");
+//                        }
                         mMusicEnd.getAndIncrement();
                         if (!isNotifyMusic.get() && (mMusicList.size() % UPDATE_DENSITY) == 1) {
                             notifyMusicListener(mMusicStart.get());
@@ -719,7 +718,7 @@ public class FlyMediaService extends Service implements IStorageListener {
         FlyLog.d("onStartCommand");
         try {
             String str1 = intent.getStringExtra(Const.SCAN_PATH_KEY);
-            if (!TextUtils.isEmpty(str1) && !StorageTools.isRemoved(this, str1)) {
+            if (!TextUtils.isEmpty(str1) && StorageTools.isRemoved(this, str1)) {
                 FlyLog.d("scan path=%s", str1);
                 isStoped.set(true);
                 scanPath(str1);
