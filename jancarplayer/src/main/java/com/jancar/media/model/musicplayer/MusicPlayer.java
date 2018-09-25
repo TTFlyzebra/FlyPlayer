@@ -178,7 +178,7 @@ public class MusicPlayer implements IMusicPlayer,
                 break;
             case LOOP_ALL:
             case LOOP_ONE:
-                mPlayPos = (mPlayPos + 1) % (mPlayUrls.size() - 1);
+                mPlayPos = (mPlayPos + 1) % (mPlayUrls.size());
                 break;
         }
         play(mPlayUrls.get(mPlayPos).url);
