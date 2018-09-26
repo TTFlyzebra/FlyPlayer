@@ -1,6 +1,7 @@
 package com.jancar.media.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
@@ -21,6 +22,7 @@ import com.jancar.media.data.Music;
 import com.jancar.media.model.listener.IMusicPlayerListener;
 import com.jancar.media.model.musicplayer.IMusicPlayer;
 import com.jancar.media.model.musicplayer.MusicPlayer;
+import com.jancar.media.service.MusicService;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
@@ -106,6 +108,9 @@ public class MusicActivity extends BaseActivity implements
         initView();
 
         musicPlayer.addListener(this);
+
+        Intent intent = new Intent(this, MusicService.class);
+        startService(intent);
 
     }
 
