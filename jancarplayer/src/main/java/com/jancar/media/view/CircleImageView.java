@@ -1,6 +1,7 @@
 package com.jancar.media.view;
 
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -12,9 +13,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
 
@@ -30,6 +29,7 @@ public class CircleImageView extends ImageView {
     private Paint bitmapPaint;
     private Bitmap mBitmap;
     private BitmapShader mBitmapShader;
+    private ObjectAnimator rotationAnimator;
 
     public CircleImageView(Context context) {
         this(context, null);
@@ -48,6 +48,12 @@ public class CircleImageView extends ImageView {
         borderPaint.setColor(borderColor);
         bitmapPaint = new Paint();
         bitmapPaint.setAntiAlias(true);
+
+        rotationAnimator = ObjectAnimator.ofFloat(this, "rotation", 0, 360);
+        rotationAnimator.setDuration(10000);
+        rotationAnimator.setInterpolator(new LinearInterpolator());
+        rotationAnimator.setRepeatCount(ObjectAnimator.INFINITE);
+
     }
 
     @Override
@@ -148,19 +154,20 @@ public class CircleImageView extends ImageView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Animation();
+        rotationAnimator.start();
     }
 
-    //控制动画
-    public void Animation(){
-        RotateAnimation rotate = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        //默认为0，为-1时一直循环动画
-        rotate.setRepeatCount(-1);
-        //添加匀速加速器
-        rotate.setDuration(10000);
-        rotate.setInterpolator(new LinearInterpolator());
-        rotate.setFillAfter(true);
-        this.startAnimation(rotate);
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        rotationAnimator.end();
     }
 
+    public void setAnimatePlaying(boolean animatePlaying) {
+        if (animatePlaying) {
+            rotationAnimator.resume();
+        } else {
+            rotationAnimator.pause();
+        }
+    }
 }

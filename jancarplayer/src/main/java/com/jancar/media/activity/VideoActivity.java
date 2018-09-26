@@ -78,43 +78,43 @@ public class VideoActivity extends BaseActivity implements
         super.onStart();
     }
 
-    private AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
-        public void onAudioFocusChange(int focusChange) {
-            try {
-                switch (focusChange) {
-                    case AudioManager.AUDIOFOCUS_LOSS:
-                        player.pause();
-                        break;
-                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                        if (player.isPlaying()) {
-                            player.pause();
-                        }
-                        break;
-                    case AudioManager.AUDIOFOCUS_GAIN:
-                        player.start();
-                        break;
-                }
-            }catch (Exception e){
-                FlyLog.e(e.toString());
-            }
-        }
-    };
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC,
-                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-    }
-
-
-    @Override
-    protected void onPause() {
-        mAudioManager.abandonAudioFocus(mAudioFocusListener);
-        super.onPause();
-    }
+//    private AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
+//        public void onAudioFocusChange(int focusChange) {
+//            try {
+//                switch (focusChange) {
+//                    case AudioManager.AUDIOFOCUS_LOSS:
+//                        player.pause();
+//                        break;
+//                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+//                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+//                        if (player.isPlaying()) {
+//                            player.pause();
+//                        }
+//                        break;
+//                    case AudioManager.AUDIOFOCUS_GAIN:
+//                        player.start();
+//                        break;
+//                }
+//            }catch (Exception e){
+//                FlyLog.e(e.toString());
+//            }
+//        }
+//    };
+//
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC,
+//                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+//    }
+//
+//
+//    @Override
+//    protected void onPause() {
+//        mAudioManager.abandonAudioFocus(mAudioFocusListener);
+//        super.onPause();
+//    }
 
     @Override
     protected void onStop() {

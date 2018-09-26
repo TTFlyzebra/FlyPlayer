@@ -57,8 +57,8 @@
                 android:layout_height="70px"
                 android:scaleType="fitXY"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="20px"
-                android:layout_marginRight="20px"
+                android:layout_marginLeft="50px"
+                android:layout_marginRight="50px"
                 android:src="@drawable/media_fore" />
 
             <ImageView
@@ -67,8 +67,8 @@
                 android:layout_height="70px"
                 android:scaleType="fitXY"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="20px"
-                android:layout_marginRight="20px"
+                android:layout_marginLeft="50px"
+                android:layout_marginRight="50px"
                 android:src="@drawable/media_photo_rotate" />
 
             <ImageView
@@ -77,8 +77,8 @@
                 android:layout_height="70px"
                 android:scaleType="fitXY"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="20px"
-                android:layout_marginRight="20px"
+                android:layout_marginLeft="50px"
+                android:layout_marginRight="50px"
                 android:src="@drawable/media_next" />
         </LinearLayout>
 

@@ -24,6 +24,7 @@ import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
+import com.jancar.media.view.CircleImageView;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
 import com.jancar.media.view.MarqueeTextView;
@@ -53,7 +54,7 @@ public class MusicActivity extends BaseActivity implements
     private ImageView playFore, playNext, play, leftMenu;
     private TouchEventRelativeLayout leftLayout;
     private MarqueeTextView tvSingle, tvArtist, tvAlbum;
-    private ImageView ivImage;
+    private CircleImageView ivImage;
     private ImageView ivLoop;
     private LrcView lrcView;
     private FlyTabView tabView;
@@ -161,7 +162,7 @@ public class MusicActivity extends BaseActivity implements
         tvSingle = (MarqueeTextView) findViewById(R.id.ac_music_single);
         tvArtist = (MarqueeTextView) findViewById(R.id.ac_music_artist);
         tvAlbum = (MarqueeTextView) findViewById(R.id.ac_music_album);
-        ivImage = (ImageView) findViewById(R.id.ac_music_iv_image);
+        ivImage = (CircleImageView) findViewById(R.id.ac_music_iv_image);
         ivLoop = (ImageView) findViewById(R.id.ac_music_iv_loop);
         lrcView = (LrcView) findViewById(R.id.ac_music_lrcview);
         llContent = (LinearLayout) findViewById(R.id.ac_music_content);
@@ -272,7 +273,7 @@ public class MusicActivity extends BaseActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ac_music_left_menu:
-            case R.id.ac_music_content:
+//            case R.id.ac_music_content:
                 isShowLeftMenu = !isShowLeftMenu;
                 showLeftMenu(isShowLeftMenu);
                 break;
@@ -312,6 +313,7 @@ public class MusicActivity extends BaseActivity implements
                 break;
         }
         play.setImageResource(musicPlayer.isPlaying() ? R.drawable.media_pause : R.drawable.media_play);
+        ivImage.setAnimatePlaying(musicPlayer.isPlaying());
 
     }
 
