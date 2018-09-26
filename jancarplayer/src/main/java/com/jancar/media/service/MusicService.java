@@ -4,7 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.widget.RemoteViews;
@@ -24,11 +27,16 @@ public class MusicService extends Service implements IMusicPlayerListener {
     private Notification noti = null;
 
     private IMusicPlayer musicPlayer = MusicPlayer.getInstance();
+    private ServiceBroadCast broadcastreceiver = new ServiceBroadCast();
 
     @SuppressLint("NewApi")
     @Override
     public void onCreate() {
         super.onCreate();
+        /* 注册广播 */
+        broadcastreceiver = new ServiceBroadCast();
+        IntentFilter filter = new IntentFilter(SERVICEACTION);
+        registerReceiver(broadcastreceiver, filter);
         remoteviews = new RemoteViews(getPackageName(), R.layout.notification);
         remoteviews.setImageViewResource(R.id.noti_butfore, R.drawable.butfore);
         remoteviews.setImageViewResource(R.id.noti_butplay, R.drawable.butstop);
@@ -61,6 +69,10 @@ public class MusicService extends Service implements IMusicPlayerListener {
                 .build();
         noti.bigContentView = remoteviews;
         noti.icon = android.R.drawable.ic_media_play;
+
+        musicPlayer.addListener(this);
+
+
     }
 
     @Override
@@ -80,6 +92,7 @@ public class MusicService extends Service implements IMusicPlayerListener {
     @Override
     public void onDestroy() {
         stopForeground(true);
+        unregisterReceiver(broadcastreceiver);
         super.onDestroy();
     }
 
@@ -91,11 +104,9 @@ public class MusicService extends Service implements IMusicPlayerListener {
     private void setRemoteViews() {
         remoteviews.setTextViewText(R.id.noti_tv01_musicname, musicPlayer.getPlayUrl());
         if (musicPlayer.isPlaying()) {
-            remoteviews.setImageViewResource(R.id.noti_butplay,
-                    R.drawable.butstop);
+            remoteviews.setImageViewResource(R.id.noti_butplay, R.drawable.butstop);
         } else {
-            remoteviews.setImageViewResource(R.id.noti_butplay,
-                    R.drawable.butplay);
+            remoteviews.setImageViewResource(R.id.noti_butplay, R.drawable.butplay);
         }
     }
 
@@ -106,11 +117,42 @@ public class MusicService extends Service implements IMusicPlayerListener {
 
     @Override
     public void playStatusChange(int statu) {
-
+        showNotification();
     }
 
     @Override
     public void loopStatusChange(int staut) {
-
     }
+
+    private class ServiceBroadCast extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+//			Log.i(TAG, SERVICEACTION);
+            if (action.equals(SERVICEACTION)) {
+                if (intent.getStringExtra("ACTION").equals("FORE")) {
+                    PlayForeMusic();
+//					Log.i(TAG, "按了FORE");
+                } else if (intent.getStringExtra("ACTION").equals("PLAY")) {
+                    if(musicPlayer.isPlaying()) {
+                        musicPlayer.pause();
+                    }else{
+                        musicPlayer.start();
+                    }
+                    showNotification();
+//					Log.i(TAG, "按了PLAY");
+                } else if (intent.getStringExtra("ACTION").equals("NEXT")) {
+                    PlayNextMusic();
+//					Log.i(TAG, "按了NEXT");
+                } else if (intent.getStringExtra("ACTION").equals("EXIT")) {
+//                    Intent bintent = new Intent();
+//                    bintent.setAction(MAIN_ACTION_BROADCAST_EXIT);
+//                    sendBroadcast(bintent);
+//                    stopSelf();
+//					Log.i(TAG, "按了EXIT");
+                }
+            }
+        }
+    }
+
 }
