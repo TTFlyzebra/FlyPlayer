@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -99,12 +100,15 @@ public class MusicActivity extends BaseActivity implements
             }
         }
     };
+    private AudioManager mAudioManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music);
 
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        requestAudioFocus();
         /**
          *监听通知栏退出广播
          */
@@ -121,6 +125,7 @@ public class MusicActivity extends BaseActivity implements
         titles = new String[]{getString(R.string.storage), getString(R.string.single), getString(R.string.artist), getString(R.string.album), getString(R.string.folder)};
         initView();
         musicPlayer.addListener(this);
+
     }
 
     private void initView() {
@@ -165,6 +170,7 @@ public class MusicActivity extends BaseActivity implements
         mHandler.removeCallbacksAndMessages(null);
         musicPlayer.removeListener(this);
         unregisterReceiver(mReceiver);
+        abandonAudioFocus();
         Intent intent = new Intent(this, MusicService.class);
         stopService(intent);
         super.onDestroy();
@@ -439,5 +445,39 @@ public class MusicActivity extends BaseActivity implements
                 finish();
             }
         }
+    }
+
+    private AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
+        public void onAudioFocusChange(int focusChange) {
+            FlyLog.d("onAudioFocusChange focusChange=%d", focusChange);
+            switch (focusChange) {
+                case AudioManager.AUDIOFOCUS_LOSS:
+                    //长期失去焦点，此处应该关闭播放器，释放资源
+//                    pause();
+                    finish();
+                    break;
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                    if (musicPlayer.isPlaying()) {
+                        musicPlayer.pause();
+                    }
+                    break;
+                case AudioManager.AUDIOFOCUS_GAIN:
+                    if (musicPlayer.isPause()) {
+                        musicPlayer.start();
+                    }
+                    break;
+            }
+        }
+    };
+
+
+    private void requestAudioFocus() {
+        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+    }
+
+
+    private void abandonAudioFocus() {
+        mAudioManager.abandonAudioFocus(mAudioFocusListener);
     }
 }

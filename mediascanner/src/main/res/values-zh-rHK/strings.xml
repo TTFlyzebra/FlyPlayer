@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MediaScanner</string>
+    <string name="no_album">未知專輯</string>
+    <string name="no_artist">未知藝術家</string>
+</resources>

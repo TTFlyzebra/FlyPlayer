@@ -51,8 +51,9 @@ public class VideoActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.giraffe_player);
-
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+
         player = new GiraffePlayer(this);
         player.setScaleType(GiraffePlayer.SCALETYPE_FITPARENT);
         player.addStatusChangeLiseter(this);
@@ -76,8 +77,7 @@ public class VideoActivity extends BaseActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-        if(isPause){
+        if (isPause) {
             player.start();
         }
         isPause = false;
@@ -100,22 +100,29 @@ public class VideoActivity extends BaseActivity implements
                         player.start();
                         break;
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 FlyLog.e(e.toString());
             }
         }
     };
 
     boolean isPause = false;
+
     @Override
     protected void onStop() {
         isPause = false;
-        if(player.isPlaying()){
+        if (player.isPlaying()) {
             player.pause();
             isPause = true;
         }
-        mAudioManager.abandonAudioFocus(mAudioFocusListener);
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mAudioManager.abandonAudioFocus(mAudioFocusListener);
+        player.stop();
+        super.onDestroy();
     }
 
     @Override
