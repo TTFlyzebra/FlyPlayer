@@ -1,6 +1,7 @@
 package com.jancar.media.model.musicplayer;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 
 import com.jancar.media.data.Music;
@@ -17,7 +18,6 @@ public class MusicPlayer implements IMusicPlayer,
         MediaPlayer.OnCompletionListener,
         MediaPlayer.OnErrorListener,
         MediaPlayer.OnPreparedListener,
-//        MediaPlayer.OnInfoListener,
         IPlayStatus,
         ILoopStatus {
     private Context mContext;
@@ -29,12 +29,13 @@ public class MusicPlayer implements IMusicPlayer,
     private List<Music> mPlayUrls = new ArrayList<>();
     private int mPlayPos = -1;
     private Map<String, Integer> mPosMap = new HashMap<>();
+    private AudioManager mAudioManager;
 
     private MusicPlayer() {
     }
 
     public void onPrepared(MediaPlayer mp) {
-        mp.start();
+        start();
         mPlayStatus = STATUS_PLAYING;
         notifyStatus();
     }
@@ -61,6 +62,7 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void init(Context context) {
         this.mContext = context;
+        mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
     }
 
@@ -81,7 +83,7 @@ public class MusicPlayer implements IMusicPlayer,
             } else {
                 mMediaPlayer.reset();
             }
-            mPlayStatus=STATUS_STARTPLAY;
+            mPlayStatus = STATUS_STARTPLAY;
             notifyStatus();
             mMediaPlayer.setDataSource(mPlayUrl);
             mMediaPlayer.prepareAsync();
@@ -98,6 +100,7 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void start() {
         if (mMediaPlayer != null) {
+            requestAudioFocus();
             mMediaPlayer.start();
             mPlayStatus = STATUS_PLAYING;
             notifyStatus();
@@ -108,6 +111,7 @@ public class MusicPlayer implements IMusicPlayer,
     public void pause() {
         if (mMediaPlayer != null) {
             mMediaPlayer.pause();
+            abandonAudioFocus();
             mPlayStatus = STATUS_PAUSE;
             notifyStatus();
         }
@@ -125,6 +129,7 @@ public class MusicPlayer implements IMusicPlayer,
             mMediaPlayer.release();
             mMediaPlayer = null;
         }
+        abandonAudioFocus();
         mPlayStatus = STATUS_IDLE;
         notifyStatus();
     }
@@ -195,7 +200,7 @@ public class MusicPlayer implements IMusicPlayer,
                 mPlayPos = Math.max(0, mPlayPos - 1);
                 break;
         }
-        if(mPlayUrls!=null&&mPlayUrls.size()>mPlayPos) {
+        if (mPlayUrls != null && mPlayUrls.size() > mPlayPos) {
             play(mPlayUrls.get(mPlayPos).url);
         }
     }
@@ -247,28 +252,48 @@ public class MusicPlayer implements IMusicPlayer,
         playNext();
         return false;
     }
-//
-//    @Override
-//    public boolean onInfo(MediaPlayer mp, int what, int extra) {
-//        FlyLog.d("onInfo what=%d,extra=%d", what, extra);
-//        switch (what) {
-//            case MediaPlayer.MEDIA_INFO_BUFFERING_START:
-//                mPlayStatus = STATUS_LOADING;
-//                break;
-//            case MediaPlayer.MEDIA_INFO_BUFFERING_END:
-//            case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
-//                mPlayStatus = STATUS_PLAYING;
-//                break;
-//        }
-//        notifyStatus();
-//        return false;
-//    }
 
     private void notifyStatus() {
         mPlayPos = getPlayPos();
         for (IMusicPlayerListener iMusicPlayerListener : listeners) {
             iMusicPlayerListener.playStatusChange(mPlayStatus);
         }
+    }
+
+    private AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
+        public void onAudioFocusChange(int focusChange) {
+            FlyLog.d("onAudioFocusChange focusChange=%d",focusChange);
+            try {
+                switch (focusChange) {
+                    case AudioManager.AUDIOFOCUS_LOSS:
+                        pause();
+                        break;
+                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                        if (isPlaying()) {
+                            pause();
+                        }
+                        break;
+                    case AudioManager.AUDIOFOCUS_GAIN:
+                        if (isPause()) {
+                            start();
+                        }
+                        break;
+                }
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+        }
+    };
+
+
+    private void requestAudioFocus() {
+        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+    }
+
+
+    private void abandonAudioFocus() {
+        mAudioManager.abandonAudioFocus(mAudioFocusListener);
     }
 }
 

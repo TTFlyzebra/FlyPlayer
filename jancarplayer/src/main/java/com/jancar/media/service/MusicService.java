@@ -28,6 +28,7 @@ public class MusicService extends Service implements IMusicPlayerListener {
 
     private IMusicPlayer musicPlayer = MusicPlayer.getInstance();
     private ServiceBroadCast broadcastreceiver = new ServiceBroadCast();
+    public static final String MAIN_ACTION_BROADCAST_EXIT = "MAIN_ACTION_BROADCAST_EXIT";
 
     @SuppressLint("NewApi")
     @Override
@@ -69,10 +70,7 @@ public class MusicService extends Service implements IMusicPlayerListener {
                 .build();
         noti.bigContentView = remoteviews;
         noti.icon = android.R.drawable.ic_media_play;
-
         musicPlayer.addListener(this);
-
-
     }
 
     @Override
@@ -81,18 +79,12 @@ public class MusicService extends Service implements IMusicPlayerListener {
         return START_STICKY;
     }
 
-    private void PlayForeMusic() {
-        musicPlayer.playFore();
-    }
-
-    private void PlayNextMusic() {
-        musicPlayer.playNext();
-    }
-
     @Override
     public void onDestroy() {
         stopForeground(true);
         unregisterReceiver(broadcastreceiver);
+        musicPlayer.removeListener(this);
+        musicPlayer.stop();
         super.onDestroy();
     }
 
@@ -128,11 +120,9 @@ public class MusicService extends Service implements IMusicPlayerListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-//			Log.i(TAG, SERVICEACTION);
             if (action.equals(SERVICEACTION)) {
                 if (intent.getStringExtra("ACTION").equals("FORE")) {
-                    PlayForeMusic();
-//					Log.i(TAG, "按了FORE");
+                    musicPlayer.playFore();
                 } else if (intent.getStringExtra("ACTION").equals("PLAY")) {
                     if(musicPlayer.isPlaying()) {
                         musicPlayer.pause();
@@ -140,16 +130,13 @@ public class MusicService extends Service implements IMusicPlayerListener {
                         musicPlayer.start();
                     }
                     showNotification();
-//					Log.i(TAG, "按了PLAY");
                 } else if (intent.getStringExtra("ACTION").equals("NEXT")) {
-                    PlayNextMusic();
-//					Log.i(TAG, "按了NEXT");
+                    musicPlayer.playNext();
                 } else if (intent.getStringExtra("ACTION").equals("EXIT")) {
-//                    Intent bintent = new Intent();
-//                    bintent.setAction(MAIN_ACTION_BROADCAST_EXIT);
-//                    sendBroadcast(bintent);
-//                    stopSelf();
-//					Log.i(TAG, "按了EXIT");
+                    Intent bintent = new Intent();
+                    bintent.setAction(MAIN_ACTION_BROADCAST_EXIT);
+                    sendBroadcast(bintent);
+                    stopSelf();
                 }
             }
         }

@@ -12,8 +12,7 @@
         android:layout_width="110dp"
         android:layout_height="120dp"
         android:layout_marginLeft="5dp"
-        android:background="@drawable/showimagebk"
-        android:src="@drawable/listenermusic">
+        android:background="@drawable/showimagebk">
 
         <ImageView
             android:id="@+id/imageView1"
@@ -44,25 +43,25 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/noti_butfore"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_weight="1" />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/noti_butplay"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_weight="1" />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/noti_butnext"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_weight="1" />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/noti_butexit"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
@@ -72,14 +71,13 @@
         <TextView
             android:id="@+id/noti_tv01_musicname"
             android:layout_width="fill_parent"
-            android:layout_height="35dp"
             android:layout_marginTop="5dp"
+            android:layout_height="35dp"
             android:background="@drawable/showtextbk"
             android:gravity="center"
-            android:paddingTop="5dp"
             android:singleLine="true"
             android:text="正在播放..."
-            android:textColor="#FFFF00"
+            android:textColor="#00FF00"
             android:textSize="20sp" />
     </LinearLayout>
 

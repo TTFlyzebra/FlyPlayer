@@ -281,8 +281,8 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
         // called start() previously
         release(false);
 
-        AudioManager am = (AudioManager) mAppContext.getSystemService(Context.AUDIO_SERVICE);
-        am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+//        AudioManager am = (AudioManager) mAppContext.getSystemService(Context.AUDIO_SERVICE);
+//        am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
         try {
             if (usingAndroidPlayer) {

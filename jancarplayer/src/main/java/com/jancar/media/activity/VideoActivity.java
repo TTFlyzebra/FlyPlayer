@@ -76,49 +76,45 @@ public class VideoActivity extends BaseActivity implements
     @Override
     protected void onStart() {
         super.onStart();
+        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+        if(isPause){
+            player.start();
+        }
+        isPause = false;
     }
 
-//    private AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
-//        public void onAudioFocusChange(int focusChange) {
-//            try {
-//                switch (focusChange) {
-//                    case AudioManager.AUDIOFOCUS_LOSS:
-//                        player.pause();
-//                        break;
-//                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-//                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-//                        if (player.isPlaying()) {
-//                            player.pause();
-//                        }
-//                        break;
-//                    case AudioManager.AUDIOFOCUS_GAIN:
-//                        player.start();
-//                        break;
-//                }
-//            }catch (Exception e){
-//                FlyLog.e(e.toString());
-//            }
-//        }
-//    };
-//
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC,
-//                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-//    }
-//
-//
-//    @Override
-//    protected void onPause() {
-//        mAudioManager.abandonAudioFocus(mAudioFocusListener);
-//        super.onPause();
-//    }
+    private AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
+        public void onAudioFocusChange(int focusChange) {
+            try {
+                switch (focusChange) {
+                    case AudioManager.AUDIOFOCUS_LOSS:
+                        player.pause();
+                        break;
+                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                        if (player.isPlaying()) {
+                            player.pause();
+                        }
+                        break;
+                    case AudioManager.AUDIOFOCUS_GAIN:
+                        player.start();
+                        break;
+                }
+            }catch (Exception e){
+                FlyLog.e(e.toString());
+            }
+        }
+    };
 
+    boolean isPause = false;
     @Override
     protected void onStop() {
-        player.stop();
+        isPause = false;
+        if(player.isPlaying()){
+            player.pause();
+            isPause = true;
+        }
+        mAudioManager.abandonAudioFocus(mAudioFocusListener);
         super.onStop();
     }
 
