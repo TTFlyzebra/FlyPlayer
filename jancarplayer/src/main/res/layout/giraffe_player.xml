@@ -184,11 +184,12 @@
 
                 <TextView
                     android:id="@+id/app_video_currentTime"
-                    android:layout_width="wrap_content"
+                    android:layout_width="78px"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="-10px"
                     android:text="00:00"
+                    android:gravity="right"
                     android:textColor="@android:color/white"
                     android:textSize="20px" />
 
@@ -204,11 +205,12 @@
 
                 <TextView
                     android:id="@+id/app_video_endTime"
-                    android:layout_width="wrap_content"
+                    android:layout_width="78px"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="-10px"
+                    android:gravity="left"
                     android:text="00:00"
                     android:textColor="@android:color/white"
                     android:textSize="20px" />

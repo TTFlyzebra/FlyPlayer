@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -125,6 +126,7 @@ public class MusicActivity extends BaseActivity implements
         titles = new String[]{getString(R.string.storage), getString(R.string.single), getString(R.string.artist), getString(R.string.album), getString(R.string.folder)};
         initView();
         musicPlayer.addListener(this);
+        musicPlayer.playSave();
 
     }
 
@@ -250,6 +252,38 @@ public class MusicActivity extends BaseActivity implements
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_HEADSETHOOK:
+            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+                if (musicPlayer.isPlaying()) {
+                    musicPlayer.pause();
+                } else {
+                    musicPlayer.start();
+                }
+                return true;
+            case KeyEvent.KEYCODE_MEDIA_PLAY:
+                musicPlayer.start();
+                return true;
+            case KeyEvent.KEYCODE_MEDIA_PAUSE:
+                if (musicPlayer.isPlaying()) {
+                    musicPlayer.pause();
+                }
+                return true;
+            case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
+            case KeyEvent.KEYCODE_MEDIA_NEXT:
+            case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+            case KeyEvent.KEYCODE_MEDIA_REWIND:
+                return true;
+            case KeyEvent.KEYCODE_MEDIA_STOP:
+            case KeyEvent.KEYCODE_BACK:
+                finish();
+                return true;
+
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     public void onClick(View v) {
@@ -473,7 +507,7 @@ public class MusicActivity extends BaseActivity implements
 
 
     private void requestAudioFocus() {
-        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
     }
 
 

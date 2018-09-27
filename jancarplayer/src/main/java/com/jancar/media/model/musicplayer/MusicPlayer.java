@@ -3,10 +3,12 @@ package com.jancar.media.model.musicplayer;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.text.TextUtils;
 
 import com.jancar.media.data.Music;
 import com.jancar.media.model.listener.IMusicPlayerListener;
 import com.jancar.media.utils.FlyLog;
+import com.jancar.media.utils.SPUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -89,6 +91,26 @@ public class MusicPlayer implements IMusicPlayer,
         }
     }
 
+    private void play(String mPlayUrl, int seek) {
+        FlyLog.d("play url=%s,seek=%d", mPlayUrl,seek);
+        try {
+            this.mPlayUrl = mPlayUrl;
+            if (mMediaPlayer == null) {
+                initMediaPlayer();
+            } else {
+                mMediaPlayer.reset();
+            }
+            mPlayStatus = STATUS_STARTPLAY;
+            notifyStatus();
+            mMediaPlayer.setDataSource(mPlayUrl);
+            mMediaPlayer.prepare();
+            mMediaPlayer.seekTo(seek);
+            mMediaPlayer.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public String getPlayUrl() {
         return mPlayUrl;
@@ -120,10 +142,13 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void stop() {
         if (mMediaPlayer != null) {
+            SPUtil.set(mContext,"MUSIC_URL",mPlayUrl);
+            SPUtil.set(mContext,"MUSIC_SEEK",getCurrentPosition());
             mMediaPlayer.stop();
             mMediaPlayer.release();
             mMediaPlayer = null;
         }
+        mPlayUrl = "";
         mPlayStatus = STATUS_IDLE;
         notifyStatus();
     }
@@ -155,7 +180,7 @@ public class MusicPlayer implements IMusicPlayer,
             for (int i = 0; i < mPlayUrls.size(); i++) {
                 mPosMap.put(mPlayUrls.get(i).url, i);
             }
-            if (isPlaying()||isPause()) {
+            if (!TextUtils.isEmpty(mPlayUrl)) {
                 mPlayPos = getPlayPos();
                 if (mPlayPos == -1) {
                     mPlayPos = 0;
@@ -214,6 +239,16 @@ public class MusicPlayer implements IMusicPlayer,
             iMusicPlayerListener.loopStatusChange(mLoopStatus);
         }
     }
+
+    @Override
+    public void playSave() {
+        mPlayUrl = (String) SPUtil.get(mContext,"MUSIC_URL","");
+        int seek = (int) SPUtil.get(mContext,"MUSIC_SEEK",0);
+        if(!TextUtils.isEmpty(mPlayUrl)){
+            play(mPlayUrl,seek);
+        }
+    }
+
 
     @Override
     public void seekTo(int seekPos) {

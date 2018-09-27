@@ -45,4 +45,6 @@ public interface IMusicPlayer {
     int getPlayPos();
 
     void switchLoopStatus();
+
+    void playSave();
 }

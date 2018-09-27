@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.jancar.media.R;
 import com.jancar.media.utils.DisplayUtils;
+import com.jancar.media.utils.FlyLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -586,10 +587,22 @@ public class GiraffePlayer {
     }
 
     public void play(String url) {
+        FlyLog.d("play url=%s",url);
         this.url = url;
         if (playerSupport) {
             $.id(R.id.app_video_loading).visible();
             videoView.setVideoPath(url);
+            videoView.start();
+        }
+    }
+
+    public void play(String url,int seek) {
+        FlyLog.d("play url=%s,seek=%d",url,seek);
+        this.url = url;
+        if (playerSupport) {
+            $.id(R.id.app_video_loading).visible();
+            videoView.setVideoPath(url);
+            videoView.seekTo(seek);
             videoView.start();
         }
     }
@@ -1052,10 +1065,11 @@ public class GiraffePlayer {
      * @return
      */
     public boolean isPlaying() {
-        return videoView != null ? videoView.isPlaying() : false;
+        return videoView != null && videoView.isPlaying();
     }
 
     public void stop() {
+        this.url="";
         videoView.stopPlayback();
     }
 
@@ -1084,7 +1098,7 @@ public class GiraffePlayer {
     }
 
     public int getCurrentPosition() {
-        return videoView.getCurrentPosition();
+        return videoView==null?0:videoView.getCurrentPosition();
     }
 
     /**

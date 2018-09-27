@@ -7,6 +7,7 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -17,6 +18,7 @@ import com.jancar.media.data.Const;
 import com.jancar.media.data.Video;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
+import com.jancar.media.utils.SPUtil;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
 
@@ -66,12 +68,12 @@ public class VideoActivity extends BaseActivity implements
 
         initView();
 
-        Intent intent = getIntent();
-        final String playUrl = intent.getStringExtra(Const.PLAYURL_KEY);
-        FlyLog.d("playurl=%s", playUrl);
+        String playUrl = (String) SPUtil.get(this, "VIDEO_URL", "");
+        int seek = (int) SPUtil.get(this, "VIDEO_SEEK", 0);
         if (!TextUtils.isEmpty(playUrl)) {
-            player.play(playUrl);
+            player.play(playUrl, seek);
         }
+
     }
 
     @Override
@@ -121,6 +123,8 @@ public class VideoActivity extends BaseActivity implements
     @Override
     protected void onDestroy() {
         mAudioManager.abandonAudioFocus(mAudioFocusListener);
+        SPUtil.set(this, "VIDEO_URL", player.getPlayUrl());
+        SPUtil.set(this, "VIDEO_SEEK", player.getCurrentPosition());
         player.stop();
         super.onDestroy();
     }
@@ -258,7 +262,7 @@ public class VideoActivity extends BaseActivity implements
         }
         videoList.addAll(videoUrlList);
         //TODO:判断当前列表有没更新，确定播放哪首歌曲
-        if (!player.isPlaying()) {
+        if (TextUtils.isEmpty(player.getPlayUrl())) {
             currenPos = 0;
             player.play(videoList.get(currenPos).url);
             super.videoUrlList(videoUrlList);
@@ -271,9 +275,15 @@ public class VideoActivity extends BaseActivity implements
             super.videoUrlList(videoUrlList);
             return;
         }
-        String currentUrl = player.getPlayUrl();
-        if (!videoList.get(currenPos).equals(currentUrl)) {
+
+        for (int i = 0; i < videoList.size(); i++) {
             currenPos = 0;
+            if (videoList.get(i).url.equals(player.getPlayUrl())) {
+                currenPos = i;
+                break;
+            }
+        }
+        if (currenPos == 0 && TextUtils.isEmpty(player.getPlayUrl())) {
             player.play(videoList.get(currenPos).url);
         }
         super.videoUrlList(videoUrlList);
@@ -304,5 +314,38 @@ public class VideoActivity extends BaseActivity implements
                 break;
             }
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_HEADSETHOOK:
+            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+                if (player.isPlaying()) {
+                    player.pause();
+                } else {
+                    player.start();
+                }
+                return true;
+            case KeyEvent.KEYCODE_MEDIA_PLAY:
+                player.start();
+                return true;
+            case KeyEvent.KEYCODE_MEDIA_PAUSE:
+                if (player.isPlaying()) {
+                    player.pause();
+                }
+                return true;
+            case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
+            case KeyEvent.KEYCODE_MEDIA_NEXT:
+            case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+            case KeyEvent.KEYCODE_MEDIA_REWIND:
+                return true;
+            case KeyEvent.KEYCODE_MEDIA_STOP:
+            case KeyEvent.KEYCODE_BACK:
+                finish();
+                return true;
+
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
