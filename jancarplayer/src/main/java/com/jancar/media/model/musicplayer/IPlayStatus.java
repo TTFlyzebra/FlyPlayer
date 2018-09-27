@@ -13,7 +13,7 @@ public interface IPlayStatus {
     /**
      * 开始加载播放
      */
-    int STATUS_STARTPLAY = 0;
+    int STATUS_STARTPLAY = 1;
     /**
      * 加载缓存准备播放
      */

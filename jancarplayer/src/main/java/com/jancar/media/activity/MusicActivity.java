@@ -327,6 +327,12 @@ public class MusicActivity extends BaseActivity implements
                 initSeekBar();
                 upPlayInfo();
                 break;
+            case MusicPlayer.STATUS_IDLE:
+                tvSingle.setText("");
+                tvArtist.setText("");
+                tvAlbum.setText("");
+                ivImage.setImageResource(R.drawable.media_music);
+                break;
         }
         play.setImageResource(musicPlayer.isPlaying() ? R.drawable.media_pause : R.drawable.media_play);
         ivImage.setAnimatePlaying(musicPlayer.isPlaying());

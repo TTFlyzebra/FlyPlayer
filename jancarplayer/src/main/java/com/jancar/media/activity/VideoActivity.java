@@ -115,6 +115,8 @@ public class VideoActivity extends BaseActivity implements
         isPause = false;
         if (player.isPlaying()) {
             player.pause();
+            SPUtil.set(this, "VIDEO_URL", player.getPlayUrl());
+            SPUtil.set(this, "VIDEO_SEEK", player.getCurrentPosition());
             isPause = true;
         }
         super.onStop();

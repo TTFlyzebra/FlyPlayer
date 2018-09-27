@@ -131,6 +131,8 @@ public class MusicPlayer implements IMusicPlayer,
             mMediaPlayer.pause();
             mPlayStatus = STATUS_PAUSE;
             notifyStatus();
+            SPUtil.set(mContext,"MUSIC_URL",mPlayUrl);
+            SPUtil.set(mContext,"MUSIC_SEEK",getCurrentPosition());
         }
     }
 
