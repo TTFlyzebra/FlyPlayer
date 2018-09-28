@@ -4,6 +4,11 @@ LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES :=  glide-3.7.0:libs/glide-3.7.0.jar \
                                          disklrucache:libs/disklrucache.jar \
 include $(BUILD_MULTI_PREBUILT)
 include $(CLEAR_VARS)
+LOCAL_PREBUILT_LIBS := libijkffmpeg:$(LOCAL_PATH)/../ijkplayer/src/main/jinLibs/armeabi-v7a/libijkffmpeg.so \
+                       libijkplayer:$(LOCAL_PATH)/../ijkplayer/src/main/jinLibs/armeabi-v7a/libijkplayer.so \
+                       libijksdl:$(LOCAL_PATH)/../ijkplayer/src/main/jinLibs/armeabi-v7a/libijksdl.so \
+include $(BUILD_MULTI_PREBUILT)
+include $(CLEAR_VARS)
 LOCAL_MODULE_TAGS := optional
 LOCAL_MANIFEST_FILE := src/main/AndroidManifest.xml
 LOCAL_SRC_FILES := $(call all-java-files-under, src/main/java) \
@@ -19,6 +24,9 @@ LOCAL_STATIC_JAVA_LIBRARIES :=  glide-3.7.0 \
 								android-support-v4 \
 								android-support-v7-appcompat \
 								android-support-v7-recyclerview
+LOCAL_JNI_SHARED_LIBRARIES := libijkffmpeg \
+                              libijkplayer \
+                              libijksdl \
 LOCAL_AAPT_FLAGS := \
     --auto-add-overlay \
     --extra-packages android.support.v7.recyclerview
