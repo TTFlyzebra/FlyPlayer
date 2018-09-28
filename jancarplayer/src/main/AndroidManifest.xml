@@ -16,6 +16,7 @@
         <activity
             android:name=".activity.MusicActivity"
             android:exported="true"
+            android:icon="@drawable/ic_music"
             android:label="@string/music"
             android:launchMode="singleTask"
             android:screenOrientation="landscape">
@@ -29,6 +30,7 @@
         <activity
             android:name=".activity.VideoActivity"
             android:exported="true"
+            android:icon="@drawable/ic_video"
             android:label="@string/video"
             android:launchMode="singleTask"
             android:screenOrientation="landscape">
@@ -42,6 +44,7 @@
         <activity
             android:name=".activity.PhotoActivity"
             android:exported="true"
+            android:icon="@drawable/ic_image"
             android:label="@string/photo"
             android:launchMode="singleTask"
             android:screenOrientation="landscape">

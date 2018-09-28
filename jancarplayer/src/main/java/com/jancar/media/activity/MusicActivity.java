@@ -77,6 +77,7 @@ public class MusicActivity extends BaseActivity implements
     private static final int REFRESH_SEEK_LRC_TIME = 200;
 
     private MyReceiver mReceiver;
+    private long touchTime;
 
 
     private Runnable seekBarTask = new Runnable() {
@@ -240,8 +241,6 @@ public class MusicActivity extends BaseActivity implements
         }
         leftMenu.setImageResource(flag ? R.drawable.media_list_menu_open : R.drawable.media_list_menu_close);
     }
-
-    private long touchTime;
 
     @Override
     public void onFlyTouchEvent(MotionEvent ev) {
@@ -511,11 +510,9 @@ public class MusicActivity extends BaseActivity implements
         }
     };
 
-
     private void requestAudioFocus() {
         mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
     }
-
 
     private void abandonAudioFocus() {
         mAudioManager.abandonAudioFocus(mAudioFocusListener);
