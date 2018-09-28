@@ -17,6 +17,7 @@ import com.jancar.media.activity.MusicActivity;
 import com.jancar.media.model.listener.IMusicPlayerListener;
 import com.jancar.media.model.musicplayer.IMusicPlayer;
 import com.jancar.media.model.musicplayer.MusicPlayer;
+import com.jancar.media.model.musicplayer.RegisterMusicSession;
 
 
 public class MusicService extends Service implements IMusicPlayerListener {
@@ -29,6 +30,7 @@ public class MusicService extends Service implements IMusicPlayerListener {
     private IMusicPlayer musicPlayer = MusicPlayer.getInstance();
     private ServiceBroadCast broadcastreceiver = new ServiceBroadCast();
     public static final String MAIN_ACTION_BROADCAST_EXIT = "MAIN_ACTION_BROADCAST_EXIT";
+    private RegisterMusicSession registerMediaSession;
 
     @SuppressLint("NewApi")
     @Override
@@ -71,6 +73,8 @@ public class MusicService extends Service implements IMusicPlayerListener {
         noti.bigContentView = remoteviews;
         noti.icon = android.R.drawable.ic_media_play;
         musicPlayer.addListener(this);
+        registerMediaSession = new RegisterMusicSession(this, musicPlayer);
+        registerMediaSession.requestMediaButton();
     }
 
     @Override
@@ -81,6 +85,7 @@ public class MusicService extends Service implements IMusicPlayerListener {
 
     @Override
     public void onDestroy() {
+        registerMediaSession.releaseMediaButton();
         stopForeground(true);
         unregisterReceiver(broadcastreceiver);
         musicPlayer.removeListener(this);

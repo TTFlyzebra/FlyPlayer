@@ -1,0 +1,32 @@
+<resources>
+	<string name="app_name">JancarPlayers</string>
+	<string name="giraffe_player_url_empty">请指定视频播放的地址</string>
+	<string name="small_problem">播放视频出错</string>
+	<string name="can_not_play">无法播放此视频</string>
+	<string name="not_support">播放器不支持此设备</string>
+	<string name="disk_list">磁盘列表</string>
+	<string name="play_list">播放列表</string>
+	<string name="file_list">文件列表</string>
+	<string name="photo_list">图片列表</string>
+	<string name="storage">存储器</string>
+	<string name="single">单曲</string>
+	<string name="artist">歌手</string>
+	<string name="album">专辑</string>
+	<string name="folder">文件夹</string>
+	<string name="storage_local">本地存储</string>
+	<string name="storage_usb">USB</string>
+	<string name="no_artist">未知艺术家</string>
+	<string name="no_album">未知专辑</string>
+	<string name="no_album_start">未知</string>
+	<string name="photo">图片</string>
+	<string name="video">视频</string>
+	<string name="music">音乐</string>
+	<string name="musicsumformat">(%d首)</string>
+	<string name="photosumformat">(%d张)</string>
+	<string name="videosumformat">(%d集)</string>
+	<string name="lrc_label">暂无歌词</string>
+	<string name="music_scan1">正在扫描设备...</string>
+	<string name="music_scan2">共有%d首歌曲</string>
+	<string name="video_scan2">共有%d集视频</string>
+	<string name="photo_scan2">共有%d张图片</string>
+</resources>

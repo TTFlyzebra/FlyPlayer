@@ -54,7 +54,6 @@ public class VideoActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.giraffe_player);
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
         player = new GiraffePlayer(this);
         player.setScaleType(GiraffePlayer.SCALETYPE_FITPARENT);
@@ -79,6 +78,7 @@ public class VideoActivity extends BaseActivity implements
     @Override
     protected void onStart() {
         super.onStart();
+        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         if (isPause) {
             player.start();
         }
@@ -112,6 +112,7 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     protected void onStop() {
+        mAudioManager.abandonAudioFocus(mAudioFocusListener);
         isPause = false;
         if (player.isPlaying()) {
             player.pause();
@@ -124,7 +125,6 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     protected void onDestroy() {
-        mAudioManager.abandonAudioFocus(mAudioFocusListener);
         SPUtil.set(this, "VIDEO_URL", player.getPlayUrl());
         SPUtil.set(this, "VIDEO_SEEK", player.getCurrentPosition());
         player.stop();
