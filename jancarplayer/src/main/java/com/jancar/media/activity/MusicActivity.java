@@ -168,6 +168,20 @@ public class MusicActivity extends BaseActivity implements
         tabView.setFocusPos(1);
     }
 
+    private boolean isStop = true;
+    protected void onStart() {
+        super.onStart();
+        usbMediaScan.addListener(this);
+        isStop = false;
+    }
+
+    @Override
+    protected void onStop() {
+        isStop = true;
+        usbMediaScan.removeListener(this);
+        super.onStop();
+    }
+
     @Override
     protected void onDestroy() {
         mHandler.removeCallbacksAndMessages(null);
@@ -450,21 +464,6 @@ public class MusicActivity extends BaseActivity implements
         musicPlayer.seekTo(seekBarPos);
         lrcView.updateTime(seekBarPos);
         mHandler.postDelayed(seekBarTask, REFRESH_SEEK_LRC_TIME);
-    }
-
-
-    private boolean isStop = true;
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        isStop = false;
-    }
-
-    @Override
-    protected void onStop() {
-        isStop = true;
-        super.onStop();
     }
 
     public void setSeekStartText(int seekPos) {

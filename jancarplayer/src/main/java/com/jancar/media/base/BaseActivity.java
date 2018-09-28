@@ -30,18 +30,6 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        usbMediaScan.addListener(this);
-    }
-
-    @Override
-    protected void onStop() {
-        usbMediaScan.removeListener(this);
-        super.onStop();
-    }
-
-    @Override
     protected void onDestroy() {
         usbMediaScan.close();
         super.onDestroy();

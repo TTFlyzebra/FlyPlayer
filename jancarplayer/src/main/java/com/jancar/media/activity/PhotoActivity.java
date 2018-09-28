@@ -85,6 +85,8 @@ public class PhotoActivity extends BaseActivity implements
                 }
             }
         });
+
+        usbMediaScan.addListener(this);
     }
 
     private void initView() {
@@ -119,14 +121,18 @@ public class PhotoActivity extends BaseActivity implements
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
+        if(imageList.size()>currentItem){
+            viewPager.setCurrentItem(currentItem,false);
+        }
     }
 
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
         mHandler.removeCallbacksAndMessages(null);
-        super.onStop();
+        usbMediaScan.removeListener(this);
+        super.onDestroy();
     }
 
     @Override
@@ -140,11 +146,13 @@ public class PhotoActivity extends BaseActivity implements
 
     @Override
     public void imageUrlList(List<Image> imageUrlList) {
+        FlyLog.d("get Image size=%d", imageUrlList == null ? 0 : imageUrlList.size());
         if (imageUrlList != null) {
 //            imageList.clear();
             imageList.addAll(imageUrlList);
             if (!imageList.isEmpty() && TextUtils.isEmpty(CRET_URL)) {
                 CRET_URL = imageList.get(0).url;
+                currentItem = 0;
             }
 
             if (imageList.isEmpty()) {
