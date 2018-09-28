@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MediaScanner</string>
+    <string name="no_album">unknown album </string>
+    <string name="no_artist">unknown artist </string>
+</resources>
