@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="110dp"
         android:layout_height="120dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:background="@drawable/showimagebk">
 
         <ImageView
@@ -19,8 +19,8 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginTop="10dp"
             android:src="@drawable/listenermusic" />
     </LinearLayout>
@@ -30,8 +30,8 @@
         android:id="@+id/line03"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="15dp"
         android:baselineAligned="false"
         android:orientation="vertical"
         android:padding="1dp">

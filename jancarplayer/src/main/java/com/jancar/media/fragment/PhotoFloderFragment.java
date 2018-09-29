@@ -123,7 +123,7 @@ public class PhotoFloderFragment extends BaseFragment implements
         for (int i = 0; i < itemList.size(); i++) {
             if (findPos1 == -1) {
                 for (int j = 0; j < itemList.get(i).size(); j++) {
-                    if (itemList.get(i).get(j).equals(activity.CRET_URL)) {
+                    if (itemList.get(i).get(j).equals(activity.CURRENT_IMAGE.url)) {
                         expandableListView.expandGroup(i, false);
                         findPos1 = i;
                         findPos2 = j;

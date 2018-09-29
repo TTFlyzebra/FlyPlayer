@@ -59,7 +59,7 @@ public class PhotoFloderItemAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         String url = itemGridList.get(position);
-        boolean flag = url.equals(((PhotoActivity)mContext).CRET_URL);
+        boolean flag = url.equals(((PhotoActivity)mContext).CURRENT_IMAGE.url);
         viewHolder.textView.setText(StringTools.getNameByPath(url));
         viewHolder.textView.setTextColor(flag ? 0xFF0370E5 : 0xFFFFFFFF);
         viewHolder.textView.enableMarquee(flag);

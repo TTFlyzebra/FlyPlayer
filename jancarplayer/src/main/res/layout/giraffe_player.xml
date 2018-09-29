@@ -187,7 +187,7 @@
                     android:layout_width="78px"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="-10px"
+                    android:layout_marginEnd="-10px"
                     android:text="00:00"
                     android:gravity="right"
                     android:textColor="@android:color/white"
@@ -207,9 +207,8 @@
                     android:id="@+id/app_video_endTime"
                     android:layout_width="78px"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="-10px"
+                    android:layout_marginStart="-10px"
                     android:gravity="left"
                     android:text="00:00"
                     android:textColor="@android:color/white"
@@ -228,8 +227,8 @@
                     android:layout_width="70px"
                     android:layout_height="70px"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="50px"
-                    android:layout_marginRight="50px"
+                    android:layout_marginStart="50px"
+                    android:layout_marginEnd="50px"
                     android:scaleType="fitXY"
                     android:src="@drawable/media_fore" />
 
@@ -238,8 +237,8 @@
                     android:layout_width="70px"
                     android:layout_height="70px"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="50px"
-                    android:layout_marginRight="50px"
+                    android:layout_marginStart="50px"
+                    android:layout_marginEnd="50px"
                     android:scaleType="fitXY"
                     android:src="@drawable/media_play" />
 
@@ -248,8 +247,8 @@
                     android:layout_width="70px"
                     android:layout_height="70px"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="50px"
-                    android:layout_marginRight="50px"
+                    android:layout_marginStart="50px"
+                    android:layout_marginEnd="50px"
                     android:scaleType="fitXY"
                     android:src="@drawable/media_next" />
             </LinearLayout>
@@ -258,7 +257,7 @@
                 android:layout_width="75px"
                 android:layout_height="75px"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:gravity="center">
 
                 <ImageView
@@ -276,9 +275,9 @@
             android:layout_width="400px"
             android:layout_height="403px"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_marginBottom="138px"
-            android:layout_marginRight="-399px"
+            android:layout_marginEnd="-399px"
             android:orientation="vertical">
 
             <View

@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +36,7 @@ public class PhotoActivity extends BaseActivity implements
 
     private FlyTabView tabView;
     private String titles[] = new String[]{"磁盘列表", "图片列表", "文件列表"};
-    private String fmName[] = new String[]{"StorageFragment", "PhotoPlayListFragment", "PhotoFloderFragment"};
+    private String fmName[] = new String[]{"StorageFragment", "PhotoPlayListFragment", "PhotoFloderFragment2"};
     public ViewPager viewPager;
     private MyPageAdapter adapter;
     public List<Image> imageList = new ArrayList<>();
@@ -47,7 +46,7 @@ public class PhotoActivity extends BaseActivity implements
     private TouchEventRelativeLayout controlLayout;
     private TouchEventRelativeLayout leftLayout;
     public int currentItem = 0;
-    public String CRET_URL = "";
+    public Image CURRENT_IMAGE = null;
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private int hideTime = 5000;
@@ -130,6 +129,7 @@ public class PhotoActivity extends BaseActivity implements
 
     @Override
     protected void onDestroy() {
+        CURRENT_IMAGE = null;
         mHandler.removeCallbacksAndMessages(null);
         usbMediaScan.removeListener(this);
         super.onDestroy();
@@ -139,7 +139,7 @@ public class PhotoActivity extends BaseActivity implements
     public void changePath(String path) {
         imageList.clear();
         currentItem = 0;
-        CRET_URL = "";
+        CURRENT_IMAGE = null;
         adapter.notifyDataSetChanged();
         super.changePath(path);
     }
@@ -150,8 +150,8 @@ public class PhotoActivity extends BaseActivity implements
         if (imageUrlList != null) {
 //            imageList.clear();
             imageList.addAll(imageUrlList);
-            if (!imageList.isEmpty() && TextUtils.isEmpty(CRET_URL)) {
-                CRET_URL = imageList.get(0).url;
+            if (!imageList.isEmpty() && CURRENT_IMAGE ==null) {
+                CURRENT_IMAGE = imageList.get(0);
                 currentItem = 0;
             }
 
@@ -286,7 +286,7 @@ public class PhotoActivity extends BaseActivity implements
      */
     public void setSelectItem(int pos) {
         currentItem = pos;
-        CRET_URL = imageList.get(currentItem).url;
+        CURRENT_IMAGE = imageList.get(currentItem);
         viewPager.setCurrentItem(pos);
     }
 
@@ -313,7 +313,7 @@ public class PhotoActivity extends BaseActivity implements
     @Override
     public void onPageSelected(int position) {
         currentItem = position;
-        CRET_URL = imageList.get(currentItem).url;
+        CURRENT_IMAGE = imageList.get(currentItem);
     }
 
     @Override

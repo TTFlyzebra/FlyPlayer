@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="#000000"
     android:fitsSystemWindows="true"
+    android:layoutDirection="locale"
     tools:context=".activity.VideoActivity">
 
 
@@ -25,9 +26,9 @@
             <ImageView
                 android:layout_width="270px"
                 android:layout_height="270px"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginLeft="160px"
+                android:layout_marginStart="160px"
                 android:layout_marginTop="68px"
                 android:scaleType="fitXY"
                 android:src="@drawable/media_music_iv" />
@@ -36,9 +37,9 @@
                 android:id="@+id/ac_music_iv_image"
                 android:layout_width="150px"
                 android:layout_height="150px"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginLeft="223px"
+                android:layout_marginStart="223px"
                 android:layout_marginTop="125px"
                 android:background="#00000000"
                 android:scaleType="fitXY"
@@ -70,8 +71,8 @@
                     android:id="@+id/ac_music_single"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20px"
-                    android:layout_marginRight="50px"
+                    android:layout_marginStart="20px"
+                    android:layout_marginEnd="50px"
                     android:ellipsize="marquee"
                     android:singleLine="true"
                     android:textColor="#FFF"
@@ -96,8 +97,8 @@
                     android:id="@+id/ac_music_album"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20px"
-                    android:layout_marginRight="50px"
+                    android:layout_marginStart="20px"
+                    android:layout_marginEnd="50px"
                     android:ellipsize="marquee"
                     android:singleLine="true"
                     android:textColor="#FFF"
@@ -122,8 +123,8 @@
                     android:id="@+id/ac_music_artist"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20px"
-                    android:layout_marginRight="50px"
+                    android:layout_marginStart="20px"
+                    android:layout_marginEnd="50px"
                     android:ellipsize="marquee"
                     android:singleLine="true"
                     android:textColor="#FFF"
@@ -161,7 +162,7 @@
                 android:layout_width="78px"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="-10px"
+                android:layout_marginEnd="-10px"
                 android:text="00:00"
                 android:gravity="right"
                 android:textColor="@android:color/white"
@@ -181,9 +182,8 @@
                 android:id="@+id/ac_music_endTime"
                 android:layout_width="78px"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="-10px"
+                android:layout_marginStart="-10px"
                 android:text="00:00"
                 android:gravity="left"
                 android:textColor="@android:color/white"
@@ -202,8 +202,8 @@
                 android:layout_width="70px"
                 android:layout_height="70px"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="50px"
-                android:layout_marginRight="50px"
+                android:layout_marginStart="50px"
+                android:layout_marginEnd="50px"
                 android:scaleType="fitXY"
                 android:src="@drawable/media_fore" />
 
@@ -212,8 +212,8 @@
                 android:layout_width="70px"
                 android:layout_height="70px"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="50px"
-                android:layout_marginRight="50px"
+                android:layout_marginStart="50px"
+                android:layout_marginEnd="50px"
                 android:scaleType="fitXY"
                 android:src="@drawable/media_play" />
 
@@ -222,8 +222,8 @@
                 android:layout_width="70px"
                 android:layout_height="70px"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="50px"
-                android:layout_marginRight="50px"
+                android:layout_marginStart="50px"
+                android:layout_marginEnd="50px"
                 android:scaleType="fitXY"
                 android:src="@drawable/media_next" />
         </LinearLayout>
@@ -232,7 +232,7 @@
             android:layout_width="75px"
             android:layout_height="75px"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:gravity="center">
 
             <ImageView
@@ -250,9 +250,9 @@
         android:layout_width="456px"
         android:layout_height="406px"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginBottom="135px"
-        android:layout_marginRight="-401px"
+        android:layout_marginEnd="-401px"
         android:orientation="vertical">
 
         <ImageView
@@ -260,14 +260,14 @@
             android:layout_width="56px"
             android:layout_height="32px"
             android:layout_marginTop="8px"
-            android:paddingRight="10px"
+            android:paddingEnd="10px"
             android:scaleType="fitXY"
             android:src="@drawable/media_loop_all" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="56px"
+            android:layout_marginStart="56px"
             android:background="#EA212121" />
 
         <com.jancar.media.view.FlyTabView
@@ -275,7 +275,7 @@
             android:layout_width="match_parent"
             android:layout_height="52px"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="56px"
+            android:layout_marginStart="56px"
             android:background="@drawable/media_list_header" />
 
         <FrameLayout
@@ -283,7 +283,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/ac_music_tabview"
-            android:layout_marginLeft="56px" />
+            android:layout_marginStart="56px" />
     </com.jancar.media.view.TouchEventRelativeLayout>
 
 </RelativeLayout>

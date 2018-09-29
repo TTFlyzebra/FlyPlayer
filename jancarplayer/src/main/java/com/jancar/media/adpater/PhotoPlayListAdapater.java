@@ -60,7 +60,7 @@ public class PhotoPlayListAdapater extends RecyclerView.Adapter<PhotoPlayListAda
             }
         });
 
-        if(url.equals(((PhotoActivity)mContext).CRET_URL)){
+        if(url.equals(((PhotoActivity)mContext).CURRENT_IMAGE.url)){
             holder.itemView.setSelected(true);
         }else{
             holder.itemView.setSelected(false);

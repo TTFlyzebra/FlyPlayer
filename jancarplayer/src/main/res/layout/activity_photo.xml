@@ -32,7 +32,7 @@
                 android:layout_width="60px"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="30px"
+                android:layout_marginStart="30px"
                 android:scaleType="center"
                 android:src="@drawable/media_photo_zoomout" />
 
@@ -57,8 +57,8 @@
                 android:layout_height="70px"
                 android:scaleType="fitXY"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="50px"
-                android:layout_marginRight="50px"
+                android:layout_marginStart="50px"
+                android:layout_marginEnd="50px"
                 android:src="@drawable/media_fore" />
 
             <ImageView
@@ -67,8 +67,8 @@
                 android:layout_height="70px"
                 android:scaleType="fitXY"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="50px"
-                android:layout_marginRight="50px"
+                android:layout_marginStart="50px"
+                android:layout_marginEnd="50px"
                 android:src="@drawable/media_photo_rotate" />
 
             <ImageView
@@ -77,8 +77,8 @@
                 android:layout_height="70px"
                 android:scaleType="fitXY"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="50px"
-                android:layout_marginRight="50px"
+                android:layout_marginStart="50px"
+                android:layout_marginEnd="50px"
                 android:src="@drawable/media_next" />
         </LinearLayout>
 
@@ -87,7 +87,7 @@
             android:layout_height="75px"
             android:gravity="center"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true">
+            android:layout_alignParentEnd="true">
 
             <ImageView
                 android:id="@+id/ac_photo_left_menu"
@@ -105,9 +105,9 @@
         android:layout_width="400px"
         android:layout_height="421px"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginBottom="120px"
-        android:layout_marginRight="-399px"
+        android:layout_marginEnd="-399px"
         android:orientation="vertical">
 
         <View
