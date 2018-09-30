@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="64px"
     android:gravity="center_vertical"
+    android:background="@drawable/down_line_01"
     android:orientation="horizontal">
 
     <ImageView

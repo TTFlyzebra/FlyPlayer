@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.jancar.media.R;
 import com.jancar.media.activity.PhotoActivity;
 import com.jancar.media.data.FloderImage;
+import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.MarqueeTextView;
 
 import java.io.File;
@@ -54,7 +55,7 @@ public class PhotoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
                 viewHolder = new MenuHolder(v0);
                 break;
             case 2:
-                View v1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_photo2, parent, false);
+                View v1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_photo, parent, false);
                 viewHolder = new PhotoHolder(v1);
                 break;
             case 3:
@@ -73,9 +74,10 @@ public class PhotoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
             PhotoHolder photoHolder = (PhotoHolder) holder;
             Glide.with(mContext).load((mList.get(position)).url).into(photoHolder.imageView1);
             boolean flag = mList.get(position).url.equals(crtUrl);
+            photoHolder.textView.setText(StringTools.getNameByPath(mList.get(position).url));
             photoHolder.textView.setTextColor(flag ? 0xFF0370E5 : 0xFFFFFFFF);
             photoHolder.textView.enableMarquee(flag);
-            photoHolder.imageView2.setImageResource(flag ? R.drawable.rectangle_blue : R.drawable.rectangle_select);
+            photoHolder.imageView2.setImageResource(flag ? R.drawable.media_list_item_select_02 : R.drawable.media_list_item_select_01);
         } else if (holder instanceof MenuHolder) {
             MenuHolder textHolder = (MenuHolder) holder;
             String path = mList.get(position).url;
@@ -146,8 +148,8 @@ public class PhotoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
 
         public PhotoHolder(View itemView) {
             super(itemView);
-            textView = (MarqueeTextView) itemView.findViewById(R.id.tv_gridview);
-            imageView1 = (ImageView) itemView.findViewById(R.id.iv_gridview);
+            textView = (MarqueeTextView) itemView.findViewById(R.id.item_tv01);
+            imageView1 = (ImageView) itemView.findViewById(R.id.item_iv01);
             imageView2 = (ImageView) itemView.findViewById(R.id.item_iv01_back);
         }
     }
@@ -159,8 +161,8 @@ public class PhotoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
 
         public NonePhotoHolder(View itemView) {
             super(itemView);
-            textView = (MarqueeTextView) itemView.findViewById(R.id.tv_gridview);
-            imageView1 = (ImageView) itemView.findViewById(R.id.iv_gridview);
+            textView = (MarqueeTextView) itemView.findViewById(R.id.item_tv01);
+            imageView1 = (ImageView) itemView.findViewById(R.id.item_iv01);
             imageView2 = (ImageView) itemView.findViewById(R.id.item_iv01_back);
         }
     }

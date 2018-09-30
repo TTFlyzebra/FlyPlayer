@@ -1,36 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="110px"
-    android:minHeight="110px"
     android:orientation="vertical">
 
     <ImageView
-        android:layout_margin="4px"
-        android:id="@+id/iv_gridview"
+        android:id="@+id/item_iv01"
         android:layout_width="match_parent"
-        android:layout_height="110px"
-        android:minHeight="110px"
+        android:layout_height="match_parent"
+        android:layout_margin="4px"
         android:duplicateParentState="true"
-        android:scaleType="centerInside" />
+        android:scaleType="fitCenter" />
 
     <ImageView
-        android:layout_margin="4px"
         android:id="@+id/item_iv01_back"
         android:layout_width="match_parent"
-        android:layout_height="110px"
-        android:minHeight="110px"
-        android:duplicateParentState="true"
+        android:layout_height="match_parent"
+        android:src="@drawable/media_list_item_select"
         android:scaleType="fitXY"
-        android:src="@drawable/rectangle_select" />
+        android:duplicateParentState="true" />
 
     <com.jancar.media.view.MarqueeTextView
-        android:id="@+id/tv_gridview"
-        android:layout_marginStart="8px"
-        android:layout_marginEnd="8px"
-        android:layout_marginTop="84px"
+        android:id="@+id/item_tv01"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="6px"
         android:background="#2F000000"
         android:duplicateParentState="true"
         android:ellipsize="marquee"

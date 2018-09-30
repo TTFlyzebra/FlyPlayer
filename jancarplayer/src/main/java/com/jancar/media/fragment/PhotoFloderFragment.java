@@ -59,6 +59,8 @@ public class PhotoFloderFragment extends BaseFragment implements
         recyclerView.setLayoutManager(gridLayoutManager);
         adapter = new PhotoFloderAdapater(getActivity(), mAdapterList, 3);
         recyclerView.setAdapter(adapter);
+//        recyclerView.addItemDecoration(new RecycleViewDivider(getActivity(),
+//                LinearLayoutManager.HORIZONTAL, 1, getActivity().getResources().getColor(R.color.divider)));
         adapter.setOnItemClickListener(this);
         imageUrlList(activity.imageList);
     }
