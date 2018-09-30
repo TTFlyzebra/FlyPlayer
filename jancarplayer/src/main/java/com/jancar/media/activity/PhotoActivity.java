@@ -323,10 +323,11 @@ public class PhotoActivity extends BaseActivity implements
 
 
     private class MyPageAdapter extends PagerAdapter {
-        List<PhotoView> photoViewList = new ArrayList<>();
+        private int MAX_NUM = 4;
+        private List<PhotoView> photoViewList = new ArrayList<>();
         public MyPageAdapter(){
             photoViewList.clear();
-            for(int i=0;i<4;i++){
+            for(int i=0;i<MAX_NUM;i++){
                PhotoView photoView = new PhotoView(PhotoActivity.this);
                photoViewList.add(photoView);
             }
@@ -348,7 +349,7 @@ public class PhotoActivity extends BaseActivity implements
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            PhotoView photoView = photoViewList.get(position%4);
+            PhotoView photoView = photoViewList.get(position%MAX_NUM);
             photoView.setOnClickListener(PhotoActivity.this);
             imageResIDs.put(position, View.generateViewId());
             photoView.setId(imageResIDs.get(position));
