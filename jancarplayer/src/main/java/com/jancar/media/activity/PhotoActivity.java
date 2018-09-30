@@ -355,6 +355,7 @@ public class PhotoActivity extends BaseActivity implements
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
+            FlyLog.d("set size=%d", viewSet.size());
             PhotoView photoView = null;
             Iterator it = viewSet.iterator();
             if(it.hasNext()) {
