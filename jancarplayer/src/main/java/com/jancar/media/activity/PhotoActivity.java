@@ -26,6 +26,8 @@ import com.jancar.media.view.TouchEventRelativeLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 public class PhotoActivity extends BaseActivity implements
@@ -330,15 +332,9 @@ public class PhotoActivity extends BaseActivity implements
 
 
     private class MyPageAdapter extends PagerAdapter {
-        private int MAX_NUM = 4;
-        private List<PhotoView> photoViewList = new ArrayList<>();
+        private HashSet<PhotoView> viewSet = new HashSet<>();
 
         public MyPageAdapter() {
-            photoViewList.clear();
-            for (int i = 0; i < MAX_NUM; i++) {
-                PhotoView photoView = new PhotoView(PhotoActivity.this);
-                photoViewList.add(photoView);
-            }
         }
 
         @Override
@@ -353,12 +349,20 @@ public class PhotoActivity extends BaseActivity implements
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
+            viewSet.add((PhotoView) object);
             container.removeView((View) object);
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            PhotoView photoView = photoViewList.get(position % MAX_NUM);
+            PhotoView photoView = null;
+            Iterator it = viewSet.iterator();
+            if(it.hasNext()) {
+                photoView = (PhotoView) it.next();
+                viewSet.remove(photoView);
+            }else{
+                photoView = new PhotoView(PhotoActivity.this);
+            }
             photoView.setOnClickListener(PhotoActivity.this);
             imageResIDs.put(position, View.generateViewId());
             photoView.setId(imageResIDs.get(position));
@@ -369,7 +373,11 @@ public class PhotoActivity extends BaseActivity implements
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .error(R.drawable.media_image_error)
                     .into(photoView);
-            container.addView(photoView);
+            try {
+                container.addView(photoView);
+            }catch (Exception e){
+                FlyLog.e(e.toString());
+            }
             return photoView;
         }
 
