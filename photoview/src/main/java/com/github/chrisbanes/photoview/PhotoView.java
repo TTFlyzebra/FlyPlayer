@@ -16,6 +16,7 @@
 package com.github.chrisbanes.photoview;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
@@ -255,5 +256,13 @@ public class PhotoView extends AppCompatImageView {
 
     public void setOnSingleFlingListener(OnSingleFlingListener onSingleFlingListener) {
         attacher.setOnSingleFlingListener(onSingleFlingListener);
+    }
+
+    public void recycle() {
+        Bitmap bitmap = getDrawingCache();
+        setImageDrawable(null);
+        if (bitmap != null && !bitmap.isRecycled()){
+            bitmap.recycle();
+        }
     }
 }

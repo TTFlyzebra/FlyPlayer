@@ -321,7 +321,16 @@ public class PhotoActivity extends BaseActivity implements
 
     }
 
+
     private class MyPageAdapter extends PagerAdapter {
+        List<PhotoView> photoViewList = new ArrayList<>();
+        public MyPageAdapter(){
+            photoViewList.clear();
+            for(int i=0;i<4;i++){
+               PhotoView photoView = new PhotoView(PhotoActivity.this);
+               photoViewList.add(photoView);
+            }
+        }
         @Override
         public int getCount() {
             return imageList == null ? 0 : imageList.size();
@@ -339,7 +348,7 @@ public class PhotoActivity extends BaseActivity implements
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            PhotoView photoView = new PhotoView(PhotoActivity.this);
+            PhotoView photoView = photoViewList.get(position%4);
             photoView.setOnClickListener(PhotoActivity.this);
             imageResIDs.put(position, View.generateViewId());
             photoView.setId(imageResIDs.get(position));
