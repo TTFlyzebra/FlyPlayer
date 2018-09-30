@@ -35,6 +35,10 @@ public class MusicPlayer implements IMusicPlayer,
     }
 
     public void onPrepared(MediaPlayer mp) {
+        if(saveSeek>0){
+            seekTo(saveSeek);
+            saveSeek = 0;
+        }
         start();
         mPlayStatus = STATUS_PLAYING;
         notifyStatus();
@@ -92,8 +96,10 @@ public class MusicPlayer implements IMusicPlayer,
         }
     }
 
+    private int saveSeek = 0;
     private void play(String mPlayUrl, int seek) {
         FlyLog.d("play url=%s,seek=%d", mPlayUrl,seek);
+        saveSeek = seek;
         try {
             this.mPlayUrl = mPlayUrl;
             if (mMediaPlayer == null) {
@@ -104,9 +110,7 @@ public class MusicPlayer implements IMusicPlayer,
             mPlayStatus = STATUS_STARTPLAY;
             notifyStatus();
             mMediaPlayer.setDataSource(mPlayUrl);
-            mMediaPlayer.prepare();
-            mMediaPlayer.seekTo(seek);
-            mMediaPlayer.start();
+            mMediaPlayer.prepareAsync();
         } catch (IOException e) {
             e.printStackTrace();
         }
