@@ -54,11 +54,11 @@ public class PhotoActivity extends BaseActivity implements
         @Override
         public void run() {
             long time = System.currentTimeMillis() - touchTime;
-            if (time > hideTime) {
+            if (time > hideTime && !imageList.isEmpty()) {
                 showLeftMenu(false);
                 isShowLeftMenu = false;
                 controlLayout.animate()
-                        .translationY(150*DisplayUtils.getMetrices(PhotoActivity.this).heightPixels/600)
+                        .translationY(150 * DisplayUtils.getMetrices(PhotoActivity.this).heightPixels / 600)
                         .setDuration(300).start();
                 getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
                 isShowControl = false;
@@ -103,6 +103,8 @@ public class PhotoActivity extends BaseActivity implements
         adapter = new MyPageAdapter();
         viewPager.setAdapter(adapter);
 
+        findViewById(R.id.ac_photo_root).setOnClickListener(this);
+        viewPager.setOnClickListener(this);
         photoFore.setOnClickListener(this);
         photoNext.setOnClickListener(this);
         photoRotate.setOnClickListener(this);
@@ -122,8 +124,8 @@ public class PhotoActivity extends BaseActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        if(imageList.size()>currentItem){
-            viewPager.setCurrentItem(currentItem,false);
+        if (imageList.size() > currentItem) {
+            viewPager.setCurrentItem(currentItem, false);
         }
     }
 
@@ -150,7 +152,7 @@ public class PhotoActivity extends BaseActivity implements
         if (imageUrlList != null) {
 //            imageList.clear();
             imageList.addAll(imageUrlList);
-            if (!imageList.isEmpty() && CURRENT_IMAGE ==null) {
+            if (!imageList.isEmpty() && CURRENT_IMAGE == null) {
                 CURRENT_IMAGE = imageList.get(0);
                 currentItem = 0;
             }
@@ -197,6 +199,11 @@ public class PhotoActivity extends BaseActivity implements
                     isShowLeftMenu = !isShowLeftMenu;
                     showLeftMenu(isShowLeftMenu);
                     break;
+                case R.id.ac_photo_root:
+                case R.id.ac_photo_viewpager:
+                    touchTime = 0;
+                    showControlView(!isShowControl);
+                    break;
                 default:
                     if (v instanceof PhotoView) {
                         touchTime = 0;
@@ -204,7 +211,7 @@ public class PhotoActivity extends BaseActivity implements
                     }
                     break;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
     }
@@ -258,7 +265,7 @@ public class PhotoActivity extends BaseActivity implements
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        if (leftLayout.getX() > ((1024-394) * DisplayUtils.getMetrices(PhotoActivity.this).widthPixels / 1024)) {
+                        if (leftLayout.getX() > ((1024 - 394) * DisplayUtils.getMetrices(PhotoActivity.this).widthPixels / 1024)) {
                             leftLayout.setVisibility(View.GONE);
                         } else {
                             leftLayout.setVisibility(View.VISIBLE);
@@ -325,13 +332,15 @@ public class PhotoActivity extends BaseActivity implements
     private class MyPageAdapter extends PagerAdapter {
         private int MAX_NUM = 4;
         private List<PhotoView> photoViewList = new ArrayList<>();
-        public MyPageAdapter(){
+
+        public MyPageAdapter() {
             photoViewList.clear();
-            for(int i=0;i<MAX_NUM;i++){
-               PhotoView photoView = new PhotoView(PhotoActivity.this);
-               photoViewList.add(photoView);
+            for (int i = 0; i < MAX_NUM; i++) {
+                PhotoView photoView = new PhotoView(PhotoActivity.this);
+                photoViewList.add(photoView);
             }
         }
+
         @Override
         public int getCount() {
             return imageList == null ? 0 : imageList.size();
@@ -349,7 +358,7 @@ public class PhotoActivity extends BaseActivity implements
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            PhotoView photoView = photoViewList.get(position%MAX_NUM);
+            PhotoView photoView = photoViewList.get(position % MAX_NUM);
             photoView.setOnClickListener(PhotoActivity.this);
             imageResIDs.put(position, View.generateViewId());
             photoView.setId(imageResIDs.get(position));

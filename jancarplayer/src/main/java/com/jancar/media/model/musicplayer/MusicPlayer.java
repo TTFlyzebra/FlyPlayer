@@ -1,7 +1,6 @@
 package com.jancar.media.model.musicplayer;
 
 import android.content.Context;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.text.TextUtils;
 
@@ -39,6 +38,8 @@ public class MusicPlayer implements IMusicPlayer,
         start();
         mPlayStatus = STATUS_PLAYING;
         notifyStatus();
+        SPUtil.set(mContext,"MUSIC_URL",mPlayUrl);
+        SPUtil.set(mContext,"MUSIC_SEEK",getCurrentPosition());
     }
 
     private static class MusicPlayerHolder {

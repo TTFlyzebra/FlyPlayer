@@ -303,6 +303,8 @@ public class VideoActivity extends BaseActivity implements
                 playNext();
                 break;
             case GiraffePlayer.STATUS_PLAYING:
+                SPUtil.set(this, "VIDEO_URL", player.getPlayUrl());
+                SPUtil.set(this, "VIDEO_SEEK", player.getCurrentPosition());
                 setCurrentPos();
                 break;
             case GiraffePlayer.STATUS_PAUSE:
