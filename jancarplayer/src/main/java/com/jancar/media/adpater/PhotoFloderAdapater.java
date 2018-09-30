@@ -25,7 +25,7 @@ import java.util.List;
  * Created by flyzebra on 18-3-29-下午3:06.
  */
 
-public class MenuPhotoAdapater extends RecyclerView.Adapter<ViewHolder> {
+public class PhotoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
     private List<FloderImage> mList;
     private Context mContext;
     private int mColumnNum;
@@ -39,7 +39,7 @@ public class MenuPhotoAdapater extends RecyclerView.Adapter<ViewHolder> {
         mOnItemClick = onItemClick;
     }
 
-    public MenuPhotoAdapater(Context context, List<FloderImage> list, int columnNum) {
+    public PhotoFloderAdapater(Context context, List<FloderImage> list, int columnNum) {
         mContext = context;
         mList = list;
         mColumnNum = columnNum;

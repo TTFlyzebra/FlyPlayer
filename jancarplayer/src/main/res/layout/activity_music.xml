@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#000000"
     android:fitsSystemWindows="true"
-    android:layoutDirection="locale"
+    android:layoutDirection="ltr"
     tools:context=".activity.VideoActivity">
 
 
@@ -51,14 +51,14 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:gravity="left|center"
+            android:gravity="start|center"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20px"
-                android:gravity="left|center"
+                android:gravity="start|center"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -84,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20px"
-                android:gravity="left|center"
+                android:gravity="start|center"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -110,7 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20px"
-                android:gravity="left|center"
+                android:gravity="start|center"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -164,7 +164,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="-10px"
                 android:text="00:00"
-                android:gravity="right"
+                android:gravity="end"
                 android:textColor="@android:color/white"
                 android:textSize="20px" />
 
@@ -185,7 +185,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="-10px"
                 android:text="00:00"
-                android:gravity="left"
+                android:gravity="start"
                 android:textColor="@android:color/white"
                 android:textSize="20px" />
 
@@ -195,6 +195,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/rl_01"
+            android:layoutDirection="ltr"
             android:gravity="center">
 
             <ImageView

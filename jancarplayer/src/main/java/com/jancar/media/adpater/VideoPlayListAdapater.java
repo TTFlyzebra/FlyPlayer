@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jancar.media.R;
 import com.jancar.media.activity.VideoActivity;
 import com.jancar.media.data.Video;
@@ -34,13 +35,9 @@ import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
  */
 
 public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAdapater.ViewHolder> {
-    private static final int smallImageWidth = 101;
-    private static final int smallImageHeight = 96;
     private List<Video> mList;
     private Context mContext;
     private RecyclerView mRecyclerView;
-    private Set<GetDvrVideoBitmatTask> tasks = new HashSet<>();
-    private DoubleBitmapCache doubleBitmapCache;
     private OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
@@ -55,25 +52,6 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
         mContext = context;
         mList = list;
         mRecyclerView = recyclerView;
-        doubleBitmapCache = DoubleBitmapCache.getInstance(context.getApplicationContext());
-
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                switch (newState) {
-                    case SCROLL_STATE_IDLE:
-                        int first = ((GridLayoutManager) (recyclerView.getLayoutManager())).findFirstVisibleItemPosition();
-                        int last = ((GridLayoutManager) (recyclerView.getLayoutManager())).findLastVisibleItemPosition();
-                        if (first >= 0) {
-                            loadImageView(first, last);
-                        }
-                        break;
-                    default:
-                        cancleAllTask();
-                        break;
-                }
-            }
-        });
     }
 
     @Override
@@ -86,18 +64,8 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
     public void onBindViewHolder(ViewHolder holder, final int position) {
         final String url = mList.get(position).url;
         holder.itemView.setTag(position);
-        holder.imageView.setTag(url);
         holder.textView.setText(StringTools.getNameByPath(url));
-        Bitmap bitmap = doubleBitmapCache.get(url);
-        if (null != bitmap) {
-            holder.imageView.setImageBitmap(bitmap);
-        } else {
-            holder.imageView.setImageResource(R.drawable.media_default_image);
-            GetDvrVideoBitmatTask task = new GetDvrVideoBitmatTask(mList.get(position).url);
-            task.execute(mList.get(position).url);
-            tasks.add(task);
-        }
-
+        Glide.with(mContext).load(url).placeholder(R.drawable.media_default_image).error(R.drawable.media_image_error).into(holder.imageView);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,38 +81,6 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
             holder.itemView.setSelected(false);
         }
     }
-
-    public void cancleAllTask() {
-        for (GetDvrVideoBitmatTask task : tasks) {
-            task.cancel(true);
-        }
-        tasks.clear();
-    }
-
-    public void loadImageView(int first, int last) {
-        FlyLog.d("loadImageView %d-%d", first, last);
-        try {
-            if (mList == null || first < 0 || first >= mList.size() || last < 0 || last >= mList.size()) {
-                return;
-            }
-            for (int i = first; i <= last; i++) {
-                Bitmap bitmap = doubleBitmapCache.get(mList.get(i).url);
-                if (null != bitmap) {
-                    ImageView imageView = (ImageView) mRecyclerView.findViewWithTag(mList.get(i));
-                    if (null != imageView) {
-                        imageView.setImageBitmap(bitmap);
-                    }
-                } else {
-                    GetDvrVideoBitmatTask task = new GetDvrVideoBitmatTask(mList.get(i).url);
-                    task.execute(mList.get(i).url);
-                    tasks.add(task);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 
     @Override
     public int getItemCount() {
@@ -162,62 +98,4 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
         }
     }
 
-    private Handler mHandler = new Handler(Looper.getMainLooper());
-
-    public void update() {
-        this.notifyDataSetChanged();
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                int first = ((GridLayoutManager) (mRecyclerView.getLayoutManager())).findFirstVisibleItemPosition();
-                int last = ((GridLayoutManager) (mRecyclerView.getLayoutManager())).findLastVisibleItemPosition();
-                if (first >= 0 && last >= first) {
-                    loadImageView(first, last);
-                }
-            }
-        }, 0);
-
-    }
-
-
-    public class GetDvrVideoBitmatTask extends AsyncTask<String, Bitmap, Bitmap> {
-        private String url;
-
-        GetDvrVideoBitmatTask(String url) {
-            this.url = url;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... strings) {
-            Bitmap bitmap = null;
-            try {
-                final String path = strings[0];
-                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-                retriever.setDataSource(strings[0]);
-                bitmap = retriever.getFrameAtTime(-1);
-                if (bitmap != null) {
-                    bitmap = BitmapTools.zoomImg(bitmap, smallImageWidth, smallImageHeight);
-                }
-                if (bitmap != null) {
-                    if (doubleBitmapCache != null) {
-                        doubleBitmapCache.put(path, bitmap);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return bitmap;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            ImageView imageView = (ImageView) mRecyclerView.findViewWithTag(url);
-            if (imageView != null) {
-                if (bitmap != null) {
-                    imageView.setImageBitmap(bitmap);
-                }
-            }
-        }
-
-    }
 }

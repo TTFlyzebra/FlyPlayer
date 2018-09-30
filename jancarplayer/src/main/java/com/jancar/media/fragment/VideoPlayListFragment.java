@@ -65,13 +65,12 @@ public class VideoPlayListFragment extends BaseFragment implements
 
     @Override
     public void onDestroy() {
-        adapter.cancleAllTask();
         super.onDestroy();
     }
 
     @Override
     public void changePath(String path) {
-        adapter.update();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -79,7 +78,7 @@ public class VideoPlayListFragment extends BaseFragment implements
         textView.setText(R.string.music_scan1);
         FlyLog.d("get videos size=%d", videoUrlList == null ? 0 : videoUrlList.size());
 //        scrollToCureentPlayItem();
-        adapter.update();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -95,12 +94,13 @@ public class VideoPlayListFragment extends BaseFragment implements
     public void onItemClick(View view, int pos) {
         activity.currenPos = pos;
         activity.player.play(activity.videoList.get(activity.currenPos).url);
-        adapter.update();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void statusChange(int statu) {
-        adapter.update();
+        scrollToCureentPlayItem();
+        adapter.notifyDataSetChanged();
     }
 
     private void scrollToCureentPlayItem() {

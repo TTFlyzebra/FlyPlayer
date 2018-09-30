@@ -36,7 +36,7 @@ public class PhotoActivity extends BaseActivity implements
 
     private FlyTabView tabView;
     private String titles[] = new String[]{"磁盘列表", "图片列表", "文件列表"};
-    private String fmName[] = new String[]{"StorageFragment", "PhotoPlayListFragment", "PhotoFloderFragment2"};
+    private String fmName[] = new String[]{"StorageFragment", "PhotoPlayListFragment", "PhotoFloderFragment"};
     public ViewPager viewPager;
     private MyPageAdapter adapter;
     public List<Image> imageList = new ArrayList<>();

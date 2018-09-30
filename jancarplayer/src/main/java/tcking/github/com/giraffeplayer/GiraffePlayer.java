@@ -596,6 +596,7 @@ public class GiraffePlayer {
         }
     }
 
+
     public void play(String url,int seek) {
         FlyLog.d("play url=%s,seek=%d",url,seek);
         this.url = url;
@@ -608,7 +609,7 @@ public class GiraffePlayer {
     }
 
     public String getPlayUrl() {
-        return url;
+        return url==null?"":url;
     }
 
     private String generateTime(long time) {
