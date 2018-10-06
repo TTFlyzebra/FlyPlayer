@@ -123,11 +123,11 @@ public class MusicFloderFragment extends MusicFragment implements
                 }
                 groupList.addAll(mHashMap.keySet());
 
-                Collections.sort(groupList, new Comparator<String>() {
-                    public int compare(String p1, String p2) {
-                        return p1.compareToIgnoreCase(p2);
-                    }
-                });
+//                Collections.sort(groupList, new Comparator<String>() {
+//                    public int compare(String p1, String p2) {
+//                        return p1.compareToIgnoreCase(p2);
+//                    }
+//                });
 
                 for (String key : groupList) {
                     itemList.add(mHashMap.get(key));

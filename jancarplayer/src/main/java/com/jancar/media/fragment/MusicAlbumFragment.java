@@ -128,17 +128,17 @@ public class MusicAlbumFragment extends MusicFragment implements
                 }
                 groupList.addAll(mHashMap.keySet());
 
-                Collections.sort(groupList, new Comparator<String>() {
-                    public int compare(String p1, String p2) {
-                        if (p1.startsWith(getString(R.string.no_album_start))) {
-                            return 1;
-                        } else if (p2.startsWith(getString(R.string.no_album_start))) {
-                            return -1;
-                        } else {
-                            return p1.compareToIgnoreCase(p2);
-                        }
-                    }
-                });
+//                Collections.sort(groupList, new Comparator<String>() {
+//                    public int compare(String p1, String p2) {
+//                        if (p1.startsWith(getString(R.string.no_album_start))) {
+//                            return 1;
+//                        } else if (p2.startsWith(getString(R.string.no_album_start))) {
+//                            return -1;
+//                        } else {
+//                            return p1.compareToIgnoreCase(p2);
+//                        }
+//                    }
+//                });
 
                 for (String key : groupList) {
                     itemList.add(mHashMap.get(key));
