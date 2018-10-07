@@ -49,21 +49,26 @@ public class VideoActivity extends BaseActivity implements
     private float scaleY = 1.0f;
     private AudioManager mAudioManager;
 
+    private boolean lostPause = false;
     private AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
         public void onAudioFocusChange(int focusChange) {
             try {
                 switch (focusChange) {
                     case AudioManager.AUDIOFOCUS_LOSS:
                         player.pause();
+                        finish();
                         break;
                     case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                     case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                         if (player.isPlaying()) {
                             player.pause();
+                            lostPause = true;
                         }
                         break;
                     case AudioManager.AUDIOFOCUS_GAIN:
-                        player.start();
+                        if(lostPause){
+                            player.start();
+                        }
                         break;
                 }
             } catch (Exception e) {
@@ -95,41 +100,53 @@ public class VideoActivity extends BaseActivity implements
         if (!TextUtils.isEmpty(playUrl)) {
             player.play(playUrl, seek);
         }
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        String playUrl = (String) SPUtil.get(this, "VIDEO_URL", "");
+        int seek = (int) SPUtil.get(this, "VIDEO_SEEK", 0);
+        if (!TextUtils.isEmpty(playUrl)) {
+            player.play(playUrl, seek);
+        }
         usbMediaScan.addListener(this);
         mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+    }
+
+    boolean isPause = false;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (isPause) {
             player.start();
         }
         isPause = false;
     }
 
-    boolean isPause = false;
-
     @Override
-    protected void onStop() {
-        mAudioManager.abandonAudioFocus(mAudioFocusListener);
+    protected void onPause() {
         isPause = false;
         if (player.isPlaying()) {
             player.pause();
-            SPUtil.set(this, "VIDEO_URL", player.getPlayUrl());
-            SPUtil.set(this, "VIDEO_SEEK", player.getCurrentPosition());
             isPause = true;
         }
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        SPUtil.set(this, "VIDEO_URL", player.getPlayUrl());
+        SPUtil.set(this, "VIDEO_SEEK", player.getCurrentPosition());
+        mAudioManager.abandonAudioFocus(mAudioFocusListener);
         usbMediaScan.removeListener(this);
         super.onStop();
+        player.stop();
     }
 
     @Override
     protected void onDestroy() {
-        SPUtil.set(this, "VIDEO_URL", player.getPlayUrl());
-        SPUtil.set(this, "VIDEO_SEEK", player.getCurrentPosition());
-        player.stop();
         super.onDestroy();
     }
 

@@ -486,6 +486,7 @@ public class MusicActivity extends BaseActivity implements
         }
     }
 
+    private boolean lostPause = false;
     private AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
         public void onAudioFocusChange(int focusChange) {
             FlyLog.d("onAudioFocusChange focusChange=%d", focusChange);
@@ -494,16 +495,19 @@ public class MusicActivity extends BaseActivity implements
                     //长期失去焦点，此处应该关闭播放器，释放资源
 //                    pause();
                     finish();
+                    lostPause = false;
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                     if (musicPlayer.isPlaying()) {
                         musicPlayer.pause();
+                        lostPause = true;
                     }
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
-                    if (musicPlayer.isPause()) {
+                    if (musicPlayer.isPause()&&lostPause) {
                         musicPlayer.start();
+                        lostPause = false;
                     }
                     break;
             }
