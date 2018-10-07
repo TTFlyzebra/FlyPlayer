@@ -35,15 +35,15 @@ public class MusicPlayer implements IMusicPlayer,
     }
 
     public void onPrepared(MediaPlayer mp) {
-        if(saveSeek>0){
+        if (saveSeek > 0) {
             seekTo(saveSeek);
             saveSeek = 0;
         }
         start();
         mPlayStatus = STATUS_PLAYING;
         notifyStatus();
-        SPUtil.set(mContext,"MUSIC_URL",mPlayUrl);
-        SPUtil.set(mContext,"MUSIC_SEEK",getCurrentPosition());
+        SPUtil.set(mContext, "MUSIC_URL", mPlayUrl);
+        SPUtil.set(mContext, "MUSIC_SEEK", getCurrentPosition());
     }
 
     private static class MusicPlayerHolder {
@@ -97,8 +97,9 @@ public class MusicPlayer implements IMusicPlayer,
     }
 
     private int saveSeek = 0;
+
     private void play(String mPlayUrl, int seek) {
-        FlyLog.d("play url=%s,seek=%d", mPlayUrl,seek);
+        FlyLog.d("play url=%s,seek=%d", mPlayUrl, seek);
         saveSeek = seek;
         try {
             this.mPlayUrl = mPlayUrl;
@@ -136,8 +137,8 @@ public class MusicPlayer implements IMusicPlayer,
             mMediaPlayer.pause();
             mPlayStatus = STATUS_PAUSE;
             notifyStatus();
-            SPUtil.set(mContext,"MUSIC_URL",mPlayUrl);
-            SPUtil.set(mContext,"MUSIC_SEEK",getCurrentPosition());
+            SPUtil.set(mContext, "MUSIC_URL", mPlayUrl);
+            SPUtil.set(mContext, "MUSIC_SEEK", getCurrentPosition());
         }
     }
 
@@ -149,8 +150,8 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void stop() {
         if (mMediaPlayer != null) {
-            SPUtil.set(mContext,"MUSIC_URL",mPlayUrl);
-            SPUtil.set(mContext,"MUSIC_SEEK",getCurrentPosition());
+            SPUtil.set(mContext, "MUSIC_URL", mPlayUrl);
+            SPUtil.set(mContext, "MUSIC_SEEK", getCurrentPosition());
             mMediaPlayer.stop();
             mMediaPlayer.release();
             mMediaPlayer = null;
@@ -189,10 +190,6 @@ public class MusicPlayer implements IMusicPlayer,
             }
             if (!TextUtils.isEmpty(mPlayUrl)) {
                 mPlayPos = getPlayPos();
-                if (mPlayPos == -1) {
-                    mPlayPos = 0;
-                    play(mPlayUrls.get(0).url);
-                }
             } else {
                 mPlayPos = 0;
                 play(mPlayUrls.get(0).url);
@@ -223,7 +220,7 @@ public class MusicPlayer implements IMusicPlayer,
                 break;
             case LOOP_ALL:
             case LOOP_ONE:
-                mPlayPos = Math.max(0, mPlayPos - 1);
+                mPlayPos = Math.max(0, (mPlayPos - 1 + mPlayUrls.size()) % mPlayUrls.size());
                 break;
         }
         if (mPlayUrls != null && mPlayUrls.size() > mPlayPos) {
@@ -249,10 +246,10 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void playSave() {
-        mPlayUrl = (String) SPUtil.get(mContext,"MUSIC_URL","");
-        int seek = (int) SPUtil.get(mContext,"MUSIC_SEEK",0);
-        if(!TextUtils.isEmpty(mPlayUrl)){
-            play(mPlayUrl,seek);
+        mPlayUrl = (String) SPUtil.get(mContext, "MUSIC_URL", "");
+        int seek = (int) SPUtil.get(mContext, "MUSIC_SEEK", 0);
+        if (!TextUtils.isEmpty(mPlayUrl)) {
+            play(mPlayUrl, seek);
         }
     }
 

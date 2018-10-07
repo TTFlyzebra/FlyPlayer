@@ -22,6 +22,7 @@ import com.jancar.mediascan.model.storage.Storage;
 import com.jancar.mediascan.model.storage.StorageInfo;
 import com.jancar.mediascan.utils.FlyLog;
 import com.jancar.mediascan.utils.GsonUtils;
+import com.jancar.mediascan.utils.SPUtil;
 import com.jancar.mediascan.utils.StorageTools;
 import com.jancar.mediascan.utils.StringTools;
 import com.mpatric.mp3agic.ID3v1;
@@ -72,8 +73,10 @@ public class FlyMediaService extends Service implements IStorageListener {
         @Override
         public void scanDisk(final String disk) throws RemoteException {
             FlyLog.d("start scan disk!");
-            isStoped.set(true);
-            scanPath(disk);
+            if (!currentPath.endsWith(disk)) {
+                isStoped.set(true);
+                scanPath(disk);
+            }
         }
 
         @Override
@@ -379,6 +382,7 @@ public class FlyMediaService extends Service implements IStorageListener {
         FlyLog.d("scan mPath=%s", path);
         clearData();
         currentPath = path;
+        SPUtil.set(this, "SAVE_PATH", currentPath);
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -664,8 +668,8 @@ public class FlyMediaService extends Service implements IStorageListener {
                         }
                         mDoubleMusicCache.put(music.url, music);
                     } else {
-                        music.artist = TextUtils.isEmpty(id3music.artist)?getString(R.string.no_artist):id3music.artist;
-                        music.album = TextUtils.isEmpty(id3music.album)?getString(R.string.no_album):id3music.album;
+                        music.artist = TextUtils.isEmpty(id3music.artist) ? getString(R.string.no_artist) : id3music.artist;
+                        music.album = TextUtils.isEmpty(id3music.album) ? getString(R.string.no_album) : id3music.album;
                         music.name = StringTools.getNameByPath(music.url);
                     }
                     synchronized (mMusicID3List) {
@@ -686,14 +690,27 @@ public class FlyMediaService extends Service implements IStorageListener {
     public void storageList(List<StorageInfo> storageList) {
         if (storageList != null && !storageList.isEmpty()) {
             localPaths = "T";
+            String savePath = (String) SPUtil.get(this, "SAVE_PATH", "");
+            String scanPath = "";
             for (StorageInfo storageInfo : storageList) {
                 if (!storageInfo.isRemoveable) {
                     localPaths = localPaths + "#T#S#Y#" + storageInfo.mPath;
                 }
+                if (savePath.endsWith(storageInfo.mPath)) {
+                    scanPath = savePath;
+                }
             }
             FlyLog.d("localPaths=%s", localPaths);
-            isStoped.set(true);
-            scanPath(storageList.get(0).mPath);
+            if (TextUtils.isEmpty(scanPath)) {
+                scanPath = storageList.get(0).mPath;
+                FlyLog.d("scan first path =%s", scanPath);
+            } else {
+                FlyLog.d("scan save path =%s", scanPath);
+            }
+            if (!currentPath.endsWith(scanPath)) {
+                isStoped.set(true);
+                scanPath(scanPath);
+            }
         }
     }
 
@@ -720,8 +737,10 @@ public class FlyMediaService extends Service implements IStorageListener {
             String str1 = intent.getStringExtra(Const.SCAN_PATH_KEY);
             if (!TextUtils.isEmpty(str1) && StorageTools.isRemoved(this, str1)) {
                 FlyLog.d("scan path=%s", str1);
-                isStoped.set(true);
-                scanPath(str1);
+                if(!currentPath.endsWith(str1)) {
+                    isStoped.set(true);
+                    scanPath(str1);
+                }
             }
 
             String str2 = intent.getStringExtra(Const.UMOUNT_STORE);
