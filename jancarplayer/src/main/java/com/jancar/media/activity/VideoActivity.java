@@ -168,10 +168,8 @@ public class VideoActivity extends BaseActivity implements
 
     private void playNext() {
         if (videoList != null && !videoList.isEmpty()) {
-            if (currenPos < videoList.size() - 1) {
-                currenPos++;
-                player.play(videoList.get(currenPos).url);
-            }
+            currenPos = (currenPos + 1) % videoList.size();
+            player.play(videoList.get(currenPos).url);
         }
     }
 

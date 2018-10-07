@@ -267,6 +267,7 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        FlyLog.d("keycode=%d,event=%s",keyCode,event.toString());
         switch (keyCode){
             case KeyEvent.KEYCODE_HEADSETHOOK:
             case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">JancarPlayers</string>
     <string name="giraffe_player_url_empty">请指定视频播放的地址</string>
-    <string name="small_problem">播放视频出错</string>
+    <string name="small_problem">视频解码出错</string>
     <string name="can_not_play">无法播放此视频</string>
     <string name="not_support">播放器不支持此设备</string>
     <string name="disk_list">磁盘列表</string>
