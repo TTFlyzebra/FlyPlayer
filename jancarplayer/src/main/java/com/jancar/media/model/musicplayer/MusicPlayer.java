@@ -206,10 +206,16 @@ public class MusicPlayer implements IMusicPlayer,
                 break;
             case LOOP_ALL:
             case LOOP_ONE:
-                mPlayPos = (mPlayPos + 1) % (mPlayUrls.size());
+                if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
+                    mPlayPos = (mPlayPos + 1) % (mPlayUrls.size());
+                } else {
+                    mPlayPos = -1;
+                }
                 break;
         }
-        play(mPlayUrls.get(mPlayPos).url);
+        if (mPlayPos >=0 && mPlayUrls != null && mPlayUrls.size() > mPlayPos) {
+            play(mPlayUrls.get(mPlayPos).url);
+        }
     }
 
     @Override
@@ -220,10 +226,14 @@ public class MusicPlayer implements IMusicPlayer,
                 break;
             case LOOP_ALL:
             case LOOP_ONE:
-                mPlayPos = Math.max(0, (mPlayPos - 1 + mPlayUrls.size()) % mPlayUrls.size());
+                if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
+                    mPlayPos = (mPlayPos - 1 + mPlayUrls.size()) % mPlayUrls.size();
+                } else {
+                    mPlayPos = -1;
+                }
                 break;
         }
-        if (mPlayUrls != null && mPlayUrls.size() > mPlayPos) {
+        if (mPlayPos >=0 && mPlayUrls != null && mPlayUrls.size() > mPlayPos) {
             play(mPlayUrls.get(mPlayPos).url);
         }
     }

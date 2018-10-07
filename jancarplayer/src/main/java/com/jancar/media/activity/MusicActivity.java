@@ -129,6 +129,21 @@ public class MusicActivity extends BaseActivity implements
         musicPlayer.addListener(this);
         musicPlayer.playSave();
 
+//        //获取cursor
+//        Cursor cursor = this.getContentResolver().query(
+//                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, // URI,可以有多种形式
+//                null,
+//                null,
+//                null,
+//                null);
+////图片路径所在列的索引
+//        int indexPhotoPath = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
+//        while (cursor.moveToNext()) {
+//            //打印图片的路径
+//            FlyLog.i("uri=:%s", cursor.getString(indexPhotoPath));
+//        }
+//        cursor.close();
+
     }
 
     private void initView() {
