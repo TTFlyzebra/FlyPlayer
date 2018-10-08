@@ -47,4 +47,6 @@ public interface IMusicPlayer {
     void switchLoopStatus();
 
     void playSave();
+
+    void setVolume(float v, float v1);
 }

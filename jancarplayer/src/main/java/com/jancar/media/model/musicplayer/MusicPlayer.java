@@ -263,6 +263,13 @@ public class MusicPlayer implements IMusicPlayer,
         }
     }
 
+    @Override
+    public void setVolume(float v, float v1) {
+        if(mMediaPlayer!=null){
+            mMediaPlayer.setVolume(v,v1);
+        }
+    }
+
 
     @Override
     public void seekTo(int seekPos) {

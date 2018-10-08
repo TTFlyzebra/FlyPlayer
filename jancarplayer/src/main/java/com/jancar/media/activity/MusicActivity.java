@@ -502,6 +502,7 @@ public class MusicActivity extends BaseActivity implements
     }
 
     private boolean lostPause = false;
+    private boolean lostSetVolume = true;
     private AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
         public void onAudioFocusChange(int focusChange) {
             FlyLog.d("onAudioFocusChange focusChange=%d", focusChange);
@@ -513,16 +514,25 @@ public class MusicActivity extends BaseActivity implements
                     lostPause = false;
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                     if (musicPlayer.isPlaying()) {
                         musicPlayer.pause();
                         lostPause = true;
+                    }
+                    break;
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                    if (musicPlayer.isPlaying()) {
+                        lostSetVolume = true;
+                        musicPlayer.setVolume(0.1f, 0.1f);
                     }
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
                     if (musicPlayer.isPause()&&lostPause) {
                         musicPlayer.start();
                         lostPause = false;
+                    }
+                    if(lostSetVolume){
+                        lostSetVolume = false;
+                        musicPlayer.setVolume(1.0f,1.0f);
                     }
                     break;
             }
