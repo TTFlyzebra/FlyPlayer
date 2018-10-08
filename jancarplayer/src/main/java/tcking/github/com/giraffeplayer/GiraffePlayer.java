@@ -879,7 +879,6 @@ public class GiraffePlayer {
         return false;
     }
 
-
     class Query {
         private final Activity activity;
         public View view;

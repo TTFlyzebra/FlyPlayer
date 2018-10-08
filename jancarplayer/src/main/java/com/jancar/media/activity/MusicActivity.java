@@ -521,8 +521,8 @@ public class MusicActivity extends BaseActivity implements
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                     if (musicPlayer.isPlaying()) {
+                        musicPlayer.setVolume(0.3f, 0.3f);
                         lostSetVolume = true;
-                        musicPlayer.setVolume(0.1f, 0.1f);
                     }
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
@@ -531,8 +531,8 @@ public class MusicActivity extends BaseActivity implements
                         lostPause = false;
                     }
                     if(lostSetVolume){
-                        lostSetVolume = false;
                         musicPlayer.setVolume(1.0f,1.0f);
+                        lostSetVolume = false;
                     }
                     break;
             }
