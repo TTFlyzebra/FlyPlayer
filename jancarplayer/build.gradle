@@ -9,6 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     signingConfigs {
         release {
@@ -42,11 +43,13 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:23.+'
     implementation 'com.android.support:recyclerview-v7:23.+'
-    //    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.14'
+    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.14'
     //    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever-armeabi:1.0.14'
+    implementation 'com.android.support:multidex:1.0.3'
     implementation project(path: ':ijkplayer')
     implementation project(path: ':photoview')
     implementation project(path: ':mp3id3library')
     implementation files('libs/disklrucache.jar')
     implementation files('libs/glide-3.7.0.jar')
+    implementation files('libs/framworks.jar')
 }

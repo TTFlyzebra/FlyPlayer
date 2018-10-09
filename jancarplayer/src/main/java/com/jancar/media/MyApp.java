@@ -1,6 +1,8 @@
 package com.jancar.media;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 import android.view.ViewConfiguration;
 
 import com.jancar.media.model.mediascan.MediaScan;
@@ -10,7 +12,7 @@ import com.jancar.media.utils.FlyLog;
 
 import java.lang.reflect.Field;
 
-public class MyApp extends Application {
+public class MyApp extends  Application{
 
     @Override
     public void onCreate() {
@@ -30,5 +32,11 @@ public class MyApp extends Application {
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }
