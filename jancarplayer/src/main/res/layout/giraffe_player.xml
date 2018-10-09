@@ -10,6 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <include layout="@layout/video_parkwarning"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -188,8 +192,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="-10px"
-                    android:text="00:00"
                     android:gravity="right"
+                    android:text="00:00"
                     android:textColor="@android:color/white"
                     android:textSize="20px" />
 
@@ -256,8 +260,8 @@
             <RelativeLayout
                 android:layout_width="75px"
                 android:layout_height="75px"
-                android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
                 android:gravity="center">
 
                 <ImageView
@@ -274,10 +278,10 @@
             android:id="@+id/play_ll01_playlist"
             android:layout_width="400px"
             android:layout_height="403px"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="138px"
+            android:layout_alignParentBottom="true"
             android:layout_marginEnd="-399px"
+            android:layout_marginBottom="138px"
             android:orientation="vertical">
 
             <View

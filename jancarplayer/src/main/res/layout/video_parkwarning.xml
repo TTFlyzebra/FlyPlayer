@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.jancar.avin.ParkWarningView
+<com.jancar.media.view.ParkWarningView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_parking"
     android:layout_width="match_parent"
@@ -7,7 +7,7 @@
     android:background="#FF000000"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:visibility="visible" >
+    android:visibility="invisible" >
 
     <Space
         android:layout_width="0dp"
@@ -51,4 +51,4 @@
         android:layout_height="match_parent"
         android:layout_weight="1" />
 
-</com.jancar.avin.ParkWarningView>
+</com.jancar.media.view.ParkWarningView>
