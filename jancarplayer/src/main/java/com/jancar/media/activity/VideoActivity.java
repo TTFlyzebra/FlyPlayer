@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
@@ -19,6 +20,7 @@ import com.jancar.media.data.Video;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.SPUtil;
+import com.jancar.media.utils.SystemPropertiesProxy;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
 
@@ -51,33 +53,6 @@ public class VideoActivity extends BaseActivity implements
     private AudioManager mAudioManager;
 
     private boolean lostPause = false;
-    private AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
-        public void onAudioFocusChange(int focusChange) {
-            try {
-                switch (focusChange) {
-                    case AudioManager.AUDIOFOCUS_LOSS:
-                        player.pause();
-                        finish();
-                        break;
-                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                        if (player.isPlaying()) {
-                            player.pause();
-                            lostPause = true;
-                        }
-                        break;
-                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                        break;
-                    case AudioManager.AUDIOFOCUS_GAIN:
-                        if (lostPause) {
-                            player.start();
-                        }
-                        break;
-                }
-            } catch (Exception e) {
-                FlyLog.e(e.toString());
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -376,4 +351,40 @@ public class VideoActivity extends BaseActivity implements
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    private AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
+        public void onAudioFocusChange(int focusChange) {
+            try {
+                switch (focusChange) {
+                    case AudioManager.AUDIOFOCUS_LOSS:
+                        player.pause();
+                        finish();
+                        break;
+                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                        if (player.isPlaying()) {
+                            player.pause();
+                            lostPause = true;
+                        }
+                        break;
+                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                        /**
+                         * 是否混音
+                         */
+                        boolean flag = SystemProperties.getBoolean(SystemPropertiesProxy.Property.PERSIST_KEY_GISMIX, true);
+                        if (!flag && player.isPlaying()) {
+                            player.pause();
+                            lostPause = true;
+                        }
+                        break;
+                    case AudioManager.AUDIOFOCUS_GAIN:
+                        if (lostPause) {
+                            player.start();
+                        }
+                        break;
+                }
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+        }
+    };
 }
