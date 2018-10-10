@@ -22,6 +22,7 @@ import com.jancar.media.utils.SPUtil;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +68,7 @@ public class VideoActivity extends BaseActivity implements
                     case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                         break;
                     case AudioManager.AUDIOFOCUS_GAIN:
-                        if(lostPause){
+                        if (lostPause) {
                             player.start();
                         }
                         break;
@@ -96,23 +97,26 @@ public class VideoActivity extends BaseActivity implements
 
         initView();
 
-        String playUrl = (String) SPUtil.get(this, "VIDEO_URL", "");
-        int seek = (int) SPUtil.get(this, "VIDEO_SEEK", 0);
-        if (!TextUtils.isEmpty(playUrl)) {
-            player.play(playUrl, seek);
-        }
+        playSave();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        playSave();
+        usbMediaScan.addListener(this);
+        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+    }
+
+    private void playSave() {
         String playUrl = (String) SPUtil.get(this, "VIDEO_URL", "");
         int seek = (int) SPUtil.get(this, "VIDEO_SEEK", 0);
         if (!TextUtils.isEmpty(playUrl)) {
-            player.play(playUrl, seek);
+            File file = new File(playUrl);
+            if (file.exists()) {
+                player.play(playUrl, seek);
+            }
         }
-        usbMediaScan.addListener(this);
-        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
     }
 
     boolean isPause = false;
@@ -356,13 +360,17 @@ public class VideoActivity extends BaseActivity implements
                 }
                 return true;
             case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
-            case KeyEvent.KEYCODE_MEDIA_NEXT:
-            case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
             case KeyEvent.KEYCODE_MEDIA_REWIND:
                 return true;
             case KeyEvent.KEYCODE_MEDIA_STOP:
             case KeyEvent.KEYCODE_BACK:
                 finish();
+                return true;
+            case KeyEvent.KEYCODE_MEDIA_NEXT:
+                playNext();
+                return true;
+            case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+                playFore();
                 return true;
 
         }

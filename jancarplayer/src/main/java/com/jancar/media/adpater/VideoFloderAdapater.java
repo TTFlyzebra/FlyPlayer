@@ -1,6 +1,10 @@
 package com.jancar.media.adpater;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
@@ -14,11 +18,21 @@ import com.bumptech.glide.Glide;
 import com.jancar.media.R;
 import com.jancar.media.activity.VideoActivity;
 import com.jancar.media.data.FloderVideo;
+import com.jancar.media.data.Video;
+import com.jancar.media.module.DoubleBitmapCache;
+import com.jancar.media.utils.BitmapTools;
+import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.MarqueeTextView;
+import com.ksyun.media.player.misc.KSYProbeMediaInfo;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 
 /**
@@ -32,6 +46,13 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
     private int mColumnNum;
     private OnItemClickListener mOnItemClick;
 
+    private static final int smallImageWidth = 192;
+    private static final int smallImageHeight = 108;
+    private RecyclerView mRecyclerView;
+    private Set<GetVideoBitmatTask> tasks = new HashSet<>();
+    private DoubleBitmapCache doubleBitmapCache;
+    private Handler mHandler = new Handler(Looper.getMainLooper());
+
     public interface OnItemClickListener {
         void onItemClick(View v, FloderVideo floderVideo);
     }
@@ -40,10 +61,25 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
         mOnItemClick = onItemClick;
     }
 
-    public VideoFloderAdapater(Context context, List<FloderVideo> list, int columnNum) {
+    public VideoFloderAdapater(Context context, List<FloderVideo> list, int columnNum,RecyclerView recyclerView) {
         mContext = context;
         mList = list;
         mColumnNum = columnNum;
+        mRecyclerView = recyclerView;
+        doubleBitmapCache = DoubleBitmapCache.getInstance(context.getApplicationContext());
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                switch (newState) {
+                    case SCROLL_STATE_IDLE:
+                        update();
+                        break;
+                    default:
+                        cancleAllTask();
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -72,11 +108,22 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
         String crtUrl = ((VideoActivity)mContext).player.getPlayUrl();
         if (holder instanceof PhotoHolder) {
             PhotoHolder photoHolder = (PhotoHolder) holder;
-            Glide.with(mContext)
-                    .load((mList.get(position)).url)
-                    .placeholder(R.drawable.media_default_image)
-                    .error(R.drawable.media_image_error)
-                    .into(photoHolder.imageView1);
+//            Glide.with(mContext)
+//                    .load((mList.get(position)).url)
+//                    .placeholder(R.drawable.media_default_image)
+//                    .error(R.drawable.media_image_error)
+//                    .into(photoHolder.imageView1);
+
+            photoHolder.imageView1.setTag(mList.get(position).url);
+            Bitmap bitmap = doubleBitmapCache.get(mList.get(position).url);
+            if (null != bitmap) {
+                photoHolder.imageView1.setImageBitmap(bitmap);
+            } else {
+                photoHolder.imageView1.setImageResource(R.drawable.media_default_image);
+                GetVideoBitmatTask task = new GetVideoBitmatTask(mList.get(position).url);
+                task.execute(mList.get(position).url);
+                tasks.add(task);
+            }
 
             boolean flag = mList.get(position).url.equals(crtUrl);
             photoHolder.textView.setText(StringTools.getNameByPath(mList.get(position).url));
@@ -187,6 +234,101 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
             imageView1 = (ImageView) itemView.findViewById(R.id.item_iv01);
             imageView2 = (ImageView) itemView.findViewById(R.id.item_iv02);
         }
+
+    }
+    public class GetVideoBitmatTask extends AsyncTask<String, Bitmap, Bitmap> {
+        private String url;
+
+        GetVideoBitmatTask(String url) {
+            this.url = url;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            Bitmap bitmap = null;
+            try {
+                final String path = strings[0];
+                KSYProbeMediaInfo ksyProbeMediaInfo = new KSYProbeMediaInfo();
+                bitmap = ksyProbeMediaInfo.getVideoThumbnailAtTime(strings[0], 1, smallImageWidth, smallImageHeight);
+//                FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
+//                mmr.setDataSource(path);
+//                mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ALBUM);
+//                mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST);
+//                bitmap = mmr.getFrameAtTime(-1, FFmpegMediaMetadataRetriever.OPTION_CLOSEST); // frame at 2 seconds
+//                if (bitmap != null) {
+//                    bitmap = BitmapTools.zoomImg(bitmap, smallImageWidth, smallImageHeight);
+//                }
+//                mmr.release();
+                if (bitmap != null) {
+                    if (doubleBitmapCache != null) {
+                        doubleBitmapCache.put(path, bitmap);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            ImageView imageView = (ImageView) mRecyclerView.findViewWithTag(url);
+            if (imageView != null) {
+                if (bitmap != null) {
+                    imageView.setImageBitmap(bitmap);
+                }
+            }
+        }
+
+    }
+
+    public void cancleAllTask() {
+        for (GetVideoBitmatTask task : tasks) {
+            task.cancel(true);
+        }
+        tasks.clear();
+    }
+
+    public void loadImageView(int first, int last) {
+        FlyLog.d("loadImageView %d-%d", first, last);
+        try {
+            if (mList == null || first < 0 || first >= mList.size() || last < 0 || last >= mList.size()) {
+                return;
+            }
+            for (int i = first; i <= last; i++) {
+                Bitmap bitmap = doubleBitmapCache.get(mList.get(i).url);
+                if (null != bitmap) {
+                    ImageView imageView = (ImageView) mRecyclerView.findViewWithTag(mList.get(i));
+                    if (null != imageView) {
+                        imageView.setImageBitmap(bitmap);
+                    }
+                } else {
+                    GetVideoBitmatTask task = new GetVideoBitmatTask(mList.get(i).url);
+                    task.execute(mList.get(i).url);
+                    tasks.add(task);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+    public void update() {
+        cancleAllTask();
+        this.notifyDataSetChanged();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                int first = ((GridLayoutManager) (mRecyclerView.getLayoutManager())).findFirstVisibleItemPosition();
+                int last = ((GridLayoutManager) (mRecyclerView.getLayoutManager())).findLastVisibleItemPosition();
+                if (first >= 0 && last >= first) {
+                    loadImageView(first, last);
+                }
+            }
+        }, 0);
 
     }
 }

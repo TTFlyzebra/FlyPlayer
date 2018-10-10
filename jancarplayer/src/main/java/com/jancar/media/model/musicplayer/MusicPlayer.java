@@ -9,6 +9,7 @@ import com.jancar.media.model.listener.IMusicPlayerListener;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.SPUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -179,6 +180,9 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void setPlayUrls(List<Music> urls) {
         mPlayUrls.clear();
+        if(!(new File(mPlayUrl).exists())){
+            mPlayUrl="";
+        }
         if (urls == null || urls.isEmpty()) {
             mPlayPos = -1;
             stop();
@@ -213,7 +217,7 @@ public class MusicPlayer implements IMusicPlayer,
                 }
                 break;
         }
-        if (mPlayPos >=0 && mPlayUrls != null && mPlayUrls.size() > mPlayPos) {
+        if (mPlayPos >= 0 && mPlayUrls != null && mPlayUrls.size() > mPlayPos) {
             play(mPlayUrls.get(mPlayPos).url);
         }
     }
@@ -233,7 +237,7 @@ public class MusicPlayer implements IMusicPlayer,
                 }
                 break;
         }
-        if (mPlayPos >=0 && mPlayUrls != null && mPlayUrls.size() > mPlayPos) {
+        if (mPlayPos >= 0 && mPlayUrls != null && mPlayUrls.size() > mPlayPos) {
             play(mPlayUrls.get(mPlayPos).url);
         }
     }
@@ -256,17 +260,21 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void playSave() {
-        mPlayUrl = (String) SPUtil.get(mContext, "MUSIC_URL", "");
+        String mPlayUrl = (String) SPUtil.get(mContext, "MUSIC_URL", "");
         int seek = (int) SPUtil.get(mContext, "MUSIC_SEEK", 0);
         if (!TextUtils.isEmpty(mPlayUrl)) {
-            play(mPlayUrl, seek);
+            File file = new File(mPlayUrl);
+            if (file.exists()) {
+                this.mPlayUrl = mPlayUrl;
+                play(mPlayUrl, seek);
+            }
         }
     }
 
     @Override
     public void setVolume(float v, float v1) {
-        if(mMediaPlayer!=null){
-            mMediaPlayer.setVolume(v,v1);
+        if (mMediaPlayer != null) {
+            mMediaPlayer.setVolume(v, v1);
         }
     }
 

@@ -30,6 +30,7 @@ public class CircleImageView extends ImageView {
     private Bitmap mBitmap;
     private BitmapShader mBitmapShader;
     private ObjectAnimator rotationAnimator;
+    private boolean animatePlaying = false;
 
     public CircleImageView(Context context) {
         this(context, null);
@@ -155,6 +156,11 @@ public class CircleImageView extends ImageView {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         rotationAnimator.start();
+        if (animatePlaying) {
+            rotationAnimator.resume();
+        } else {
+            rotationAnimator.pause();
+        }
     }
 
     @Override
@@ -164,6 +170,7 @@ public class CircleImageView extends ImageView {
     }
 
     public void setAnimatePlaying(boolean animatePlaying) {
+        this.animatePlaying = animatePlaying;
         if (animatePlaying) {
             rotationAnimator.resume();
         } else {

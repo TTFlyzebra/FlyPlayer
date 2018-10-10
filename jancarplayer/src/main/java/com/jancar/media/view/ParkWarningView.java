@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.jancar.JancarManager;
+import com.jancar.media.utils.SystemPropertiesProxy;
 import com.jancar.state.JacState;
 
 
@@ -43,7 +44,7 @@ public class ParkWarningView extends LinearLayout {
 	}
 
 	public void updateParkProperty() {
-        mbParkingEnable = SystemProperties.getBoolean("persist.jancar.brakewarn", false);
+        mbParkingEnable = SystemProperties.getBoolean(SystemPropertiesProxy.Property.PERSIST_KEY_BRAKEWARN, false);
         Log.e(TAG, "parking_enable:" + mbParkingEnable + " mbUnderParking:" + mbUnderParking);
 		if (mbParkingEnable && !mbUnderParking) {
 			setVisibility(View.VISIBLE);

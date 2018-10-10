@@ -57,7 +57,7 @@ public class VideoFloderFragment extends BaseFragment implements
         recyclerView = (RecyclerView) view.findViewById(R.id.fm_rv01);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(gridLayoutManager);
-        adapter = new VideoFloderAdapater(getActivity(), mAdapterList, 3);
+        adapter = new VideoFloderAdapater(getActivity(), mAdapterList, 3,recyclerView);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
         videoUrlList(activity.videoList);

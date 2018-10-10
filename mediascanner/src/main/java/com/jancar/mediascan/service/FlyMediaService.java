@@ -69,14 +69,11 @@ public class FlyMediaService extends Service implements IStorageListener {
     private static final int ID3_UPDATE_DENSITY = 50;
     private static final int THREAD_WAIT_TIME = 100;
     private IStorage iStorage = Storage.getInstance();
+    private long startScanTime;
     private IBinder mBinder = new FlyMedia.Stub() {
         @Override
         public void scanDisk(final String disk) throws RemoteException {
-            FlyLog.d("start scan disk!");
-            if (!currentPath.endsWith(disk)) {
-                isStoped.set(true);
-                scanPath(disk);
-            }
+            startScanPath(disk);
         }
 
         @Override
@@ -161,6 +158,15 @@ public class FlyMediaService extends Service implements IStorageListener {
         }
 
     };
+
+    private void startScanPath(String disk) {
+        FlyLog.d("start scan disk!");
+        startScanTime = System.currentTimeMillis();
+        if (!currentPath.endsWith(disk)) {
+            isStoped.set(true);
+            scanPath(disk);
+        }
+    }
 
     private void notifyMusic(List<Music> mMusicList, Notify notify) {
         FlyLog.d("notifyMusic size=%d", mMusicList.size());
@@ -496,6 +502,7 @@ public class FlyMediaService extends Service implements IStorageListener {
                 }
                 isRunning.set(false);
                 FlyLog.d("finish scan mPath=%s", path);
+                FlyLog.d("scan path %s use %d Millis",path,(int)(System.currentTimeMillis()-startScanTime));
             }
         });
     }
@@ -707,10 +714,7 @@ public class FlyMediaService extends Service implements IStorageListener {
             } else {
                 FlyLog.d("scan save path =%s", scanPath);
             }
-            if (!currentPath.endsWith(scanPath)) {
-                isStoped.set(true);
-                scanPath(scanPath);
-            }
+            startScanPath(scanPath);
         }
     }
 
@@ -737,10 +741,7 @@ public class FlyMediaService extends Service implements IStorageListener {
             String str1 = intent.getStringExtra(Const.SCAN_PATH_KEY);
             if (!TextUtils.isEmpty(str1) && StorageTools.isRemoved(this, str1)) {
                 FlyLog.d("scan path=%s", str1);
-                if(!currentPath.endsWith(str1)) {
-                    isStoped.set(true);
-                    scanPath(str1);
-                }
+                startScanPath(str1);
             }
 
             String str2 = intent.getStringExtra(Const.UMOUNT_STORE);

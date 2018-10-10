@@ -2,7 +2,6 @@ package com.jancar.media.adpater;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
@@ -27,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
 import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 /**
@@ -40,8 +40,9 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
     private List<Video> mList;
     private Context mContext;
     private RecyclerView mRecyclerView;
-    private Set<GetDvrVideoBitmatTask> tasks = new HashSet<>();
+    private Set<GetVideoBitmatTask> tasks = new HashSet<>();
     private DoubleBitmapCache doubleBitmapCache;
+    private Handler mHandler = new Handler(Looper.getMainLooper());
     private OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
@@ -90,7 +91,7 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
             holder.imageView.setImageBitmap(bitmap);
         } else {
             holder.imageView.setImageResource(R.drawable.media_default_image);
-            GetDvrVideoBitmatTask task = new GetDvrVideoBitmatTask(mList.get(position).url);
+            GetVideoBitmatTask task = new GetVideoBitmatTask(mList.get(position).url);
             task.execute(mList.get(position).url);
             tasks.add(task);
         }
@@ -111,8 +112,24 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
         }
     }
 
+    @Override
+    public int getItemCount() {
+        return mList == null ? 0 : mList.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView;
+        TextView textView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            imageView = (ImageView) itemView.findViewById(R.id.item_iv01);
+            textView = (TextView) itemView.findViewById(R.id.item_tv01);
+        }
+    }
+
     public void cancleAllTask() {
-        for (GetDvrVideoBitmatTask task : tasks) {
+        for (GetVideoBitmatTask task : tasks) {
             task.cancel(true);
         }
         tasks.clear();
@@ -132,7 +149,7 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
                         imageView.setImageBitmap(bitmap);
                     }
                 } else {
-                    GetDvrVideoBitmatTask task = new GetDvrVideoBitmatTask(mList.get(i).url);
+                    GetVideoBitmatTask task = new GetVideoBitmatTask(mList.get(i).url);
                     task.execute(mList.get(i).url);
                     tasks.add(task);
                 }
@@ -143,23 +160,7 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
     }
 
 
-    @Override
-    public int getItemCount() {
-        return mList == null ? 0 : mList.size();
-    }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
-        TextView textView;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            imageView = (ImageView) itemView.findViewById(R.id.item_iv01);
-            textView = (TextView) itemView.findViewById(R.id.item_tv01);
-        }
-    }
-
-    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     public void update() {
         cancleAllTask();
@@ -178,10 +179,10 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
     }
 
 
-    public class GetDvrVideoBitmatTask extends AsyncTask<String, Bitmap, Bitmap> {
+    public class GetVideoBitmatTask extends AsyncTask<String, Bitmap, Bitmap> {
         private String url;
 
-        GetDvrVideoBitmatTask(String url) {
+        GetVideoBitmatTask(String url) {
             this.url = url;
         }
 

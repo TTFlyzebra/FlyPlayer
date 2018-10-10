@@ -10,6 +10,7 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -29,6 +30,7 @@ import com.jancar.media.service.MusicService;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
+import com.jancar.media.utils.SystemPropertiesProxy;
 import com.jancar.media.view.CircleImageView;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
@@ -117,7 +119,7 @@ public class MusicActivity extends BaseActivity implements
         mReceiver = new MyReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(MusicService.MAIN_ACTION_BROADCAST_EXIT);
-        registerReceiver(mReceiver,intentFilter);
+        registerReceiver(mReceiver, intentFilter);
 
         /**
          * 启动服务
@@ -184,6 +186,7 @@ public class MusicActivity extends BaseActivity implements
     }
 
     private boolean isStop = true;
+
     protected void onStart() {
         super.onStart();
         usbMediaScan.addListener(this);
@@ -243,7 +246,7 @@ public class MusicActivity extends BaseActivity implements
             } catch (Exception e) {
                 FlyLog.e(e.toString());
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
         super.musicID3UrlList(musicUrlList);
@@ -282,8 +285,8 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        FlyLog.d("keycode=%d,event=%s",keyCode,event.toString());
-        switch (keyCode){
+        FlyLog.d("keycode=%d,event=%s", keyCode, event.toString());
+        switch (keyCode) {
             case KeyEvent.KEYCODE_HEADSETHOOK:
             case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
                 if (musicPlayer.isPlaying()) {
@@ -495,14 +498,14 @@ public class MusicActivity extends BaseActivity implements
     private class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(MusicService.MAIN_ACTION_BROADCAST_EXIT)){
+            if (intent.getAction().equals(MusicService.MAIN_ACTION_BROADCAST_EXIT)) {
                 finish();
             }
         }
     }
 
     private boolean lostPause = false;
-    private boolean lostSetVolume = true;
+    private boolean jancarMixPause = true;
     private AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
         public void onAudioFocusChange(int focusChange) {
             FlyLog.d("onAudioFocusChange focusChange=%d", focusChange);
@@ -520,19 +523,23 @@ public class MusicActivity extends BaseActivity implements
                     }
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                    if (musicPlayer.isPlaying()) {
-                        musicPlayer.setVolume(0.3f, 0.3f);
-                        lostSetVolume = true;
+                    /**
+                     * 是否混音
+                     */
+                    boolean flag = SystemProperties.getBoolean(SystemPropertiesProxy.Property.PERSIST_KEY_GISMIX, true);
+                    if (!flag && musicPlayer.isPlaying()) {
+                        musicPlayer.pause();
+                        jancarMixPause = true;
                     }
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
-                    if (musicPlayer.isPause()&&lostPause) {
+                    if (musicPlayer.isPause() && lostPause) {
                         musicPlayer.start();
                         lostPause = false;
                     }
-                    if(lostSetVolume){
-                        musicPlayer.setVolume(1.0f,1.0f);
-                        lostSetVolume = false;
+                    if (jancarMixPause) {
+                        musicPlayer.start();
+                        jancarMixPause = false;
                     }
                     break;
             }
