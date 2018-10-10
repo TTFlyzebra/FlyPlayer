@@ -91,11 +91,11 @@ public class RegisterMusicSession {
     private void handleMediaButton(KeyEvent keyEvent) {
         int keyCode = keyEvent.getKeyCode();
         if (KeyEvent.KEYCODE_MEDIA_NEXT == keyCode) {
-            musicPlayer.playFore();
+            musicPlayer.playNext();
         } else if (KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE == keyCode) {
         } else if (KeyEvent.KEYCODE_HEADSETHOOK == keyCode) {
         } else if (KeyEvent.KEYCODE_MEDIA_PREVIOUS == keyCode) {
-            musicPlayer.playNext();
+            musicPlayer.playFore();
         } else if (KeyEvent.KEYCODE_MEDIA_STOP == keyCode) {
             musicPlayer.pause();
         } else if (KeyEvent.KEYCODE_MEDIA_PAUSE == keyCode) {

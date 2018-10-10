@@ -50,7 +50,7 @@ public class MusicPlayListFragment extends MusicFragment implements
         recyclerView.addItemDecoration(new RecycleViewDivider(getActivity(),
                 LinearLayoutManager.HORIZONTAL, 1, getActivity().getResources().getColor(R.color.divider)));
         recyclerView.setAdapter(adapter);
-
+        musicUrlList(mMusicList);
     }
 
     @Override

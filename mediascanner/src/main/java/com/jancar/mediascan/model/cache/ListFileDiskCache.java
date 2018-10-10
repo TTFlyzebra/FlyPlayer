@@ -74,7 +74,10 @@ public class ListFileDiskCache {
     }
 
     public void put(String key, String json) {
-        if (TextUtils.isEmpty(json)) return;
+        if (TextUtils.isEmpty(json)) {
+            FlyLog.d("json is empty!");
+            json = "[]";
+        }
         OutputStream outputStream = null;
         try {
             DiskLruCache.Editor editor = mDiskLruCache.edit(EncodeHelper.md5(key));

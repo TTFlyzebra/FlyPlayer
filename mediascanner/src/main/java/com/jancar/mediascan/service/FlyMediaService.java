@@ -487,12 +487,9 @@ public class FlyMediaService extends Service implements IStorageListener {
                 }
 
                 if (localPaths.contains(path)) {
-                    if (!mVideoList.isEmpty())
-                        mListDiskCache.put(path + "video", GsonUtils.obj2Json(mVideoList));
-                    if (!mMusicList.isEmpty())
-                        mListDiskCache.put(path + "music", GsonUtils.obj2Json(mMusicList));
-                    if (!mImageList.isEmpty())
-                        mListDiskCache.put(path + "image", GsonUtils.obj2Json(mImageList));
+                    mListDiskCache.put(path + "video", GsonUtils.obj2Json(mVideoList));
+                    mListDiskCache.put(path + "music", GsonUtils.obj2Json(mMusicList));
+                    mListDiskCache.put(path + "image", GsonUtils.obj2Json(mImageList));
                     FlyLog.d("finish save path=%s", path);
                 }
 
@@ -502,7 +499,7 @@ public class FlyMediaService extends Service implements IStorageListener {
                 }
                 isRunning.set(false);
                 FlyLog.d("finish scan mPath=%s", path);
-                FlyLog.d("scan path %s use %d Millis",path,(int)(System.currentTimeMillis()-startScanTime));
+                FlyLog.d("scan path %s use %d Millis", path, (int) (System.currentTimeMillis() - startScanTime));
             }
         });
     }
