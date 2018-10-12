@@ -86,7 +86,7 @@ public class MusicService extends Service implements IMusicPlayerListener {
     @Override
     public void onDestroy() {
         registerMediaSession.releaseMediaButton();
-        stopForeground(true);
+//        stopForeground(true);
         unregisterReceiver(broadcastreceiver);
         musicPlayer.removeListener(this);
         musicPlayer.stop();
@@ -94,8 +94,8 @@ public class MusicService extends Service implements IMusicPlayerListener {
     }
 
     private void showNotification() {
-        setRemoteViews();
-        startForeground(NOTIFICATION_ID, noti);
+//        setRemoteViews();
+//        startForeground(NOTIFICATION_ID, noti);
     }
 
     private void setRemoteViews() {

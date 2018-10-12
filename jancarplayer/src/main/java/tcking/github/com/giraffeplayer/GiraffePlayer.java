@@ -28,6 +28,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.jancar.media.R;
+import com.jancar.media.activity.VideoActivity;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 
@@ -42,7 +43,6 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
  */
 public class GiraffePlayer {
 
-    public static boolean isShowVideoPlayList = false;
     /**
      * fitParent:scale the video uniformly (maintain the video's aspect ratio) so that both dimensions (width and height) of the video will be equal to or **less** than the corresponding dimension of the view. like ImageView's `CENTER_INSIDE`.等比缩放,画面填满view。
      */
@@ -73,7 +73,7 @@ public class GiraffePlayer {
     private static final int MESSAGE_SEEK_NEW_POSITION = 3;
     private static final int MESSAGE_HIDE_CENTER_BOX = 4;
     private static final int MESSAGE_RESTART_PLAY = 5;
-    private final Activity activity;
+    private final VideoActivity activity;
     private final IjkVideoView videoView;
     private final SeekBar seekBar;
     private final AudioManager audioManager;
@@ -95,11 +95,6 @@ public class GiraffePlayer {
     private int screenWidthPixels;
 
 
-    private RelativeLayout app_video_bottom_box;
-    private RelativeLayout play_ll01_playlist;
-    private ImageView menu_play_list;
-
-
     private final View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -109,6 +104,7 @@ public class GiraffePlayer {
             } else if (v.getId() == R.id.app_video_replay_icon) {
                 videoView.seekTo(0);
                 videoView.start();
+                statusChange(STATUS_PLAYING);
                 doPauseResume();
             }
         }
@@ -161,21 +157,18 @@ public class GiraffePlayer {
             $.id(R.id.app_video_replay).gone();
             videoView.seekTo(0);
             videoView.start();
+            statusChange(STATUS_PLAYING);
         } else if (videoView.isPlaying()) {
-            statusChange(STATUS_PAUSE);
             videoView.pause();
+            statusChange(STATUS_PAUSE);
         } else {
             videoView.start();
+            statusChange(STATUS_PLAYING);
         }
-        updatePausePlay();
     }
 
-    private void updatePausePlay() {
-        if (videoView.isPlaying()) {
-            $.id(R.id.app_video_play).image(R.drawable.media_pause);
-        } else {
-            $.id(R.id.app_video_play).image(R.drawable.media_play);
-        }
+    public void updatePausePlay() {
+        $.id(R.id.app_video_play).image(videoView.isPlaying() ? R.drawable.media_pause : R.drawable.media_play);
     }
 
 
@@ -185,30 +178,15 @@ public class GiraffePlayer {
      * @param timeout
      */
     public void show(int timeout) {
-        activity.getWindow().getDecorView().setSystemUiVisibility(View.VISIBLE);
         if (!isShowing) {
-            if (!isLive) {
-                showBottomControl(true);
-            }
             isShowing = true;
             onControlPanelVisibilityChangeListener.change(true);
         }
-        updatePausePlay();
-        handler.sendEmptyMessage(MESSAGE_SHOW_PROGRESS);
         handler.removeMessages(MESSAGE_FADE_OUT);
         if (timeout != 0) {
             handler.sendMessageDelayed(handler.obtainMessage(MESSAGE_FADE_OUT), timeout);
         }
     }
-
-
-    private void showBottomControl(boolean show) {
-        app_video_bottom_box.animate()
-                .translationY(show ? 0 : 150 * DisplayUtils.getMetrices(activity).heightPixels / 600)
-                .setDuration(show ? 300 : 300)
-                .start();
-    }
-
 
     private long duration;
     private boolean instantSeeking;
@@ -256,12 +234,7 @@ public class GiraffePlayer {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MESSAGE_FADE_OUT:
-                    long time = defaultRetryTime - (System.currentTimeMillis() - RootPlayView.TOUCHTIME);
-                    if (time <= 0) {
-                        hide(false);
-                    } else {
-                        handler.sendMessageDelayed(handler.obtainMessage(MESSAGE_FADE_OUT), time);
-                    }
+                    hide(false);
                     break;
                 case MESSAGE_HIDE_CENTER_BOX:
                     $.id(R.id.app_video_volume_box).gone();
@@ -279,7 +252,6 @@ public class GiraffePlayer {
                     if (!isDragging && isShowing) {
                         msg = obtainMessage(MESSAGE_SHOW_PROGRESS);
                         sendMessageDelayed(msg, 1000);
-                        updatePausePlay();
                     }
                     break;
                 case MESSAGE_RESTART_PLAY:
@@ -298,10 +270,8 @@ public class GiraffePlayer {
         } catch (Throwable e) {
             Log.e("GiraffePlayer", "loadLibraries error", e);
         }
-        this.activity = activity;
-        app_video_bottom_box = (RelativeLayout) activity.findViewById(R.id.app_video_bottom_box);
-        play_ll01_playlist = (RelativeLayout) activity.findViewById(R.id.play_ll01_playlist);
-        menu_play_list = (ImageView) activity.findViewById(R.id.menu_play_list);
+        this.activity = (VideoActivity) activity;
+//        app_video_bottom_box = (RelativeLayout) activity.findViewById(R.id.app_video_bottom_box);
         screenWidthPixels = activity.getResources().getDisplayMetrics().widthPixels;
         $ = new Query(activity);
         videoView = (IjkVideoView) activity.findViewById(R.id.video_view);
@@ -401,17 +371,6 @@ public class GiraffePlayer {
         if (!playerSupport) {
             showStatus(activity.getResources().getString(R.string.not_support));
         }
-
-        activity.getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if (visibility == 0) {
-                    handler.removeCallbacksAndMessages(null);
-                    show(defaultTimeout);
-                }
-            }
-        });
-
     }
 
     /**
@@ -441,14 +400,7 @@ public class GiraffePlayer {
         } else if (newStatus == STATUS_ERROR) {
             handler.removeMessages(MESSAGE_SHOW_PROGRESS);
             hideAll();
-            if (isLive) {
-                showStatus(activity.getResources().getString(R.string.small_problem));
-                if (defaultRetryTime > 0) {
-                    handler.sendEmptyMessageDelayed(MESSAGE_RESTART_PLAY, defaultRetryTime);
-                }
-            } else {
-                showStatus(activity.getResources().getString(R.string.small_problem));
-            }
+            showStatus(activity.getResources().getString(R.string.small_problem));
         } else if (newStatus == STATUS_LOADING) {
             hideAll();
             $.id(R.id.app_video_loading).visible();
@@ -457,43 +409,13 @@ public class GiraffePlayer {
             $.id(R.id.app_video_loading).gone();
             $.id(R.id.app_video_status).gone();
         }
-
+        updatePausePlay();
     }
 
     private void hideAll() {
-        isShowVideoPlayList = false;
-        menu_play_list.setImageResource(R.drawable.media_list_menu_close);
-        play_ll01_playlist.animate().translationX(0).setDuration(300)
-                .setListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        if (play_ll01_playlist.getX() > ((1024 - 394) * DisplayUtils.getMetrices(activity).widthPixels / 1024)) {
-                            play_ll01_playlist.setVisibility(View.GONE);
-                        } else {
-                            play_ll01_playlist.setVisibility(View.VISIBLE);
-                        }
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                }).start();
-        activity.getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
         $.id(R.id.app_video_replay).gone();
         $.id(R.id.app_video_loading).gone();
         $.id(R.id.app_video_status).gone();
-        showBottomControl(false);
         onControlPanelVisibilityChangeListener.change(false);
     }
 
@@ -517,6 +439,7 @@ public class GiraffePlayer {
                 }
             }
             videoView.start();
+            statusChange(STATUS_PLAYING);
         }
     }
 
@@ -587,29 +510,31 @@ public class GiraffePlayer {
     }
 
     public void play(String url) {
-        FlyLog.d("play url=%s",url);
+        FlyLog.d("play url=%s", url);
         this.url = url;
         if (playerSupport) {
             $.id(R.id.app_video_loading).visible();
             videoView.setVideoPath(url);
             videoView.start();
+            statusChange(STATUS_PLAYING);
         }
     }
 
 
-    public void play(String url,int seek) {
-        FlyLog.d("play url=%s,seek=%d",url,seek);
+    public void play(String url, int seek) {
+        FlyLog.d("play url=%s,seek=%d", url, seek);
         this.url = url;
         if (playerSupport) {
             $.id(R.id.app_video_loading).visible();
             videoView.setVideoPath(url);
             videoView.seekTo(seek);
             videoView.start();
+            statusChange(STATUS_PLAYING);
         }
     }
 
     public String getPlayUrl() {
-        return url==null?"":url;
+        return url == null ? "" : url;
     }
 
     private String generateTime(long time) {
@@ -720,7 +645,6 @@ public class GiraffePlayer {
         long deltaMax = Math.min(100 * 1000, duration - position);
         long delta = (long) (deltaMax * percent);
 
-
         newPosition = delta + position;
         if (newPosition > duration) {
             newPosition = duration;
@@ -766,7 +690,7 @@ public class GiraffePlayer {
 
     }
 
-    private long setProgress() {
+    public long setProgress() {
         if (isDragging) {
             return 0;
         }
@@ -789,42 +713,11 @@ public class GiraffePlayer {
     }
 
     public void hide(boolean force) {
-        if(force){
+        if (force) {
             handler.removeCallbacksAndMessages(null);
         }
-        isShowVideoPlayList = false;
-        menu_play_list.setImageResource(R.drawable.media_list_menu_close);
-        play_ll01_playlist.animate().translationX(0).setDuration(300)
-                .setListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        if (play_ll01_playlist.getX() > ((1024 - 394) * DisplayUtils.getMetrices(activity).widthPixels / 1024)) {
-                            play_ll01_playlist.setVisibility(View.GONE);
-                        } else {
-                            play_ll01_playlist.setVisibility(View.VISIBLE);
-                        }
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                })
-                .start();
-        activity.getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
         if (force || isShowing) {
             handler.removeMessages(MESSAGE_SHOW_PROGRESS);
-            showBottomControl(false);
             isShowing = false;
             onControlPanelVisibilityChangeListener.change(false);
         }
@@ -865,6 +758,7 @@ public class GiraffePlayer {
 
     public void start() {
         videoView.start();
+        statusChange(STATUS_PLAYING);
     }
 
     public void pause() {
@@ -1046,7 +940,14 @@ public class GiraffePlayer {
             } else {
                 show(defaultTimeout);
             }
+            activity.touchTime = 0;
+            activity.showControlView(!activity.isShowControl);
             return true;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            super.onLongPress(e);
         }
     }
 
@@ -1069,7 +970,7 @@ public class GiraffePlayer {
     }
 
     public void stop() {
-        this.url="";
+        this.url = "";
         videoView.stopPlayback();
     }
 
@@ -1091,14 +992,13 @@ public class GiraffePlayer {
             return this;
         }
         onProgressSlide(percent);
-        showBottomControl(true);
         handler.sendEmptyMessage(MESSAGE_SHOW_PROGRESS);
         endGesture();
         return this;
     }
 
     public int getCurrentPosition() {
-        return videoView==null?0:videoView.getCurrentPosition();
+        return videoView == null ? 0 : videoView.getCurrentPosition();
     }
 
     /**

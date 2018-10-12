@@ -76,7 +76,7 @@ public class MusicActivity extends BaseActivity implements
     private String lyrics = null;
 
     private int HIDE_TIME = 5000;
-    private static final int REFRESH_SEEK_LRC_TIME = 200;
+    private static final int REFRESH_SEEK_LRC_TIME = 1000;
 
     private MyReceiver mReceiver;
     private long touchTime;
@@ -130,22 +130,6 @@ public class MusicActivity extends BaseActivity implements
         initView();
         musicPlayer.addListener(this);
         musicPlayer.playSave();
-
-//        //获取cursor
-//        Cursor cursor = this.getContentResolver().query(
-//                MediaStore.Video.Media.EXTERNAL_CONTENT_URI, // URI,可以有多种形式
-//                null,
-//                null,
-//                null,
-//                null);
-////图片路径所在列的索引
-//        int indexPhotoPath = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
-//        while (cursor.moveToNext()) {
-//            //打印图片的路径
-//            FlyLog.i("uri=:%s", cursor.getString(indexPhotoPath));
-//        }
-//        cursor.close();
-
     }
 
     private void initView() {
@@ -304,8 +288,13 @@ public class MusicActivity extends BaseActivity implements
                 }
                 return true;
             case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
+                return true;
             case KeyEvent.KEYCODE_MEDIA_NEXT:
+                musicPlayer.playNext();
+                return true;
             case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+                musicPlayer.playFore();
+                return true;
             case KeyEvent.KEYCODE_MEDIA_REWIND:
                 return true;
             case KeyEvent.KEYCODE_MEDIA_STOP:
