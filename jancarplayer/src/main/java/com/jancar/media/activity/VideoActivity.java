@@ -38,7 +38,7 @@ public class VideoActivity extends BaseActivity implements
         View.OnClickListener,
         FlyTabView.OnItemClickListener,
         GiraffePlayer.OnPlayStatusChangeLiseter,
-        TouchEventRelativeLayout.OnTouchEventListener{
+        TouchEventRelativeLayout.OnTouchEventListener {
     private ImageView play_fore, play_next, leftMenu;
     private TouchEventRelativeLayout leftLayout;
     private ImageView menu_play_list;
@@ -68,7 +68,7 @@ public class VideoActivity extends BaseActivity implements
             try {
                 player.setProgress();
                 mHandler.postDelayed(seekBarTask, REFRESH_SEEK_LRC_TIME);
-            }catch (Exception e){
+            } catch (Exception e) {
                 FlyLog.e(e.toString());
             }
         }
@@ -101,10 +101,7 @@ public class VideoActivity extends BaseActivity implements
         player = new GiraffePlayer(this);
         player.setScaleType(GiraffePlayer.SCALETYPE_FITPARENT);
         player.addStatusChangeLiseter(this);
-
         initView();
-
-        playSave();
     }
 
     @Override
@@ -252,7 +249,7 @@ public class VideoActivity extends BaseActivity implements
 
     public void showControlView(boolean flag) {
         isShowControl = flag;
-        if(isShowControl){
+        if (isShowControl) {
             mHandler.removeCallbacks(seekBarTask);
             mHandler.post(seekBarTask);
         }
@@ -270,12 +267,13 @@ public class VideoActivity extends BaseActivity implements
     private void showLeftMenu(boolean flag) {
         leftLayout.setVisibility(View.VISIBLE);
         leftLayout.animate()
-                .translationX(flag ? -394 * DisplayUtils.getMetrices(this).widthPixels / 1024:0)
+                .translationX(flag ? -394 * DisplayUtils.getMetrices(this).widthPixels / 1024 : 0)
                 .setDuration(300)
                 .setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
                     }
+
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         if (leftLayout.getX() > ((1024 - 394) * DisplayUtils.getMetrices(VideoActivity.this).widthPixels / 1024)) {
@@ -284,9 +282,11 @@ public class VideoActivity extends BaseActivity implements
                             leftLayout.setVisibility(View.VISIBLE);
                         }
                     }
+
                     @Override
                     public void onAnimationCancel(Animator animation) {
                     }
+
                     @Override
                     public void onAnimationRepeat(Animator animation) {
                     }
@@ -361,21 +361,26 @@ public class VideoActivity extends BaseActivity implements
     @Override
     public void statusChange(int statu) {
         FlyLog.d("Statu = %d", statu);
-
         switch (statu) {
             case GiraffePlayer.STATUS_ERROR:
             case GiraffePlayer.STATUS_COMPLETED:
                 playNext();
                 break;
             case GiraffePlayer.STATUS_PLAYING:
-                SPUtil.set(this, "VIDEO_URL", player.getPlayUrl());
-                SPUtil.set(this, "VIDEO_SEEK", player.getCurrentPosition());
                 setCurrentPos();
                 mHandler.removeCallbacks(seekBarTask);
                 mHandler.post(seekBarTask);
+                SPUtil.set(this, "VIDEO_URL", player.getPlayUrl());
+                SPUtil.set(this, "VIDEO_SEEK", player.getCurrentPosition());
                 break;
             case GiraffePlayer.STATUS_PAUSE:
             case GiraffePlayer.STATUS_LOADING:
+                SPUtil.set(this, "VIDEO_URL", player.getPlayUrl());
+                SPUtil.set(this, "VIDEO_SEEK", player.getCurrentPosition());
+                break;
+            default:
+                SPUtil.set(this, "VIDEO_URL", player.getPlayUrl());
+                SPUtil.set(this, "VIDEO_SEEK", player.getCurrentPosition());
                 break;
         }
     }
@@ -463,6 +468,7 @@ public class VideoActivity extends BaseActivity implements
     };
 
     public long touchTime;
+
     @Override
     public void onFlyTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {

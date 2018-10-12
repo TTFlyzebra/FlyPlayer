@@ -309,8 +309,11 @@ public class MusicActivity extends BaseActivity implements
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ac_music_content:
+                isShowLeftMenu = false;
+                showLeftMenu(isShowLeftMenu);
+                break;
             case R.id.ac_music_left_menu:
-//            case R.id.ac_music_content:
                 isShowLeftMenu = !isShowLeftMenu;
                 showLeftMenu(isShowLeftMenu);
                 break;

@@ -27,6 +27,7 @@ import com.jancar.media.view.TouchEventRelativeLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class PhotoActivity extends BaseActivity implements
     public ViewPager viewPager;
     private MyPageAdapter adapter;
     public List<Image> imageList = new ArrayList<>();
-    private HashMap<Integer, Integer> imageResIDs = new HashMap<>();
+    private Hashtable<Integer, Integer> imageResIDs = new Hashtable<>();
     private ImageView photoFore, photoNext, photoRotate, photoZoomIn, photoZoomOut;
     private ImageView leftMenu;
     private TouchEventRelativeLayout controlLayout;
@@ -82,7 +83,7 @@ public class PhotoActivity extends BaseActivity implements
             @Override
             public void onSystemUiVisibilityChange(int visibility) {
                 if (visibility == 0) {
-//                    showOrHideControlView();
+                    showControlView(true);
                 }
             }
         });
