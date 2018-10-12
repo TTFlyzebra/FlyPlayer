@@ -41,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.PhotoActivity"
+            android:name="com.jancar.photo.MainActivity"
             android:exported="true"
             android:icon="@drawable/ic_image"
             android:label="@string/photo"

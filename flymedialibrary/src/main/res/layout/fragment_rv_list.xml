@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fm_rv01"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/item_divider"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <View
+        android:id="@+id/item_divider"
+        android:layout_width="match_parent"
+        android:background="@color/divider"
+        android:layout_above="@+id/fm_tv01"
+        android:layout_height="1px"/>
+
+    <TextView
+        android:id="@+id/fm_tv01"
+        android:layout_width="match_parent"
+        android:layout_height="40px"
+        android:gravity="center"
+        android:textColor="#0370E5"
+        android:layout_alignParentBottom="true"
+        android:textSize="22px" />
+</RelativeLayout>

@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">JancarPlayers</string>
+    <string name="giraffe_player_url_empty">請指定視頻播放的地址</string>
+    <string name="small_problem">視頻解碼出錯</string>
+    <string name="can_not_play">無法播放此視頻</string>
+    <string name="not_support">播放器不支持此設備</string>
+    <string name="disk_list">磁盤列表</string>
+    <string name="play_list">播放列表</string>
+    <string name="file_list">文件列表</string>
+    <string name="photo_list">圖片列表</string>
+    <string name="storage">存儲器</string>
+    <string name="single">單曲</string>
+    <string name="artist">歌手</string>
+    <string name="album">專輯</string>
+    <string name="folder">文件夾</string>
+    <string name="storage_local">本地存儲</string>
+    <string name="storage_usb">USB</string>
+    <string name="no_artist">未知藝術家</string>
+    <string name="no_album">未知專輯</string>
+    <string name="no_album_start">未知</string>
+    <string name="photo">圖片</string>
+    <string name="video">視頻</string>
+    <string name="music">音樂</string>
+    <string name="musicsumformat">(%d首)</string>
+    <string name="photosumformat">(%d張)</string>
+    <string name="videosumformat">(%d集)</string>
+    <string name="lrc_label">暫無歌詞</string>
+    <string name="music_scan1">正在掃描設備...</string>
+    <string name="music_scan2">共有%d首歌曲</string>
+    <string name="video_scan2">共有%d集視頻</string>
+    <string name="photo_scan2">共有%d張圖片</string>
+    <string name="media_parking_prompt_contents">為了行駛安全，請注意駕駛！</string>
+</resources>

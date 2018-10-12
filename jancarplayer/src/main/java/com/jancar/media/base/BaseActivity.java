@@ -36,10 +36,10 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     }
 
     public void replaceFragment(String fName) {
-        FlyLog.d("replaceFragment com.jancar.media.fragment.%s", fName);
+        FlyLog.d("replaceFragment com.jancar.media.com.jancar.photo.fragment.%s", fName);
         try {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
-            Class<?> cls = Class.forName("com.jancar.media.fragment." + fName);
+            Class<?> cls = Class.forName("com.jancar.media.com.jancar.photo.fragment." + fName);
             Constructor<?> cons = cls.getConstructor();
             Fragment fragment = (Fragment) cons.newInstance();
             ft.replace(R.id.ac_replace_fragment, fragment).commit();
