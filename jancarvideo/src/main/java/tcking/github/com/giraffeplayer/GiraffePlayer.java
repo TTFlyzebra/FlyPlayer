@@ -25,9 +25,9 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.jancar.media.R;
-import com.jancar.media.activity.VideoActivity;
 import com.jancar.media.utils.FlyLog;
+import com.jancar.video.MainActivity;
+import com.jancar.video.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +70,7 @@ public class GiraffePlayer {
     private static final int MESSAGE_SEEK_NEW_POSITION = 3;
     private static final int MESSAGE_HIDE_CENTER_BOX = 4;
     private static final int MESSAGE_RESTART_PLAY = 5;
-    private final VideoActivity activity;
+    private final MainActivity activity;
     private final IjkVideoView videoView;
     private final SeekBar seekBar;
     private final AudioManager audioManager;
@@ -267,7 +267,7 @@ public class GiraffePlayer {
         } catch (Throwable e) {
             Log.e("GiraffePlayer", "loadLibraries error", e);
         }
-        this.activity = (VideoActivity) activity;
+        this.activity = (MainActivity) activity;
 //        app_video_bottom_box = (RelativeLayout) activity.findViewById(R.id.app_video_bottom_box);
         screenWidthPixels = activity.getResources().getDisplayMetrics().widthPixels;
         $ = new Query(activity);

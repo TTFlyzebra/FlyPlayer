@@ -6,7 +6,7 @@ android {
 
 
     defaultConfig {
-        applicationId "com.jancar.jancarvideo"
+        applicationId "com.jancar.video"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
@@ -27,10 +27,11 @@ android {
 
 dependencies {
     implementation 'com.android.support:multidex:1.0.3'
+    implementation project(path: ':ijkplayer')
     implementation project(path: ':flymedialibrary')
-    implementation project(path: ':photoview')
+    implementation files('libs/libksystat.jar')
+    implementation files('libs/libksyplayer.jar')
     compileOnly 'com.android.support:appcompat-v7:23.+'
     compileOnly 'com.android.support:recyclerview-v7:23.+'
-    compileOnly files('libs/glide-3.7.0.jar')
-    implementation files('libs/framworks.jar')
+    compileOnly files('libs/framworks.jar')
 }

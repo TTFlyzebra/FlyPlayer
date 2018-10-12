@@ -9,7 +9,7 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.jancar.media.R;
+import com.jancar.video.R;
 
 /**
  * Created by tcking on 15/10/27.
