@@ -50,7 +50,7 @@ dependencies {
     implementation project(path: ':mp3id3library')
     implementation files('libs/disklrucache.jar')
     implementation files('libs/glide-3.7.0.jar')
-    implementation files('libs/framworks.jar')
     implementation files('libs/libksyplayer.jar')
     implementation files('libs/libksystat.jar')
+    compileOnly files('libs/framworks.jar')
 }
