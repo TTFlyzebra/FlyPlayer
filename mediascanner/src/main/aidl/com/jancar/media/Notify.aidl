@@ -21,4 +21,6 @@ interface Notify {
     void notifyID3Music(inout List<Music> list);
 
     void notifyPath(String path);
+
+    void notifyFinish();
 }

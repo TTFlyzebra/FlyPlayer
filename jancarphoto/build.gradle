@@ -1,5 +1,28 @@
 apply plugin: 'com.android.application'
 
+//获取当前编译时间
+def getCreateTime() {
+    def createTime = new Date().format("yyyyMMdd", TimeZone.getTimeZone("GMT+08:00")).trim()
+    println createTime
+    return createTime
+}
+
+/**
+ * 获取Git 版本号
+ */
+def getGitSHA() {
+    def gitSHA = 'git rev-parse --short HEAD'.execute().text.trim()
+    return gitSHA
+}
+
+/**
+ * 获取Git 提交次数
+ */
+def getGitCommitCount() {
+    def gitCommitCount = 'git rev-list --count HEAD'.execute().text.trim();
+    return gitCommitCount;
+}
+
 android {
     compileSdkVersion 23
 
@@ -9,9 +32,8 @@ android {
         applicationId "com.jancar.photo"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
-
+        versionCode gitCommitCount.toInteger()
+        versionName "v1.0."+gitCommitCount
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -34,13 +56,28 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
 
         debug {
             signingConfig signingConfigs.debug
+        }
+    }
+
+    //配置自定义打包名称
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            def fileName
+            if (variant.buildType.name.equals('release')) {
+                fileName = "${applicationId}_release_${gitSHA}_${gitCommitCount}_${createTime}.apk"
+            } else if (variant.buildType.name.equals('debug')) {
+                fileName = "${applicationId}_debug_${gitSHA}_${gitCommitCount}_${createTime}.apk"
+            }
+            outputFileName = fileName;
         }
     }
 
