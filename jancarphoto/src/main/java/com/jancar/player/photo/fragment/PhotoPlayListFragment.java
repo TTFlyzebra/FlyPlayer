@@ -18,10 +18,9 @@ import com.jancar.media.data.Image;
 import com.jancar.media.data.Music;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.player.photo.PhotoActivity;
+import com.jancar.player.photo.adpater.PhotoPlayListAdapater;
 
 import java.util.List;
-
-import com.jancar.player.photo.adpater.PhotoPlayListAdapater;
 
 public class PhotoPlayListFragment extends BaseFragment implements
         PhotoPlayListAdapater.OnItemClickListener,
@@ -95,6 +94,7 @@ public class PhotoPlayListFragment extends BaseFragment implements
 
     @Override
     public void changePath(String path) {
+        textView.setText(R.string.music_scan1);
         activity.imageList.clear();
         adapter.notifyDataSetChanged();
     }
@@ -102,7 +102,6 @@ public class PhotoPlayListFragment extends BaseFragment implements
     @Override
     public void imageUrlList(List<Image> imageUrlList) {
         try {
-            textView.setText(R.string.music_scan1);
             adapter.notifyDataSetChanged();
         } catch (Exception e) {
             FlyLog.e(e.toString());

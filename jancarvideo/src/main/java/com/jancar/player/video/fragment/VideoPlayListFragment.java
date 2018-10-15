@@ -70,12 +70,12 @@ public class VideoPlayListFragment extends BaseFragment implements
 
     @Override
     public void changePath(String path) {
+        textView.setText(R.string.music_scan1);
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void videoUrlList(List<Video> videoUrlList) {
-        textView.setText(R.string.music_scan1);
         FlyLog.d("get videos size=%d", videoUrlList == null ? 0 : videoUrlList.size());
 //        scrollToCureentPlayItem();
         adapter.notifyDataSetChanged();

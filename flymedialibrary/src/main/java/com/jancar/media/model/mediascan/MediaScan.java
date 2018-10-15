@@ -187,13 +187,13 @@ public class MediaScan implements IMediaScan {
     @Override
     public void addListener(IUsbMediaListener iUsbMediaListener) {
         listeners.add(iUsbMediaListener);
-        if (mFlyMedia != null) {
-            try {
-                mFlyMedia.notify(notify);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
+//        if (mFlyMedia != null) {
+//            try {
+//                mFlyMedia.notify(notify);
+//            } catch (RemoteException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     @Override

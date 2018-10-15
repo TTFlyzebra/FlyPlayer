@@ -22,10 +22,6 @@ import android.widget.TextView;
 
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Music;
-import com.jancar.player.music.model.listener.IMusicPlayerListener;
-import com.jancar.player.music.model.musicplayer.IMusicPlayer;
-import com.jancar.player.music.model.musicplayer.MusicPlayer;
-import com.jancar.player.music.service.MusicService;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
@@ -36,6 +32,10 @@ import com.jancar.media.view.FlyTabView;
 import com.jancar.media.view.MarqueeTextView;
 import com.jancar.media.view.TouchEventRelativeLayout;
 import com.jancar.media.view.lrcview.LrcView;
+import com.jancar.player.music.model.listener.IMusicPlayerListener;
+import com.jancar.player.music.model.musicplayer.IMusicPlayer;
+import com.jancar.player.music.model.musicplayer.MusicPlayer;
+import com.jancar.player.music.service.MusicService;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
@@ -212,6 +212,12 @@ public class MusicActivity extends BaseActivity implements
         musicList.addAll(musicUrlList);
         musicPlayer.setPlayUrls(musicList);
         super.musicUrlList(musicUrlList);
+    }
+
+    @Override
+    public void scanFinish(String path) {
+        FlyLog.d("scanFinish");
+        super.scanFinish(path);
     }
 
     @Override

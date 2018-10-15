@@ -92,6 +92,7 @@ public class FlyMediaService extends Service implements IStorageListener {
                     }
                     try {
                         if (!isRunning.get()) {
+                            FlyLog.d("notifyPath path=%s", currentPath);
                             notify.notifyPath(currentPath);
                             synchronized (mMusicList) {
                                 notifyMusic(mMusicList, notify);
@@ -105,6 +106,8 @@ public class FlyMediaService extends Service implements IStorageListener {
                             synchronized (mMusicID3List) {
                                 notifyID3Music(mMusicID3List, notify);
                             }
+                            notify.notifyFinish(currentPath);
+                            FlyLog.d("notifyFinish path=%s", currentPath);
                         }
                     } catch (RemoteException e) {
                         FlyLog.e(e.toString());
@@ -131,6 +134,7 @@ public class FlyMediaService extends Service implements IStorageListener {
                     }
                     try {
                         if (!isRunning.get()) {
+                            FlyLog.d("notifyPath path=%s", currentPath);
                             notify.notifyPath(currentPath);
                             synchronized (mMusicList) {
                                 notifyMusic(mMusicList, notify);
@@ -144,6 +148,8 @@ public class FlyMediaService extends Service implements IStorageListener {
                             synchronized (mMusicID3List) {
                                 notifyID3Music(mMusicID3List, notify);
                             }
+                            notify.notifyFinish(currentPath);
+                            FlyLog.d("notifyFinish path=%s", currentPath);
                         }
                     } catch (RemoteException e) {
                         FlyLog.e(e.toString());
