@@ -47,4 +47,9 @@ public class BaseFragment extends Fragment implements IUsbMediaListener {
     public void changePath(String path) {
 
     }
+
+    @Override
+    public void scanFinish(String path) {
+
+    }
 }

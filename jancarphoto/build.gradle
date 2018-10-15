@@ -29,7 +29,7 @@ android {
 
 
     defaultConfig {
-        applicationId "com.jancar.photo"
+        applicationId "com.jancar.player.photo"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode gitCommitCount.toInteger()

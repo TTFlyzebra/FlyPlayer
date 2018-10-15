@@ -61,7 +61,7 @@ public class MusicPlayListFragment extends MusicFragment implements
 
     @Override
     public void musicUrlList(List<Music> musicUrlList) {
-        FlyLog.d("get music size=%d", musicUrlList == null ? 0 : musicUrlList.size());
+        FlyLog.d("get player.music size=%d", musicUrlList == null ? 0 : musicUrlList.size());
         textView.setText(R.string.music_scan1);
 //        mMusicList.addAll(musicUrlList);
         adapter.notifyDataSetChanged();

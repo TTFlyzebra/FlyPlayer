@@ -535,7 +535,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
                         mMediaController.hide();
                     }
 
-                    /* If an error handler has been supplied, use it and finish. */
+                    /* If an error handler has been supplied, use it and scanFinish. */
                     if (mOnErrorListener != null) {
                         if (mOnErrorListener.onError(mMediaPlayer, framework_err, impl_err)) {
                             return true;

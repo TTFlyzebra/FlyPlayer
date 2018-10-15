@@ -22,13 +22,14 @@ def getGitCommitCount() {
     def gitCommitCount = 'git rev-list --count HEAD'.execute().text.trim();
     return gitCommitCount;
 }
+
 android {
     compileSdkVersion 23
 
 
 
     defaultConfig {
-        applicationId "com.jancar.video"
+        applicationId "com.jancar.player.video"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1

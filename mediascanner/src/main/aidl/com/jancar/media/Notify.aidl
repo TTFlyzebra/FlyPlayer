@@ -22,5 +22,5 @@ interface Notify {
 
     void notifyPath(String path);
 
-    void notifyFinish();
+    void notifyFinish(String path);
 }

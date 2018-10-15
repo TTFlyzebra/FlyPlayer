@@ -48,7 +48,7 @@ public class MediaScan implements IMediaScan {
     private Notify notify = new Notify.Stub() {
         @Override
         public void notifyMusic(final List<Music> list) throws RemoteException {
-            FlyLog.d("get music list size=%d", list == null ? 0 : list.size());
+            FlyLog.d("get player.music list size=%d", list == null ? 0 : list.size());
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {

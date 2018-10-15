@@ -38,4 +38,11 @@ public interface IUsbMediaListener {
      */
     void changePath(String path);
 
+
+    /**
+     * 存储器扫描完成
+     * @param path
+     */
+    void scanFinish(String path);
+
 }

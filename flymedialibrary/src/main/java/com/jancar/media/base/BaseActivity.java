@@ -89,6 +89,13 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
 
     }
 
+    @Override
+    public void scanFinish(String path) {
+        for(IUsbMediaListener listener:listeners){
+            listener.scanFinish(path);
+        }
+    }
+
 
     private List<IUsbMediaListener> listeners = new ArrayList<>();
 

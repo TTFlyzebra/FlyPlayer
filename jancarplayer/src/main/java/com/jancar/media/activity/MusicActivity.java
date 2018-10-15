@@ -203,7 +203,7 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     public void musicUrlList(List<Music> musicUrlList) {
-        FlyLog.d("get music size=%d", musicUrlList == null ? 0 : musicUrlList.size());
+        FlyLog.d("get player.music size=%d", musicUrlList == null ? 0 : musicUrlList.size());
         if (musicUrlList == null) {
             FlyLog.d("musicUrlList = null return");
             super.musicUrlList(null);

@@ -48,7 +48,7 @@ public class MediaScan implements IMediaScan {
     private Notify notify = new Notify.Stub() {
         @Override
         public void notifyMusic(final List<Music> list) throws RemoteException {
-            FlyLog.d("get music list size=%d", list == null ? 0 : list.size());
+            FlyLog.d("get player.music list size=%d", list == null ? 0 : list.size());
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -93,6 +93,19 @@ public class MediaScan implements IMediaScan {
                 public void run() {
                     for (IUsbMediaListener listener : listeners) {
                         listener.changePath(path);
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void notifyFinish(final String path) throws RemoteException {
+            FlyLog.d("scanFinish mPath=%s", path);
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    for (IUsbMediaListener listener : listeners) {
+                        listener.scanFinish(path);
                     }
                 }
             });

@@ -27,7 +27,7 @@ android {
     compileSdkVersion 23
 
     defaultConfig {
-        applicationId "com.jancar.music"
+        applicationId "com.jancar.player.music"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode gitCommitCount.toInteger()
