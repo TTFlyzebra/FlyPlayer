@@ -28,6 +28,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currenPath = getSavePath();
         usbMediaScan.open();
     }
 
@@ -38,10 +39,10 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     }
 
     public void replaceFragment(String fName, @IdRes int resID) {
-        FlyLog.d("replaceFragment %s.fragment.%s",getPackageName(), fName);
+        FlyLog.d("replaceFragment %s.fragment.%s", getPackageName(), fName);
         try {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
-            Class<?> cls = Class.forName(getPackageName()+".fragment." + fName);
+            Class<?> cls = Class.forName(getPackageName() + ".fragment." + fName);
             Constructor<?> cons = cls.getConstructor();
             Fragment fragment = (Fragment) cons.newInstance();
             ft.replace(resID, fragment).commit();
@@ -52,14 +53,14 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
 
     @Override
     public void musicUrlList(List<Music> musicUrlList) {
-        for(IUsbMediaListener listener:listeners){
+        for (IUsbMediaListener listener : listeners) {
             listener.musicUrlList(musicUrlList);
         }
     }
 
     @Override
     public void musicID3UrlList(List<Music> musicUrlList) {
-        for(IUsbMediaListener listener:listeners){
+        for (IUsbMediaListener listener : listeners) {
             listener.musicID3UrlList(musicUrlList);
         }
 
@@ -67,7 +68,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
 
     @Override
     public void videoUrlList(List<Video> videoUrlList) {
-        for(IUsbMediaListener listener:listeners){
+        for (IUsbMediaListener listener : listeners) {
             listener.videoUrlList(videoUrlList);
         }
 
@@ -75,7 +76,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
 
     @Override
     public void imageUrlList(List<Image> imageUrlList) {
-        for(IUsbMediaListener listener:listeners){
+        for (IUsbMediaListener listener : listeners) {
             listener.imageUrlList(imageUrlList);
         }
 
@@ -84,8 +85,8 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     @Override
     public void stogrePathChange(String path) {
         currenPath = path;
-        SPUtil.set(this, "SAVA_PATH", currenPath);
-        for(IUsbMediaListener listener:listeners){
+        setSavePath(currenPath);
+        for (IUsbMediaListener listener : listeners) {
             listener.stogrePathChange(path);
         }
 
@@ -93,20 +94,26 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
 
     @Override
     public void scanFinish(String path) {
-        for(IUsbMediaListener listener:listeners){
+        for (IUsbMediaListener listener : listeners) {
             listener.scanFinish(path);
         }
     }
 
     @Override
     public void scanServiceConneted() {
-        String path = (String) SPUtil.get(this, "SAVA_PATH", "/storage/emulated/0");
-        usbMediaScan.openStorager(new StorageInfo(path));
-        for(IUsbMediaListener listener:listeners){
+        usbMediaScan.openStorager(new StorageInfo(getSavePath()));
+        for (IUsbMediaListener listener : listeners) {
             listener.scanServiceConneted();
         }
     }
 
+    public void setSavePath(String path) {
+        SPUtil.set(this, "SAVA_PATH", path);
+    }
+
+    public String getSavePath() {
+        return (String) SPUtil.get(this, "SAVA_PATH", "/storage/emulated/0");
+    }
 
     private List<IUsbMediaListener> listeners = new ArrayList<>();
 

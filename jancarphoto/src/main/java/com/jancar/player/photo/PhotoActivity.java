@@ -167,7 +167,7 @@ public class PhotoActivity extends BaseActivity implements
 
     @Override
     public void scanFinish(String path) {
-        FlyLog.d("scanFinish path=%d",path);
+        FlyLog.d("scanFinish path=%s",path);
         if (imageList == null || imageList.isEmpty()) {
             replaceFragment(fmName[0], R.id.ac_replace_fragment);
             tabView.setFocusPos(0);

@@ -611,7 +611,7 @@ public class FlyMediaService extends Service implements IStorageListener {
             notifyMusicListener(0);
             notifyVideoListener(0);
             notifyImageListener(0);
-
+            notifyFinishListener();
         }
         iStorage.refresh();
     }

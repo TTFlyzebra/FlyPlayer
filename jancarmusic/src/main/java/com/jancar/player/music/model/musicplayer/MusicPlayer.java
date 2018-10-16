@@ -5,9 +5,9 @@ import android.media.MediaPlayer;
 import android.text.TextUtils;
 
 import com.jancar.media.data.Music;
-import com.jancar.player.music.model.listener.IMusicPlayerListener;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.SPUtil;
+import com.jancar.player.music.model.listener.IMusicPlayerListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +30,7 @@ public class MusicPlayer implements IMusicPlayer,
     private String mPlayUrl = "";
     private List<Music> mPlayUrls = new ArrayList<>();
     private int mPlayPos = -1;
+    private String playPath = "";
     private Map<String, Integer> mPosMap = new HashMap<>();
 
     private MusicPlayer() {
@@ -41,10 +42,9 @@ public class MusicPlayer implements IMusicPlayer,
             saveSeek = 0;
         }
         start();
+        savePlayUrl(playPath);
         mPlayStatus = STATUS_PLAYING;
         notifyStatus();
-        SPUtil.set(mContext, "MUSIC_URL", mPlayUrl);
-        SPUtil.set(mContext, "MUSIC_SEEK", getCurrentPosition());
     }
 
     private static class MusicPlayerHolder {
@@ -135,12 +135,19 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void pause() {
         if (mMediaPlayer != null) {
+            savePlayUrl(playPath);
             mMediaPlayer.pause();
             mPlayStatus = STATUS_PAUSE;
             notifyStatus();
-            SPUtil.set(mContext, "MUSIC_URL", mPlayUrl);
-            SPUtil.set(mContext, "MUSIC_SEEK", getCurrentPosition());
         }
+    }
+
+    @Override
+    public void savePlayUrl(String path) {
+        int seek = getCurrentPosition();
+        SPUtil.set(mContext, path + "MUSIC_URL", mPlayUrl);
+        SPUtil.set(mContext, "MUSIC_SEEK", seek);
+        FlyLog.d("savePlayUrl path=%s,url=%s,seek=%d", path, mPlayUrl, seek);
     }
 
     @Override
@@ -150,9 +157,8 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void stop() {
+        FlyLog.d();
         if (mMediaPlayer != null) {
-            SPUtil.set(mContext, "MUSIC_URL", mPlayUrl);
-            SPUtil.set(mContext, "MUSIC_SEEK", getCurrentPosition());
             mMediaPlayer.stop();
             mMediaPlayer.release();
             mMediaPlayer = null;
@@ -180,8 +186,8 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void setPlayUrls(List<Music> urls) {
         mPlayUrls.clear();
-        if(!(new File(mPlayUrl).exists())){
-            mPlayUrl="";
+        if (!(new File(mPlayUrl).exists())) {
+            mPlayUrl = "";
         }
         if (urls == null || urls.isEmpty()) {
             mPlayPos = -1;
@@ -259,15 +265,22 @@ public class MusicPlayer implements IMusicPlayer,
     }
 
     @Override
-    public void playSave() {
-        String mPlayUrl = (String) SPUtil.get(mContext, "MUSIC_URL", "");
+    public void playSave(String path) {
+        FlyLog.d("playSave path=%s", path);
+        playPath = path;
+        String mPlayUrl = (String) SPUtil.get(mContext, playPath + "MUSIC_URL", "");
         int seek = (int) SPUtil.get(mContext, "MUSIC_SEEK", 0);
+        FlyLog.d("get Save url=%s,seek=%d", mPlayUrl, seek);
         if (!TextUtils.isEmpty(mPlayUrl)) {
             File file = new File(mPlayUrl);
             if (file.exists()) {
                 this.mPlayUrl = mPlayUrl;
                 play(mPlayUrl, seek);
             }
+        } else {
+            this.mPlayUrl = "";
+            this.saveSeek = 0;
+            savePlayUrl(playPath);
         }
     }
 

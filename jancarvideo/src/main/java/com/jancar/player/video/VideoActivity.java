@@ -358,7 +358,7 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     public void scanFinish(String path) {
-        FlyLog.d("scanFinish path=%d",path);
+        FlyLog.d("scanFinish path=%s",path);
         if(videoList==null||videoList.isEmpty()){
             player.stop();
             player.showStatus("");

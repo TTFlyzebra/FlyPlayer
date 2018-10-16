@@ -12,8 +12,9 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.widget.RemoteViews;
 
-import com.jancar.player.music.R;
+import com.jancar.media.utils.FlyLog;
 import com.jancar.player.music.MusicActivity;
+import com.jancar.player.music.R;
 import com.jancar.player.music.model.listener.IMusicPlayerListener;
 import com.jancar.player.music.model.musicplayer.IMusicPlayer;
 import com.jancar.player.music.model.musicplayer.MusicPlayer;
@@ -85,6 +86,7 @@ public class MusicService extends Service implements IMusicPlayerListener {
 
     @Override
     public void onDestroy() {
+        FlyLog.d("onDestroy");
         registerMediaSession.releaseMediaButton();
 //        stopForeground(true);
         unregisterReceiver(broadcastreceiver);

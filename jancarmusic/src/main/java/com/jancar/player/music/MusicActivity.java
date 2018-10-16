@@ -112,8 +112,6 @@ public class MusicActivity extends BaseActivity implements
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         requestAudioFocus();
 
-        musicPlayer.playSave();
-
         /**
          *监听通知栏退出广播
          */
@@ -187,6 +185,7 @@ public class MusicActivity extends BaseActivity implements
     @Override
     protected void onDestroy() {
         mHandler.removeCallbacksAndMessages(null);
+        musicPlayer.savePlayUrl(currenPath);
         musicPlayer.removeListener(this);
         unregisterReceiver(mReceiver);
         abandonAudioFocus();
@@ -197,9 +196,13 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     public void stogrePathChange(String path) {
-        FlyLog.d("stogrePathChange");
+        if(musicPlayer.isPlaying()){
+            musicPlayer.savePlayUrl(currenPath);
+        }
+        FlyLog.d("stogrePathChange path=%s",path);
         musicList.clear();
         super.stogrePathChange(path);
+        musicPlayer.playSave(path);
     }
 
     @Override
@@ -217,7 +220,7 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     public void scanFinish(String path) {
-        FlyLog.d("scanFinish path=%d", path);
+        FlyLog.d("scanFinish path=%s", path);
         if (musicList == null || musicList.isEmpty()) {
             musicPlayer.stop();
             tvAlbum.setText("");
@@ -231,11 +234,6 @@ public class MusicActivity extends BaseActivity implements
             showLeftMenu(isShowLeftMenu);
         }
         super.scanFinish(path);
-    }
-
-    @Override
-    public void scanServiceConneted() {
-        super.scanServiceConneted();
     }
 
     @Override

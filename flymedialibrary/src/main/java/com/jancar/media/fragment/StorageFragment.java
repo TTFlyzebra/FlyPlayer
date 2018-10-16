@@ -32,7 +32,7 @@ public class StorageFragment extends BaseFragment implements
     private StorageAdapater adapater;
     private List<StorageInfo> mList = new ArrayList<>();
     private IStorage storage = Storage.getInstance();
-    private MyReceiver receiver ;
+    private MyReceiver receiver;
 
     public StorageFragment() {
     }
@@ -51,7 +51,8 @@ public class StorageFragment extends BaseFragment implements
         IntentFilter mFilter = new IntentFilter();
         mFilter.addAction(Intent.ACTION_MEDIA_MOUNTED);
         mFilter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
-        getActivity().registerReceiver(receiver,mFilter);
+        mFilter.addDataScheme("file");
+        getActivity().registerReceiver(receiver, mFilter);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class StorageFragment extends BaseFragment implements
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapater);
         adapater.setOnItemClickListener(this);
-        adapater.setCurrentPath(((BaseActivity)getActivity()).currenPath);
+        adapater.setCurrentPath(((BaseActivity) getActivity()).currenPath);
     }
 
     @Override
@@ -87,7 +88,7 @@ public class StorageFragment extends BaseFragment implements
     @Override
     public void onStart() {
         super.onStart();
-        adapater.setCurrentPath(((BaseActivity)getActivity()).currenPath);
+        adapater.setCurrentPath(((BaseActivity) getActivity()).currenPath);
         adapater.notifyDataSetChanged();
         storage.addListener(this);
     }
@@ -118,8 +119,8 @@ public class StorageFragment extends BaseFragment implements
             FlyLog.d(intent.toUri(0));
             if (intent.getAction().equals(Intent.ACTION_MEDIA_MOUNTED)
                     || intent.getAction().equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
-                FlyLog.d("onReceive");
-                if(storage!=null){
+                FlyLog.d("onReceive " + intent.toString());
+                if (storage != null) {
                     storage.refresh();
                 }
             }
