@@ -37,7 +37,7 @@ public class PhotoActivity extends BaseActivity implements
 
     private FlyTabView tabView;
     private String titles[] = new String[]{"磁盘列表", "图片列表", "文件列表"};
-    private String fmName[] = new String[]{"StorageFragment", "PhotoPlayListFragment", "PhotoFloderFragment"};
+    private String fmName[] = new String[]{"PhotoStorageFragment", "PhotoPlayListFragment", "PhotoFloderFragment"};
     public ViewPager viewPager;
     private MyPageAdapter adapter;
     public List<Image> imageList = new ArrayList<>();
@@ -139,12 +139,12 @@ public class PhotoActivity extends BaseActivity implements
     }
 
     @Override
-    public void changePath(String path) {
+    public void stogrePathChange(String path) {
         imageList.clear();
         currentItem = 0;
         CURRENT_IMAGE = null;
         adapter.notifyDataSetChanged();
-        super.changePath(path);
+        super.stogrePathChange(path);
     }
 
     @Override
@@ -167,7 +167,7 @@ public class PhotoActivity extends BaseActivity implements
 
     @Override
     public void scanFinish(String path) {
-        FlyLog.d("scanFinish ----");
+        FlyLog.d("scanFinish path=%d",path);
         if (imageList == null || imageList.isEmpty()) {
             replaceFragment(fmName[0], R.id.ac_replace_fragment);
             tabView.setFocusPos(0);

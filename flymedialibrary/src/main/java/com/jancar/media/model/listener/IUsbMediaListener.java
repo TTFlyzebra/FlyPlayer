@@ -36,7 +36,7 @@ public interface IUsbMediaListener {
      * 存储器改变
      * @param path
      */
-    void changePath(String path);
+    void stogrePathChange(String path);
 
 
     /**
@@ -44,5 +44,11 @@ public interface IUsbMediaListener {
      * @param path
      */
     void scanFinish(String path);
+
+
+    /**
+     * 连接服务成功
+    */
+    void scanServiceConneted();
 
 }

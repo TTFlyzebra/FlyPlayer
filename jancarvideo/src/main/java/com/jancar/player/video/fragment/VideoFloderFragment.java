@@ -102,7 +102,7 @@ public class VideoFloderFragment extends BaseFragment implements
     }
 
     @Override
-    public void changePath(String path) {
+    public void stogrePathChange(String path) {
         mAllList.clear();
         mHashSet.clear();
         adapter.notifyDataSetChanged();

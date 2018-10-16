@@ -6,14 +6,15 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 
-
 import com.jancar.media.data.Image;
 import com.jancar.media.data.Music;
+import com.jancar.media.data.StorageInfo;
 import com.jancar.media.data.Video;
 import com.jancar.media.model.listener.IUsbMediaListener;
 import com.jancar.media.model.mediascan.IMediaScan;
 import com.jancar.media.model.mediascan.MediaScan;
 import com.jancar.media.utils.FlyLog;
+import com.jancar.media.utils.SPUtil;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -81,10 +82,11 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     }
 
     @Override
-    public void changePath(String path) {
+    public void stogrePathChange(String path) {
         currenPath = path;
+        SPUtil.set(this, "SAVA_PATH", currenPath);
         for(IUsbMediaListener listener:listeners){
-            listener.changePath(path);
+            listener.stogrePathChange(path);
         }
 
     }
@@ -93,6 +95,15 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     public void scanFinish(String path) {
         for(IUsbMediaListener listener:listeners){
             listener.scanFinish(path);
+        }
+    }
+
+    @Override
+    public void scanServiceConneted() {
+        String path = (String) SPUtil.get(this, "SAVA_PATH", "/storage/emulated/0");
+        usbMediaScan.openStorager(new StorageInfo(path));
+        for(IUsbMediaListener listener:listeners){
+            listener.scanServiceConneted();
         }
     }
 

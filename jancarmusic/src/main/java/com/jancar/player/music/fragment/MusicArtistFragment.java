@@ -6,11 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import com.jancar.media.data.Music;
+import com.jancar.media.utils.FlyLog;
 import com.jancar.player.music.R;
 import com.jancar.player.music.adpater.MusicArtistAdapter;
-import com.jancar.media.data.Music;
 import com.jancar.player.music.model.musicplayer.MusicPlayer;
-import com.jancar.media.utils.FlyLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,7 +104,7 @@ public class MusicArtistFragment extends MusicFragment implements
     private boolean isFistGet = true;
 
     @Override
-    public void changePath(String path) {
+    public void stogrePathChange(String path) {
         mHashMap.clear();
         adapter.notifyDataSetChanged();
     }

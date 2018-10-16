@@ -51,7 +51,7 @@ public class MusicActivity extends BaseActivity implements
         View.OnClickListener,
         TouchEventRelativeLayout.OnTouchEventListener {
     private String titles[] = new String[]{"存储器", "单曲", "歌手", "专辑", "文件夹"};
-    private String fmName[] = new String[]{"StorageFragment", "MusicPlayListFragment", "MusicArtistFragment", "MusicAlbumFragment", "MusicFloderFragment"};
+    private String fmName[] = new String[]{"MusicStorageFragment", "MusicPlayListFragment", "MusicArtistFragment", "MusicAlbumFragment", "MusicFloderFragment"};
     public List<Music> musicList = new ArrayList<>();
     protected IMusicPlayer musicPlayer = MusicPlayer.getInstance();
 
@@ -95,7 +95,7 @@ public class MusicActivity extends BaseActivity implements
         @Override
         public void run() {
             long time = System.currentTimeMillis() - touchTime;
-            if (time > HIDE_TIME&&!musicList.isEmpty()) {
+            if (time > HIDE_TIME && !musicList.isEmpty()) {
                 showLeftMenu(false);
             } else {
                 mHandler.postDelayed(hideLeftLayoutTask, time + 100);
@@ -111,6 +111,9 @@ public class MusicActivity extends BaseActivity implements
 
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         requestAudioFocus();
+
+        musicPlayer.playSave();
+
         /**
          *监听通知栏退出广播
          */
@@ -127,7 +130,6 @@ public class MusicActivity extends BaseActivity implements
         titles = new String[]{getString(R.string.storage), getString(R.string.single), getString(R.string.artist), getString(R.string.album), getString(R.string.folder)};
         initView();
         musicPlayer.addListener(this);
-        musicPlayer.playSave();
     }
 
     private void initView() {
@@ -163,7 +165,7 @@ public class MusicActivity extends BaseActivity implements
         llContent.setOnClickListener(this);
 
         tabView.setTitles(titles);
-        replaceFragment(fmName[1],R.id.ac_replace_fragment);
+        replaceFragment(fmName[1], R.id.ac_replace_fragment);
         tabView.setFocusPos(1);
     }
 
@@ -194,10 +196,10 @@ public class MusicActivity extends BaseActivity implements
     }
 
     @Override
-    public void changePath(String path) {
-        FlyLog.d("changePath");
+    public void stogrePathChange(String path) {
+        FlyLog.d("stogrePathChange");
         musicList.clear();
-        super.changePath(path);
+        super.stogrePathChange(path);
     }
 
     @Override
@@ -215,19 +217,25 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     public void scanFinish(String path) {
-        if(musicList==null||musicList.isEmpty()){
+        FlyLog.d("scanFinish path=%d", path);
+        if (musicList == null || musicList.isEmpty()) {
             musicPlayer.stop();
             tvAlbum.setText("");
             tvArtist.setText("");
             tvSingle.setText("");
-            replaceFragment(fmName[0],R.id.ac_replace_fragment);
+            replaceFragment(fmName[0], R.id.ac_replace_fragment);
             tabView.setFocusPos(0);
             showLeftMenu(true);
         }
-        if(isShowLeftMenu){
+        if (isShowLeftMenu) {
             showLeftMenu(isShowLeftMenu);
         }
         super.scanFinish(path);
+    }
+
+    @Override
+    public void scanServiceConneted() {
+        super.scanServiceConneted();
     }
 
     @Override
@@ -255,7 +263,7 @@ public class MusicActivity extends BaseActivity implements
     @Override
     public void onItemClick(View v, int pos) {
         if (v instanceof FlyTabTextView) {
-            replaceFragment(fmName[pos],R.id.ac_replace_fragment);
+            replaceFragment(fmName[pos], R.id.ac_replace_fragment);
         }
     }
 
@@ -370,7 +378,7 @@ public class MusicActivity extends BaseActivity implements
                 tvSingle.setText("");
                 tvArtist.setText("");
                 tvAlbum.setText("");
-               initSeekBar();
+                initSeekBar();
                 ivImage.setImageResource(R.drawable.media_music);
                 break;
         }

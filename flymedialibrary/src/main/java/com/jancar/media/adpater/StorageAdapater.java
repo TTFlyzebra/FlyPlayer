@@ -1,4 +1,4 @@
-package com.jancar.player.video.adpater;
+package com.jancar.media.adpater;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jancar.media.R;
 import com.jancar.media.data.StorageInfo;
-import com.jancar.player.video.R;
 
 import java.util.List;
 

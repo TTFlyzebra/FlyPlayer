@@ -34,6 +34,9 @@ public class MediaScan implements IMediaScan {
                 mFlyMedia = FlyMedia.Stub.asInterface(service);
                 if (mFlyMedia == null) return;
                 mFlyMedia.registerNotify(notify);
+                for(IUsbMediaListener listener:listeners){
+                    listener.scanServiceConneted();
+                }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -92,7 +95,7 @@ public class MediaScan implements IMediaScan {
                 @Override
                 public void run() {
                     for (IUsbMediaListener listener : listeners) {
-                        listener.changePath(path);
+                        listener.stogrePathChange(path);
                     }
                 }
             });

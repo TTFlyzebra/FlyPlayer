@@ -44,12 +44,17 @@ public class BaseFragment extends Fragment implements IUsbMediaListener {
     }
 
     @Override
-    public void changePath(String path) {
+    public void stogrePathChange(String path) {
 
     }
 
     @Override
     public void scanFinish(String path) {
+
+    }
+
+    @Override
+    public void scanServiceConneted() {
 
     }
 }

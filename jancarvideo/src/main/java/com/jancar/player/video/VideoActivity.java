@@ -49,7 +49,7 @@ public class VideoActivity extends BaseActivity implements
 
 
     private String titles[] = new String[]{"磁盘列表", "播放列表", "文件列表"};
-    private String fmName[] = new String[]{"StorageFragment", "VideoPlayListFragment", "VideoFloderFragment"};
+    private String fmName[] = new String[]{"VideoStorageFragment", "VideoPlayListFragment", "VideoFloderFragment"};
 
     private AudioManager mAudioManager;
 
@@ -294,9 +294,9 @@ public class VideoActivity extends BaseActivity implements
     }
 
     @Override
-    public void changePath(String path) {
+    public void stogrePathChange(String path) {
         videoList.clear();
-        super.changePath(path);
+        super.stogrePathChange(path);
     }
 
     @Override
@@ -358,6 +358,7 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     public void scanFinish(String path) {
+        FlyLog.d("scanFinish path=%d",path);
         if(videoList==null||videoList.isEmpty()){
             player.stop();
             player.showStatus("");

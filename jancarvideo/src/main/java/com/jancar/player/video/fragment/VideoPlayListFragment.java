@@ -69,7 +69,7 @@ public class VideoPlayListFragment extends BaseFragment implements
     }
 
     @Override
-    public void changePath(String path) {
+    public void stogrePathChange(String path) {
         textView.setText(R.string.music_scan1);
         adapter.notifyDataSetChanged();
     }

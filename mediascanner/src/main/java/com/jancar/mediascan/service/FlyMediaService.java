@@ -73,47 +73,47 @@ public class FlyMediaService extends Service implements IStorageListener {
     private IBinder mBinder = new FlyMedia.Stub() {
         @Override
         public void scanDisk(final String disk) throws RemoteException {
-            FlyLog.d("scanDisk=%s",disk);
+            FlyLog.d("scanDisk=%s", disk);
             startScanPath(disk);
         }
 
         @Override
         public void notify(final Notify notify) throws RemoteException {
             FlyLog.d("notify client=%s", notify.toString());
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    while (isRunning.get()) {
-                        try {
-                            Thread.sleep(THREAD_WAIT_TIME);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    try {
-                        if (!isRunning.get()) {
-                            FlyLog.d("notifyPath path=%s", currentPath);
-                            notify.notifyPath(currentPath);
-                            synchronized (mMusicList) {
-                                notifyMusic(mMusicList, notify);
-                            }
-                            synchronized (mVideoList) {
-                                notifyVideo(mVideoList, notify);
-                            }
-                            synchronized (mImageList) {
-                                notifyImage(mImageList, notify);
-                            }
-                            synchronized (mMusicID3List) {
-                                notifyID3Music(mMusicID3List, notify);
-                            }
-                            notify.notifyFinish(currentPath);
-                            FlyLog.d("notifyFinish path=%s", currentPath);
-                        }
-                    } catch (RemoteException e) {
-                        FlyLog.e(e.toString());
-                    }
-                }
-            });
+//            executor.execute(new Runnable() {
+//                @Override
+//                public void run() {
+//                    while (isRunning.get()) {
+//                        try {
+//                            Thread.sleep(THREAD_WAIT_TIME);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                    try {
+//                        if (!isRunning.get()) {
+//                            FlyLog.d("notifyPath path=%s", currentPath);
+//                            notify.notifyPath(currentPath);
+//                            synchronized (mMusicList) {
+//                                notifyMusic(mMusicList, notify);
+//                            }
+//                            synchronized (mVideoList) {
+//                                notifyVideo(mVideoList, notify);
+//                            }
+//                            synchronized (mImageList) {
+//                                notifyImage(mImageList, notify);
+//                            }
+//                            synchronized (mMusicID3List) {
+//                                notifyID3Music(mMusicID3List, notify);
+//                            }
+//                            notify.notifyFinish(currentPath);
+//                            FlyLog.d("notifyFinish path=%s", currentPath);
+//                        }
+//                    } catch (RemoteException e) {
+//                        FlyLog.e(e.toString());
+//                    }
+//                }
+//            });
 
         }
 
@@ -121,41 +121,41 @@ public class FlyMediaService extends Service implements IStorageListener {
         public void registerNotify(final Notify notify) throws RemoteException {
             mNotifys.register(notify);
             FlyLog.d("registerNotify client=%s", notify.toString());
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    while (isRunning.get()) {
-                        try {
-                            FlyLog.d("wait scan finish!");
-                            Thread.sleep(THREAD_WAIT_TIME);
-                        } catch (InterruptedException e) {
-                            FlyLog.d(e.toString());
-                        }
-                    }
-                    try {
-                        if (!isRunning.get()) {
-                            FlyLog.d("notifyPath path=%s", currentPath);
-                            notify.notifyPath(currentPath);
-                            synchronized (mMusicList) {
-                                notifyMusic(mMusicList, notify);
-                            }
-                            synchronized (mVideoList) {
-                                notifyVideo(mVideoList, notify);
-                            }
-                            synchronized (mImageList) {
-                                notifyImage(mImageList, notify);
-                            }
-                            synchronized (mMusicID3List) {
-                                notifyID3Music(mMusicID3List, notify);
-                            }
-                            notify.notifyFinish(currentPath);
-                            FlyLog.d("notifyFinish path=%s", currentPath);
-                        }
-                    } catch (RemoteException e) {
-                        FlyLog.e(e.toString());
-                    }
-                }
-            });
+//            executor.execute(new Runnable() {
+//                @Override
+//                public void run() {
+//                    while (isRunning.get()) {
+//                        try {
+//                            FlyLog.d("wait scan finish!");
+//                            Thread.sleep(THREAD_WAIT_TIME);
+//                        } catch (InterruptedException e) {
+//                            FlyLog.d(e.toString());
+//                        }
+//                    }
+//                    try {
+//                        if (!isRunning.get()) {
+//                            FlyLog.d("notifyPath path=%s", currentPath);
+//                            notify.notifyPath(currentPath);
+//                            synchronized (mMusicList) {
+//                                notifyMusic(mMusicList, notify);
+//                            }
+//                            synchronized (mVideoList) {
+//                                notifyVideo(mVideoList, notify);
+//                            }
+//                            synchronized (mImageList) {
+//                                notifyImage(mImageList, notify);
+//                            }
+//                            synchronized (mMusicID3List) {
+//                                notifyID3Music(mMusicID3List, notify);
+//                            }
+//                            notify.notifyFinish(currentPath);
+//                            FlyLog.d("notifyFinish path=%s", currentPath);
+//                        }
+//                    } catch (RemoteException e) {
+//                        FlyLog.e(e.toString());
+//                    }
+//                }
+//            });
 
         }
 
@@ -172,6 +172,23 @@ public class FlyMediaService extends Service implements IStorageListener {
         if (!currentPath.endsWith(disk)) {
             isStoped.set(true);
             scanPath(disk);
+        } else {
+            FlyLog.d("notifyPath path=%s", currentPath);
+            notifyPathListener();
+            synchronized (mMusicList) {
+                notifyMusicListener(mMusicList);
+            }
+            synchronized (mVideoList) {
+                notifyVideoListener(mVideoList);
+            }
+            synchronized (mImageList) {
+                notifyImageListener(mImageList);
+            }
+            synchronized (mMusicID3List) {
+                notifyID3MusicListener(mMusicID3List);
+            }
+            notifyFinishListener();
+            FlyLog.d("notifyFinish path=%s", currentPath);
         }
     }
 
@@ -352,6 +369,23 @@ public class FlyMediaService extends Service implements IStorageListener {
         }
     }
 
+    public synchronized void notifyID3MusicListener(List<Music> mID3MusicList) {
+        try {
+            FlyLog.d("notify player.music list size=%d", mID3MusicList.size());
+            final int N = mNotifys.beginBroadcast();
+//            FlyLog.d("start notify client, client sum=%d", N);
+            for (int i = 0; i < N; i++) {
+                Notify l = mNotifys.getBroadcastItem(i);
+                if (l != null) {
+                    notifyID3Music(mID3MusicList, l);
+                }
+            }
+            mNotifys.finishBroadcast();
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
+    }
+
     public synchronized void notifyImageListener(List<Image> mImageList) {
         try {
             FlyLog.d("notify image list size=%d", mImageList == null ? 0 : mImageList.size());
@@ -368,7 +402,6 @@ public class FlyMediaService extends Service implements IStorageListener {
             FlyLog.e(e.toString());
         }
     }
-
 
     private synchronized void notifyPathListener() {
         try {
@@ -464,26 +497,32 @@ public class FlyMediaService extends Service implements IStorageListener {
 
                 isNotifyMusic.set(false);
                 List<Music> musics = mListDiskCache.get(path + "player.music", Music.class);
-                if (musics != null) {
-                    isNotifyMusic.set(true);
-                    notifyMusicListener(musics);
-                    FlyLog.d("loading save musics size=%d", musics.size());
+                if (musics != null && !musics.isEmpty()) {
+                    if ((new File(musics.get(0).url).exists())) {
+                        isNotifyMusic.set(true);
+                        notifyMusicListener(musics);
+                        FlyLog.d("loading save musics size=%d", musics.size());
+                    }
                 }
 
                 isNotifyVideo.set(false);
                 List<Video> videos = mListDiskCache.get(path + "video", Video.class);
-                if (videos != null) {
-                    isNotifyVideo.set(true);
-                    notifyVideoListener(videos);
-                    FlyLog.d("loading save videos size=%d", videos.size());
+                if (videos != null && !videos.isEmpty()) {
+                    if ((new File(videos.get(0).url).exists())) {
+                        isNotifyVideo.set(true);
+                        notifyVideoListener(videos);
+                        FlyLog.d("loading save videos size=%d", videos.size());
+                    }
                 }
 
                 isNotifyImage.set(false);
                 List<Image> images = mListDiskCache.get(path + "image", Image.class);
-                if (images != null) {
-                    isNotifyImage.set(true);
-                    notifyImageListener(images);
-                    FlyLog.d("loading save images size=%d", images.size());
+                if (images != null && !images.isEmpty()) {
+                    if ((new File(images.get(0).url).exists())) {
+                        isNotifyImage.set(true);
+                        notifyImageListener(images);
+                        FlyLog.d("loading save images size=%d", images.size());
+                    }
                 }
 
                 try {
@@ -492,7 +531,7 @@ public class FlyMediaService extends Service implements IStorageListener {
                     FlyLog.e(e.toString());
                 }
 
-                if(isNotifyMusic.get()||isNotifyVideo.get()||isNotifyImage.get()){
+                if (isNotifyMusic.get() || isNotifyVideo.get() || isNotifyImage.get()) {
                     notifyPathListener();
                 }
 
@@ -728,24 +767,24 @@ public class FlyMediaService extends Service implements IStorageListener {
     public void storageList(List<StorageInfo> storageList) {
         if (storageList != null && !storageList.isEmpty()) {
             localPaths = "T";
-            String savePath = (String) SPUtil.get(this, "SAVE_PATH", "");
-            String scanPath = "";
+//            String savePath = (String) SPUtil.get(this, "SAVE_PATH", "");
+//            String scanPath = "";
             for (StorageInfo storageInfo : storageList) {
-                if (!storageInfo.isRemoveable) {
-                    localPaths = localPaths + "#T#S#Y#" + storageInfo.mPath;
-                }
-                if (savePath.endsWith(storageInfo.mPath)) {
-                    scanPath = savePath;
-                }
+//                if (!storageInfo.isRemoveable) {
+                localPaths = localPaths + "#T#S#Y#" + storageInfo.mPath;
+//                }
+//                if (savePath.endsWith(storageInfo.mPath)) {
+//                    scanPath = savePath;
+//                }
             }
-            FlyLog.d("localPaths=%s", localPaths);
-            if (TextUtils.isEmpty(scanPath)) {
-                scanPath = storageList.get(0).mPath;
-                FlyLog.d("scan first path =%s", scanPath);
-            } else {
-                FlyLog.d("scan save path =%s", scanPath);
-            }
-            startScanPath(scanPath);
+//            FlyLog.d("localPaths=%s", localPaths);
+//            if (TextUtils.isEmpty(scanPath)) {
+//                scanPath = storageList.get(0).mPath;
+//                FlyLog.d("scan first path =%s", scanPath);
+//            } else {
+//                FlyLog.d("scan save path =%s", scanPath);
+//            }
+//            startScanPath(scanPath);
         }
     }
 
@@ -771,8 +810,8 @@ public class FlyMediaService extends Service implements IStorageListener {
         try {
             String str1 = intent.getStringExtra(Const.SCAN_PATH_KEY);
             if (!TextUtils.isEmpty(str1) && StorageTools.isRemoved(this, str1)) {
-                FlyLog.d("scan path=%s", str1);
-                startScanPath(str1);
+//                FlyLog.d("scan path=%s", str1);
+//                startScanPath(str1);
             }
 
             String str2 = intent.getStringExtra(Const.UMOUNT_STORE);
