@@ -3,7 +3,6 @@ apply plugin: 'com.android.application'
 //获取当前编译时间
 def getCreateTime() {
     def createTime = new Date().format("yyyyMMdd", TimeZone.getTimeZone("GMT+08:00")).trim()
-    println createTime
     return createTime
 }
 
@@ -51,9 +50,6 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
-            zipAlignEnabled true
-            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
@@ -82,6 +78,5 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:23.+'
     implementation project(path: ':mp3id3library')
     implementation files('libs/gson-2.8.5.jar')
-    implementation files('libs/glide-3.7.0.jar')
     implementation files('libs/disklrucache.jar')
 }

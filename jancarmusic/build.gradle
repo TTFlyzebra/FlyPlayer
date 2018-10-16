@@ -3,7 +3,6 @@ apply plugin: 'com.android.application'
 //获取当前编译时间
 def getCreateTime() {
     def createTime = new Date().format("yyyyMMdd", TimeZone.getTimeZone("GMT+08:00")).trim()
-    println createTime
     return createTime
 }
 
@@ -53,9 +52,6 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
-            zipAlignEnabled true
-            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
