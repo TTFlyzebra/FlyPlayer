@@ -12,12 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.jancar.media.R;
 import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.Image;
 import com.jancar.media.data.Music;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.player.photo.PhotoActivity;
+import com.jancar.player.photo.R;
 import com.jancar.player.photo.adpater.PhotoPlayListAdapater;
 
 import java.util.List;

@@ -8,12 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jancar.media.R;
 import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.FloderVideo;
 import com.jancar.media.data.Music;
 import com.jancar.media.data.Video;
 import com.jancar.media.utils.FlyLog;
+import com.jancar.player.video.R;
 import com.jancar.player.video.VideoActivity;
 import com.jancar.player.video.adpater.VideoFloderAdapater;
 

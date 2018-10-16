@@ -9,10 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.jancar.media.R;
 import com.jancar.media.data.Image;
 import com.jancar.media.utils.StringTools;
 import com.jancar.player.photo.PhotoActivity;
+import com.jancar.player.photo.R;
 
 import java.util.List;
 

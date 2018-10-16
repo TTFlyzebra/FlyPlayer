@@ -11,11 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.jancar.media.R;
 import com.jancar.media.data.FloderImage;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.MarqueeTextView;
 import com.jancar.player.photo.PhotoActivity;
+import com.jancar.player.photo.R;
 
 import java.io.File;
 import java.util.List;

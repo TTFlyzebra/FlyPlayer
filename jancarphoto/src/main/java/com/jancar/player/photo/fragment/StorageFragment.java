@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jancar.media.R;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.StorageInfo;
@@ -20,11 +19,11 @@ import com.jancar.media.model.storage.IStorage;
 import com.jancar.media.model.storage.Storage;
 import com.jancar.media.receiver.DiskReceiver;
 import com.jancar.media.utils.FlyLog;
+import com.jancar.player.photo.R;
+import com.jancar.player.photo.adpater.StorageAdapater;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.jancar.player.photo.adpater.StorageAdapater;
 
 public class StorageFragment extends BaseFragment implements
         IStorageListener,

@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jancar.media.R;
-import com.jancar.media.adpater.StorageAdapater;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.StorageInfo;
@@ -21,6 +19,8 @@ import com.jancar.media.model.storage.IStorage;
 import com.jancar.media.model.storage.Storage;
 import com.jancar.media.receiver.DiskReceiver;
 import com.jancar.media.utils.FlyLog;
+import com.jancar.player.video.R;
+import com.jancar.player.video.adpater.StorageAdapater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +37,8 @@ public class StorageFragment extends BaseFragment implements
     public StorageFragment() {
     }
 
-    public static com.jancar.media.fragment.StorageFragment newInstance(Bundle args) {
-        com.jancar.media.fragment.StorageFragment usbListFragment = new com.jancar.media.fragment.StorageFragment();
+    public static StorageFragment newInstance(Bundle args) {
+        StorageFragment usbListFragment = new StorageFragment();
         usbListFragment.setArguments(args);
         return usbListFragment;
     }

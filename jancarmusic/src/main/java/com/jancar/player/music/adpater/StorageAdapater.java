@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.jancar.media.R;
 import com.jancar.media.data.StorageInfo;
+import com.jancar.player.music.R;
 
 import java.util.List;
 

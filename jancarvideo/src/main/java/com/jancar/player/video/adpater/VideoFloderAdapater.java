@@ -14,12 +14,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.jancar.media.R;
 import com.jancar.media.data.FloderVideo;
 import com.jancar.media.module.DoubleBitmapCache;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.MarqueeTextView;
+import com.jancar.player.video.R;
 import com.jancar.player.video.VideoActivity;
 import com.ksyun.media.player.misc.KSYProbeMediaInfo;
 

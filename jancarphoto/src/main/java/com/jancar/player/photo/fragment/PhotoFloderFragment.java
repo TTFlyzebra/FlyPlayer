@@ -9,21 +9,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jancar.media.R;
 import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.FloderImage;
 import com.jancar.media.data.Image;
 import com.jancar.media.data.Music;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.player.photo.PhotoActivity;
+import com.jancar.player.photo.R;
+import com.jancar.player.photo.adpater.PhotoFloderAdapater;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.jancar.player.photo.adpater.PhotoFloderAdapater;
 
 
 public class PhotoFloderFragment extends BaseFragment implements
