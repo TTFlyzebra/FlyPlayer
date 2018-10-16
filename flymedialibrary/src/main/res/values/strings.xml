@@ -30,4 +30,5 @@
     <string name="video_scan2">共有%d集视频</string>
     <string name="photo_scan2">共有%d张图片</string>
     <string name="media_parking_prompt_contents">为了行驶安全，请注意驾驶！</string>
+    <string name="no_video">未发现可播放的视频文件</string>
 </resources>

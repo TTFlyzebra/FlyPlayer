@@ -118,7 +118,7 @@ public class PhotoActivity extends BaseActivity implements
         leftLayout.setOnTouchEventListener(this);
         controlLayout.setOnTouchEventListener(this);
         tabView.setTitles(titles);
-        replaceFragment(fmName[1],R.id.ac_replace_fragment);
+        replaceFragment(fmName[1], R.id.ac_replace_fragment);
         tabView.setFocusPos(1);
     }
 
@@ -158,20 +158,23 @@ public class PhotoActivity extends BaseActivity implements
                 currentItem = 0;
             }
 
-            if (imageList.isEmpty()) {
-                mHandler.removeCallbacks(hideControlTask);
-                controlLayout.animate().translationY(0).setDuration(300).start();
-                getWindow().getDecorView().setSystemUiVisibility(View.VISIBLE);
-                isShowControl = true;
-                showLeftMenu(true);
-            } else {
-                showControlView(true);
-            }
             if (adapter != null) {
                 adapter.notifyDataSetChanged();
             }
         }
         super.imageUrlList(imageUrlList);
+    }
+
+    @Override
+    public void scanFinish(String path) {
+        FlyLog.d("scanFinish ----");
+        if (imageList == null || imageList.isEmpty()) {
+            replaceFragment(fmName[0], R.id.ac_replace_fragment);
+            tabView.setFocusPos(0);
+            showControlView(true);
+            showLeftMenu(true);
+        }
+        super.scanFinish(path);
     }
 
     @Override
@@ -220,7 +223,7 @@ public class PhotoActivity extends BaseActivity implements
     @Override
     public void onItemClick(View v, int pos) {
         if (v instanceof FlyTabTextView) {
-            replaceFragment(fmName[pos],R.id.ac_replace_fragment);
+            replaceFragment(fmName[pos], R.id.ac_replace_fragment);
         }
     }
 
@@ -357,10 +360,10 @@ public class PhotoActivity extends BaseActivity implements
             FlyLog.d("set size=%d", viewSet.size());
             PhotoView photoView = null;
             Iterator it = viewSet.iterator();
-            if(it.hasNext()) {
+            if (it.hasNext()) {
                 photoView = (PhotoView) it.next();
                 viewSet.remove(photoView);
-            }else{
+            } else {
                 photoView = new PhotoView(PhotoActivity.this);
             }
             photoView.setOnClickListener(PhotoActivity.this);
@@ -375,7 +378,7 @@ public class PhotoActivity extends BaseActivity implements
                     .into(photoView);
             try {
                 container.addView(photoView);
-            }catch (Exception e){
+            } catch (Exception e) {
                 FlyLog.e(e.toString());
             }
             return photoView;

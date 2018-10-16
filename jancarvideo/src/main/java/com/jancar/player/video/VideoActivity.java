@@ -357,6 +357,19 @@ public class VideoActivity extends BaseActivity implements
     }
 
     @Override
+    public void scanFinish(String path) {
+        if(videoList==null||videoList.isEmpty()){
+            player.stop();
+            player.showStatus("");
+            replaceFragment(fmName[0],R.id.ac_replace_fragment);
+            tabView.setFocusPos(0);
+            showControlView(true);
+            showLeftMenu(true);
+        }
+        super.scanFinish(path);
+    }
+
+    @Override
     public void statusChange(int statu) {
         FlyLog.d("Statu = %d", statu);
         switch (statu) {

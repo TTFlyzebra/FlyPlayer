@@ -108,14 +108,22 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
     }
 
     private void setSelectItem(int duration) {
-        focusView.animate().translationX(childWidth * focusPos).setDuration(duration).start();
-        for (int i = 0; i < textViews.length; i++) {
-            textViews[i].setEnabled(i != focusPos);
+        try {
+            if(focusView!=null&&textViews!=null) {
+                focusView.animate().translationX(childWidth * focusPos).setDuration(duration).start();
+                for (int i = 0; i < textViews.length; i++) {
+                    textViews[i].setEnabled(i != focusPos);
+                }
+            }
+        }catch (Exception e){
+            FlyLog.e(e.toString());
         }
     }
 
     public void setFocusPos(int pos) {
+        FlyLog.d("setFocusPos=%d", pos);
         focusPos = pos;
+        setSelectItem(0);
     }
 
     public interface OnItemClickListener {

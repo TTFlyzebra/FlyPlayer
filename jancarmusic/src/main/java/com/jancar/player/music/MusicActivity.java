@@ -95,8 +95,7 @@ public class MusicActivity extends BaseActivity implements
         @Override
         public void run() {
             long time = System.currentTimeMillis() - touchTime;
-            if (time > HIDE_TIME) {
-                isShowLeftMenu = false;
+            if (time > HIDE_TIME&&!musicList.isEmpty()) {
                 showLeftMenu(false);
             } else {
                 mHandler.postDelayed(hideLeftLayoutTask, time + 100);
@@ -216,7 +215,18 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     public void scanFinish(String path) {
-        FlyLog.d("scanFinish");
+        if(musicList==null||musicList.isEmpty()){
+            musicPlayer.stop();
+            tvAlbum.setText("");
+            tvArtist.setText("");
+            tvSingle.setText("");
+            replaceFragment(fmName[0],R.id.ac_replace_fragment);
+            tabView.setFocusPos(0);
+            showLeftMenu(true);
+        }
+        if(isShowLeftMenu){
+            showLeftMenu(isShowLeftMenu);
+        }
         super.scanFinish(path);
     }
 
@@ -253,6 +263,7 @@ public class MusicActivity extends BaseActivity implements
 
 
     private void showLeftMenu(boolean flag) {
+        isShowLeftMenu = flag;
         mHandler.removeCallbacks(hideLeftLayoutTask);
         leftLayout.animate().translationX(flag
                 ? -394 * DisplayUtils.getMetrices(this).widthPixels / 1024
@@ -316,12 +327,10 @@ public class MusicActivity extends BaseActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ac_music_content:
-                isShowLeftMenu = false;
-                showLeftMenu(isShowLeftMenu);
+                showLeftMenu(false);
                 break;
             case R.id.ac_music_left_menu:
-                isShowLeftMenu = !isShowLeftMenu;
-                showLeftMenu(isShowLeftMenu);
+                showLeftMenu(!isShowLeftMenu);
                 break;
             case R.id.ac_music_play_fore:
                 musicPlayer.playFore();
@@ -361,6 +370,7 @@ public class MusicActivity extends BaseActivity implements
                 tvSingle.setText("");
                 tvArtist.setText("");
                 tvAlbum.setText("");
+               initSeekBar();
                 ivImage.setImageResource(R.drawable.media_music);
                 break;
         }

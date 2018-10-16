@@ -25,7 +25,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <service android:name="com.jancar.player.music.service.MusicService" />
+        <service android:name=".service.MusicService" />
     </application>
 
 </manifest>

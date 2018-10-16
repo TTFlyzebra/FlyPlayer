@@ -26,8 +26,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.jancar.media.utils.FlyLog;
-import com.jancar.player.video.VideoActivity;
 import com.jancar.player.video.R;
+import com.jancar.player.video.VideoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -501,7 +501,7 @@ public class GiraffePlayer {
     }
 
 
-    private void showStatus(String statusText) {
+    public void showStatus(String statusText) {
         $.id(R.id.app_video_status).visible();
         $.id(R.id.app_video_status_text).text(statusText);
     }
