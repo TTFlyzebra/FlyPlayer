@@ -98,10 +98,7 @@ public class GiraffePlayer {
     private final View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (v.getId() == R.id.app_video_play) {
-                doPauseResume();
-                show(defaultTimeout);
-            } else if (v.getId() == R.id.app_video_replay_icon) {
+            if (v.getId() == R.id.app_video_replay_icon) {
                 videoView.seekTo(0);
                 videoView.start();
                 statusChange(STATUS_PLAYING);
@@ -166,13 +163,6 @@ public class GiraffePlayer {
             statusChange(STATUS_PLAYING);
         }
     }
-
-    public void updatePausePlay() {
-        $.id(R.id.app_video_play).image(videoView.isPlaying() ? R.drawable.media_pause : R.drawable.media_play);
-    }
-
-
-    public boolean isFirstShow = true;
 
     /**
      * @param timeout
@@ -316,7 +306,6 @@ public class GiraffePlayer {
         seekBar = (SeekBar) activity.findViewById(R.id.app_video_seekBar);
         seekBar.setMax(1000);
         seekBar.setOnSeekBarChangeListener(mSeekListener);
-        $.id(R.id.app_video_play).clicked(onClickListener);
         $.id(R.id.app_video_replay_icon).clicked(onClickListener);
 
 
@@ -409,7 +398,6 @@ public class GiraffePlayer {
             $.id(R.id.app_video_loading).gone();
             $.id(R.id.app_video_status).gone();
         }
-        updatePausePlay();
     }
 
     private void hideAll() {
@@ -767,6 +755,7 @@ public class GiraffePlayer {
 
     public void pause() {
         videoView.pause();
+        statusChange(STATUS_PAUSE);
     }
 
     public boolean onBackPressed() {

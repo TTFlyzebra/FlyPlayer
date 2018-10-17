@@ -228,7 +228,7 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/ac_music_play_fore"
+                    android:id="@+id/ac_video_play_fore"
                     android:layout_width="70px"
                     android:layout_height="70px"
                     android:layout_centerVertical="true"
@@ -238,7 +238,7 @@
                     android:src="@drawable/media_fore" />
 
                 <ImageView
-                    android:id="@+id/app_video_play"
+                    android:id="@+id/ac_video_play_pause"
                     android:layout_width="70px"
                     android:layout_height="70px"
                     android:layout_centerVertical="true"
@@ -248,7 +248,7 @@
                     android:src="@drawable/media_play" />
 
                 <ImageView
-                    android:id="@+id/ac_music_play_next"
+                    android:id="@+id/ac_video_play_next"
                     android:layout_width="70px"
                     android:layout_height="70px"
                     android:layout_centerVertical="true"

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemProperties;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.jancar.media.base.BaseActivity;
-import com.jancar.media.data.Const;
 import com.jancar.media.data.Video;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
@@ -36,7 +34,7 @@ public class VideoActivity extends BaseActivity implements
         FlyTabView.OnItemClickListener,
         GiraffePlayer.OnPlayStatusChangeLiseter,
         TouchEventRelativeLayout.OnTouchEventListener {
-    private ImageView play_fore, play_next, leftMenu;
+    private ImageView play_fore, play_next, play_pause, leftMenu;
     private TouchEventRelativeLayout leftLayout;
     private TouchEventRelativeLayout controlLayout;
     public int currenPos = 0;
@@ -101,7 +99,10 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     protected void onStart() {
+        touchTime = 0;
+        showControlView(true);
         super.onStart();
+        FlyLog.d("onStart");
         player.playSavePath(currenPath);
         mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
     }
@@ -111,14 +112,24 @@ public class VideoActivity extends BaseActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        FlyLog.d("onResume setpause=" + setPause);
         if (isPause) {
             player.start();
         }
         isPause = false;
+        if (setPause) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    player.pause();
+                }
+            }, 1000);
+        }
     }
 
     @Override
     protected void onPause() {
+        FlyLog.d("onPause");
         isPause = false;
         if (player.isPlaying()) {
             player.pause();
@@ -129,31 +140,33 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     protected void onStop() {
+        FlyLog.d("onStop");
         mAudioManager.abandonAudioFocus(mAudioFocusListener);
         super.onStop();
         player.stop();
+        mHandler.removeCallbacksAndMessages(null);
     }
 
     @Override
     protected void onDestroy() {
-        mHandler.removeCallbacksAndMessages(null);
         super.onDestroy();
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
-        final String playUrl = intent.getStringExtra(Const.PLAYURL_KEY);
-        FlyLog.d("playurl=%s", playUrl);
-        if (!TextUtils.isEmpty(playUrl) && !player.isPlaying()) {
-            player.play(playUrl);
-        }
+//        final String playUrl = intent.getStringExtra(Const.PLAYURL_KEY);
+//        FlyLog.d("playurl=%s", playUrl);
+//        if (!TextUtils.isEmpty(playUrl) && !player.isPlaying()) {
+//            player.play(playUrl);
+//        }
         super.onNewIntent(intent);
     }
 
     private void initView() {
         titles = new String[]{getString(R.string.disk_list), getString(R.string.play_list), getString(R.string.file_list)};
-        play_fore = (ImageView) findViewById(R.id.ac_music_play_fore);
-        play_next = (ImageView) findViewById(R.id.ac_music_play_next);
+        play_fore = (ImageView) findViewById(R.id.ac_video_play_fore);
+        play_pause = (ImageView) findViewById(R.id.ac_video_play_pause);
+        play_next = (ImageView) findViewById(R.id.ac_video_play_next);
         leftMenu = (ImageView) findViewById(R.id.menu_play_list);
         controlLayout = (TouchEventRelativeLayout) findViewById(R.id.app_video_bottom_box);
         tabView = (FlyTabView) findViewById(R.id.app_video_tabview);
@@ -164,6 +177,7 @@ public class VideoActivity extends BaseActivity implements
         tabView.setOnItemClickListener(this);
         play_fore.setOnClickListener(this);
         play_next.setOnClickListener(this);
+        play_pause.setOnClickListener(this);
         leftMenu.setOnClickListener(this);
         controlLayout.setOnClickListener(this);
         controlLayout.setOnTouchEventListener(this);
@@ -198,6 +212,8 @@ public class VideoActivity extends BaseActivity implements
         }
     }
 
+    private boolean setPause = false;
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -205,15 +221,24 @@ public class VideoActivity extends BaseActivity implements
                 isShowLeftMenu = !isShowLeftMenu;
                 showLeftMenu(isShowLeftMenu);
                 break;
-            case R.id.ac_music_play_fore:
+            case R.id.ac_video_play_fore:
                 playFore();
                 break;
-            case R.id.ac_music_play_next:
+            case R.id.ac_video_play_next:
                 playNext();
+                break;
+            case R.id.ac_video_play_pause:
+                if (player.isPlaying()) {
+                    setPause = true;
+                    player.pause();
+                } else {
+                    setPause = false;
+                    player.start();
+                }
+                break;
             case R.id.app_video_box:
             case R.id.video_view:
                 touchTime = 0;
-//                showControlView(!isShowControl);
                 break;
         }
     }
@@ -280,8 +305,8 @@ public class VideoActivity extends BaseActivity implements
         if (player.isPlaying()) {
             player.savePathUrl(currenPath);
         }
-        player.playSavePath(path);
         videoList.clear();
+        player.playSavePath(path);
         super.notifyPathChange(path);
     }
 
@@ -323,7 +348,7 @@ public class VideoActivity extends BaseActivity implements
             showControlView(true);
             showLeftMenu(true);
         }
-        if(isShowControl){
+        if (isShowControl) {
             showControlView(true);
         }
         super.scanFinish(path);
@@ -351,6 +376,12 @@ public class VideoActivity extends BaseActivity implements
             default:
                 break;
         }
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                play_pause.setImageResource(player.isPlaying() ? R.drawable.media_pause : R.drawable.media_play);
+            }
+        }, 100);
     }
 
     private void setCurrentPos() {
@@ -401,29 +432,33 @@ public class VideoActivity extends BaseActivity implements
 
     private AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
         public void onAudioFocusChange(int focusChange) {
-            FlyLog.d("onAudioFocusChange focusChange=%d",focusChange);
+            FlyLog.d("onAudioFocusChange focusChange=%d", focusChange);
             switch (focusChange) {
                 case AudioManager.AUDIOFOCUS_LOSS:
+                    FlyLog.d("lost Focus finish!");
                     finish();
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                    if (player!=null&&player.isPlaying()) {
+                    if (player != null && player.isPlaying()) {
+                        FlyLog.d("lost Focus1 pause!");
                         player.pause();
                         lostPause = true;
                     }
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                     /**
-                     * 是否混音
+                     * 是否混音,高德其它软件在后台播报的情景
                      */
                     boolean flag = SystemProperties.getBoolean(SystemPropertiesProxy.Property.PERSIST_KEY_GISMIX, true);
-                    if (!flag && player!=null&&player.isPlaying()) {
+                    if (!flag && player != null && player.isPlaying()) {
+                        FlyLog.d("lost Focus2 pause!");
                         player.pause();
                         lostPause = true;
                     }
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
-                    if (player!=null&&lostPause) {
+                    if (player != null && lostPause && !setPause) {
+                        FlyLog.d("get Focus play!");
                         player.start();
                     }
                     break;
