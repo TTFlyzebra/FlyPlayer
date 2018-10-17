@@ -171,21 +171,19 @@ public class MusicActivity extends BaseActivity implements
 
     protected void onStart() {
         super.onStart();
-        usbMediaScan.addListener(this);
         isStop = false;
     }
 
     @Override
     protected void onStop() {
         isStop = true;
-        usbMediaScan.removeListener(this);
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
         mHandler.removeCallbacksAndMessages(null);
-        musicPlayer.savePlayUrl(currenPath);
+        musicPlayer.savePathUrl(currenPath);
         musicPlayer.removeListener(this);
         unregisterReceiver(mReceiver);
         abandonAudioFocus();
@@ -195,20 +193,20 @@ public class MusicActivity extends BaseActivity implements
     }
 
     @Override
-    public void stogrePathChange(String path) {
+    public void notifyPathChange(String path) {
+        FlyLog.d("notifyPathChange path=%s",path);
         if(musicPlayer.isPlaying()){
-            musicPlayer.savePlayUrl(currenPath);
+            musicPlayer.savePathUrl(currenPath);
         }
-        FlyLog.d("stogrePathChange path=%s",path);
+        musicPlayer.playSavePath(path);
         musicList.clear();
-        super.stogrePathChange(path);
-        musicPlayer.playSave(path);
+        super.notifyPathChange(path);
     }
 
     @Override
     public void musicUrlList(List<Music> musicUrlList) {
         FlyLog.d("get player.music size=%d", musicUrlList == null ? 0 : musicUrlList.size());
-        if (musicUrlList == null) {
+        if (musicUrlList == null||musicUrlList.isEmpty()) {
             FlyLog.d("musicUrlList = null return");
             super.musicUrlList(null);
             return;
@@ -231,7 +229,7 @@ public class MusicActivity extends BaseActivity implements
             showLeftMenu(true);
         }
         if (isShowLeftMenu) {
-            showLeftMenu(isShowLeftMenu);
+            showLeftMenu(true);
         }
         super.scanFinish(path);
     }

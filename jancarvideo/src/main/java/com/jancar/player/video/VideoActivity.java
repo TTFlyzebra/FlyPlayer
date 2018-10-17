@@ -20,7 +20,6 @@ import com.jancar.media.data.Const;
 import com.jancar.media.data.Video;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
-import com.jancar.media.utils.SPUtil;
 import com.jancar.media.utils.SystemPropertiesProxy;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
@@ -39,7 +38,6 @@ public class VideoActivity extends BaseActivity implements
         TouchEventRelativeLayout.OnTouchEventListener {
     private ImageView play_fore, play_next, leftMenu;
     private TouchEventRelativeLayout leftLayout;
-    private ImageView menu_play_list;
     private TouchEventRelativeLayout controlLayout;
     public int currenPos = 0;
     public GiraffePlayer player;
@@ -95,7 +93,6 @@ public class VideoActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.giraffe_player);
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
         player = new GiraffePlayer(this);
         player.setScaleType(GiraffePlayer.SCALETYPE_FITPARENT);
         player.addStatusChangeLiseter(this);
@@ -105,20 +102,8 @@ public class VideoActivity extends BaseActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        playSave();
-        usbMediaScan.addListener(this);
+        player.playSavePath(currenPath);
         mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-    }
-
-    private void playSave() {
-        String playUrl = (String) SPUtil.get(this, "VIDEO_URL", "");
-        int seek = (int) SPUtil.get(this, "VIDEO_SEEK", 0);
-        if (!TextUtils.isEmpty(playUrl)) {
-            File file = new File(playUrl);
-            if (file.exists()) {
-                player.play(playUrl, seek);
-            }
-        }
     }
 
     boolean isPause = false;
@@ -144,10 +129,7 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     protected void onStop() {
-        SPUtil.set(this, "VIDEO_URL", player.getPlayUrl());
-        SPUtil.set(this, "VIDEO_SEEK", player.getCurrentPosition());
         mAudioManager.abandonAudioFocus(mAudioFocusListener);
-        usbMediaScan.removeListener(this);
         super.onStop();
         player.stop();
     }
@@ -176,7 +158,6 @@ public class VideoActivity extends BaseActivity implements
         controlLayout = (TouchEventRelativeLayout) findViewById(R.id.app_video_bottom_box);
         tabView = (FlyTabView) findViewById(R.id.app_video_tabview);
         leftLayout = (TouchEventRelativeLayout) findViewById(R.id.play_ll01_playlist);
-        menu_play_list = (ImageView) findViewById(R.id.menu_play_list);
         liveBox = (RelativeLayout) findViewById(R.id.app_video_box);
 
         findViewById(R.id.video_view).setOnClickListener(this);
@@ -190,7 +171,7 @@ public class VideoActivity extends BaseActivity implements
         liveBox.setOnClickListener(this);
 
         tabView.setTitles(titles);
-        replaceFragment(fmName[1],R.id.ac_replace_fragment);
+        replaceFragment(fmName[1], R.id.ac_replace_fragment);
         tabView.setFocusPos(1);
 
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
@@ -240,7 +221,7 @@ public class VideoActivity extends BaseActivity implements
     @Override
     public void onItemClick(View v, int pos) {
         if (v instanceof FlyTabTextView) {
-            replaceFragment(fmName[pos],R.id.ac_replace_fragment);
+            replaceFragment(fmName[pos], R.id.ac_replace_fragment);
         }
     }
 
@@ -294,81 +275,60 @@ public class VideoActivity extends BaseActivity implements
     }
 
     @Override
-    public void stogrePathChange(String path) {
+    public void notifyPathChange(String path) {
+        FlyLog.d("notifyPathChange path=%s", path);
+        if (player.isPlaying()) {
+            player.savePathUrl(currenPath);
+        }
+        player.playSavePath(path);
         videoList.clear();
-        super.stogrePathChange(path);
+        super.notifyPathChange(path);
     }
 
     @Override
     public void videoUrlList(List<Video> videoUrlList) {
         FlyLog.d("get videos size=%d", videoUrlList == null ? 0 : videoUrlList.size());
 
-        if (videoUrlList == null) {
+        if (videoUrlList == null || videoUrlList.isEmpty()) {
             FlyLog.d("musicUrlList = null return");
             super.videoUrlList(videoUrlList);
             return;
         }
-        if (videoUrlList.isEmpty()) {
-            mHandler.removeCallbacks(hideControlTask);
-            controlLayout.animate().translationY(0).setDuration(300).start();
-            getWindow().getDecorView().setSystemUiVisibility(View.VISIBLE);
-            isShowControl = true;
-            showLeftMenu(true);
-        } else {
-            showControlView(true);
-        }
 
-        if (videoUrlList.isEmpty()) {
-            currenPos = 0;
-            if (player.isPlaying()) {
-                player.stop();
-            }
-            FlyLog.d("musicPlayer stop");
-            super.videoUrlList(videoUrlList);
-            return;
-        }
         videoList.addAll(videoUrlList);
-        //TODO:判断当前列表有没更新，确定播放哪首歌曲
-        if (TextUtils.isEmpty(player.getPlayUrl())) {
-            currenPos = 0;
-            player.play(videoList.get(currenPos).url);
-            super.videoUrlList(videoUrlList);
-            return;
-        }
-
-        if (currenPos >= videoList.size()) {
-            currenPos = 0;
-            player.play(videoList.get(currenPos).url);
-            super.videoUrlList(videoUrlList);
-            return;
-        }
-
-        for (int i = 0; i < videoList.size(); i++) {
-            currenPos = 0;
-            if (videoList.get(i).url.equals(player.getPlayUrl())) {
-                currenPos = i;
-                break;
+        if ((new File(player.getPlayUrl()).exists())) {
+            for (int i = 0; i < videoList.size(); i++) {
+                currenPos = -1;
+                if (videoList.get(i).url.equals(player.getPlayUrl())) {
+                    currenPos = i;
+                    break;
+                }
             }
-        }
-        if (currenPos == 0 && TextUtils.isEmpty(player.getPlayUrl())) {
-            player.play(videoList.get(currenPos).url);
+        } else {
+            player.setPlayUrl("");
+            currenPos = 0;
+            player.play(videoList.get(0).url);
         }
         super.videoUrlList(videoUrlList);
     }
 
     @Override
     public void scanFinish(String path) {
-        FlyLog.d("scanFinish path=%s",path);
-        if(videoList==null||videoList.isEmpty()){
+        FlyLog.d("scanFinish path=%s", path);
+        if (videoList == null || videoList.isEmpty()) {
             player.stop();
             player.showStatus("");
-            replaceFragment(fmName[0],R.id.ac_replace_fragment);
+            replaceFragment(fmName[0], R.id.ac_replace_fragment);
             tabView.setFocusPos(0);
             showControlView(true);
             showLeftMenu(true);
         }
+        if(isShowControl){
+            showControlView(true);
+        }
         super.scanFinish(path);
     }
+
 
     @Override
     public void statusChange(int statu) {
@@ -382,17 +342,13 @@ public class VideoActivity extends BaseActivity implements
                 setCurrentPos();
                 mHandler.removeCallbacks(seekBarTask);
                 mHandler.post(seekBarTask);
-                SPUtil.set(this, "VIDEO_URL", player.getPlayUrl());
-                SPUtil.set(this, "VIDEO_SEEK", player.getCurrentPosition());
+                player.savePathUrl(currenPath);
                 break;
             case GiraffePlayer.STATUS_PAUSE:
-            case GiraffePlayer.STATUS_LOADING:
-                SPUtil.set(this, "VIDEO_URL", player.getPlayUrl());
-                SPUtil.set(this, "VIDEO_SEEK", player.getCurrentPosition());
+                player.savePathUrl(currenPath);
                 break;
+            case GiraffePlayer.STATUS_LOADING:
             default:
-                SPUtil.set(this, "VIDEO_URL", player.getPlayUrl());
-                SPUtil.set(this, "VIDEO_SEEK", player.getCurrentPosition());
                 break;
         }
     }
@@ -445,36 +401,32 @@ public class VideoActivity extends BaseActivity implements
 
     private AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
         public void onAudioFocusChange(int focusChange) {
-            try {
-                switch (focusChange) {
-                    case AudioManager.AUDIOFOCUS_LOSS:
+            FlyLog.d("onAudioFocusChange focusChange=%d",focusChange);
+            switch (focusChange) {
+                case AudioManager.AUDIOFOCUS_LOSS:
+                    finish();
+                    break;
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                    if (player!=null&&player.isPlaying()) {
                         player.pause();
-                        finish();
-                        break;
-                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                        if (player.isPlaying()) {
-                            player.pause();
-                            lostPause = true;
-                        }
-                        break;
-                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                        /**
-                         * 是否混音
-                         */
-                        boolean flag = SystemProperties.getBoolean(SystemPropertiesProxy.Property.PERSIST_KEY_GISMIX, true);
-                        if (!flag && player.isPlaying()) {
-                            player.pause();
-                            lostPause = true;
-                        }
-                        break;
-                    case AudioManager.AUDIOFOCUS_GAIN:
-                        if (lostPause) {
-                            player.start();
-                        }
-                        break;
-                }
-            } catch (Exception e) {
-                FlyLog.e(e.toString());
+                        lostPause = true;
+                    }
+                    break;
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                    /**
+                     * 是否混音
+                     */
+                    boolean flag = SystemProperties.getBoolean(SystemPropertiesProxy.Property.PERSIST_KEY_GISMIX, true);
+                    if (!flag && player!=null&&player.isPlaying()) {
+                        player.pause();
+                        lostPause = true;
+                    }
+                    break;
+                case AudioManager.AUDIOFOCUS_GAIN:
+                    if (player!=null&&lostPause) {
+                        player.start();
+                    }
+                    break;
             }
         }
     };

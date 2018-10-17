@@ -27,8 +27,8 @@ android {
         applicationId "com.jancar.mediascan"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode gitCommitCount.toInteger()
+        versionName "v1.0."+gitSHA
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

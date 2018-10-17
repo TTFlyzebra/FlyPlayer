@@ -42,7 +42,7 @@ public class MusicPlayer implements IMusicPlayer,
             saveSeek = 0;
         }
         start();
-        savePlayUrl(playPath);
+        savePathUrl(playPath);
         mPlayStatus = STATUS_PLAYING;
         notifyStatus();
     }
@@ -135,7 +135,7 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void pause() {
         if (mMediaPlayer != null) {
-            savePlayUrl(playPath);
+            savePathUrl(playPath);
             mMediaPlayer.pause();
             mPlayStatus = STATUS_PAUSE;
             notifyStatus();
@@ -143,11 +143,11 @@ public class MusicPlayer implements IMusicPlayer,
     }
 
     @Override
-    public void savePlayUrl(String path) {
+    public void savePathUrl(String path) {
         int seek = getCurrentPosition();
         SPUtil.set(mContext, path + "MUSIC_URL", mPlayUrl);
-        SPUtil.set(mContext, "MUSIC_SEEK", seek);
-        FlyLog.d("savePlayUrl path=%s,url=%s,seek=%d", path, mPlayUrl, seek);
+        SPUtil.set(mContext, path + "MUSIC_SEEK", seek);
+        FlyLog.d("savePathUrl path=%s,url=%s,seek=%d", path, mPlayUrl, seek);
     }
 
     @Override
@@ -189,27 +189,23 @@ public class MusicPlayer implements IMusicPlayer,
         if (!(new File(mPlayUrl).exists())) {
             mPlayUrl = "";
         }
-        if (urls == null || urls.isEmpty()) {
-            mPlayPos = -1;
-            stop();
+        mPlayUrls.addAll(urls);
+        mPosMap.clear();
+        for (int i = 0; i < mPlayUrls.size(); i++) {
+            mPosMap.put(mPlayUrls.get(i).url, i);
+        }
+        if (!TextUtils.isEmpty(mPlayUrl)) {
+            mPlayPos = getPlayPos();
         } else {
-            mPlayUrls.addAll(urls);
-            mPosMap.clear();
-            for (int i = 0; i < mPlayUrls.size(); i++) {
-                mPosMap.put(mPlayUrls.get(i).url, i);
-            }
-            if (!TextUtils.isEmpty(mPlayUrl)) {
-                mPlayPos = getPlayPos();
-            } else {
-                mPlayPos = 0;
-                play(mPlayUrls.get(0).url);
-            }
+            mPlayPos = 0;
+            play(mPlayUrls.get(0).url);
         }
         FlyLog.d("setPlayUrls mPlayPos=%d", mPlayPos);
     }
 
     @Override
     public void playNext() {
+        FlyLog.d("playNext");
         switch (mLoopStatus) {
             case LOOP_RAND:
                 mPlayPos = (int) (Math.random() * mPlayUrls.size());
@@ -230,6 +226,7 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void playFore() {
+        FlyLog.d("playFore");
         switch (mLoopStatus) {
             case LOOP_RAND:
                 mPlayPos = (int) (Math.random() * mPlayUrls.size());
@@ -265,22 +262,26 @@ public class MusicPlayer implements IMusicPlayer,
     }
 
     @Override
-    public void playSave(String path) {
-        FlyLog.d("playSave path=%s", path);
+    public void playSavePath(String path) {
+        FlyLog.d("playSavePath path=%s", path);
         playPath = path;
-        String mPlayUrl = (String) SPUtil.get(mContext, playPath + "MUSIC_URL", "");
-        int seek = (int) SPUtil.get(mContext, "MUSIC_SEEK", 0);
-        FlyLog.d("get Save url=%s,seek=%d", mPlayUrl, seek);
-        if (!TextUtils.isEmpty(mPlayUrl)) {
-            File file = new File(mPlayUrl);
+        String url = (String) SPUtil.get(mContext, playPath + "MUSIC_URL", "");
+        int seek = (int) SPUtil.get(mContext, playPath + "MUSIC_SEEK", 0);
+        FlyLog.d("get Save url=%s,seek=%d", url, seek);
+        if (TextUtils.isEmpty(url) || url.equals(mPlayUrl)) {
+            FlyLog.e("play save is playing so return, play url=%s", url);
+            return;
+        }
+        if (!TextUtils.isEmpty(url)) {
+            File file = new File(url);
             if (file.exists()) {
-                this.mPlayUrl = mPlayUrl;
-                play(mPlayUrl, seek);
+                play(url, seek);
             }
         } else {
-            this.mPlayUrl = "";
-            this.saveSeek = 0;
-            savePlayUrl(playPath);
+            FlyLog.e("play file no exists url=%s", url);
+            mPlayUrl = "";
+            saveSeek = 0;
+            savePathUrl(playPath);
         }
     }
 
@@ -301,7 +302,7 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        FlyLog.d("onCompletion---");
+        FlyLog.d("onCompletion url=%s", mPlayUrl);
         mPlayStatus = STATUS_COMPLETED;
         notifyStatus();
         switch (mLoopStatus) {

@@ -33,10 +33,10 @@ public interface IUsbMediaListener {
     void imageUrlList(List<Image> imageUrlList);
 
     /**
-     * 存储器改变
+     * 存储器改变，每次扫描都有两次通知，一次为读取缓存的通知，一次为扫描完成的通知
      * @param path
      */
-    void stogrePathChange(String path);
+    void notifyPathChange(String path);
 
 
     /**

@@ -29,7 +29,7 @@ public class MediaScan implements IMediaScan {
     private ServiceConnection conn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            FlyLog.d("usbscan service connected");
+            FlyLog.d("mediascan service connected");
             try {
                 mFlyMedia = FlyMedia.Stub.asInterface(service);
                 if (mFlyMedia == null) return;
@@ -95,7 +95,7 @@ public class MediaScan implements IMediaScan {
                 @Override
                 public void run() {
                     for (IUsbMediaListener listener : listeners) {
-                        listener.stogrePathChange(path);
+                        listener.notifyPathChange(path);
                     }
                 }
             });

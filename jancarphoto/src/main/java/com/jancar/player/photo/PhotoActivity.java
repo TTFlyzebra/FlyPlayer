@@ -86,7 +86,6 @@ public class PhotoActivity extends BaseActivity implements
             }
         });
 
-        usbMediaScan.addListener(this);
     }
 
     private void initView() {
@@ -134,17 +133,16 @@ public class PhotoActivity extends BaseActivity implements
     protected void onDestroy() {
         CURRENT_IMAGE = null;
         mHandler.removeCallbacksAndMessages(null);
-        usbMediaScan.removeListener(this);
         super.onDestroy();
     }
 
     @Override
-    public void stogrePathChange(String path) {
+    public void notifyPathChange(String path) {
         imageList.clear();
         currentItem = 0;
         CURRENT_IMAGE = null;
         adapter.notifyDataSetChanged();
-        super.stogrePathChange(path);
+        super.notifyPathChange(path);
     }
 
     @Override

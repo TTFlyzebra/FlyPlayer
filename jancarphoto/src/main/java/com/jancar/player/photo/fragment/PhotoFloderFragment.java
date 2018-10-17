@@ -86,7 +86,7 @@ public class PhotoFloderFragment extends BaseFragment implements
     }
 
     @Override
-    public void stogrePathChange(String path) {
+    public void notifyPathChange(String path) {
         mAllList.clear();
         mHashSet.clear();
         adapter.notifyDataSetChanged();

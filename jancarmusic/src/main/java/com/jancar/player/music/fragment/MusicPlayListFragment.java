@@ -53,7 +53,7 @@ public class MusicPlayListFragment extends MusicFragment implements
     }
 
     @Override
-    public void stogrePathChange(String path) {
+    public void notifyPathChange(String path) {
         mMusicList.clear();
         textView.setText(R.string.music_scan1);
         adapter.notifyDataSetChanged();

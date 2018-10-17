@@ -101,7 +101,7 @@ public class StorageFragment extends BaseFragment implements
     }
 
     @Override
-    public void stogrePathChange(String path) {
+    public void notifyPathChange(String path) {
         storage.refresh();
         adapater.setCurrentPath(path);
         adapater.notifyDataSetChanged();

@@ -102,7 +102,7 @@ public class MusicAlbumFragment extends MusicFragment implements
     }
 
     @Override
-    public void stogrePathChange(String path) {
+    public void notifyPathChange(String path) {
         mHashMap.clear();
         adapter.notifyDataSetChanged();
     }

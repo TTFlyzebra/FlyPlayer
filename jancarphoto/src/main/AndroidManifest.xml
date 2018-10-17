@@ -17,6 +17,7 @@
             android:exported="true"
             android:icon="@drawable/ic_image"
             android:label="@string/photo"
+            android:launchMode="singleInstance"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

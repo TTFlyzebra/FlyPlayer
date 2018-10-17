@@ -12,8 +12,6 @@ interface FlyMedia {
      */
     void scanDisk(String disk);
 
-    void notify(Notify notify);
-
     void registerNotify(Notify notify);
 
     void unregisterNotify(Notify notify);

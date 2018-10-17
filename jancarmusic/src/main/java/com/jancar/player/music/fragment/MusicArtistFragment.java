@@ -104,7 +104,7 @@ public class MusicArtistFragment extends MusicFragment implements
     private boolean isFistGet = true;
 
     @Override
-    public void stogrePathChange(String path) {
+    public void notifyPathChange(String path) {
         mHashMap.clear();
         adapter.notifyDataSetChanged();
     }

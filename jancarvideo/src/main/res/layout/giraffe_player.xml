@@ -10,9 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <include layout="@layout/video_parkwarning"
+    <include
+        layout="@layout/video_parkwarning"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -257,20 +258,14 @@
                     android:src="@drawable/media_next" />
             </LinearLayout>
 
-            <RelativeLayout
+            <ImageView
+                android:id="@+id/menu_play_list"
                 android:layout_width="75px"
                 android:layout_height="75px"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/menu_play_list"
-                    android:layout_width="45px"
-                    android:layout_height="45px"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/media_list_menu_close" />
-            </RelativeLayout>
+                android:scaleType="center"
+                android:src="@drawable/media_list_menu_close" />
 
         </com.jancar.media.view.TouchEventRelativeLayout>
 

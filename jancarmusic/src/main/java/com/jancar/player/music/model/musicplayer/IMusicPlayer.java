@@ -46,9 +46,9 @@ public interface IMusicPlayer {
 
     void switchLoopStatus();
 
-    void playSave(String path);
+    void playSavePath(String path);
 
     void setVolume(float v, float v1);
 
-    void savePlayUrl(String path);
+    void savePathUrl(String path);
 }

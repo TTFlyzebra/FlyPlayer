@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -26,9 +27,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.jancar.media.utils.FlyLog;
+import com.jancar.media.utils.SPUtil;
 import com.jancar.player.video.R;
 import com.jancar.player.video.VideoActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +79,7 @@ public class GiraffePlayer {
     private final AudioManager audioManager;
     private final int mMaxVolume;
     private boolean playerSupport;
-    private String url;
+    private String mPlayUrl;
     private Query $;
     public static final int STATUS_ERROR = -1;
     public static final int STATUS_IDLE = 0;
@@ -252,7 +255,7 @@ public class GiraffePlayer {
                     }
                     break;
                 case MESSAGE_RESTART_PLAY:
-                    play(url);
+                    play(mPlayUrl);
                     break;
             }
         }
@@ -503,12 +506,12 @@ public class GiraffePlayer {
 
     public void showStatus(String statusText) {
         $.id(R.id.app_video_status).visible();
-        $.id(R.id.app_video_status_text).text(statusText);
+        $.id(R.id.app_video_status_text).text("");
     }
 
     public void play(String url) {
         FlyLog.d("play url=%s", url);
-        this.url = url;
+        this.mPlayUrl = url;
         if (playerSupport) {
             $.id(R.id.app_video_loading).visible();
             videoView.setVideoPath(url);
@@ -520,7 +523,7 @@ public class GiraffePlayer {
 
     public void play(String url, int seek) {
         FlyLog.d("play url=%s,seek=%d", url, seek);
-        this.url = url;
+        this.mPlayUrl = url;
         if (playerSupport) {
             $.id(R.id.app_video_loading).visible();
             videoView.setVideoPath(url);
@@ -531,7 +534,11 @@ public class GiraffePlayer {
     }
 
     public String getPlayUrl() {
-        return url == null ? "" : url;
+        return mPlayUrl == null ? "" : mPlayUrl;
+    }
+
+    public void setPlayUrl(String url){
+        mPlayUrl = url;
     }
 
     private String generateTime(long time) {
@@ -770,6 +777,36 @@ public class GiraffePlayer {
         return false;
     }
 
+    public void savePathUrl(String path) {
+        int seek = getCurrentPosition();
+        SPUtil.set(activity, path + "VIDEO_URL", mPlayUrl);
+        SPUtil.set(activity, path + "VIDEO_SEEK", seek);
+        FlyLog.d("savePathUrl path=%s,url=%s,seek=%d", path, mPlayUrl, seek);
+    }
+
+    public String playPath = "";
+    public void playSavePath(String path) {
+        FlyLog.d("playSavePath path=%s", path);
+        playPath = path;
+        String url = (String) SPUtil.get(activity, path + "VIDEO_URL", "");
+        int seek = (int) SPUtil.get(activity, path +"VIDEO_SEEK", 0);
+        FlyLog.d("get Save url=%s,seek=%d", url, seek);
+        if(TextUtils.isEmpty(url)||url.equals(mPlayUrl)) {
+            FlyLog.e("play save is playing so return, play url=%s",url);
+            return;
+        }
+        if (!TextUtils.isEmpty(url)) {
+            File file = new File(url);
+            if (file.exists()) {
+                play(url, seek);
+            }
+        } else {
+            FlyLog.e("play file no exists url=%s",url);
+            mPlayUrl = "";
+            savePathUrl(path);
+        }
+    }
+
     class Query {
         private final Activity activity;
         public View view;
@@ -967,7 +1004,7 @@ public class GiraffePlayer {
     }
 
     public void stop() {
-        this.url = "";
+        this.mPlayUrl = "";
         videoView.stopPlayback();
     }
 
