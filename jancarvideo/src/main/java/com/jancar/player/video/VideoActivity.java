@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.jancar.JancarManager;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Video;
 import com.jancar.media.utils.DisplayUtils;
@@ -22,6 +23,7 @@ import com.jancar.media.utils.SystemPropertiesProxy;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
 import com.jancar.media.view.TouchEventRelativeLayout;
+import com.jancar.state.JacState;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -58,12 +60,15 @@ public class VideoActivity extends BaseActivity implements
     private int countSavePlaySeek = 0;
     private int SAVEPLAYSEEKTIME = 10;
 
+    private JacState jacState = null;
+    private JancarManager jancarManager;
+
     private Runnable seekBarTask = new Runnable() {
         @Override
         public void run() {
             try {
                 countSavePlaySeek++;
-                if(countSavePlaySeek%SAVEPLAYSEEKTIME==0&&player!=null){
+                if (countSavePlaySeek % SAVEPLAYSEEKTIME == 0 && player != null) {
                     player.savePathUrl(currenPath);
                 }
                 player.setProgress();
@@ -101,6 +106,9 @@ public class VideoActivity extends BaseActivity implements
         player.setScaleType(GiraffePlayer.SCALETYPE_FITPARENT);
         player.addStatusChangeLiseter(this);
         initView();
+        jacState = new SystemStates();
+        jancarManager = (JancarManager) getSystemService("jancar_manager");
+        jancarManager.registerJacStateListener(jacState.asBinder());
     }
 
     @Override
@@ -155,6 +163,7 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     protected void onDestroy() {
+        jancarManager.unregisterJacStateListener(jacState.asBinder());
         super.onDestroy();
     }
 
@@ -480,6 +489,26 @@ public class VideoActivity extends BaseActivity implements
             case MotionEvent.ACTION_DOWN:
                 touchTime = System.currentTimeMillis();
                 break;
+        }
+    }
+
+    public class SystemStates extends JacState {
+        @Override
+        public void OnBackCar(boolean bState) {
+            super.OnBackCar(bState);
+        }
+
+        @Override
+        public void OnStorage(StorageState state) {
+            FlyLog.d("usb state:" + state.isUsbMounted());
+            if (!state.isUsbMounted()) {
+                if (!(new File(player.getPlayUrl()).exists())) {
+                    FlyLog.d("play file is no exists");
+                    player.stop();
+                    player.showStatus("");
+                }
+            }
+            super.OnStorage(state);
         }
     }
 }
