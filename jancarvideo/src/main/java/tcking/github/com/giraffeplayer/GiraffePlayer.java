@@ -778,7 +778,7 @@ public class GiraffePlayer {
                     int seek = getCurrentPosition();
                     SPUtil.set(activity, path + "VIDEO_URL", mPlayUrl);
                     SPUtil.set(activity, path + "VIDEO_SEEK", seek);
-                    FlyLog.d("savePathUrl path=%s,url=%s,seek=%d", path, mPlayUrl, seek);
+                    FlyLog.d("savePathUrl seek=%d,path=%s,url=%s", seek,path, mPlayUrl);
                 }catch (Exception e){
                     FlyLog.e(e.toString());
                 }

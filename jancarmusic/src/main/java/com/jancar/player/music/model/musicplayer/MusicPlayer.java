@@ -264,7 +264,7 @@ public class MusicPlayer implements IMusicPlayer,
                 int seek = getCurrentPosition();
                 SPUtil.set(mContext, path + "MUSIC_URL", mPlayUrl);
                 SPUtil.set(mContext, path + "MUSIC_SEEK", seek);
-                FlyLog.d("savePathUrl path=%s,url=%s,seek=%d", path, mPlayUrl, seek);
+                FlyLog.d("savePathUrl seek=%d,path=%s,url=%s",seek, path, mPlayUrl);
             }
         });
     }
