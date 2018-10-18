@@ -2,6 +2,8 @@ package com.jancar.mediascan.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
@@ -41,6 +43,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class FlyMediaService extends Service implements IStorageListener {
     private static final Executor executor = Executors.newFixedThreadPool(1);
+
+    static final HandlerThread sWorkerThread = new HandlerThread("notify-thread");
+
+    static {
+        sWorkerThread.start();
+    }
+
+    static final Handler sWorker = new Handler(sWorkerThread.getLooper());
     private static AtomicBoolean isRunning = new AtomicBoolean(false);
     private static AtomicBoolean isStoped = new AtomicBoolean(false);
     private static AtomicBoolean isNotifyVideo = new AtomicBoolean(false);
@@ -137,6 +147,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     @Override
     public void onDestroy() {
         iStorage.removeListener(this);
+        sWorker.removeCallbacksAndMessages(null);
         super.onDestroy();
     }
 
@@ -265,9 +276,15 @@ public class FlyMediaService extends Service implements IStorageListener {
                 notifyFinishListener();
 
                 if (localPaths.contains(path)) {
-                    mListDiskCache.put(path + "video", GsonUtils.obj2Json(mVideoList));
-                    mListDiskCache.put(path + "player.music", GsonUtils.obj2Json(mMusicList));
-                    mListDiskCache.put(path + "image", GsonUtils.obj2Json(mImageList));
+                    synchronized (mVideoList) {
+                        mListDiskCache.put(path + "video", GsonUtils.obj2Json(mVideoList));
+                    }
+                    synchronized (mMusicList) {
+                        mListDiskCache.put(path + "player.music", GsonUtils.obj2Json(mMusicList));
+                    }
+                    synchronized (mImageList) {
+                        mListDiskCache.put(path + "image", GsonUtils.obj2Json(mImageList));
+                    }
                     FlyLog.d("finish save path=%s", path);
                 }
 
@@ -528,7 +545,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     }
 
     private void notifyVideoListener(final int start) {
-        executor.execute(new Runnable() {
+        sWorker.post(new Runnable() {
             @Override
             public void run() {
                 synchronized (mVideoList) {
@@ -552,7 +569,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     }
 
     private void notifyMusicListener(final int start) {
-        executor.execute(new Runnable() {
+        sWorker.post(new Runnable() {
             @Override
             public void run() {
                 synchronized (mMusicList) {
@@ -576,7 +593,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     }
 
     private void notifyImageListener(final int start) {
-        executor.execute(new Runnable() {
+        sWorker.post(new Runnable() {
             @Override
             public void run() {
                 synchronized (mImageList) {
@@ -600,7 +617,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     }
 
     private void notifyMusicID3Listener(final int start) {
-        executor.execute(new Runnable() {
+        sWorker.post(new Runnable() {
             @Override
             public void run() {
                 synchronized (mMusicID3List) {
@@ -624,7 +641,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     }
 
     public void notifyVideoListener(final List<Video> list) {
-        executor.execute(new Runnable() {
+        sWorker.post(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -644,7 +661,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     }
 
     public void notifyMusicListener(final List<Music> mMusicList) {
-        executor.execute(new Runnable() {
+        sWorker.post(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -666,7 +683,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     }
 
     public void notifyID3MusicListener(final List<Music> mID3MusicList) {
-        executor.execute(new Runnable() {
+        sWorker.post(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -688,7 +705,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     }
 
     public void notifyImageListener(final List<Image> mImageList) {
-        executor.execute(new Runnable() {
+        sWorker.post(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -710,7 +727,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     }
 
     private void notifyPathListener() {
-        executor.execute(new Runnable() {
+        sWorker.post(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -736,7 +753,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     }
 
     private void notifyFinishListener() {
-        executor.execute(new Runnable() {
+        sWorker.post(new Runnable() {
             @Override
             public void run() {
                 try {
