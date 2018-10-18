@@ -184,6 +184,8 @@ public class MusicPlayer implements IMusicPlayer,
         if (!(new File(mPlayUrl).exists())) {
             mPlayUrl = "";
         }
+        if(urls==null||urls.isEmpty()) return;
+
         mPlayUrls.addAll(urls);
         mPosMap.clear();
         for (int i = 0; i < mPlayUrls.size(); i++) {

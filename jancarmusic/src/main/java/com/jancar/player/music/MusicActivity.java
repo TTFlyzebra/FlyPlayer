@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Music;
+import com.jancar.media.data.StorageInfo;
+import com.jancar.media.model.listener.IUsbMediaListener;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
@@ -51,10 +53,10 @@ public class MusicActivity extends BaseActivity implements
         View.OnClickListener,
         TouchEventRelativeLayout.OnTouchEventListener {
     private String titles[] = new String[]{"存储器", "单曲", "歌手", "专辑", "文件夹"};
-    private String fmName[] = new String[]{"MusicStorageFragment", "MusicPlayListFragment", "MusicArtistFragment", "MusicAlbumFragment", "MusicFloderFragment"};
+    private String fmName[] = new String[]{"MusicStorageFragment", "MusicPlayListFragment",
+            "MusicArtistFragment", "MusicAlbumFragment", "MusicFloderFragment"};
     public List<Music> musicList = new ArrayList<>();
     protected IMusicPlayer musicPlayer = MusicPlayer.getInstance();
-
     private SeekBar seekBar;
     private TextView seekBarSartTime, seekBarEndTime;
     private ImageView playFore, playNext, play, leftMenu;
@@ -199,6 +201,7 @@ public class MusicActivity extends BaseActivity implements
         super.onDestroy();
     }
 
+
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s",path);
@@ -227,6 +230,7 @@ public class MusicActivity extends BaseActivity implements
     public void scanFinish(String path) {
         FlyLog.d("scanFinish path=%s", path);
         if (musicList == null || musicList.isEmpty()) {
+            musicPlayer.setPlayUrls(musicList);
             musicPlayer.stop();
             tvAlbum.setText("");
             tvArtist.setText("");
@@ -239,6 +243,21 @@ public class MusicActivity extends BaseActivity implements
             showLeftMenu(true);
         }
         super.scanFinish(path);
+    }
+
+    @Override
+    public void scanServiceConneted() {
+        String path = null;
+        try {
+            Intent intent = getIntent();
+            path = intent.getStringExtra("device");
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
+        if(!TextUtils.isEmpty(path)){
+            currenPath = path;
+        }
+        super.scanServiceConneted();
     }
 
     @Override
