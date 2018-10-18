@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class MusicPlayer implements IMusicPlayer,
         MediaPlayer.OnCompletionListener,
@@ -22,6 +24,7 @@ public class MusicPlayer implements IMusicPlayer,
         MediaPlayer.OnPreparedListener,
         IPlayStatus,
         ILoopStatus {
+    private final static Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     private Context mContext;
     private List<IMusicPlayerListener> listeners = new ArrayList<>();
     private MediaPlayer mMediaPlayer;
@@ -143,14 +146,6 @@ public class MusicPlayer implements IMusicPlayer,
     }
 
     @Override
-    public void savePathUrl(String path) {
-        int seek = getCurrentPosition();
-        SPUtil.set(mContext, path + "MUSIC_URL", mPlayUrl);
-        SPUtil.set(mContext, path + "MUSIC_SEEK", seek);
-        FlyLog.d("savePathUrl path=%s,url=%s,seek=%d", path, mPlayUrl, seek);
-    }
-
-    @Override
     public boolean isPause() {
         return mPlayStatus == STATUS_PAUSE;
     }
@@ -260,6 +255,20 @@ public class MusicPlayer implements IMusicPlayer,
             iMusicPlayerListener.loopStatusChange(mLoopStatus);
         }
     }
+
+    @Override
+    public void savePathUrl(final String path) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                int seek = getCurrentPosition();
+                SPUtil.set(mContext, path + "MUSIC_URL", mPlayUrl);
+                SPUtil.set(mContext, path + "MUSIC_SEEK", seek);
+                FlyLog.d("savePathUrl path=%s,url=%s,seek=%d", path, mPlayUrl, seek);
+            }
+        });
+    }
+
 
     @Override
     public void playSavePath(String path) {

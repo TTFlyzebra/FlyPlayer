@@ -79,15 +79,22 @@ public class MusicActivity extends BaseActivity implements
 
     private MyReceiver mReceiver;
     private long touchTime;
-
+    private int countSavePlaySeek = 0;
+    private int SAVEPLAYSEEKTIME = 10;
 
     private Runnable seekBarTask = new Runnable() {
         @Override
         public void run() {
-            seekBarPos = musicPlayer.getCurrentPosition();
-            lrcView.updateTime(seekBarPos);
-            setSeekStartText(seekBarPos);
-            seekBar.setProgress(seekBarPos);
+            countSavePlaySeek++;
+            if(countSavePlaySeek%SAVEPLAYSEEKTIME==0&&musicPlayer!=null){
+                musicPlayer.savePathUrl(currenPath);
+            }
+            if(musicPlayer!=null) {
+                seekBarPos = musicPlayer.getCurrentPosition();
+                lrcView.updateTime(seekBarPos);
+                setSeekStartText(seekBarPos);
+                seekBar.setProgress(seekBarPos);
+            }
             mHandler.postDelayed(seekBarTask, REFRESH_SEEK_LRC_TIME);
         }
     };

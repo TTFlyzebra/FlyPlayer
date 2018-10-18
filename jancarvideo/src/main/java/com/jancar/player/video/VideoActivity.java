@@ -55,11 +55,17 @@ public class VideoActivity extends BaseActivity implements
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private int hideTime = 5000;
     private static final int REFRESH_SEEK_LRC_TIME = 1000;
+    private int countSavePlaySeek = 0;
+    private int SAVEPLAYSEEKTIME = 10;
 
     private Runnable seekBarTask = new Runnable() {
         @Override
         public void run() {
             try {
+                countSavePlaySeek++;
+                if(countSavePlaySeek%SAVEPLAYSEEKTIME==0&&player!=null){
+                    player.savePathUrl(currenPath);
+                }
                 player.setProgress();
                 mHandler.postDelayed(seekBarTask, REFRESH_SEEK_LRC_TIME);
             } catch (Exception e) {
@@ -79,7 +85,7 @@ public class VideoActivity extends BaseActivity implements
                         .setDuration(300).start();
                 getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
                 isShowControl = false;
-                mHandler.removeCallbacks(seekBarTask);
+//                mHandler.removeCallbacks(seekBarTask);
             } else {
                 mHandler.postDelayed(hideControlTask, time + 100);
             }

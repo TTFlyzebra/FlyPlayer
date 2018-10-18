@@ -34,6 +34,8 @@ import com.jancar.player.video.VideoActivity;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
@@ -93,6 +95,8 @@ public class GiraffePlayer {
     final private int initHeight;
     private int defaultTimeout = 10000;
     private int screenWidthPixels;
+
+    private final static Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
 
     private final View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -766,11 +770,20 @@ public class GiraffePlayer {
         return false;
     }
 
-    public void savePathUrl(String path) {
-        int seek = getCurrentPosition();
-        SPUtil.set(activity, path + "VIDEO_URL", mPlayUrl);
-        SPUtil.set(activity, path + "VIDEO_SEEK", seek);
-        FlyLog.d("savePathUrl path=%s,url=%s,seek=%d", path, mPlayUrl, seek);
+    public void savePathUrl(final String path) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int seek = getCurrentPosition();
+                    SPUtil.set(activity, path + "VIDEO_URL", mPlayUrl);
+                    SPUtil.set(activity, path + "VIDEO_SEEK", seek);
+                    FlyLog.d("savePathUrl path=%s,url=%s,seek=%d", path, mPlayUrl, seek);
+                }catch (Exception e){
+                    FlyLog.e(e.toString());
+                }
+            }
+        });
     }
 
     public String playPath = "";
