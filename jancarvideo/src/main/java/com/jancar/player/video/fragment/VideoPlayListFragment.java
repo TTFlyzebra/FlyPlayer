@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jancar.media.base.BaseFragment;
-import com.jancar.media.data.Music;
 import com.jancar.media.data.Video;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.player.video.R;
@@ -48,7 +47,6 @@ public class VideoPlayListFragment extends BaseFragment implements
     public void onViewCreated(View view, Bundle savedInstanceState) {
         recyclerView = (RecyclerView) view.findViewById(R.id.fm_rv01);
         textView = (TextView) view.findViewById(R.id.fm_tv01);
-        textView.setText(String.format(getString(R.string.video_scan2), activity.videoList.size()));
         adapter = new VideoPlayListAdapater(getActivity(), activity.videoList, recyclerView);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -60,6 +58,11 @@ public class VideoPlayListFragment extends BaseFragment implements
     @Override
     public void onResume() {
         super.onResume();
+        if(VideoActivity.isScan){
+            textView.setText(R.string.music_scan1);
+        }else{
+            textView.setText(String.format(getString(R.string.video_scan2), activity.videoList.size()));
+        }
         scrollToCureentPlayItem();
     }
 
@@ -82,7 +85,7 @@ public class VideoPlayListFragment extends BaseFragment implements
     }
 
     @Override
-    public void musicID3UrlList(List<Music> musicUrlList) {
+    public void scanFinish(String path) {
         try {
             textView.setText(String.format(getString(R.string.video_scan2), activity.videoList.size()));
         }catch (Exception e){

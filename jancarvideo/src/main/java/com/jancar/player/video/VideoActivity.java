@@ -64,6 +64,8 @@ public class VideoActivity extends BaseActivity implements
     private JacState jacState = null;
     private JancarManager jancarManager;
 
+    public static boolean isScan = false;
+
     private Runnable seekBarTask = new Runnable() {
         @Override
         public void run() {
@@ -321,6 +323,7 @@ public class VideoActivity extends BaseActivity implements
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
+        isScan = true;
         if (player.isPlaying()) {
             player.savePathUrl(currenPath);
         }
@@ -359,6 +362,7 @@ public class VideoActivity extends BaseActivity implements
     @Override
     public void scanFinish(String path) {
         FlyLog.d("scanFinish path=%s", path);
+        isScan = false;
         if (videoList == null || videoList.isEmpty()) {
             player.stop();
             player.showStatus("");

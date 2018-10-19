@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.Image;
-import com.jancar.media.data.Music;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.player.photo.PhotoActivity;
 import com.jancar.player.photo.R;
@@ -63,6 +62,11 @@ public class PhotoPlayListFragment extends BaseFragment implements
     @Override
     public void onResume() {
         super.onResume();
+        if(PhotoActivity.isScan){
+            textView.setText(R.string.music_scan1);
+        }else{
+            textView.setText(String.format(getString(R.string.photo_scan2), activity.imageList.size()));
+        }
         ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(activity.viewPager.getCurrentItem(), 0);
     }
 
@@ -99,6 +103,7 @@ public class PhotoPlayListFragment extends BaseFragment implements
         adapter.notifyDataSetChanged();
     }
 
+
     @Override
     public void imageUrlList(List<Image> imageUrlList) {
         try {
@@ -110,8 +115,7 @@ public class PhotoPlayListFragment extends BaseFragment implements
     }
 
     @Override
-    public void musicID3UrlList(List<Music> musicUrlList) {
-        FlyLog.d("========================");
+    public void scanFinish(String path) {
         try {
             textView.setText(String.format(getString(R.string.photo_scan2), activity.imageList.size()));
         } catch (Exception e) {

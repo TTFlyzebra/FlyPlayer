@@ -26,7 +26,6 @@ import com.jancar.mediascan.model.storage.Storage;
 import com.jancar.mediascan.model.storage.StorageInfo;
 import com.jancar.mediascan.utils.FlyLog;
 import com.jancar.mediascan.utils.GsonUtils;
-import com.jancar.mediascan.utils.SPUtil;
 import com.jancar.mediascan.utils.StorageTools;
 import com.jancar.mediascan.utils.StringTools;
 import com.jancar.mediascan.utils.SystemPropertiesProxy;
@@ -165,7 +164,12 @@ public class FlyMediaService extends Service implements IStorageListener {
         FlyLog.d("scan mPath=%s", path);
         clearData();
         currentPath = path;
-        SPUtil.set(this, "SAVE_PATH", currentPath);
+        sWorker.post(new Runnable() {
+            @Override
+            public void run() {
+                notifyPathListener();
+            }
+        });
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -179,12 +183,6 @@ public class FlyMediaService extends Service implements IStorageListener {
                 }
                 isRunning.set(true);
                 isStoped.set(false);
-                sWorker.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        notifyPathListener();
-                    }
-                });
                 FlyLog.d("start scan mPath=%s", path);
                 File file = new File(path);
                 if (file.exists()) {
@@ -278,70 +276,52 @@ public class FlyMediaService extends Service implements IStorageListener {
                 }
 
                 if (isStoped.get()) {
-                    FlyLog.d("stop scan path=%s",path);
-                }else {
+                    FlyLog.d("stop scan path=%s", path);
+                } else {
+                    if (!isNotifyMusic.get()) {
+                        sWorker.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                synchronized (mMusicList) {
+                                    notifyMusicListener(mMusicStart.get(), mMusicList.size());
+                                }
+                            }
+                        });
+                    }
+                    if (!isNotifyVideo.get()) {
+                        sWorker.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                synchronized (mVideoList) {
+                                    notifyVideoListener(mVideoStart.get(), mVideoList.size());
+                                }
+                            }
+                        });
+                    }
+                    if (!isNotifyImage.get()) {
+                        sWorker.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                synchronized (mImageList) {
+                                    notifyImageListener(mImageStart.get(), mImageList.size());
+                                }
+                            }
+                        });
+                    }
+
                     if (isNotifyMusic.get() || isNotifyVideo.get() || isNotifyImage.get()) {
                         sWorker.post(new Runnable() {
                             @Override
                             public void run() {
                                 notifyPathListener();
-                            }
-                        });
-                    }
-
-                    if (isNotifyMusic.get()) {
-                        sWorker.post(new Runnable() {
-                            @Override
-                            public void run() {
                                 synchronized (mMusicList) {
                                     notifyMusicListener(mMusicList);
                                 }
-                            }
-                        });
-                    } else {
-                        sWorker.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                synchronized (mMusicList) {
-                                    notifyMusicListener(mMusicStart.get());
-                                }
-                            }
-                        });
-                    }
-                    if (isNotifyVideo.get()) {
-                        sWorker.post(new Runnable() {
-                            @Override
-                            public void run() {
                                 synchronized (mVideoList) {
                                     notifyVideoListener(mVideoList);
                                 }
-                            }
-                        });
-                    } else {
-                        sWorker.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                synchronized (mVideoList) {
-                                    notifyVideoListener(mVideoStart.get());
-                                }
-                            }
-                        });
-                    }
-                    if (isNotifyImage.get()) {
-                        sWorker.post(new Runnable() {
-                            @Override
-                            public void run() {
                                 synchronized (mImageList) {
                                     notifyImageListener(mImageList);
-                                }
-                            }
-                        });
-                    } else {
-                        sWorker.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                synchronized (mImageList) {
-                                    notifyImageListener(mImageStart.get());
                                 }
                             }
                         });
@@ -372,11 +352,13 @@ public class FlyMediaService extends Service implements IStorageListener {
                     getMusicID3Info();
 
                     if (!isStoped.get()) {
+                        final int start = mMusicID3Start.get();
+                        final int end = Math.min(start+ID3_UPDATE_DENSITY,mMusicID3List.size());
                         sWorker.post(new Runnable() {
                             @Override
                             public void run() {
                                 synchronized (mImageList) {
-                                    notifyMusicID3Listener(mMusicID3Start.get());
+                                    notifyMusicID3Listener(start,end);
                                 }
                             }
                         });
@@ -416,7 +398,7 @@ public class FlyMediaService extends Service implements IStorageListener {
 
     private void removePath(String path) {
         FlyLog.d("remove mPath=%s", path);
-        if (currentPath.equals(path)&&eState==JacState.ePowerState.ePowerOn) {
+        if (currentPath.equals(path) && eState == JacState.ePowerState.ePowerOn) {
             FlyLog.d("clear all list");
             clearData();
             currentPath = DEF_PATH;
@@ -460,10 +442,11 @@ public class FlyMediaService extends Service implements IStorageListener {
                         mVideoEnd.getAndIncrement();
                         if (!isNotifyVideo.get() && (mVideoList.size() % UPDATE_DENSITY) == 1) {
                             final int start = mVideoStart.get();
+                            final int end = Math.min(start + UPDATE_DENSITY, mVideoList.size());
                             sWorker.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    notifyVideoListener(start);
+                                    notifyVideoListener(start, end);
                                 }
                             });
                             mVideoStart.set(mVideoList.size());
@@ -489,10 +472,11 @@ public class FlyMediaService extends Service implements IStorageListener {
                         mMusicEnd.getAndIncrement();
                         if (!isNotifyMusic.get() && (mMusicList.size() % UPDATE_DENSITY) == 1) {
                             final int start = mMusicStart.get();
+                            final int end = Math.min(start + UPDATE_DENSITY, mMusicList.size());
                             sWorker.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    notifyMusicListener(start);
+                                    notifyMusicListener(start, end);
                                 }
                             });
                             mMusicStart.set(mMusicList.size());
@@ -509,10 +493,11 @@ public class FlyMediaService extends Service implements IStorageListener {
                         mImageEnd.getAndIncrement();
                         if (!isNotifyImage.get() && (mImageList.size() % UPDATE_DENSITY) == 1) {
                             final int start = mImageStart.get();
+                            final int end = Math.min(start + UPDATE_DENSITY, mImageList.size());
                             sWorker.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    notifyImageListener(start);
+                                    notifyImageListener(start, end);
                                 }
                             });
                             mImageStart.set(mImageList.size());
@@ -557,20 +542,25 @@ public class FlyMediaService extends Service implements IStorageListener {
             scanPath(disk);
         } else {
             FlyLog.d("notify path=%s", currentPath);
-            notifyPathListener();
-            synchronized (mMusicList) {
-                notifyMusicListener(mMusicList);
-            }
-            synchronized (mVideoList) {
-                notifyVideoListener(mVideoList);
-            }
-            synchronized (mImageList) {
-                notifyImageListener(mImageList);
-            }
-            synchronized (mMusicID3List) {
-                notifyID3MusicListener(mMusicID3List);
-            }
-            notifyFinishListener();
+            sWorker.post(new Runnable() {
+                @Override
+                public void run() {
+                    notifyPathListener();
+                    synchronized (mMusicList) {
+                        notifyMusicListener(mMusicList);
+                    }
+                    synchronized (mVideoList) {
+                        notifyVideoListener(mVideoList);
+                    }
+                    synchronized (mImageList) {
+                        notifyImageListener(mImageList);
+                    }
+                    synchronized (mMusicID3List) {
+                        notifyID3MusicListener(mMusicID3List);
+                    }
+                    notifyFinishListener();
+                }
+            });
             FlyLog.d("notify Finish path=%s", currentPath);
         }
     }
@@ -643,11 +633,10 @@ public class FlyMediaService extends Service implements IStorageListener {
         }
     }
 
-    private void notifyVideoListener(final int start) {
+    private void notifyVideoListener(final int start, final int end) {
         FlyLog.d("notify video list start=%d,list", start);
         synchronized (mVideoList) {
             try {
-                int end = Math.min(mVideoList.size(), start + UPDATE_DENSITY);
                 final List<Video> list = mVideoList.subList(start, end);
                 final int N = mNotifys.beginBroadcast();
 //                FlyLog.d("start notify client, client sum=%d", N);
@@ -665,11 +654,10 @@ public class FlyMediaService extends Service implements IStorageListener {
         }
     }
 
-    private void notifyMusicListener(final int start) {
+    private void notifyMusicListener(final int start, final int end) {
         FlyLog.d("notify music list start=%d", start);
         synchronized (mMusicList) {
             try {
-                int end = Math.min(mMusicList.size(), start + UPDATE_DENSITY);
                 final List<Music> list = mMusicList.subList(start, end);
                 final int N = mNotifys.beginBroadcast();
 //                FlyLog.d("start notify client, client sum=%d", N);
@@ -687,12 +675,11 @@ public class FlyMediaService extends Service implements IStorageListener {
         }
     }
 
-    private void notifyImageListener(final int start) {
+    private void notifyImageListener(final int start, final int end) {
         FlyLog.d("notify image list start=%d", start);
         synchronized (mImageList) {
             try {
-                int end = Math.min(mImageList.size(), start + UPDATE_DENSITY);
-                List<Image> list = mImageList.subList(start,end);
+                List<Image> list = mImageList.subList(start, end);
                 final int N = mNotifys.beginBroadcast();
 //                FlyLog.d("start notify client, client sum=%d", N);
                 for (int i = 0; i < N; i++) {
@@ -709,11 +696,10 @@ public class FlyMediaService extends Service implements IStorageListener {
         }
     }
 
-    private void notifyMusicID3Listener(final int start) {
+    private void notifyMusicID3Listener(final int start, final int end) {
         FlyLog.d("notify id3 music list start=%d", start);
         synchronized (mMusicID3List) {
             try {
-                int end = Math.min(mMusicID3List.size(), start + UPDATE_DENSITY);
                 List<Music> list = mMusicID3List.subList(start, end);
                 final int N = mNotifys.beginBroadcast();
 //                FlyLog.d("start notify client, client sum=%d", N);
@@ -894,11 +880,12 @@ public class FlyMediaService extends Service implements IStorageListener {
                         mMusicID3List.add(music);
                         if (!isStoped.get() && (mMusicID3List.size() % ID3_UPDATE_DENSITY == 1)) {
                             final int start = mMusicID3Start.get();
+                            final int end = Math.min(start + ID3_UPDATE_DENSITY, mMusicID3List.size());
                             sWorker.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     synchronized (mImageList) {
-                                        notifyMusicID3Listener(start);
+                                        notifyMusicID3Listener(start, end);
                                     }
                                 }
                             });
@@ -913,7 +900,7 @@ public class FlyMediaService extends Service implements IStorageListener {
     }
 
 
-    private JacState.ePowerState eState = JacState.ePowerState.ePowerOn ;
+    private JacState.ePowerState eState = JacState.ePowerState.ePowerOn;
 
     public class JacSystemStates extends JacState {
         @Override

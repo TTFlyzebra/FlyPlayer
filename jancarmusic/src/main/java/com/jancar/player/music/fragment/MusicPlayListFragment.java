@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.jancar.media.data.Music;
 import com.jancar.media.module.RecycleViewDivider;
 import com.jancar.media.utils.FlyLog;
+import com.jancar.player.music.MusicActivity;
 import com.jancar.player.music.R;
 import com.jancar.player.music.adpater.MusicPlayListAdapter;
 import com.jancar.player.music.model.musicplayer.MusicPlayer;
@@ -41,7 +42,6 @@ public class MusicPlayListFragment extends MusicFragment implements
     public void onViewCreated(View view, Bundle savedInstanceState) {
         recyclerView = (RecyclerView) view.findViewById(R.id.fm_rv01);
         textView = (TextView) view.findViewById(R.id.fm_tv01);
-        textView.setText(String.format(getString(R.string.music_scan2), mMusicList.size()));
         adapter = new MusicPlayListAdapter(activity, mMusicList, recyclerView);
         adapter.setOnItemClickListener(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -52,8 +52,10 @@ public class MusicPlayListFragment extends MusicFragment implements
         musicUrlList(mMusicList);
     }
 
+
     @Override
     public void notifyPathChange(String path) {
+        FlyLog.d("notifyPathChange path=%s",path);
         mMusicList.clear();
         textView.setText(R.string.music_scan1);
         adapter.notifyDataSetChanged();
@@ -64,11 +66,6 @@ public class MusicPlayListFragment extends MusicFragment implements
         FlyLog.d("get player.music size=%d", musicUrlList == null ? 0 : musicUrlList.size());
 //        mMusicList.addAll(musicUrlList);
         adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void musicID3UrlList(List<Music> musicUrlList) {
-
     }
 
     @Override
@@ -86,8 +83,13 @@ public class MusicPlayListFragment extends MusicFragment implements
 
     @Override
     public void onResume() {
-        scrollToCureentPlayItem();
         super.onResume();
+        if(MusicActivity.isScan){
+            textView.setText(R.string.music_scan1);
+        }else{
+            textView.setText(String.format(getString(R.string.music_scan2), mMusicList.size()));
+        }
+        scrollToCureentPlayItem();
     }
 
     @Override

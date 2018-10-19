@@ -51,6 +51,8 @@ public class PhotoActivity extends BaseActivity implements
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private int hideTime = 5000;
+    public static boolean isScan = true;
+
     private Runnable hideControlTask = new Runnable() {
         @Override
         public void run() {
@@ -138,6 +140,8 @@ public class PhotoActivity extends BaseActivity implements
 
     @Override
     public void notifyPathChange(String path) {
+        FlyLog.d("notifyPathChange path=%s",path);
+        isScan = true;
         imageList.clear();
         currentItem = 0;
         CURRENT_IMAGE = null;
@@ -166,6 +170,7 @@ public class PhotoActivity extends BaseActivity implements
     @Override
     public void scanFinish(String path) {
         FlyLog.d("scanFinish path=%s",path);
+        isScan = false;
         if (imageList == null || imageList.isEmpty()) {
             replaceFragment(fmName[0], R.id.ac_replace_fragment);
             tabView.setFocusPos(0);

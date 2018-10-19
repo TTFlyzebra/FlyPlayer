@@ -82,6 +82,8 @@ public class MusicActivity extends BaseActivity implements
     private int countSavePlaySeek = 0;
     private int SAVEPLAYSEEKTIME = 10;
 
+    public static boolean isScan = true;
+
     private Runnable seekBarTask = new Runnable() {
         @Override
         public void run() {
@@ -204,6 +206,7 @@ public class MusicActivity extends BaseActivity implements
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s",path);
+        isScan = true;
         if(musicPlayer.isPlaying()){
             musicPlayer.savePathUrl(currenPath);
         }
@@ -228,6 +231,7 @@ public class MusicActivity extends BaseActivity implements
     @Override
     public void scanFinish(String path) {
         FlyLog.d("scanFinish path=%s", path);
+        isScan = false;
         if (musicList == null || musicList.isEmpty()) {
             musicPlayer.setPlayUrls(musicList);
             musicPlayer.stop();
