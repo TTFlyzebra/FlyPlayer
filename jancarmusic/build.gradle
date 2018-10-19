@@ -79,7 +79,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:multidex:1.0.3'
     implementation project(path: ':flymedialibrary')
     implementation project(path: ':mp3id3library')
     compileOnly 'com.android.support:appcompat-v7:23.+'

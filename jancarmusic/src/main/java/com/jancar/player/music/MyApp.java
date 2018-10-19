@@ -2,13 +2,12 @@ package com.jancar.player.music;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.multidex.MultiDex;
 import android.view.ViewConfiguration;
 
 import com.jancar.media.model.mediascan.MediaScan;
-import com.jancar.player.music.model.musicplayer.MusicPlayer;
 import com.jancar.media.model.storage.Storage;
 import com.jancar.media.utils.FlyLog;
+import com.jancar.player.music.model.musicplayer.MusicPlayer;
 
 import java.lang.reflect.Field;
 
@@ -37,6 +36,5 @@ public class MyApp extends  Application{
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        MultiDex.install(this);
     }
 }

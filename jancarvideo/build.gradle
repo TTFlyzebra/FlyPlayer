@@ -82,7 +82,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:multidex:1.0.3'
     implementation project(path: ':ijkplayer')
     implementation project(path: ':flymedialibrary')
     implementation files('libs/libksystat.jar')

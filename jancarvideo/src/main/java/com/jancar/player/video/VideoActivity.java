@@ -1,6 +1,7 @@
 package com.jancar.player.video;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -68,10 +69,11 @@ public class VideoActivity extends BaseActivity implements
         public void run() {
             try {
                 countSavePlaySeek++;
-                if (countSavePlaySeek % SAVEPLAYSEEKTIME == 0 && player != null) {
+                if (countSavePlaySeek % SAVEPLAYSEEKTIME == 0 && player != null && player.isPlaying()) {
                     player.savePathUrl(currenPath);
                 }
                 player.setProgress();
+                mHandler.removeCallbacks(seekBarTask);
                 mHandler.postDelayed(seekBarTask, REFRESH_SEEK_LRC_TIME);
             } catch (Exception e) {
                 FlyLog.e(e.toString());
@@ -97,6 +99,7 @@ public class VideoActivity extends BaseActivity implements
         }
     };
 
+    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +109,7 @@ public class VideoActivity extends BaseActivity implements
         player.setScaleType(GiraffePlayer.SCALETYPE_FITPARENT);
         player.addStatusChangeLiseter(this);
         initView();
-        jacState = new SystemStates();
+        jacState = new JacSystemStates();
         jancarManager = (JancarManager) getSystemService("jancar_manager");
         jancarManager.registerJacStateListener(jacState.asBinder());
     }
@@ -163,6 +166,7 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     protected void onDestroy() {
+        mHandler.removeCallbacksAndMessages(null);
         jancarManager.unregisterJacStateListener(jacState.asBinder());
         super.onDestroy();
     }
@@ -492,7 +496,7 @@ public class VideoActivity extends BaseActivity implements
         }
     }
 
-    public class SystemStates extends JacState {
+    public class JacSystemStates extends JacState {
         @Override
         public void OnBackCar(boolean bState) {
             super.OnBackCar(bState);

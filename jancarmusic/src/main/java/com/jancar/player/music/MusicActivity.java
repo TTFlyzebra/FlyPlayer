@@ -22,8 +22,6 @@ import android.widget.TextView;
 
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Music;
-import com.jancar.media.data.StorageInfo;
-import com.jancar.media.model.listener.IUsbMediaListener;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
@@ -88,7 +86,7 @@ public class MusicActivity extends BaseActivity implements
         @Override
         public void run() {
             countSavePlaySeek++;
-            if(countSavePlaySeek%SAVEPLAYSEEKTIME==0&&musicPlayer!=null){
+            if(countSavePlaySeek%SAVEPLAYSEEKTIME==0&&musicPlayer!=null&&musicPlayer.isPlaying()){
                 musicPlayer.savePathUrl(currenPath);
             }
             if(musicPlayer!=null) {
@@ -97,6 +95,7 @@ public class MusicActivity extends BaseActivity implements
                 setSeekStartText(seekBarPos);
                 seekBar.setProgress(seekBarPos);
             }
+            mHandler.removeCallbacks(seekBarTask);
             mHandler.postDelayed(seekBarTask, REFRESH_SEEK_LRC_TIME);
         }
     };
@@ -520,6 +519,7 @@ public class MusicActivity extends BaseActivity implements
     public void onStopTrackingTouch(SeekBar seekBar) {
         musicPlayer.seekTo(seekBarPos);
         lrcView.updateTime(seekBarPos);
+        mHandler.removeCallbacks(seekBarTask);
         mHandler.postDelayed(seekBarTask, REFRESH_SEEK_LRC_TIME);
     }
 

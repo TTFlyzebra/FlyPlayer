@@ -34,8 +34,6 @@ android {
         versionCode gitCommitCount.toInteger()
         versionName "v1.0."+gitSHA
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
-
     }
 
     signingConfigs {
@@ -83,7 +81,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:multidex:1.0.3'
     implementation project(path: ':flymedialibrary')
     implementation project(path: ':photoview')
     compileOnly 'com.android.support:appcompat-v7:23.+'

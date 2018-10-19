@@ -260,16 +260,19 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void savePathUrl(final String path) {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                int seek = getCurrentPosition();
-                SPUtil.set(mContext, path + "MUSIC_URL", mPlayUrl);
-                SPUtil.set(mContext, path + "MUSIC_SEEK", seek);
-                FlyLog.d("savePathUrl seek=%d,path=%s,url=%s",seek, path, mPlayUrl);
-            }
-        });
+        if(isPlaying()) {
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    int seek = getCurrentPosition();
+                    SPUtil.set(mContext, path + "MUSIC_URL", mPlayUrl);
+                    SPUtil.set(mContext, path + "MUSIC_SEEK", seek);
+                    FlyLog.d("savePathUrl seek=%d,path=%s,url=%s", seek, path, mPlayUrl);
+                }
+            });
+        }
     }
+
 
 
     @Override
