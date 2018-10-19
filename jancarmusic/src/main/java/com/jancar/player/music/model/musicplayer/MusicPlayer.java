@@ -45,7 +45,6 @@ public class MusicPlayer implements IMusicPlayer,
             saveSeek = 0;
         }
         start();
-        savePathUrl(playPath);
         mPlayStatus = STATUS_PLAYING;
         notifyStatus();
     }
@@ -260,19 +259,16 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void savePathUrl(final String path) {
-        if(isPlaying()) {
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    int seek = getCurrentPosition();
-                    SPUtil.set(mContext, path + "MUSIC_URL", mPlayUrl);
-                    SPUtil.set(mContext, path + "MUSIC_SEEK", seek);
-                    FlyLog.d("savePathUrl seek=%d,path=%s,url=%s", seek, path, mPlayUrl);
-                }
-            });
-        }
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                int seek = getCurrentPosition();
+                SPUtil.set(mContext, path + "MUSIC_URL", mPlayUrl);
+                SPUtil.set(mContext, path + "MUSIC_SEEK", seek);
+                FlyLog.d("savePathUrl seek=%d,path=%s,url=%s",seek, path, mPlayUrl);
+            }
+        });
     }
-
 
 
     @Override

@@ -529,7 +529,7 @@ public class GiraffePlayer {
         return mPlayUrl == null ? "" : mPlayUrl;
     }
 
-    public void setPlayUrl(String url){
+    public void setPlayUrl(String url) {
         mPlayUrl = url;
     }
 
@@ -778,8 +778,8 @@ public class GiraffePlayer {
                     int seek = getCurrentPosition();
                     SPUtil.set(activity, path + "VIDEO_URL", mPlayUrl);
                     SPUtil.set(activity, path + "VIDEO_SEEK", seek);
-                    FlyLog.d("savePathUrl seek=%d,path=%s,url=%s", seek,path, mPlayUrl);
-                }catch (Exception e){
+                    FlyLog.d("savePathUrl seek=%d,path=%s,url=%s", seek, path, mPlayUrl);
+                } catch (Exception e) {
                     FlyLog.e(e.toString());
                 }
             }
@@ -787,14 +787,15 @@ public class GiraffePlayer {
     }
 
     public String playPath = "";
+
     public void playSavePath(String path) {
         FlyLog.d("playSavePath path=%s", path);
         playPath = path;
         String url = (String) SPUtil.get(activity, path + "VIDEO_URL", "");
-        int seek = (int) SPUtil.get(activity, path +"VIDEO_SEEK", 0);
+        int seek = (int) SPUtil.get(activity, path + "VIDEO_SEEK", 0);
         FlyLog.d("get Save url=%s,seek=%d", url, seek);
-        if(TextUtils.isEmpty(url)||url.equals(mPlayUrl)) {
-            FlyLog.e("play save is playing so return, play url=%s",url);
+        if (TextUtils.isEmpty(url) || url.equals(mPlayUrl)) {
+            FlyLog.e("play save is playing so return, play url=%s", url);
             return;
         }
         if (!TextUtils.isEmpty(url)) {
@@ -803,7 +804,7 @@ public class GiraffePlayer {
                 play(url, seek);
             }
         } else {
-            FlyLog.e("play file no exists url=%s",url);
+            FlyLog.e("play file no exists url=%s", url);
             mPlayUrl = "";
             savePathUrl(path);
         }

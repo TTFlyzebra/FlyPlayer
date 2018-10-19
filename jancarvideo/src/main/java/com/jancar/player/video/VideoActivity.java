@@ -159,9 +159,9 @@ public class VideoActivity extends BaseActivity implements
     protected void onStop() {
         FlyLog.d("onStop");
         mAudioManager.abandonAudioFocus(mAudioFocusListener);
-        super.onStop();
         player.stop();
-        mHandler.removeCallbacksAndMessages(null);
+        mHandler.removeCallbacks(seekBarTask);
+        super.onStop();
     }
 
     @Override
@@ -386,7 +386,6 @@ public class VideoActivity extends BaseActivity implements
                 setCurrentPos();
                 mHandler.removeCallbacks(seekBarTask);
                 mHandler.post(seekBarTask);
-                player.savePathUrl(currenPath);
                 break;
             case GiraffePlayer.STATUS_PAUSE:
                 player.savePathUrl(currenPath);
