@@ -9,6 +9,8 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import com.jancar.media.utils.FlyLog;
+
 public class RegisterMusicSession {
     private String TAG = "BluetoothMusic";
     private MediaSession mMediaSession;
@@ -88,16 +90,21 @@ public class RegisterMusicSession {
     private void handleMediaButton(KeyEvent keyEvent) {
         int keyCode = keyEvent.getKeyCode();
         if (KeyEvent.KEYCODE_MEDIA_NEXT == keyCode) {
+            FlyLog.d("media key next");
             musicPlayer.playNext();
         } else if (KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE == keyCode) {
         } else if (KeyEvent.KEYCODE_HEADSETHOOK == keyCode) {
         } else if (KeyEvent.KEYCODE_MEDIA_PREVIOUS == keyCode) {
+            FlyLog.d("media key fore");
             musicPlayer.playFore();
         } else if (KeyEvent.KEYCODE_MEDIA_STOP == keyCode) {
+            FlyLog.d("media key stop");
             musicPlayer.pause();
         } else if (KeyEvent.KEYCODE_MEDIA_PAUSE == keyCode) {
+            FlyLog.d("media key stop");
             musicPlayer.pause();
         } else if (KeyEvent.KEYCODE_MEDIA_PLAY == keyCode) {
+            FlyLog.d("media key play");
             musicPlayer.start();
         }
     }

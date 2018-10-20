@@ -51,4 +51,5 @@ public interface IMusicPlayer {
     void setVolume(float v, float v1);
 
     void savePathUrl(String path);
+
 }

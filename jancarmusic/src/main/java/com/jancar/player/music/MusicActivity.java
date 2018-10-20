@@ -88,10 +88,10 @@ public class MusicActivity extends BaseActivity implements
         @Override
         public void run() {
             countSavePlaySeek++;
-            if(countSavePlaySeek%SAVEPLAYSEEKTIME==0&&musicPlayer!=null&&musicPlayer.isPlaying()){
+            if (countSavePlaySeek % SAVEPLAYSEEKTIME == 0 && musicPlayer != null && musicPlayer.isPlaying()) {
                 musicPlayer.savePathUrl(currenPath);
             }
-            if(musicPlayer!=null) {
+            if (musicPlayer != null) {
                 seekBarPos = musicPlayer.getCurrentPosition();
                 lrcView.updateTime(seekBarPos);
                 setSeekStartText(seekBarPos);
@@ -205,26 +205,27 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     public void notifyPathChange(String path) {
-        FlyLog.d("notifyPathChange path=%s",path);
+        FlyLog.d("notifyPathChange path=%s", path);
         isScan = true;
-        if(musicPlayer.isPlaying()){
+        if (musicPlayer.isPlaying()) {
             musicPlayer.savePathUrl(currenPath);
         }
-        musicPlayer.playSavePath(path);
         musicList.clear();
+        musicPlayer.stop();
+        tvAlbum.setText("");
+        tvArtist.setText("");
+        tvSingle.setText("");
+        musicPlayer.playSavePath(path);
         super.notifyPathChange(path);
     }
 
     @Override
     public void musicUrlList(List<Music> musicUrlList) {
         FlyLog.d("get player.music size=%d", musicUrlList == null ? 0 : musicUrlList.size());
-        if (musicUrlList == null||musicUrlList.isEmpty()) {
-            FlyLog.d("musicUrlList = null return");
-            super.musicUrlList(null);
-            return;
+        if (musicUrlList != null && !musicUrlList.isEmpty()) {
+            musicList.addAll(musicUrlList);
+            musicPlayer.setPlayUrls(musicList);
         }
-        musicList.addAll(musicUrlList);
-        musicPlayer.setPlayUrls(musicList);
         super.musicUrlList(musicUrlList);
     }
 
@@ -233,11 +234,6 @@ public class MusicActivity extends BaseActivity implements
         FlyLog.d("scanFinish path=%s", path);
         isScan = false;
         if (musicList == null || musicList.isEmpty()) {
-            musicPlayer.setPlayUrls(musicList);
-            musicPlayer.stop();
-            tvAlbum.setText("");
-            tvArtist.setText("");
-            tvSingle.setText("");
             replaceFragment(fmName[0], R.id.ac_replace_fragment);
             tabView.setFocusPos(0);
             showLeftMenu(true);
@@ -254,10 +250,10 @@ public class MusicActivity extends BaseActivity implements
         try {
             Intent intent = getIntent();
             path = intent.getStringExtra("device");
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
-        if(!TextUtils.isEmpty(path)){
+        if (!TextUtils.isEmpty(path)) {
             currenPath = path;
         }
         super.scanServiceConneted();

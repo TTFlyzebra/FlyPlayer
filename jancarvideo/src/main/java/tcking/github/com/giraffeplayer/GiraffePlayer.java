@@ -771,16 +771,15 @@ public class GiraffePlayer {
     }
 
     public void savePathUrl(final String path) {
+        final String url = mPlayUrl;
+        final int seek = getCurrentPosition();
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                try {
-                    int seek = getCurrentPosition();
-                    SPUtil.set(activity, path + "VIDEO_URL", mPlayUrl);
+                if (url.startsWith(path)) {
+                    SPUtil.set(activity, path + "VIDEO_URL", url);
                     SPUtil.set(activity, path + "VIDEO_SEEK", seek);
-                    FlyLog.d("savePathUrl seek=%d,path=%s,url=%s", seek, path, mPlayUrl);
-                } catch (Exception e) {
-                    FlyLog.e(e.toString());
+                    FlyLog.d("savePathUrl seek=%d,path=%s,url=%s", seek, path, url);
                 }
             }
         });
@@ -806,8 +805,11 @@ public class GiraffePlayer {
         } else {
             FlyLog.e("play file no exists url=%s", url);
             mPlayUrl = "";
-            savePathUrl(path);
         }
+    }
+
+    public void resetSeekBar() {
+        seekBar.setProgress(0);
     }
 
     class Query {
@@ -1008,7 +1010,9 @@ public class GiraffePlayer {
 
     public void stop() {
         this.mPlayUrl = "";
+        showStatus("");
         videoView.stopPlayback();
+        seekBar.setProgress(0);
     }
 
     /**

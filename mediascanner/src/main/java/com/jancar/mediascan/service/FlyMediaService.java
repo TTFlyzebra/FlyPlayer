@@ -20,9 +20,7 @@ import com.jancar.mediascan.R;
 import com.jancar.mediascan.data.Const;
 import com.jancar.mediascan.model.cache.ListFileDiskCache;
 import com.jancar.mediascan.model.cache.MusicDoubleCache;
-import com.jancar.mediascan.model.storage.IStorage;
 import com.jancar.mediascan.model.storage.IStorageListener;
-import com.jancar.mediascan.model.storage.Storage;
 import com.jancar.mediascan.model.storage.StorageInfo;
 import com.jancar.mediascan.utils.FlyLog;
 import com.jancar.mediascan.utils.GsonUtils;
@@ -80,11 +78,10 @@ public class FlyMediaService extends Service implements IStorageListener {
     private ListFileDiskCache mListDiskCache;
     private static String localPaths = "T";
     private static final String DEF_PATH = "/storage/emulated/0";
-    private String currentPath = DEF_PATH;
+    private static String currentPath = "";
     private static final int UPDATE_DENSITY = 100;
     private static final int ID3_UPDATE_DENSITY = 50;
     private static final int THREAD_WAIT_TIME = 100;
-    private IStorage iStorage = Storage.getInstance();
     private long startScanTime;
     private int tryCount = 0;
     private int TRY_MAX = 5;
@@ -117,14 +114,12 @@ public class FlyMediaService extends Service implements IStorageListener {
     @Override
     public void onCreate() {
         super.onCreate();
+        FlyLog.d("onCreate");
         jancarManager = (JancarManager) getSystemService("jancar_manager");
         jancarManager.registerJacStateListener(jacState.asBinder());
-        FlyLog.d("onCreate");
         mDoubleMusicCache = MusicDoubleCache.getInstance(getApplicationContext());
         mListDiskCache = new ListFileDiskCache(this);
-        Storage.getInstance().init(getApplicationContext());
-        iStorage.addListener(this);
-        iStorage.refresh();
+        startScanPath(DEF_PATH);
     }
 
     @Override
@@ -154,7 +149,6 @@ public class FlyMediaService extends Service implements IStorageListener {
 
     @Override
     public void onDestroy() {
-        iStorage.removeListener(this);
         sWorker.removeCallbacksAndMessages(null);
         jancarManager.unregisterJacStateListener(jacState.asBinder());
         super.onDestroy();
@@ -162,8 +156,6 @@ public class FlyMediaService extends Service implements IStorageListener {
 
     private void scanPath(final String path) {
         FlyLog.d("scan mPath=%s", path);
-        clearData();
-        currentPath = path;
         sWorker.post(new Runnable() {
             @Override
             public void run() {
@@ -398,7 +390,7 @@ public class FlyMediaService extends Service implements IStorageListener {
 
     private void removePath(String path) {
         FlyLog.d("remove mPath=%s", path);
-        if (currentPath.equals(path) && eState == JacState.ePowerState.ePowerOn) {
+        if (currentPath.equals(path) && mEState == JacState.ePowerState.ePowerOn) {
             FlyLog.d("clear all list");
             clearData();
             currentPath = DEF_PATH;
@@ -538,6 +530,8 @@ public class FlyMediaService extends Service implements IStorageListener {
         startScanTime = System.currentTimeMillis();
         tryCount = 0;
         if (!currentPath.endsWith(disk)) {
+            clearData();
+            currentPath = disk;
             isStoped.set(true);
             scanPath(disk);
         } else {
@@ -900,15 +894,17 @@ public class FlyMediaService extends Service implements IStorageListener {
     }
 
 
-    private JacState.ePowerState eState = JacState.ePowerState.ePowerOn;
+    private JacState.ePowerState mEState = JacState.ePowerState.ePowerOn;
 
     public class JacSystemStates extends JacState {
         @Override
         public void OnPower(ePowerState eState) {
             super.OnPower(eState);
+            mEState = eState;
             if (eState == ePowerState.ePowerOn) {
                 FlyLog.d("ePowerState ePowerOn");
             } else if (eState == ePowerState.ePowerOff) {
+                stopSelf();
                 FlyLog.d("ePowerState ePowerOff");
             } else if (eState == ePowerState.ePowerStandby) {
                 FlyLog.d("ePowerState ePowerStandby");

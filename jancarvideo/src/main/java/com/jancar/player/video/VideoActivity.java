@@ -328,6 +328,8 @@ public class VideoActivity extends BaseActivity implements
             player.savePathUrl(currenPath);
         }
         videoList.clear();
+        player.stop();
+        currenPos = -1;
         player.playSavePath(path);
         super.notifyPathChange(path);
     }
@@ -335,26 +337,23 @@ public class VideoActivity extends BaseActivity implements
     @Override
     public void videoUrlList(List<Video> videoUrlList) {
         FlyLog.d("get videos size=%d", videoUrlList == null ? 0 : videoUrlList.size());
-
-        if (videoUrlList == null || videoUrlList.isEmpty()) {
-            FlyLog.d("musicUrlList = null return");
-            super.videoUrlList(videoUrlList);
-            return;
-        }
-
-        videoList.addAll(videoUrlList);
-        if ((new File(player.getPlayUrl()).exists())) {
-            for (int i = 0; i < videoList.size(); i++) {
-                currenPos = -1;
-                if (videoList.get(i).url.equals(player.getPlayUrl())) {
-                    currenPos = i;
-                    break;
+        if (videoUrlList != null && !videoUrlList.isEmpty()) {
+            videoList.addAll(videoUrlList);
+            if ((new File(player.getPlayUrl()).exists()) && player.getPlayUrl().startsWith(currenPath)) {
+                /**
+                 * 已经在播放，更新播放了哪一集
+                 */
+                for (int i = 0; i < videoList.size(); i++) {
+                    currenPos = -1;
+                    if (videoList.get(i).url.equals(player.getPlayUrl())) {
+                        currenPos = i;
+                        break;
+                    }
                 }
+            } else {
+                currenPos = 0;
+                player.play(videoList.get(0).url);
             }
-        } else {
-            player.setPlayUrl("");
-            currenPos = 0;
-            player.play(videoList.get(0).url);
         }
         super.videoUrlList(videoUrlList);
     }
@@ -364,8 +363,6 @@ public class VideoActivity extends BaseActivity implements
         FlyLog.d("scanFinish path=%s", path);
         isScan = false;
         if (videoList == null || videoList.isEmpty()) {
-            player.stop();
-            player.showStatus("");
             replaceFragment(fmName[0], R.id.ac_replace_fragment);
             tabView.setFocusPos(0);
             showControlView(true);
@@ -512,7 +509,6 @@ public class VideoActivity extends BaseActivity implements
                 if (!(new File(player.getPlayUrl()).exists())) {
                     FlyLog.d("play file is no exists");
                     player.stop();
-                    player.showStatus("");
                 }
             }
             super.OnStorage(state);
