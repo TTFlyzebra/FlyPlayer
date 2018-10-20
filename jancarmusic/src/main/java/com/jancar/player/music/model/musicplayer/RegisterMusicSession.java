@@ -31,9 +31,9 @@ public class RegisterMusicSession {
 //        第二个参数 tag: 这个是用于调试用的,随便填写即可
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mMediaSession = new MediaSession(context, context.getPackageName());
-            mMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS|MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
+            mMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
             //指明支持的按键信息类型
-            mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS|MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+            mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
             Log.e(TAG, "setupMediaSession");
             mMediaSession.setCallback(new MediaSession.Callback() {
 
@@ -42,8 +42,10 @@ public class RegisterMusicSession {
                     // TODO Auto-generated method stub
                     KeyEvent keyEvent;
                     if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
+                        FlyLog.d("media key intent=%s", intent.toUri(0));
                         keyEvent = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
-                        if (keyEvent != null) {
+                        if (keyEvent != null && keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                            FlyLog.d("media key keyEvent=%s", keyEvent.toString());
                             handleMediaButton(keyEvent);
                         }
                     }
