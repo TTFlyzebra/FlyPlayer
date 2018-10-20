@@ -124,6 +124,22 @@ public class VideoActivity extends BaseActivity implements
         FlyLog.d("onStart");
         player.playSavePath(currenPath);
         mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        if (setPause) {
+            final int resetVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    player.pause();
+                }
+            }, 1000);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, resetVolume, 0);
+                }
+            }, 1100);
+        }
     }
 
     boolean isPause = false;
@@ -136,14 +152,6 @@ public class VideoActivity extends BaseActivity implements
             player.start();
         }
         isPause = false;
-        if (setPause) {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    player.pause();
-                }
-            }, 1000);
-        }
     }
 
     @Override
@@ -418,16 +426,20 @@ public class VideoActivity extends BaseActivity implements
             case KeyEvent.KEYCODE_HEADSETHOOK:
             case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
                 if (player.isPlaying()) {
+                    setPause = true;
                     player.pause();
                 } else {
+                    setPause = false;
                     player.start();
                 }
                 return true;
             case KeyEvent.KEYCODE_MEDIA_PLAY:
+                setPause = false;
                 player.start();
                 return true;
             case KeyEvent.KEYCODE_MEDIA_PAUSE:
                 if (player.isPlaying()) {
+                    setPause = true;
                     player.pause();
                 }
                 return true;

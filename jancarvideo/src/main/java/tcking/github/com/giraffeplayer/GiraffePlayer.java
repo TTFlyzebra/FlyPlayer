@@ -89,7 +89,7 @@ public class GiraffePlayer {
     public static final int STATUS_PLAYING = 2;
     public static final int STATUS_PAUSE = 3;
     public static final int STATUS_COMPLETED = 4;
-    private int status = STATUS_IDLE;
+    public int status = STATUS_IDLE;
     private boolean isLive = false;//是否为直播
     private OrientationEventListener orientationEventListener;
     final private int initHeight;
@@ -806,10 +806,6 @@ public class GiraffePlayer {
             FlyLog.e("play file no exists url=%s", url);
             mPlayUrl = "";
         }
-    }
-
-    public void resetSeekBar() {
-        seekBar.setProgress(0);
     }
 
     class Query {
