@@ -391,8 +391,7 @@ public class FlyMediaService extends Service{
         if (currentPath.equals(path) && mEState == JacState.ePowerState.ePowerOn) {
             FlyLog.d("clear all list");
             clearData();
-            currentPath = DEF_PATH;
-            startScanPath(currentPath);
+            startScanPath(DEF_PATH);
         }
 //        iStorage.refresh();
     }
