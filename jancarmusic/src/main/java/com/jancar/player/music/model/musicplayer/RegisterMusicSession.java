@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.media.session.MediaSession;
 import android.os.Build;
 import android.support.v4.media.session.MediaSessionCompat;
-import android.util.Log;
 import android.view.KeyEvent;
 
 import com.jancar.media.utils.FlyLog;
 
 public class RegisterMusicSession {
-    private String TAG = "BluetoothMusic";
     private MediaSession mMediaSession;
     private Context context;
     private IMusicPlayer musicPlayer;
@@ -32,17 +30,13 @@ public class RegisterMusicSession {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mMediaSession = new MediaSession(context, context.getPackageName());
             mMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
-            //指明支持的按键信息类型
             mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-            Log.e(TAG, "setupMediaSession");
             mMediaSession.setCallback(new MediaSession.Callback() {
-
                 @SuppressLint("Override")
                 public boolean onMediaButtonEvent(Intent intent) {
                     // TODO Auto-generated method stub
                     KeyEvent keyEvent;
                     if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
-                        FlyLog.d("media key intent=%s", intent.toUri(0));
                         keyEvent = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
                         if (keyEvent != null && keyEvent.getAction() == KeyEvent.ACTION_UP) {
                             FlyLog.d("media key keyEvent=%s", keyEvent.toString());
@@ -67,7 +61,6 @@ public class RegisterMusicSession {
                     mMediaSession.setActive(true);
                 }
             }
-            Log.e(TAG, "requestMediaButton:" + context.getPackageName());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -83,7 +76,6 @@ public class RegisterMusicSession {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mMediaSession.release();
             }
-            Log.e(TAG, "releaseMediaButton:" + context.getPackageName());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -103,7 +95,7 @@ public class RegisterMusicSession {
             FlyLog.d("media key stop");
             musicPlayer.pause();
         } else if (KeyEvent.KEYCODE_MEDIA_PAUSE == keyCode) {
-            FlyLog.d("media key stop");
+            FlyLog.d("media key pause");
             musicPlayer.pause();
         } else if (KeyEvent.KEYCODE_MEDIA_PLAY == keyCode) {
             FlyLog.d("media key play");
