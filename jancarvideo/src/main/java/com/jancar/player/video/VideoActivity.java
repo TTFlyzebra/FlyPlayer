@@ -130,7 +130,11 @@ public class VideoActivity extends BaseActivity implements
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    player.pause();
+                    try {
+                        player.pause();
+                    }catch (Exception e){
+                        FlyLog.e(e.toString());
+                    }
                 }
             }, 1000);
             mHandler.postDelayed(new Runnable() {
