@@ -194,6 +194,7 @@ public class MusicActivity extends BaseActivity implements
         mHandler.removeCallbacksAndMessages(null);
         musicPlayer.savePathUrl(currenPath);
         musicPlayer.removeListener(this);
+        musicPlayer.stop();
         unregisterReceiver(mReceiver);
         abandonAudioFocus();
         Intent intent = new Intent(this, MusicService.class);
