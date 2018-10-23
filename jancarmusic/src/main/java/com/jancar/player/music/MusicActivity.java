@@ -206,6 +206,7 @@ public class MusicActivity extends BaseActivity implements
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
+        if(isStop) return;
         isScan = true;
         if (musicPlayer.isPlaying()) {
             musicPlayer.savePathUrl(currenPath);
@@ -222,6 +223,7 @@ public class MusicActivity extends BaseActivity implements
     @Override
     public void musicUrlList(List<Music> musicUrlList) {
         FlyLog.d("get player.music size=%d", musicUrlList == null ? 0 : musicUrlList.size());
+        if(isStop) return;
         if (musicUrlList != null && !musicUrlList.isEmpty()) {
             musicList.addAll(musicUrlList);
             musicPlayer.setPlayUrls(musicList);
@@ -232,6 +234,7 @@ public class MusicActivity extends BaseActivity implements
     @Override
     public void scanFinish(String path) {
         FlyLog.d("scanFinish path=%s", path);
+        if(isStop) return;
         isScan = false;
         if (musicList == null || musicList.isEmpty()) {
             replaceFragment(fmName[0], R.id.ac_replace_fragment);
@@ -246,6 +249,7 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     public void scanServiceConneted() {
+        if(isStop) return;
         String path = null;
         try {
             Intent intent = getIntent();
@@ -261,6 +265,7 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     public void musicID3UrlList(List<Music> musicUrlList) {
+        if(isStop) return;
         try {
             if (musicUrlList == null || musicUrlList.isEmpty()) {
                 return;

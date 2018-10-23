@@ -123,6 +123,20 @@ public class PhotoActivity extends BaseActivity implements
         tabView.setFocusPos(1);
     }
 
+    boolean isStop = false;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        isStop = false;
+    }
+
+    @Override
+    protected void onStop() {
+        isStop = true;
+        super.onStop();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -141,6 +155,7 @@ public class PhotoActivity extends BaseActivity implements
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s",path);
+        if(isStop) return;
         isScan = true;
         imageList.clear();
         currentItem = 0;
@@ -152,6 +167,7 @@ public class PhotoActivity extends BaseActivity implements
     @Override
     public void imageUrlList(List<Image> imageUrlList) {
         FlyLog.d("get Image size=%d", imageUrlList == null ? 0 : imageUrlList.size());
+        if(isStop) return;
         if (imageUrlList != null) {
 //            imageList.clear();
             imageList.addAll(imageUrlList);
@@ -170,6 +186,7 @@ public class PhotoActivity extends BaseActivity implements
     @Override
     public void scanFinish(String path) {
         FlyLog.d("scanFinish path=%s",path);
+        if(isStop) return;
         isScan = false;
         if (imageList == null || imageList.isEmpty()) {
             replaceFragment(fmName[0], R.id.ac_replace_fragment);
@@ -304,21 +321,6 @@ public class PhotoActivity extends BaseActivity implements
         CURRENT_IMAGE = imageList.get(currentItem);
         viewPager.setCurrentItem(pos);
     }
-
-    /**
-     * 在Fragment中调用此方法，同步列表选择框
-     */
-    public void setSelectItem(String url) {
-        FlyLog.d("select start-----");
-        for (int i = 0; i < imageList.size(); i++) {
-            if (imageList.get(i).url.equals(url)) {
-                viewPager.setCurrentItem(i);
-                break;
-            }
-        }
-        FlyLog.d("select end-----");
-    }
-
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
