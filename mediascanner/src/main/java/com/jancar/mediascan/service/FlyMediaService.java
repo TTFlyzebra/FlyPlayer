@@ -266,7 +266,8 @@ public class FlyMediaService extends Service{
                 }
 
                 if (isStoped.get()) {
-                    FlyLog.d("stop scan path=%s", path);
+                    sWorker.removeCallbacksAndMessages(null);
+                    FlyLog.d("stop scan in scanPath. path=%s", path);
                 } else {
                     if (!isNotifyMusic.get()) {
                         sWorker.post(new Runnable() {
@@ -352,6 +353,9 @@ public class FlyMediaService extends Service{
                                 }
                             }
                         });
+                    }else{
+                        sWorker.removeCallbacksAndMessages(null);
+                        FlyLog.d("stop scan in scanPath. path=%s", path);
                     }
                     FlyLog.d("finish scan mPath=%s", path);
                 }
@@ -397,7 +401,11 @@ public class FlyMediaService extends Service{
     }
 
     private void getMediaFileFromPath(File file) throws Exception {
-        if (isStoped.get()) return;
+        if (isStoped.get()) {
+            sWorker.removeCallbacksAndMessages(null);
+            FlyLog.d("stop scan in getMediaFileFromPath");
+            return;
+        }
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             if (files == null) return;
@@ -499,12 +507,13 @@ public class FlyMediaService extends Service{
 
     private void startScanPath(String disk) {
         FlyLog.d("start scan disk!");
+        sWorker.removeCallbacksAndMessages(null);
         startScanTime = System.currentTimeMillis();
         tryCount = 0;
         if (!currentPath.endsWith(disk)) {
+            isStoped.set(true);
             clearData();
             currentPath = disk;
-            isStoped.set(true);
             scanPath(disk);
         } else {
             FlyLog.d("notify path=%s", currentPath);
@@ -535,7 +544,7 @@ public class FlyMediaService extends Service{
         FlyLog.d("notify Music size=%d", mMusicList.size());
         int start = 0;
         int sum = mMusicList.size();
-        while (start < sum) {
+        while (start < sum&&!isStoped.get()) {
             int end = Math.min(sum, start + UPDATE_DENSITY);
             try {
                 FlyLog.d("notifyMusic start=%d,end=%d", start, end);
@@ -552,7 +561,7 @@ public class FlyMediaService extends Service{
         FlyLog.d("notify Video size=%d", mVideoList.size());
         int start = 0;
         int sum = mVideoList.size();
-        while (start < sum) {
+        while (start < sum&&!isStoped.get()) {
             int end = Math.min(sum, start + UPDATE_DENSITY);
             try {
                 FlyLog.d("notifyVideo start=%d,end=%d", start, end);
@@ -569,7 +578,7 @@ public class FlyMediaService extends Service{
         FlyLog.d("notify Image size=%d", mVideoList.size());
         int start = 0;
         int sum = mImageList.size();
-        while (start < sum) {
+        while (start < sum&&!isStoped.get()) {
             int end = Math.min(sum, start + UPDATE_DENSITY);
             try {
                 FlyLog.d("notifyImage start=%d,end=%d", start, end);
@@ -586,7 +595,7 @@ public class FlyMediaService extends Service{
         FlyLog.d("notify id3 music size=%d", mVideoList.size());
         int start = 0;
         int sum = mMusicID3List.size();
-        while (start < sum) {
+        while (start < sum&&!isStoped.get()) {
             int end = Math.min(sum, start + UPDATE_DENSITY);
             try {
                 FlyLog.d("notifyID3Music start=%d,end=%d", start, end);
@@ -824,16 +833,25 @@ public class FlyMediaService extends Service{
     }
 
     private void getMusicID3Info() {
-        if (isStoped.get()) return;
+        if (isStoped.get()) {
+            sWorker.removeCallbacksAndMessages(null);
+            FlyLog.d("stop scan in getMusicID3Info");
+            return;
+        }
         synchronized (mMusicList) {
             FlyLog.d("start get music id3 info, music size=%d", mMusicList.size());
             synchronized (mMusicID3List) {
                 mMusicID3List.clear();
             }
             for (int i = 0; i < mMusicList.size(); i++) {
-                if (isStoped.get()) return;
                 try {
+                    if (isStoped.get()) {
+                        sWorker.removeCallbacksAndMessages(null);
+                        FlyLog.d("stop scan in getMusicID3Info");
+                        return;
+                    }
                     Music music = mMusicList.get(i);
+                    FlyLog.d("get %d id3 info",i);
                     Music id3music = mDoubleMusicCache.get(music.url);
                     if (id3music == null) {
                         if (music.url.toLowerCase().endsWith(".mp3")) {
@@ -869,18 +887,23 @@ public class FlyMediaService extends Service{
                     }
                     synchronized (mMusicID3List) {
                         mMusicID3List.add(music);
-                        if (!isStoped.get() && (mMusicID3List.size() % ID3_UPDATE_DENSITY == 1)) {
-                            final int start = mMusicID3Start.get();
-                            final int end = Math.min(start + ID3_UPDATE_DENSITY, mMusicID3List.size());
-                            sWorker.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    synchronized (mImageList) {
-                                        notifyMusicID3Listener(start, end);
+                        if (!isStoped.get()) {
+                            if( (mMusicID3List.size() % ID3_UPDATE_DENSITY == 1)) {
+                                final int start = mMusicID3Start.get();
+                                final int end = Math.min(start + ID3_UPDATE_DENSITY, mMusicID3List.size());
+                                sWorker.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        synchronized (mImageList) {
+                                            notifyMusicID3Listener(start, end);
+                                        }
                                     }
-                                }
-                            });
-                            mMusicID3Start.set(mMusicID3List.size());
+                                });
+                                mMusicID3Start.set(mMusicID3List.size());
+                            }
+                        }else{
+                            sWorker.removeCallbacksAndMessages(null);
+                            FlyLog.d("stop scan in getMusicID3Info");
                         }
                     }
                 } catch (Exception e) {

@@ -261,6 +261,7 @@ public class PhotoView extends AppCompatImageView {
     public void recycle() {
         Bitmap bitmap = getDrawingCache();
         setImageDrawable(null);
+        setImageBitmap(null);
         if (bitmap != null && !bitmap.isRecycled()){
             bitmap.recycle();
         }

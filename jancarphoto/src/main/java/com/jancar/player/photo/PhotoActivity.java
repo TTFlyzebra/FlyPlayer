@@ -177,6 +177,7 @@ public class PhotoActivity extends BaseActivity implements
             showControlView(true);
             showLeftMenu(true);
         }
+        adapter.notifyDataSetChanged();
         super.scanFinish(path);
     }
 
@@ -332,7 +333,6 @@ public class PhotoActivity extends BaseActivity implements
 
     @Override
     public void onPageScrollStateChanged(int state) {
-
     }
 
 
@@ -354,8 +354,10 @@ public class PhotoActivity extends BaseActivity implements
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            viewSet.add((PhotoView) object);
-            container.removeView((View) object);
+            PhotoView photoView =  (PhotoView) object;
+            photoView.recycle();
+            viewSet.add(photoView);
+            container.removeView(photoView);
         }
 
         @Override
@@ -385,11 +387,6 @@ public class PhotoActivity extends BaseActivity implements
                 FlyLog.e(e.toString());
             }
             return photoView;
-        }
-
-        @Override
-        public void setPrimaryItem(ViewGroup container, int position, Object object) {
-            super.setPrimaryItem(container, position, object);
         }
 
         @Override
