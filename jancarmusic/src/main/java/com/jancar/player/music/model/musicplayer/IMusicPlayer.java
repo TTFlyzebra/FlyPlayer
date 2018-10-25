@@ -46,6 +46,8 @@ public interface IMusicPlayer {
 
     void switchLoopStatus();
 
+    int getLoopStatus();
+
     void playSavePath(String path);
 
     void setVolume(float v, float v1);

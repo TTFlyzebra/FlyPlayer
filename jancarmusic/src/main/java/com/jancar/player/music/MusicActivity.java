@@ -137,6 +137,11 @@ public class MusicActivity extends BaseActivity implements
         titles = new String[]{getString(R.string.storage), getString(R.string.single), getString(R.string.artist), getString(R.string.album), getString(R.string.folder)};
         initView();
         musicPlayer.addListener(this);
+
+        /**
+         * 更新循环状态
+         */
+        loopStatusChange(musicPlayer.getLoopStatus());
     }
 
     private void initView() {
