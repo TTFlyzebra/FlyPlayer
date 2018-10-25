@@ -322,16 +322,23 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void onCompletion(MediaPlayer mp) {
         FlyLog.d("onCompletion url=%s", mPlayUrl);
-        mPlayStatus = STATUS_COMPLETED;
-        notifyStatus();
-        switch (mLoopStatus) {
-            case LOOP_RAND:
-            case LOOP_ALL:
-                playNext();
-                break;
-            case LOOP_ONE:
-                play(mPlayUrl);
-                break;
+        /**
+         * 拔掉U盘停止播放
+         */
+        if(!(new File(mPlayUrl).exists())){
+            stop();
+        }else {
+            mPlayStatus = STATUS_COMPLETED;
+            notifyStatus();
+            switch (mLoopStatus) {
+                case LOOP_RAND:
+                case LOOP_ALL:
+                    playNext();
+                    break;
+                case LOOP_ONE:
+                    play(mPlayUrl);
+                    break;
+            }
         }
     }
 

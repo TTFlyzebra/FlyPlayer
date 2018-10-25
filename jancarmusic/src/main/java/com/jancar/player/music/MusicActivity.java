@@ -367,11 +367,13 @@ public class MusicActivity extends BaseActivity implements
                 upPlayInfo();
                 break;
             case MusicPlayer.STATUS_IDLE:
+                musicList.clear();
                 tvSingle.setText("");
                 tvArtist.setText("");
                 tvAlbum.setText("");
                 initSeekBar();
                 ivImage.setImageResource(R.drawable.media_music);
+                finish();
                 break;
         }
         play.setImageResource(musicPlayer.isPlaying() ? R.drawable.media_pause : R.drawable.media_play);
