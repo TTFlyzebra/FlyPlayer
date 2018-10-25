@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.jancar.media.R;
 import com.jancar.media.adpater.StorageAdapater;
@@ -29,6 +30,7 @@ public class StorageFragment extends BaseFragment implements
         IStorageListener,
         StorageAdapater.OnItemClickListener {
     private RecyclerView recyclerView;
+    private LinearLayout refresh;
     private StorageAdapater adapater;
     private List<StorageInfo> mList = new ArrayList<>();
     private IStorage storage = Storage.getInstance();
@@ -69,6 +71,13 @@ public class StorageFragment extends BaseFragment implements
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         recyclerView = (RecyclerView) view.findViewById(R.id.fm_storage_rv01);
+        refresh = (LinearLayout) view.findViewById(R.id.fm_storage_refresh_01);
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MediaScan.getInstance().openStorager(new StorageInfo("REFRESH"));
+            }
+        });
         adapater = new StorageAdapater(getActivity(), mList);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(gridLayoutManager);

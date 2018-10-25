@@ -16,6 +16,7 @@ import com.jancar.media.model.mediascan.MediaScan;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.SPUtil;
 
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,17 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
         currenPath = getSavePath();
         usbMediaScan.addListener(this);
         usbMediaScan.open();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        /**
+         * 程序于后台被拔掉U盘，已经打不开当前盘符，刷新为当前磁盘
+         */
+        if(!(new File(currenPath).exists())){
+            usbMediaScan.openStorager(new StorageInfo("REFRESH"));
+        }
     }
 
     @Override

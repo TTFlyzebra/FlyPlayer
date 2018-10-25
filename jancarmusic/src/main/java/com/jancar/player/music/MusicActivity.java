@@ -445,7 +445,7 @@ public class MusicActivity extends BaseActivity implements
                     artist = TextUtils.isEmpty(id3v1Tag.getArtist()) ? "" : id3v1Tag.getArtist();
                     album = TextUtils.isEmpty(id3v1Tag.getAlbum()) ? "" : id3v1Tag.getAlbum();
                 }
-                FlyLog.d("scanFinish get id3 info url=%s", url);
+                FlyLog.d("get id3 info url=%s", url);
             }
             runOnUiThread(new Runnable() {
                 @Override
