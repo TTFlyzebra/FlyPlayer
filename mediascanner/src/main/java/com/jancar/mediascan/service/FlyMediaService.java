@@ -154,12 +154,6 @@ public class FlyMediaService extends Service {
 
     private void scanPath(final String path) {
         FlyLog.d("scan mPath=%s", path);
-        sWorker.post(new Runnable() {
-            @Override
-            public void run() {
-                notifyPathListener();
-            }
-        });
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -178,7 +172,7 @@ public class FlyMediaService extends Service {
                 if (file.exists()) {
                     File files[] = file.listFiles();
                     if (files == null || files.length < 1) {
-                        FlyLog.d("start scan %s no file list", path);
+                        FlyLog.e("start scan %s no file list", path);
                         try {
                             Thread.sleep(1000);
                             if (!isStoped.get()) {
@@ -186,7 +180,8 @@ public class FlyMediaService extends Service {
                                 if (tryCount <= TRY_MAX) {
                                     scanPath(path);
                                 } else {
-                                    scanPath(DEF_PATH);
+                                    currentPath = DEF_PATH;
+                                    scanPath(currentPath);
                                 }
                             }
                             isRunning.set(false);
@@ -196,7 +191,7 @@ public class FlyMediaService extends Service {
                         }
                     }
                 } else {
-                    FlyLog.d("start scan %s no file", path);
+                    FlyLog.e("start scan %s no file", path);
                     try {
                         Thread.sleep(1000);
                         if (!isStoped.get()) {
@@ -204,7 +199,8 @@ public class FlyMediaService extends Service {
                             if (tryCount <= TRY_MAX) {
                                 scanPath(path);
                             } else {
-                                scanPath(DEF_PATH);
+                                currentPath = DEF_PATH;
+                                scanPath(currentPath);
                             }
                         }
                         isRunning.set(false);
@@ -214,10 +210,17 @@ public class FlyMediaService extends Service {
                     }
                 }
 
+                sWorker.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        notifyPathListener();
+                    }
+                });
+
                 isNotifyMusic.set(false);
                 final List<Music> musics = mListDiskCache.get(path + "player.music", Music.class);
                 if (musics != null && !musics.isEmpty()) {
-                    if ((new File(musics.get(0).url).exists())) {
+                    if ((new File(musics.get(0).url).exists()) && (new File(musics.get(musics.size() - 1).url).exists())) {
                         isNotifyMusic.set(true);
                         sWorker.post(new Runnable() {
                             @Override
@@ -232,7 +235,7 @@ public class FlyMediaService extends Service {
                 isNotifyVideo.set(false);
                 final List<Video> videos = mListDiskCache.get(path + "video", Video.class);
                 if (videos != null && !videos.isEmpty()) {
-                    if ((new File(videos.get(0).url).exists())) {
+                    if ((new File(videos.get(0).url).exists()) && (new File(videos.get(videos.size() - 1).url).exists())) {
                         isNotifyVideo.set(true);
                         sWorker.post(new Runnable() {
                             @Override
@@ -247,7 +250,7 @@ public class FlyMediaService extends Service {
                 isNotifyImage.set(false);
                 final List<Image> images = mListDiskCache.get(path + "image", Image.class);
                 if (images != null && !images.isEmpty()) {
-                    if ((new File(images.get(0).url).exists())) {
+                    if ((new File(images.get(0).url).exists()) && (new File(images.get(images.size() - 1).url).exists())) {
                         isNotifyImage.set(true);
                         sWorker.post(new Runnable() {
                             @Override
@@ -325,18 +328,16 @@ public class FlyMediaService extends Service {
                         }
                     });
 
-                    if (localPaths.contains(path)) {
-                        synchronized (mVideoList) {
-                            mListDiskCache.put(path + "video", GsonUtils.obj2Json(mVideoList));
-                        }
-                        synchronized (mMusicList) {
-                            mListDiskCache.put(path + "player.music", GsonUtils.obj2Json(mMusicList));
-                        }
-                        synchronized (mImageList) {
-                            mListDiskCache.put(path + "image", GsonUtils.obj2Json(mImageList));
-                        }
-                        FlyLog.d("finish save path=%s", path);
+                    synchronized (mVideoList) {
+                        mListDiskCache.put(path + "video", GsonUtils.obj2Json(mVideoList));
                     }
+                    synchronized (mMusicList) {
+                        mListDiskCache.put(path + "player.music", GsonUtils.obj2Json(mMusicList));
+                    }
+                    synchronized (mImageList) {
+                        mListDiskCache.put(path + "image", GsonUtils.obj2Json(mImageList));
+                    }
+                    FlyLog.d("finish save path=%s", path);
 
                     getMusicID3Info();
 
@@ -511,7 +512,7 @@ public class FlyMediaService extends Service {
         if (!currentPath.endsWith(disk)) {
             isStoped.set(true);
             clearData();
-            if(!disk.equals("REFRESH")){
+            if (!disk.equals("REFRESH")) {
                 currentPath = disk;
             }
             scanPath(currentPath);

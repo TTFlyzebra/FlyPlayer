@@ -1,7 +1,6 @@
 package com.jancar.player.video;
 
 import android.animation.Animator;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.jancar.JancarManager;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Video;
 import com.jancar.media.utils.DisplayUtils;
@@ -24,7 +22,6 @@ import com.jancar.media.utils.SystemPropertiesProxy;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
 import com.jancar.media.view.TouchEventRelativeLayout;
-import com.jancar.state.JacState;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -60,9 +57,6 @@ public class VideoActivity extends BaseActivity implements
     private static final int REFRESH_SEEK_LRC_TIME = 1000;
     private int countSavePlaySeek = 0;
     private int SAVEPLAYSEEKTIME = 10;
-
-    private JacState jacState = null;
-    private JancarManager jancarManager;
 
     public static boolean isScan = false;
 
@@ -101,7 +95,6 @@ public class VideoActivity extends BaseActivity implements
         }
     };
 
-    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,9 +104,6 @@ public class VideoActivity extends BaseActivity implements
         player.setScaleType(GiraffePlayer.SCALETYPE_FITPARENT);
         player.addStatusChangeLiseter(this);
         initView();
-        jacState = new JacSystemStates();
-        jancarManager = (JancarManager) getSystemService("jancar_manager");
-        jancarManager.registerJacStateListener(jacState.asBinder());
     }
 
     @Override
@@ -181,7 +171,6 @@ public class VideoActivity extends BaseActivity implements
     @Override
     protected void onDestroy() {
         mHandler.removeCallbacksAndMessages(null);
-        jancarManager.unregisterJacStateListener(jacState.asBinder());
         super.onDestroy();
     }
 
@@ -341,8 +330,10 @@ public class VideoActivity extends BaseActivity implements
             player.savePathUrl(currenPath);
         }
         videoList.clear();
-        player.stop();
-        currenPos = -1;
+        if(!player.getPlayUrl().startsWith(path)){
+            player.stop();
+            currenPos = -1;
+        }
         player.playSavePath(path);
         super.notifyPathChange(path);
     }
@@ -515,22 +506,4 @@ public class VideoActivity extends BaseActivity implements
         }
     }
 
-    public class JacSystemStates extends JacState {
-        @Override
-        public void OnBackCar(boolean bState) {
-            super.OnBackCar(bState);
-        }
-
-        @Override
-        public void OnStorage(StorageState state) {
-            FlyLog.d("usb state:" + state.isUsbMounted());
-            if (!state.isUsbMounted()) {
-                if (!(new File(player.getPlayUrl()).exists())) {
-                    FlyLog.d("play file is no exists");
-                    player.stop();
-                }
-            }
-            super.OnStorage(state);
-        }
-    }
 }

@@ -1,11 +1,13 @@
 package com.jancar.media.base;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 
+import com.jancar.JancarManager;
 import com.jancar.media.data.Image;
 import com.jancar.media.data.Music;
 import com.jancar.media.data.StorageInfo;
@@ -15,6 +17,7 @@ import com.jancar.media.model.mediascan.IMediaScan;
 import com.jancar.media.model.mediascan.MediaScan;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.SPUtil;
+import com.jancar.state.JacState;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -25,28 +28,42 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     protected IMediaScan usbMediaScan = MediaScan.getInstance();
     public static final String DEF_PATH = "/storage/emulated/0";
     public String currenPath = DEF_PATH;
+    protected boolean isStop = false;
 
+    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currenPath = getSavePath();
         usbMediaScan.addListener(this);
         usbMediaScan.open();
+        jacState = new JacSystemStates();
+        jancarManager = (JancarManager) getSystemService("jancar_manager");
+        jancarManager.registerJacStateListener(jacState.asBinder());
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        isStop = false;
         /**
          * 程序于后台被拔掉U盘，已经打不开当前盘符，刷新为当前磁盘
          */
-        if(!(new File(currenPath).exists())){
+        if (!(new File(currenPath).exists())) {
             usbMediaScan.openStorager(new StorageInfo("REFRESH"));
         }
     }
 
+
+    @Override
+    protected void onStop() {
+        isStop = true;
+        super.onStop();
+    }
+
     @Override
     protected void onDestroy() {
+        jancarManager.unregisterJacStateListener(jacState.asBinder());
         usbMediaScan.close();
         usbMediaScan.removeListener(this);
         super.onDestroy();
@@ -128,7 +145,12 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     }
 
     public String getSavePath() {
-        return (String) SPUtil.get(this, "SAVA_PATH", DEF_PATH);
+        String path = (String) SPUtil.get(this, "SAVA_PATH", DEF_PATH);
+        if(new File(path).exists()){
+            return path;
+        }else{
+            return DEF_PATH;
+        }
     }
 
     private List<IUsbMediaListener> fragmentListeners = new ArrayList<>();
@@ -139,5 +161,37 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
 
     public void removeListener(IUsbMediaListener iUsbMediaListener) {
         fragmentListeners.remove(iUsbMediaListener);
+    }
+
+    private JacState jacState = null;
+    private JancarManager jancarManager;
+
+    public class JacSystemStates extends JacState {
+        @Override
+        public void OnBackCar(boolean bState) {
+            super.OnBackCar(bState);
+        }
+
+        @Override
+        public void OnStorage(StorageState state) {
+            try {
+                FlyLog.d("usb state:" + state.isUsbMounted());
+                onUsbMounted(state.isUsbMounted());
+                super.OnStorage(state);
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+        }
+    }
+
+    public void onUsbMounted(boolean flag) {
+        if (!flag) {
+            if (isStop && !(new File(currenPath).exists())) {
+                FlyLog.e("is back palying andr current(%s) path is removed, finish appliction!",currenPath);
+                currenPath=DEF_PATH;
+                usbMediaScan.openStorager(new StorageInfo(currenPath));
+                finish();
+            }
+        }
     }
 }

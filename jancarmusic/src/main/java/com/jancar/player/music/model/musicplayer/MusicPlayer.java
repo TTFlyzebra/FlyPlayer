@@ -72,7 +72,7 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void init(Context context) {
         this.mContext = context;
-        mLoopStatus = (int) SPUtil.get(mContext,"LOOPSTATUS",LOOP_ALL);
+        mLoopStatus = (int) SPUtil.get(mContext, "LOOPSTATUS", LOOP_ALL);
     }
 
     private void initMediaPlayer() {
@@ -154,7 +154,7 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void stop() {
         FlyLog.d("player stop");
-        SPUtil.set(mContext,"LOOPSTATUS",mLoopStatus);
+        SPUtil.set(mContext, "LOOPSTATUS", mLoopStatus);
         mPlayUrls.clear();
         mPosMap.clear();
         mPlayPos = -1;
@@ -192,7 +192,7 @@ public class MusicPlayer implements IMusicPlayer,
             mPosMap.put(mPlayUrls.get(i).url, i);
         }
 
-        if ((new File(mPlayUrl).exists())&& mPlayUrl.startsWith(mPlayPath)) {
+        if ((new File(mPlayUrl).exists()) && mPlayUrl.startsWith(mPlayPath)) {
             mPlayPos = getPlayPos();
         } else {
             mPlayPos = 0;
@@ -325,20 +325,16 @@ public class MusicPlayer implements IMusicPlayer,
         /**
          * 拔掉U盘停止播放
          */
-        if(!(new File(mPlayUrl).exists())){
-            stop();
-        }else {
-            mPlayStatus = STATUS_COMPLETED;
-            notifyStatus();
-            switch (mLoopStatus) {
-                case LOOP_RAND:
-                case LOOP_ALL:
-                    playNext();
-                    break;
-                case LOOP_ONE:
-                    play(mPlayUrl);
-                    break;
-            }
+        mPlayStatus = STATUS_COMPLETED;
+        notifyStatus();
+        switch (mLoopStatus) {
+            case LOOP_RAND:
+            case LOOP_ALL:
+                playNext();
+                break;
+            case LOOP_ONE:
+                play(mPlayUrl);
+                break;
         }
     }
 

@@ -10,7 +10,6 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -211,16 +210,18 @@ public class MusicActivity extends BaseActivity implements
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
-        if(isStop) return;
+        if (isStop) return;
         isScan = true;
         if (musicPlayer.isPlaying()) {
             musicPlayer.savePathUrl(currenPath);
         }
         musicList.clear();
-        musicPlayer.stop();
-        tvAlbum.setText("");
-        tvArtist.setText("");
-        tvSingle.setText("");
+        if(!musicPlayer.getPlayUrl().startsWith(path)){
+            musicPlayer.stop();
+            tvAlbum.setText("");
+            tvArtist.setText("");
+            tvSingle.setText("");
+        }
         musicPlayer.playSavePath(path);
         super.notifyPathChange(path);
     }
@@ -228,7 +229,7 @@ public class MusicActivity extends BaseActivity implements
     @Override
     public void musicUrlList(List<Music> musicUrlList) {
         FlyLog.d("get player.music size=%d", musicUrlList == null ? 0 : musicUrlList.size());
-        if(isStop) return;
+        if (isStop) return;
         if (musicUrlList != null && !musicUrlList.isEmpty()) {
             musicList.addAll(musicUrlList);
             musicPlayer.setPlayUrls(musicList);
@@ -239,7 +240,7 @@ public class MusicActivity extends BaseActivity implements
     @Override
     public void scanFinish(String path) {
         FlyLog.d("scanFinish path=%s", path);
-        if(isStop) return;
+        if (isStop) return;
         isScan = false;
         if (musicList == null || musicList.isEmpty()) {
             replaceFragment(fmName[0], R.id.ac_replace_fragment);
@@ -254,7 +255,7 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     public void scanServiceConneted() {
-        if(isStop) return;
+        if (isStop) return;
         String path = null;
         try {
             Intent intent = getIntent();
@@ -270,7 +271,7 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     public void musicID3UrlList(List<Music> musicUrlList) {
-        if(isStop) return;
+        if (isStop) return;
         try {
             if (musicUrlList == null || musicUrlList.isEmpty()) {
                 return;
@@ -367,13 +368,11 @@ public class MusicActivity extends BaseActivity implements
                 upPlayInfo();
                 break;
             case MusicPlayer.STATUS_IDLE:
-                musicList.clear();
                 tvSingle.setText("");
                 tvArtist.setText("");
                 tvAlbum.setText("");
                 initSeekBar();
                 ivImage.setImageResource(R.drawable.media_music);
-                finish();
                 break;
         }
         play.setImageResource(musicPlayer.isPlaying() ? R.drawable.media_pause : R.drawable.media_play);
@@ -537,8 +536,8 @@ public class MusicActivity extends BaseActivity implements
                     /**
                      * 是否混音
                      */
-                    boolean flag = SystemProperties.getBoolean(SystemPropertiesProxy.Property.PERSIST_KEY_GISMIX, true);
-                    if (!flag && musicPlayer.isPlaying()) {
+                    String flag = SystemPropertiesProxy.get(MusicActivity.this, SystemPropertiesProxy.Property.PERSIST_KEY_GISMIX, "true");
+                    if (!flag.equals("true") && musicPlayer.isPlaying()) {
                         musicPlayer.pause();
                         jancarMixPause = true;
                     }
@@ -564,4 +563,5 @@ public class MusicActivity extends BaseActivity implements
     private void abandonAudioFocus() {
         mAudioManager.abandonAudioFocus(mAudioFocusListener);
     }
+
 }

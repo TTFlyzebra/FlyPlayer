@@ -31,8 +31,8 @@
             android:duplicateParentState="true"
             android:textSize="22px" />
         <ImageView
-            android:layout_width="40px"
-            android:layout_height="40px"
+            android:layout_width="36px"
+            android:layout_height="36px"
             android:duplicateParentState="true"
             android:src="@drawable/media_refresh"/>
     </LinearLayout>
