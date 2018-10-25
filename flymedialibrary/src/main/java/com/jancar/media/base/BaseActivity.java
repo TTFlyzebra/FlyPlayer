@@ -145,12 +145,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     }
 
     public String getSavePath() {
-        String path = (String) SPUtil.get(this, "SAVA_PATH", DEF_PATH);
-        if (new File(path).exists()) {
-            return path;
-        } else {
-            return DEF_PATH;
-        }
+        return (String) SPUtil.get(this, "SAVA_PATH", DEF_PATH);
     }
 
     private List<IUsbMediaListener> fragmentListeners = new ArrayList<>();
@@ -207,8 +202,6 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     public void onUsbMounted(boolean flag) {
         if (!flag) {
             FlyLog.e("is back palying andr current(%s) path is removed, finish appliction!", currenPath);
-            currenPath = DEF_PATH;
-            usbMediaScan.openStorager(new StorageInfo(currenPath));
             if (isStop) {
                 finish();
             }
