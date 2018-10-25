@@ -1,4 +1,4 @@
-package com.jancar.player.video.view;
+package com.jancar.media.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

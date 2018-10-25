@@ -7,7 +7,6 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemProperties;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.jancar.media.base.BaseActivity;
+import com.jancar.media.data.StorageInfo;
 import com.jancar.media.data.Video;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
@@ -122,7 +122,7 @@ public class VideoActivity extends BaseActivity implements
                 public void run() {
                     try {
                         player.pause();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         FlyLog.e(e.toString());
                     }
                 }
@@ -324,13 +324,13 @@ public class VideoActivity extends BaseActivity implements
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
-        if(isPause) return;
+        if (isPause) return;
         isScan = true;
         if (player.isPlaying()) {
             player.savePathUrl(currenPath);
         }
         videoList.clear();
-        if(!player.getPlayUrl().startsWith(path)){
+        if (!player.getPlayUrl().startsWith(path)) {
             player.stop();
             currenPos = -1;
         }
@@ -341,7 +341,7 @@ public class VideoActivity extends BaseActivity implements
     @Override
     public void videoUrlList(List<Video> videoUrlList) {
         FlyLog.d("get videos size=%d", videoUrlList == null ? 0 : videoUrlList.size());
-        if(isPause) return;
+        if (isPause) return;
         if (videoUrlList != null && !videoUrlList.isEmpty()) {
             videoList.addAll(videoUrlList);
             if ((new File(player.getPlayUrl()).exists()) && player.getPlayUrl().startsWith(currenPath)) {
@@ -366,7 +366,7 @@ public class VideoActivity extends BaseActivity implements
     @Override
     public void scanFinish(String path) {
         FlyLog.d("scanFinish path=%s", path);
-        if(isPause) return;
+        if (isPause) return;
         isScan = false;
         if (videoList == null || videoList.isEmpty()) {
             replaceFragment(fmName[0], R.id.ac_replace_fragment);
@@ -478,8 +478,8 @@ public class VideoActivity extends BaseActivity implements
                     /**
                      * 是否混音,高德其它软件在后台播报的情景
                      */
-                    boolean flag = SystemProperties.getBoolean(SystemPropertiesProxy.Property.PERSIST_KEY_GISMIX, true);
-                    if (!flag && player != null && player.isPlaying()) {
+                    String flag = SystemPropertiesProxy.get(VideoActivity.this, SystemPropertiesProxy.Property.PERSIST_KEY_GISMIX, "true");
+                    if (!flag.equals("true") && player != null && player.isPlaying()) {
                         FlyLog.d("lost Focus2 pause!");
                         player.pause();
                         lostPause = true;
@@ -506,4 +506,15 @@ public class VideoActivity extends BaseActivity implements
         }
     }
 
+    @Override
+    public void onUsbMounted(boolean flag) {
+        /**
+         * 正在播放的U盘被拔
+         */
+        if (!flag) {
+            FlyLog.e("palying usb is removed!");
+            player.stop();
+        }
+        super.onUsbMounted(flag);
+    }
 }

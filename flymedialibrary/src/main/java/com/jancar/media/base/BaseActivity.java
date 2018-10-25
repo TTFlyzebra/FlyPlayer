@@ -146,9 +146,9 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
 
     public String getSavePath() {
         String path = (String) SPUtil.get(this, "SAVA_PATH", DEF_PATH);
-        if(new File(path).exists()){
+        if (new File(path).exists()) {
             return path;
-        }else{
+        } else {
             return DEF_PATH;
         }
     }
@@ -176,7 +176,27 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
         public void OnStorage(StorageState state) {
             try {
                 FlyLog.d("usb state:" + state.isUsbMounted());
-                onUsbMounted(state.isUsbMounted());
+                boolean flag = false;
+                int statu = state.toInteger();
+                switch (currenPath) {
+                    case "/storage/udisk1":
+                        flag = (statu & 8) > 0;
+                        break;
+                    case "/storage/udisk2":
+                        flag = (statu & 16) > 0;
+                        break;
+                    case "/storage/udisk3":
+                        flag = (statu & 32) > 0;
+                        break;
+                    case "/storage/udisk4":
+                        flag = (statu & 64) > 0;
+                        break;
+                    case "/storage/udisk5":
+                        flag = (statu & 128) > 0;
+                        break;
+                }
+                FlyLog.d("current path is removed=" + flag);
+                onUsbMounted(flag);
                 super.OnStorage(state);
             } catch (Exception e) {
                 FlyLog.e(e.toString());
@@ -186,10 +206,10 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
 
     public void onUsbMounted(boolean flag) {
         if (!flag) {
-            if (isStop && !(new File(currenPath).exists())) {
-                FlyLog.e("is back palying andr current(%s) path is removed, finish appliction!",currenPath);
-                currenPath=DEF_PATH;
-                usbMediaScan.openStorager(new StorageInfo(currenPath));
+            FlyLog.e("is back palying andr current(%s) path is removed, finish appliction!", currenPath);
+            currenPath = DEF_PATH;
+            usbMediaScan.openStorager(new StorageInfo(currenPath));
+            if (isStop) {
                 finish();
             }
         }
