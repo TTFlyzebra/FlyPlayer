@@ -216,7 +216,7 @@ public class MusicActivity extends BaseActivity implements
             musicPlayer.savePathUrl(currenPath);
         }
         musicList.clear();
-        if(!musicPlayer.getPlayUrl().startsWith(path)){
+        if (!musicPlayer.getPlayUrl().startsWith(path)) {
             musicPlayer.stop();
             tvAlbum.setText("");
             tvArtist.setText("");
@@ -536,8 +536,8 @@ public class MusicActivity extends BaseActivity implements
                     /**
                      * 是否混音
                      */
-                    String flag = SystemPropertiesProxy.get(MusicActivity.this, SystemPropertiesProxy.Property.PERSIST_KEY_GISMIX, "true");
-                    if (!flag.equals("true") && musicPlayer.isPlaying()) {
+                    String flag = SystemPropertiesProxy.get(MusicActivity.this, SystemPropertiesProxy.Property.PERSIST_KEY_GISMIX, "100");
+                    if (flag.equals("0") && musicPlayer != null && musicPlayer.isPlaying()) {
                         musicPlayer.pause();
                         jancarMixPause = true;
                     }

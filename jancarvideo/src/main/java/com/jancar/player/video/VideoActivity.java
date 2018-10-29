@@ -478,8 +478,8 @@ public class VideoActivity extends BaseActivity implements
                     /**
                      * 是否混音,高德其它软件在后台播报的情景
                      */
-                    String flag = SystemPropertiesProxy.get(VideoActivity.this, SystemPropertiesProxy.Property.PERSIST_KEY_GISMIX, "true");
-                    if (!flag.equals("true") && player != null && player.isPlaying()) {
+                    String flag = SystemPropertiesProxy.get(VideoActivity.this, SystemPropertiesProxy.Property.PERSIST_KEY_GISMIX, "100");
+                    if (flag.equals("0") && player != null && player.isPlaying()) {
                         FlyLog.d("lost Focus2 pause!");
                         player.pause();
                         lostPause = true;
