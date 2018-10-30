@@ -1,1 +1,1 @@
-include ':ijkplayer', ':mediascanner',':photoview', ':mp3id3library', ':flymedialibrary', ':jancarphoto', ':jancarvideo', ':jancarmusic'
+include ':ijkplayer-java', ':mediascanner',':photoview', ':mp3id3library', ':flymedialibrary', ':jancarphoto', ':jancarvideo', ':jancarmusic'

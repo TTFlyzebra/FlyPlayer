@@ -82,7 +82,7 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':ijkplayer')
+    implementation project(path: ':ijkplayer-java')
     implementation project(path: ':flymedialibrary')
     implementation files('libs/libksystat.jar')
     implementation files('libs/libksyplayer.jar')
