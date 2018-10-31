@@ -57,9 +57,7 @@ public class RegisterMusicSession {
     public void requestMediaButton() {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (!mMediaSession.isActive()) {
-                    mMediaSession.setActive(true);
-                }
+                mMediaSession.setActive(true);
             }
         } catch (Exception e) {
             e.printStackTrace();

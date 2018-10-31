@@ -35,6 +35,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
+import android.widget.TableLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,6 +62,13 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
     public static final int STATE_PLAYING = 3;
     public static final int STATE_PAUSED = 4;
     public static final int STATE_PLAYBACK_COMPLETED = 5;
+    private InfoHudViewHolder mHudViewHolder;
+
+    private long mPrepareStartTime = 0;
+    private long mPrepareEndTime = 0;
+
+    private long mSeekStartTime = 0;
+    private long mSeekEndTime = 0;
 
     public int getCurrentState() {
         return mCurrentState;
@@ -112,7 +120,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
     private boolean usingOpenSLES = false;
     private String pixelFormat = "";//Auto Select=,RGB 565=fcc-rv16,RGB 888X=fcc-rv32,YV12=fcc-yv12,默认为RGB 888X
     private boolean enableBackgroundPlay = false;
-    private boolean enableSurfaceView = true;
+    private boolean enableSurfaceView = false;
     private boolean enableTextureView = false;
     private boolean enableNoView = false;
 
@@ -265,6 +273,8 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
             mMediaPlayer.stop();
             mMediaPlayer.release();
             mMediaPlayer = null;
+            if (mHudViewHolder != null)
+                mHudViewHolder.setMediaPlayer(null);
             mCurrentState = STATE_IDLE;
             mTargetState = STATE_IDLE;
             AudioManager am = (AudioManager) mAppContext.getSystemService(Context.AUDIO_SERVICE);
@@ -312,7 +322,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
                     }
 
                     if (TextUtils.isEmpty(pixelFormat)) {
-                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "overlay-format", IjkMediaPlayer.SDL_FCC_RV16);
+                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "overlay-format", IjkMediaPlayer.SDL_FCC_RV32);
                     } else {
                         ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "overlay-format", pixelFormat);
                     }
@@ -325,28 +335,6 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
 
                     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
 
-//                    //1: 设置是否开启变调
-//                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"soundtouch",isModifyTone?0:1);
-//                    //2:设置是否开启环路过滤: 0开启，画面质量高，解码开销大，48关闭，画面质量差点，解码开销小
-//                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC,"skip_loop_filter",isSkipLoopFilter?0:48L);
-//                    //3:设置播放前的最大探测时间
-//                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT,"analyzemaxduration",100L);
-//                    //4:设置播放前的探测时间 1,达到首屏秒开效果
-//                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT,"analyzeduration",1);
-//                    //5:播放前的探测Size，默认是1M, 改小一点会出画面更快
-//                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT,"probesize",1024*10);
-//                    //6:每处理一个packet之后刷新io上下文
-//                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT,"flush_packets",1L);
-//                    //7: 是否开启预缓冲，一般直播项目会开启，达到秒开的效果，不过带来了播放丢帧卡顿的体验
-//                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"packet-buffering",isBufferCache?1:0);
-//                    //8:播放重连次数
-//                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"reconnect",5);
-//                    //9:最大缓冲大小,单位kb
-//                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"max-buffer-size",maxCacheSize);
-//                    //10:跳帧处理,放CPU处理较慢时，进行跳帧处理，保证播放流程，画面和声音同步
-//                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"framedrop",5);
-//                    //11:最大fps
-//                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"max-fps",30);
                 }
                 mMediaPlayer = ijkMediaPlayer;
             }
@@ -377,7 +365,11 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
             bindSurfaceHolder(mMediaPlayer, mSurfaceHolder);
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.setScreenOnWhilePlaying(true);
+            mPrepareStartTime = System.currentTimeMillis();
             mMediaPlayer.prepareAsync();
+
+            if (mHudViewHolder != null)
+                mHudViewHolder.setMediaPlayer(mMediaPlayer);
 
             // REMOVED: mPendingSubtitleTracks
 
@@ -440,6 +432,10 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
 
     IMediaPlayer.OnPreparedListener mPreparedListener = new IMediaPlayer.OnPreparedListener() {
         public void onPrepared(IMediaPlayer mp) {
+            mPrepareEndTime = System.currentTimeMillis();
+            if(mHudViewHolder!=null){
+                mHudViewHolder.updateLoadCost(mPrepareEndTime - mPrepareStartTime);
+            }
             mCurrentState = STATE_PREPARED;
 
             // Get the capabilities of the player for this stream
@@ -962,5 +958,9 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
                 break;
             }
         }
+    }
+
+    public void setHudView(TableLayout tableLayout) {
+        mHudViewHolder = new InfoHudViewHolder(getContext(), tableLayout);
     }
 }

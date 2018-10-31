@@ -10,11 +10,11 @@ import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.jancar.media.base.BaseActivity;
-import com.jancar.media.data.StorageInfo;
 import com.jancar.media.data.Video;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
@@ -97,11 +97,11 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.giraffe_player);
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         player = new GiraffePlayer(this);
-        player.setScaleType(GiraffePlayer.SCALETYPE_FITPARENT);
         player.addStatusChangeLiseter(this);
         initView();
     }
