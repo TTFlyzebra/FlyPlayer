@@ -47,6 +47,7 @@ import tv.danmaku.ijk.media.player.AndroidMediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 import tv.danmaku.ijk.media.player.TextureMediaPlayer;
+import tv.danmaku.ijk.media.player.misc.ITrackInfo;
 
 public class IjkVideoView extends FrameLayout implements MediaController.MediaPlayerControl {
     private String TAG = "IjkVideoView";
@@ -963,4 +964,11 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
     public void setHudView(TableLayout tableLayout) {
         mHudViewHolder = new InfoHudViewHolder(getContext(), tableLayout);
     }
+
+    public ITrackInfo[] getTrackInfo() {
+        if (mMediaPlayer == null)
+            return null;
+        return mMediaPlayer.getTrackInfo();
+    }
+
 }

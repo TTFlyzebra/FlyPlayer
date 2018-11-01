@@ -299,10 +299,23 @@
         </com.jancar.media.view.TouchEventRelativeLayout>
     </RelativeLayout>
     <!-- The main content view -->
+
+
     <TableLayout
         android:id="@+id/hud_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200px"
-        android:background="#7FFF0000" />
+        android:layout_marginTop="180px"
+        android:orientation="vertical"
+        android:background="#7FFF0000">
+
+        <TextView
+            android:id="@+id/video_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#7FFF0000"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textSize="15px" />
+    </TableLayout>
 </RelativeLayout>

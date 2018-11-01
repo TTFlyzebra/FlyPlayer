@@ -41,6 +41,7 @@ import java.util.concurrent.Executors;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
+import tv.danmaku.ijk.media.player.misc.ITrackInfo;
 
 /**
  * Created by tcking on 15/10/27.
@@ -80,6 +81,9 @@ public class GiraffePlayer {
     private final VideoActivity activity;
     private final IjkVideoView ijkVideoView;
     private final TableLayout mHudView;
+    private final TextView mVideoInfoText;
+    private final boolean isShowTestInfo;
+
     private final SeekBar seekBar;
     private final AudioManager audioManager;
     private final int mMaxVolume;
@@ -273,12 +277,16 @@ public class GiraffePlayer {
         $ = new Query(activity);
         ijkVideoView = (IjkVideoView) activity.findViewById(R.id.video_view);
         mHudView = (TableLayout) activity.findViewById(R.id.hud_view);
-        String str = SystemPropertiesProxy.get(activity,SystemPropertiesProxy.Property.PERSIST_KEY_VIDEOTEST,"0");
-        if("1".equals(str)){
+        mVideoInfoText = (TextView) activity.findViewById(R.id.video_info);
+        String str = SystemPropertiesProxy.get(activity, SystemPropertiesProxy.Property.PERSIST_KEY_VIDEOTEST, "0");
+        isShowTestInfo = "1".equals(str);
+        if (isShowTestInfo) {
             mHudView.setVisibility(View.VISIBLE);
             ijkVideoView.setHudView(mHudView);
-        }else {
+            mVideoInfoText.setVisibility(View.VISIBLE);
+        } else {
             mHudView.setVisibility(View.GONE);
+            mVideoInfoText.setVisibility(View.GONE);
         }
 
         ijkVideoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
@@ -313,6 +321,17 @@ public class GiraffePlayer {
                     case IMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
                         statusChange(STATUS_PLAYING);
                         break;
+                }
+                if (isShowTestInfo) {
+                    ITrackInfo[] iTrackInfos = ijkVideoView.getTrackInfo();
+                    String viewInfo = "";
+                    for (ITrackInfo iTrackInfo : iTrackInfos) {
+                        viewInfo = viewInfo + iTrackInfo.getInfoInline() + "\n";
+                    }
+                    if (!TextUtils.isEmpty(viewInfo)) {
+                        viewInfo = viewInfo.substring(0, viewInfo.length() - 1);
+                        mVideoInfoText.setText(viewInfo);
+                    }
                 }
                 onInfoListener.onInfo(what, extra);
                 return false;
@@ -699,12 +718,23 @@ public class GiraffePlayer {
     }
 
     public long setProgress() {
+        long position = ijkVideoView.getCurrentPosition();
+        long duration = ijkVideoView.getDuration();
+        /**
+         * #NOTE:时间大于总时长，已经播放完毕，(解决有些视频播放完了还一直播放的问题)
+         */
+        if (duration != -1 && position > duration) {
+            FlyLog.e("curentpos=%d,sumPos=%d,playing is finish, but is already playing....", position, duration);
+            ijkVideoView.pause();
+            statusChange(STATUS_COMPLETED);
+            oncomplete.run();
+            return 0;
+        }
+
         if (isDragging) {
             return 0;
         }
 
-        long position = ijkVideoView.getCurrentPosition();
-        long duration = ijkVideoView.getDuration();
         if (seekBar != null) {
             if (duration > 0) {
                 long pos = 1000L * position / duration;
