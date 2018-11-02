@@ -26,6 +26,7 @@ public class MediaScan implements IMediaScan {
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private Context mContext;
     private List<IUsbMediaListener> listeners = new ArrayList<>();
+    private boolean isReConnect = false;
     private ServiceConnection conn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -34,8 +35,10 @@ public class MediaScan implements IMediaScan {
                 mFlyMedia = FlyMedia.Stub.asInterface(service);
                 if (mFlyMedia == null) return;
                 mFlyMedia.registerNotify(notify);
-                for(IUsbMediaListener listener:listeners){
-                    listener.scanServiceConneted();
+                if (!isReConnect) {
+                    for (IUsbMediaListener listener : listeners) {
+                        listener.scanServiceConneted();
+                    }
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -44,7 +47,9 @@ public class MediaScan implements IMediaScan {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            FlyLog.d("usbscan service disconnected");
+            FlyLog.e("usbscan service disconnected");
+            isReConnect = true;
+            bindService();
         }
     };
 
@@ -181,7 +186,7 @@ public class MediaScan implements IMediaScan {
     @Override
     public void openStorager(StorageInfo storageInfo) {
         try {
-            FlyLog.d("openStorager path=%s",storageInfo.mPath);
+            FlyLog.d("openStorager path=%s", storageInfo.mPath);
             mFlyMedia.scanDisk(storageInfo.mPath);
         } catch (Exception e) {
             FlyLog.e(e.toString());
