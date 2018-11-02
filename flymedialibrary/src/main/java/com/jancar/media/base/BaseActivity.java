@@ -171,7 +171,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
         public void OnStorage(StorageState state) {
             try {
                 FlyLog.d("usb state:" + state.isUsbMounted());
-                boolean flag = false;
+                boolean flag = true;
                 int statu = state.toInteger();
                 switch (currenPath) {
                     case "/storage/udisk1":

@@ -565,6 +565,7 @@ public class GiraffePlayer {
     }
 
     private String generateTime(long time) {
+        time = Math.min(Math.max(time, 0), 359999000);
         int totalSeconds = (int) (time / 1000);
         int seconds = totalSeconds % 60;
         int minutes = (totalSeconds / 60) % 60;

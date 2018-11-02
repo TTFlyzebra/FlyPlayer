@@ -117,11 +117,11 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
     private int mVideoSarDen;
     private boolean usingAndroidPlayer = false;
     private boolean usingMediaCodec = true;
-    private boolean usingMediaCodecAutoRotate = false;
+    private boolean usingMediaCodecAutoRotate = true;
     private boolean usingOpenSLES = false;
     private String pixelFormat = "";//Auto Select=,RGB 565=fcc-rv16,RGB 888X=fcc-rv32,YV12=fcc-yv12,默认为RGB 888X
     private boolean enableBackgroundPlay = false;
-    private boolean enableSurfaceView = false;
+    private boolean enableSurfaceView = true;
     private boolean enableTextureView = false;
     private boolean enableNoView = false;
 
@@ -235,6 +235,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
      * @param path the path of the video.
      */
     public void setVideoPath(String path) {
+        initRenders();
         setVideoURI(Uri.parse(path));
     }
 
@@ -306,6 +307,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
 
                     if (usingMediaCodec) {
 //                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
+//                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-mpeg2", 1);
                         ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-all-videos", 1);
                         if (usingMediaCodecAutoRotate) {
                             ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);

@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tcking.github.com.giraffeplayer.GiraffePlayer;
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class VideoActivity extends BaseActivity implements
         View.OnClickListener,
@@ -100,6 +101,9 @@ public class VideoActivity extends BaseActivity implements
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.giraffe_player);
+        // init player
+        IjkMediaPlayer.loadLibrariesOnce(null);
+        IjkMediaPlayer.native_profileBegin("libijkplayer.so");
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         player = new GiraffePlayer(this);
         player.addStatusChangeLiseter(this);

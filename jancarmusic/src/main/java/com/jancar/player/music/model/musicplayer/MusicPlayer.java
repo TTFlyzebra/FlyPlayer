@@ -175,12 +175,14 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public int getCurrentPosition() {
-        return mMediaPlayer == null ? 0 : mMediaPlayer.getCurrentPosition();
+        int time = mMediaPlayer == null ? 0 : mMediaPlayer.getCurrentPosition();
+        return Math.min(Math.max(time, 0), 359999000);
     }
 
     @Override
     public int getDuration() {
-        return mMediaPlayer == null ? 0 : mMediaPlayer.getDuration();
+        int time = mMediaPlayer == null ? 0 : mMediaPlayer.getDuration();
+        return Math.min(Math.max(time, 0), 359999000);
     }
 
     @Override

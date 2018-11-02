@@ -398,7 +398,7 @@ public class MusicActivity extends BaseActivity implements
     private void initSeekBar() {
         int sumTime = musicPlayer.getDuration();
         seekBar.setMax(sumTime);
-        int hou = sumTime / 360000;
+        int hou = sumTime / 3600000;
         int min = sumTime / 60000 % 60;
         int sec = sumTime / 1000 % 60;
         String text = (hou == 0 ? "" : ((hou > 9 ? hou : "0" + hou) + ":")) + ""
@@ -496,7 +496,7 @@ public class MusicActivity extends BaseActivity implements
     }
 
     public void setSeekStartText(int seekPos) {
-        int hou = seekPos / 360000;
+        int hou = seekPos / 3600000;
         int min = seekPos / 60000 % 60;
         int sec = seekPos / 1000 % 60;
         String text = (hou == 0 ? "" : ((hou > 9 ? hou : "0" + hou) + ":")) + ""
