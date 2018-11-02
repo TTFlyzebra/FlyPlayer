@@ -22,6 +22,7 @@ import com.jancar.mediascan.model.cache.ListFileDiskCache;
 import com.jancar.mediascan.model.cache.MusicDoubleCache;
 import com.jancar.mediascan.utils.FlyLog;
 import com.jancar.mediascan.utils.GsonUtils;
+import com.jancar.mediascan.utils.SPUtil;
 import com.jancar.mediascan.utils.StorageTools;
 import com.jancar.mediascan.utils.StringTools;
 import com.jancar.mediascan.utils.SystemPropertiesProxy;
@@ -117,7 +118,8 @@ public class FlyMediaService extends Service {
         jancarManager.registerJacStateListener(jacState.asBinder());
         mDoubleMusicCache = MusicDoubleCache.getInstance(getApplicationContext());
         mListDiskCache = new ListFileDiskCache(this);
-        startScanPath(DEF_PATH);
+        String path = (String) SPUtil.get(this, "SAVEPATH", DEF_PATH);
+        startScanPath(path);
     }
 
     @Override
@@ -504,16 +506,17 @@ public class FlyMediaService extends Service {
         }
     }
 
-    private void startScanPath(String disk) {
+    private void startScanPath(String scanPath) {
         FlyLog.d("start scan disk!");
         sWorker.removeCallbacksAndMessages(null);
         startScanTime = System.currentTimeMillis();
         tryCount = 0;
-        if (!currentPath.endsWith(disk)) {
+        if (!currentPath.endsWith(scanPath)) {
             isStoped.set(true);
             clearData();
-            if (!disk.equals("REFRESH")) {
-                currentPath = disk;
+            if (!scanPath.equals("REFRESH")) {
+                currentPath = scanPath;
+                SPUtil.set(this, "SAVEPATH", currentPath);
             }
             scanPath(currentPath);
         } else {
