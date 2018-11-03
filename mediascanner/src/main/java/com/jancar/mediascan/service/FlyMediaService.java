@@ -2,7 +2,10 @@ package com.jancar.mediascan.service;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -84,6 +87,7 @@ public class FlyMediaService extends Service {
     private long startScanTime;
     private int tryCount = 0;
     private int TRY_MAX = 5;
+    private MediaScannerReceiver mediaScannerReceiver;
     private IBinder mBinder = new FlyMedia.Stub() {
         @Override
         public void scanDisk(final String disk) throws RemoteException {
@@ -120,6 +124,14 @@ public class FlyMediaService extends Service {
         mListDiskCache = new ListFileDiskCache(this);
         String path = (String) SPUtil.get(this, "SAVEPATH", DEF_PATH);
         startScanPath(path);
+        mediaScannerReceiver = new MediaScannerReceiver();
+
+        IntentFilter f = new IntentFilter();
+        f.addAction(Intent.ACTION_MEDIA_SCANNER_STARTED);
+        f.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
+        f.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
+        f.addDataScheme("file");
+        registerReceiver(mediaScannerReceiver, f);
     }
 
     @Override
@@ -150,6 +162,7 @@ public class FlyMediaService extends Service {
     @Override
     public void onDestroy() {
         sWorker.removeCallbacksAndMessages(null);
+        unregisterReceiver(mediaScannerReceiver);
         jancarManager.unregisterJacStateListener(jacState.asBinder());
         super.onDestroy();
     }
@@ -915,9 +928,30 @@ public class FlyMediaService extends Service {
         }
     }
 
+    public class MediaScannerReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action != null) {
+                switch (action) {
+                    case Intent.ACTION_MEDIA_SCANNER_STARTED:
+                        FlyLog.d("Intent.ACTION_MEDIA_SCANNER_STARTED");
+                        FlyLog.d(intent.toUri(0));
+                        break;
+                    case Intent.ACTION_MEDIA_SCANNER_FINISHED:
+                        FlyLog.d("Intent.ACTION_MEDIA_SCANNER_FINISHED");
+                        FlyLog.d(intent.toUri(0));
+                        break;
+                    case Intent.ACTION_MEDIA_UNMOUNTED:
+                        FlyLog.d("Intent.ACTION_MEDIA_UNMOUNTED");
+                        FlyLog.d(intent.toUri(0));
+                        break;
+                }
+            }
+        }
+    }
 
     private JacState.ePowerState mEState = JacState.ePowerState.ePowerOn;
-
     public class JacSystemStates extends JacState {
         @Override
         public void OnPower(ePowerState eState) {
