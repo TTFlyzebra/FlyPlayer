@@ -25,6 +25,8 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -37,6 +39,8 @@ import android.widget.FrameLayout;
 import android.widget.MediaController;
 import android.widget.TableLayout;
 
+import com.jancar.media.utils.FlyLog;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +50,7 @@ import java.util.Map;
 import tv.danmaku.ijk.media.player.AndroidMediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
+import tv.danmaku.ijk.media.player.MediaInfo;
 import tv.danmaku.ijk.media.player.TextureMediaPlayer;
 import tv.danmaku.ijk.media.player.misc.ITrackInfo;
 
@@ -271,6 +276,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
     // REMOVED: mPendingSubtitleTracks
 
     public void stopPlayback() {
+        mHandler.removeCallbacksAndMessages(null);
         if (mMediaPlayer != null) {
             mMediaPlayer.stop();
             mMediaPlayer.release();
@@ -330,7 +336,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
                         ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "overlay-format", pixelFormat);
                     }
                     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 1);
-                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 0);
+                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 1);
 
                     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
                     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "timeout", 10000000);
@@ -436,7 +442,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
     IMediaPlayer.OnPreparedListener mPreparedListener = new IMediaPlayer.OnPreparedListener() {
         public void onPrepared(IMediaPlayer mp) {
             mPrepareEndTime = System.currentTimeMillis();
-            if(mHudViewHolder!=null){
+            if (mHudViewHolder != null) {
                 mHudViewHolder.updateLoadCost(mPrepareEndTime - mPrepareStartTime);
             }
             mCurrentState = STATE_PREPARED;
@@ -453,9 +459,32 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
             mVideoWidth = mp.getVideoWidth();
             mVideoHeight = mp.getVideoHeight();
 
-            long seekToPosition = mSeekWhenPrepared;  // mSeekWhenPrepared may be changed after seekTo() call
-            if (seekToPosition != 0) {
-                seekTo((int) seekToPosition);
+            final long seekToPosition = mSeekWhenPrepared;  // mSeekWhenPrepared may be changed after seekTo() call
+            boolean flag = true;
+            try {
+                MediaInfo info = mMediaPlayer.getMediaInfo();
+                String type = info == null ? "FLYZEBRA" : info.mVideoDecoderImpl;
+                if (!TextUtils.isEmpty(type)) {
+                    type = type.toLowerCase(Locale.getDefault());
+                    flag = !type.contains("hevc");
+                }
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+            if(flag){
+                if (seekToPosition != 0) {
+                    seekTo((int) seekToPosition);
+                }
+            }else{
+                mHandler.removeCallbacksAndMessages(null);
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (seekToPosition != 0) {
+                            seekTo((int) seekToPosition);
+                        }
+                    }
+                }, 100);
             }
             if (mVideoWidth != 0 && mVideoHeight != 0) {
                 //Log.i("@@@@", "video size: " + mVideoWidth +"/"+ mVideoHeight);
@@ -636,6 +665,8 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
         holder.bindToMediaPlayer(mp);
     }
 
+    private Handler mHandler = new Handler(Looper.getMainLooper());
+
     IRenderView.IRenderCallback mSHCallback = new IRenderView.IRenderCallback() {
         @Override
         public void onSurfaceChanged(@NonNull IRenderView.ISurfaceHolder holder, int format, int w, int h) {
@@ -650,7 +681,28 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
             boolean hasValidSize = !mRenderView.shouldWaitForResize() || (mVideoWidth == w && mVideoHeight == h);
             if (mMediaPlayer != null && isValidState && hasValidSize) {
                 if (mSeekWhenPrepared != 0) {
-                    seekTo((int) mSeekWhenPrepared);
+                    boolean flag = true;
+                    try {
+                        MediaInfo info = mMediaPlayer.getMediaInfo();
+                        String type = info == null ? "FLYZEBRA" : info.mVideoDecoderImpl;
+                        if (!TextUtils.isEmpty(type)) {
+                            type = type.toLowerCase(Locale.getDefault());
+                            flag = !type.contains("hevc");
+                        }
+                    } catch (Exception e) {
+                        FlyLog.e(e.toString());
+                    }
+                    if (flag) {
+                        seekTo((int) mSeekWhenPrepared);
+                    } else {
+                        mHandler.removeCallbacksAndMessages(null);
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                seekTo((int) mSeekWhenPrepared);
+                            }
+                        }, 100);
+                    }
                 }
                 start();
             }

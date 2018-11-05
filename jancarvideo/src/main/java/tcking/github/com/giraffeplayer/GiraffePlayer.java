@@ -420,7 +420,7 @@ public class GiraffePlayer {
         if (!isLive && newStatus == STATUS_COMPLETED) {
             handler.removeMessages(MESSAGE_SHOW_PROGRESS);
             hideAll();
-            $.id(R.id.app_video_replay).visible();
+//            $.id(R.id.app_video_replay).visible();
         } else if (newStatus == STATUS_ERROR) {
             handler.removeMessages(MESSAGE_SHOW_PROGRESS);
             hideAll();
