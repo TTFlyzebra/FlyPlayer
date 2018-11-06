@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="#000000"
     android:fitsSystemWindows="true"
-    android:layoutDirection="ltr"
     tools:context=".MusicActivity">
 
 
@@ -24,14 +23,14 @@
             android:layout_weight="0.5">
 
             <ImageView
-                android:layout_width="270px"
-                android:layout_height="270px"
+                android:layout_width="250px"
+                android:layout_height="250px"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="160px"
-                android:layout_marginTop="68px"
+                android:layout_marginStart="170px"
+                android:layout_marginTop="78px"
                 android:scaleType="fitXY"
-                android:src="@drawable/media_music_iv" />
+                android:src="@drawable/media_music_iv01" />
 
             <com.jancar.media.view.CircleImageView
                 android:id="@+id/ac_music_iv_image"
@@ -39,11 +38,11 @@
                 android:layout_height="150px"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="223px"
-                android:layout_marginTop="125px"
+                android:layout_marginStart="220px"
+                android:layout_marginTop="128px"
                 android:background="#00000000"
                 android:scaleType="fitXY"
-                android:src="@drawable/media_music" />
+                android:src="@drawable/media_music_iv02" />
 
         </RelativeLayout>
 

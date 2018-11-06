@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">JancarPlayers</string>
+	<string name="giraffe_player_url_empty">Podaj adres, pod którym będzie odtwarzane wideo.</string>
+	<string name="small_problem">Błąd dekodowania wideo</string>
+	<string name="can_not_play">Nie można odtworzyć tego filmu wideo</string>
+	<string name="not_support">Odtwarzacz nie obsługuje tego urządzenia</string>
+	<string name="disk_list">Lista dysków</string>
+	<string name="play_list">Playlista</string>
+	<string name="file_list">Lista plików</string>
+	<string name="photo_list">Lista zdjęć</string>
+	<string name="storage">Pamięć</string>
+	<string name="single">Pojedynczy</string>
+	<string name="artist">Piosenkarz</string>
+	<string name="album">Album</string>
+	<string name="folder">Folder</string>
+	<string name="storage_local">Lokalne przechowywanie</string>
+	<string name="storage_usb">USB</string>
+	<string name="no_artist">Nieznany wykonawca</string>
+	<string name="no_album">Nieznany album</string>
+	<string name="no_album_start">Nieznane</string>
+	<string name="photo">Zdjęcie</string>
+	<string name="video">Wideo</string>
+	<string name="music">Muzyka</string>
+	<string name="musicsumformat">(najpierw% d)</string>
+	<string name="photosumformat">(% d)</string>
+	<string name="videosumformat">(zestaw% d)</string>
+	<string name="lrc_label">Brak tekstów</string>
+	<string name="music_scan1">Skanowanie urządzenia ...</string>
+	<string name="music_scan2">Łącznie% d utworów</string>
+	<string name="video_scan2">Łącznie% d wideo</string>
+	<string name="photo_scan2">Łącznie% d obrazów</string>
+	<string name="media_parking_prompt_contents">Dla bezpieczeństwa jazdy, należy zwrócić uwagę na prowadzenie pojazdu!</string>
+	<string name="no_video">Nie znaleziono plików wideo nadających się do odtworzenia</string>
+	<string name="refresh">Odśwież</string>
+	<string name="vdec">vdec</string>
+	<string name="fps">fps</string>
+	<string name="v_cache">v chowanego</string>
+	<string name="a_cache">okładka</string>
+	<string name="load_cost">obciążenie kosztem</string>
+	<string name="seek_cost">seek_cost</string>
+	<string name="seek_load_cost">seek_load_cost</string>
+	<string name="tcp_speed">tcp_speed</string>
+	<string name="bit_rate">bit_rate</string>
+</resources>

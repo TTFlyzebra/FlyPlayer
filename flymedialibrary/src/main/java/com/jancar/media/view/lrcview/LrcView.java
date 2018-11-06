@@ -177,7 +177,7 @@ public class LrcView extends View {
      * @param lrcFile 歌词文件
      */
     public void loadLrc(final File lrcFile) {
-        if(lrcFile==null||!lrcFile.exists()){
+        if (lrcFile == null || !lrcFile.exists()) {
             loadLrc("");
             return;
         }
@@ -193,7 +193,7 @@ public class LrcView extends View {
                         /**
                          * 歌词文件大于4M
                          */
-                        if(lrcFile.length()>4*1024*1024){
+                        if (lrcFile.length() > 4 * 1024 * 1024) {
                             return null;
                         }
                         String lrcStr = LrcFileRead.read(lrcFile);
@@ -497,11 +497,19 @@ public class LrcView extends View {
         invalidate();
     }
 
+    private int scrollLine = 0;
+
     /**
      * 滚动到某一行
      */
     private void scrollTo(int line) {
-        scrollTo(line, mAnimationDuration);
+        if (scrollLine + 1 != line) {
+            mOffset = getOffset(line);
+            invalidate();
+        } else {
+            scrollTo(line, mAnimationDuration);
+        }
+        scrollLine = line;
     }
 
     /**

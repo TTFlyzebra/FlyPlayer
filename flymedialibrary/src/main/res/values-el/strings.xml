@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">JancarPlayers</string>
+	<string name="giraffe_player_url_empty">Προσδιορίστε τη διεύθυνση στην οποία θα αναπαραχθεί το βίντεο.</string>
+	<string name="small_problem">Σφάλμα αποκωδικοποίησης βίντεο</string>
+	<string name="can_not_play">Δεν είναι δυνατή η αναπαραγωγή αυτού του βίντεο</string>
+	<string name="not_support">Η συσκευή αναπαραγωγής δεν υποστηρίζει αυτή τη συσκευή</string>
+	<string name="disk_list">Λίστα δίσκων</string>
+	<string name="play_list">Λίστα αναπαραγωγής</string>
+	<string name="file_list">Λίστα αρχείων</string>
+	<string name="photo_list">Λίστα εικόνων</string>
+	<string name="storage">Μνήμη</string>
+	<string name="single">Ενιαίος</string>
+	<string name="artist">Τραγουδιστής</string>
+	<string name="album">Άλμπουμ</string>
+	<string name="folder">Φάκελος</string>
+	<string name="storage_local">Τοπική αποθήκευση</string>
+	<string name="storage_usb">USB</string>
+	<string name="no_artist">Άγνωστο καλλιτέχνη</string>
+	<string name="no_album">Άγνωστο άλμπουμ</string>
+	<string name="no_album_start">Άγνωστο</string>
+	<string name="photo">Εικόνα</string>
+	<string name="video">Βίντεο</string>
+	<string name="music">Μουσική</string>
+	<string name="musicsumformat">(% d πρώτα)</string>
+	<string name="photosumformat">(% d)</string>
+	<string name="videosumformat">(% d set)</string>
+	<string name="lrc_label">Δεν υπάρχουν στίχοι</string>
+	<string name="music_scan1">Συσκευή σάρωσης ...</string>
+	<string name="music_scan2">Συνολικά% d τραγούδια</string>
+	<string name="video_scan2">Σύνολο% d βίντεο</string>
+	<string name="photo_scan2">% d εικόνες συνολικά</string>
+	<string name="media_parking_prompt_contents">Για την ασφάλεια οδήγησης, δώστε προσοχή στην οδήγηση!</string>
+	<string name="no_video">Δεν βρέθηκαν αρχεία βίντεο που να μπορούν να αναπαραχθούν</string>
+	<string name="refresh">Ανανέωση</string>
+	<string name="vdec">vdec</string>
+	<string name="fps">fps</string>
+	<string name="v_cache">v-επιδιώκουν</string>
+	<string name="a_cache">ένα κάλυμμα</string>
+	<string name="load_cost">κόστος φόρτωσης</string>
+	<string name="seek_cost">search_cost</string>
+	<string name="seek_load_cost">search_load_cost</string>
+	<string name="tcp_speed">tcp_speed</string>
+	<string name="bit_rate">bit_rate</string>
+</resources>

@@ -22,6 +22,7 @@ import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Music;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
+import com.jancar.media.utils.RtlTools;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.utils.SystemPropertiesProxy;
 import com.jancar.media.view.CircleImageView;
@@ -305,8 +306,9 @@ public class MusicActivity extends BaseActivity implements
     private void showLeftMenu(boolean flag) {
         isShowLeftMenu = flag;
         mHandler.removeCallbacks(hideLeftLayoutTask);
+        boolean isRtl = RtlTools.isLayoutRtl(leftLayout);
         leftLayout.animate().translationX(flag
-                ? -394 * DisplayUtils.getMetrices(this).widthPixels / 1024
+                ? isRtl ? 394 : -394 * DisplayUtils.getMetrices(this).widthPixels / 1024
                 : 0
         ).setDuration(300).start();
         if (flag) {
@@ -372,7 +374,7 @@ public class MusicActivity extends BaseActivity implements
                 tvArtist.setText("");
                 tvAlbum.setText("");
                 initSeekBar();
-                ivImage.setImageResource(R.drawable.media_music);
+                ivImage.setImageResource(R.drawable.media_music_iv02);
                 break;
         }
         play.setImageResource(musicPlayer.isPlaying() ? R.drawable.media_pause : R.drawable.media_play);
@@ -415,7 +417,7 @@ public class MusicActivity extends BaseActivity implements
             @Override
             public void run() {
                 if (defaultBitmap == null) {
-                    defaultBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.media_music);
+                    defaultBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.media_music_iv02);
                 }
                 loadID3Info();
             }

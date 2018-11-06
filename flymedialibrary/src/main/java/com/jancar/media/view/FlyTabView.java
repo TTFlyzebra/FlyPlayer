@@ -58,7 +58,7 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
 
                 for (int i = 0; i < textViews.length; i++) {
                     LayoutParams lp = new LayoutParams(childWidth, height);
-                    lp.leftMargin = i * childWidth;
+                    lp.setMarginStart(i * childWidth);
                     textViews[i] = new FlyTabTextView(context);
                     textViews[i].setGravity(Gravity.CENTER);
                     textViews[i].setText(titles[i]);

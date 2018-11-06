@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">JancarPlayers</string>
+	<string name="giraffe_player_url_empty">Kérjük, adja meg a címet, ahol a videót lejátssza.</string>
+	<string name="small_problem">Videó dekódolási hiba</string>
+	<string name="can_not_play">Nem sikerült lejátszani ezt a videót</string>
+	<string name="not_support">A lejátszó nem támogatja ezt a készüléket</string>
+	<string name="disk_list">Lemezlista</string>
+	<string name="play_list">Playlist</string>
+	<string name="file_list">Fájl lista</string>
+	<string name="photo_list">Képlista</string>
+	<string name="storage">emlékezet</string>
+	<string name="single">singles</string>
+	<string name="artist">énekes</string>
+	<string name="album">album</string>
+	<string name="folder">Folder</string>
+	<string name="storage_local">Helyi tárolás</string>
+	<string name="storage_usb">USB</string>
+	<string name="no_artist">Ismeretlen előadó</string>
+	<string name="no_album">Ismeretlen album</string>
+	<string name="no_album_start">ismeretlen</string>
+	<string name="photo">kép</string>
+	<string name="video">videó</string>
+	<string name="music">zene</string>
+	<string name="musicsumformat">(% d először)</string>
+	<string name="photosumformat">(% D fotók)</string>
+	<string name="videosumformat">(% d készlet)</string>
+	<string name="lrc_label">Nincs szöveg</string>
+	<string name="music_scan1">Szkennelő eszköz ...</string>
+	<string name="music_scan2">Összes% d dal</string>
+	<string name="video_scan2">Összesen% d videó</string>
+	<string name="photo_scan2">% d kép összesen</string>
+	<string name="media_parking_prompt_contents">A vezetés biztonsága érdekében figyeljen a vezetésre!</string>
+	<string name="no_video">Nem található lejátszható videofájlok</string>
+	<string name="refresh">felfrissít</string>
+	<string name="vdec">vdec</string>
+	<string name="fps">fps</string>
+	<string name="v_cache">v-keresik</string>
+	<string name="a_cache">egy fedél</string>
+	<string name="load_cost">terhelés költségű</string>
+	<string name="seek_cost">seek_cost</string>
+	<string name="seek_load_cost">seek_load_cost</string>
+	<string name="tcp_speed">tcp_speed</string>
+	<string name="bit_rate">bit_rate</string>
+</resources>

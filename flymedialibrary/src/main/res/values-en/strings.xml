@@ -24,7 +24,7 @@
     <string name="music">music</string>
     <string name="musicsumformat">(%d)</string>
     <string name="photosumformat">(%d)</string>
-    <string name="videosumformat"> (%d) </string>
+    <string name="videosumformat">(%d)</string>
     <string name="lrc_label">no lyrics</string>
     <string name="music_scan1">Scanning device...</string>
     <string name="music_scan2">shared %d songs</string>

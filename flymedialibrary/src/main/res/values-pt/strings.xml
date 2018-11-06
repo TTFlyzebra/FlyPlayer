@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">JancarPlayers</string>
+	<string name="giraffe_player_url_empty">Por favor especifique o endereço onde o vídeo será reproduzido.</string>
+	<string name="small_problem">Erro de decodificação de vídeo</string>
+	<string name="can_not_play">Não é possível reproduzir este vídeo</string>
+	<string name="not_support">O player não suporta este dispositivo</string>
+	<string name="disk_list">Lista de discos</string>
+	<string name="play_list">Playlist</string>
+	<string name="file_list">Lista de arquivos</string>
+	<string name="photo_list">Lista de fotos</string>
+	<string name="storage">Memória</string>
+	<string name="single">Solteiro</string>
+	<string name="artist">Cantor</string>
+	<string name="album">Álbum</string>
+	<string name="folder">Pasta</string>
+	<string name="storage_local">Armazenamento local</string>
+	<string name="storage_usb">USB</string>
+	<string name="no_artist">Artista desconhecido</string>
+	<string name="no_album">Álbum Desconhecido</string>
+	<string name="no_album_start">Desconhecido</string>
+	<string name="photo">Imagem</string>
+	<string name="video">Video</string>
+	<string name="music">Music</string>
+	<string name="musicsumformat">(%d primeiro)</string>
+	<string name="photosumformat">(%d)</string>
+	<string name="videosumformat">(%d set)</string>
+	<string name="lrc_label">Nenhuma letra</string>
+	<string name="music_scan1">Dispositivo de digitalização ...</string>
+	<string name="music_scan2">Total de %d músicas</string>
+	<string name="video_scan2">Total de %d video</string>
+	<string name="photo_scan2">%d imagens no total</string>
+	<string name="media_parking_prompt_contents">Para a segurança de condução, por favor, preste atenção à condução!</string>
+	<string name="no_video">Não foram encontrados arquivos de vídeo reproduzíveis</string>
+	<string name="refresh">Atualizar</string>
+	<string name="vdec">vdec</string>
+	<string name="fps">fps</string>
+	<string name="v_cache">v-seek</string>
+	<string name="a_cache">uma tampa</string>
+	<string name="load_cost">custo de carregamento</string>
+	<string name="seek_cost">seek_cost</string>
+	<string name="seek_load_cost">seek_load_cost</string>
+	<string name="tcp_speed">tcp_speed</string>
+	<string name="bit_rate">bit_rate</string>
+</resources>

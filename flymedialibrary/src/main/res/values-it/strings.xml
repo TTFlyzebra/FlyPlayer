@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">JancarPlayers</string>
+	<string name="giraffe_player_url_empty">Si prega di specificare l'indirizzo in cui verrà riprodotto il video.</string>
+	<string name="small_problem">Errore di decodifica video</string>
+	<string name="can_not_play">Impossibile riprodurre questo video</string>
+	<string name="not_support">Il lettore non supporta questo dispositivo</string>
+	<string name="disk_list">Elenco dei dischi</string>
+	<string name="play_list">playlist</string>
+	<string name="file_list">Elenco di file</string>
+	<string name="photo_list">Elenco di immagini</string>
+	<string name="storage">memoria</string>
+	<string name="single">single</string>
+	<string name="artist">cantante</string>
+	<string name="album">album</string>
+	<string name="folder">cartella</string>
+	<string name="storage_local">Archiviazione locale</string>
+	<string name="storage_usb">USB</string>
+	<string name="no_artist">Artista sconosciuto</string>
+	<string name="no_album">Album sconosciuto</string>
+	<string name="no_album_start">sconosciuto</string>
+	<string name="photo">immagine</string>
+	<string name="video">video</string>
+	<string name="music">musica</string>
+	<string name="musicsumformat">(%d prima)</string>
+	<string name="photosumformat">(%d foto)</string>
+	<string name="videosumformat">(%d impostato)</string>
+	<string name="lrc_label">Nessun testo</string>
+	<string name="music_scan1">Dispositivo di scansione ...</string>
+	<string name="music_scan2">Totale %d canzoni</string>
+	<string name="video_scan2">Totale video %d</string>
+	<string name="photo_scan2">%d immagini in totale</string>
+	<string name="media_parking_prompt_contents">Per la sicurezza di guida, si prega di prestare attenzione alla guida!</string>
+	<string name="no_video">Nessun file video riproducibile trovato</string>
+	<string name="refresh">rinfrescare</string>
+	<string name="vdec">vdec</string>
+	<string name="fps">fps</string>
+	<string name="v_cache">v-seek</string>
+	<string name="a_cache">un coperchio</string>
+	<string name="load_cost">Carico costo</string>
+	<string name="seek_cost">seek_cost</string>
+	<string name="seek_load_cost">seek_load_cost</string>
+	<string name="tcp_speed">tcp_speed</string>
+	<string name="bit_rate">bit_rate</string>
+</resources>

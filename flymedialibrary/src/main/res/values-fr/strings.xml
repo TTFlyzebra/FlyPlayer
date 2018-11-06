@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">JancarPlayers</string>
+	<string name="giraffe_player_url_empty">Veuillez spécifier l'adresse où la vidéo sera lue.</string>
+	<string name="small_problem">Erreur de décodage vidéo</string>
+	<string name="can_not_play">Impossible de lire cette vidéo</string>
+	<string name="not_support">Le lecteur ne supporte pas cet appareil</string>
+	<string name="disk_list">Liste de disques</string>
+	<string name="play_list">Playlist</string>
+	<string name="file_list">Liste de fichiers</string>
+	<string name="photo_list">Liste des images</string>
+	<string name="storage">La mémoire</string>
+	<string name="single">Single</string>
+	<string name="artist">Chanteur</string>
+	<string name="album">Album</string>
+	<string name="folder">Dossier</string>
+	<string name="storage_local">Stockage local</string>
+	<string name="storage_usb">USB</string>
+	<string name="no_artist">Artiste inconnu</string>
+	<string name="no_album">Album inconnu</string>
+	<string name="no_album_start">Inconnu</string>
+	<string name="photo">Photo</string>
+	<string name="video">Vidéo</string>
+	<string name="music">Musique</string>
+	<string name="musicsumformat">(%d en premier)</string>
+	<string name="photosumformat">(%d)</string>
+	<string name="videosumformat">(%d set)</string>
+	<string name="lrc_label">Pas de paroles</string>
+	<string name="music_scan1">Dispositif de numérisation ...</string>
+	<string name="music_scan2">Total %d chansons</string>
+	<string name="video_scan2">Total %d vidéo</string>
+	<string name="photo_scan2">%d images au total</string>
+	<string name="media_parking_prompt_contents">Pour la sécurité de conduite, veuillez faire attention à la conduite!</string>
+	<string name="no_video">Aucun fichier vidéo lisible trouvé</string>
+	<string name="refresh">Rafraîchir</string>
+	<string name="vdec">vdec</string>
+	<string name="fps">fps</string>
+	<string name="v_cache">v-cache</string>
+	<string name="a_cache">a-cache</string>
+	<string name="load_cost">coût de chargement</string>
+	<string name="seek_cost">seek_cost</string>
+	<string name="seek_load_cost">seek_load_cost</string>
+	<string name="tcp_speed">tcp_speed</string>
+	<string name="bit_rate">bit_rate</string>
+</resources>

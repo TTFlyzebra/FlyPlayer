@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">JancarPlayers</string>
+	<string name="giraffe_player_url_empty">يرجى تحديد العنوان الذي سيتم فيه تشغيل الفيديو.</string>
+	<string name="small_problem">خطأ فك تشفير الفيديو</string>
+	<string name="can_not_play">غير قادر على تشغيل هذا الفيديو</string>
+	<string name="not_support">لا يدعم المشغل هذا الجهاز</string>
+	<string name="disk_list">قائمة القرص</string>
+	<string name="play_list">قائمة التشغيل</string>
+	<string name="file_list">قائمة الملفات</string>
+	<string name="photo_list">قائمة الصور</string>
+	<string name="storage">ذاكرة</string>
+	<string name="single">الفردي</string>
+	<string name="artist">مطرب</string>
+	<string name="album">الألبوم</string>
+	<string name="folder">ملف</string>
+	<string name="storage_local">التخزين المحلي</string>
+	<string name="storage_usb">يو اس بي</string>
+	<string name="no_artist">فنان غير معروف</string>
+	<string name="no_album">ألبوم غير معروف</string>
+	<string name="no_album_start">غير معروف</string>
+	<string name="photo">صور</string>
+	<string name="video">فيديو</string>
+	<string name="music">موسيقى</string>
+	<string name="musicsumformat">(٪ d أولاً)</string>
+	<string name="photosumformat">(٪ الصور D)</string>
+	<string name="videosumformat">(٪ d مجموعة)</string>
+	<string name="lrc_label">لا كلمات</string>
+	<string name="music_scan1">جارٍ فحص الجهاز ...</string>
+	<string name="music_scan2">إجمالي٪ d أغانٍ</string>
+	<string name="video_scan2">إجمالي٪ d مقطع فيديو</string>
+	<string name="photo_scan2">٪ d صور في المجموع</string>
+	<string name="media_parking_prompt_contents">لقيادة السلامة ، يرجى الانتباه إلى القيادة!</string>
+	<string name="no_video">لم يتم العثور على ملفات فيديو قابلة للتشغيل</string>
+	<string name="refresh">تحديث</string>
+	<string name="vdec">vdec</string>
+	<string name="fps">إطارا في الثانية</string>
+	<string name="v_cache">الخامس السعي</string>
+	<string name="a_cache">غطاء</string>
+	<string name="load_cost">تكلفة التحميل</string>
+	<string name="seek_cost">seek_cost</string>
+	<string name="seek_load_cost">seek_load_cost</string>
+	<string name="tcp_speed">tcp_speed</string>
+	<string name="bit_rate">bit_rate</string>
+</resources>

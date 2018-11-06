@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">JancarPlayers</string>
+	<string name="giraffe_player_url_empty">Specificați adresa unde va fi redat videoclipul.</string>
+	<string name="small_problem">Eroare de decodare video</string>
+	<string name="can_not_play">Nu se poate reda acest videoclip</string>
+	<string name="not_support">Playerul nu acceptă acest dispozitiv</string>
+	<string name="disk_list">Lista de discuri</string>
+	<string name="play_list">Listă de redare</string>
+	<string name="file_list">Listă fișiere</string>
+	<string name="photo_list">Listă de imagini</string>
+	<string name="storage">memorie</string>
+	<string name="single">Single</string>
+	<string name="artist">cântăreț</string>
+	<string name="album">album</string>
+	<string name="folder">dosar</string>
+	<string name="storage_local">Depozit local</string>
+	<string name="storage_usb">USB</string>
+	<string name="no_artist">Artist necunoscut</string>
+	<string name="no_album">Album necunoscut</string>
+	<string name="no_album_start">necunoscut</string>
+	<string name="photo">imagine</string>
+	<string name="video">video</string>
+	<string name="music">muzică</string>
+	<string name="musicsumformat">(% d primul)</string>
+	<string name="photosumformat">(% Fotografii D)</string>
+	<string name="videosumformat">(% d set)</string>
+	<string name="lrc_label">Nu există versuri</string>
+	<string name="music_scan1">Dispozitiv de scanare ...</string>
+	<string name="music_scan2">Total cântece% d</string>
+	<string name="video_scan2">Un total de% d set film</string>
+	<string name="photo_scan2">% d imagini în total</string>
+	<string name="media_parking_prompt_contents">Pentru siguranța conducerii, vă rugăm să acordați atenție conducerii!</string>
+	<string name="no_video">Nu au fost găsite fișiere video care pot fi redate</string>
+	<string name="refresh">reîmprospăta</string>
+	<string name="vdec">vDEC</string>
+	<string name="fps">fps</string>
+	<string name="v_cache">v-ați ascunselea</string>
+	<string name="a_cache">un capac</string>
+	<string name="load_cost">încărcare-cost</string>
+	<string name="seek_cost">seek_cost</string>
+	<string name="seek_load_cost">seek_load_cost</string>
+	<string name="tcp_speed">tcp_speed</string>
+	<string name="bit_rate">bit_rate</string>
+</resources>

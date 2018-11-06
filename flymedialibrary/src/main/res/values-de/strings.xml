@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">JancarPlayers</string>
+	<string name="giraffe_player_url_empty">Bitte geben Sie die Adresse an, unter der das Video abgespielt wird.</string>
+	<string name="small_problem">Videodekodierungsfehler</string>
+	<string name="can_not_play">Dieses Video kann nicht abgespielt werden</string>
+	<string name="not_support">Der Player unterstützt dieses Gerät nicht</string>
+	<string name="disk_list">Festplattenliste</string>
+	<string name="play_list">Wiedergabeliste</string>
+	<string name="file_list">Dateiliste</string>
+	<string name="photo_list">Bilderliste</string>
+	<string name="storage">Speicher</string>
+	<string name="single">Single</string>
+	<string name="artist">Sänger</string>
+	<string name="album">Album</string>
+	<string name="folder">Ordner</string>
+	<string name="storage_local">Lokaler Speicher</string>
+	<string name="storage_usb">USB</string>
+	<string name="no_artist">Unbekannter Künstler</string>
+	<string name="no_album">Unbekanntes Album</string>
+	<string name="no_album_start">Unbekannt</string>
+	<string name="photo">Bild</string>
+	<string name="video">Video</string>
+	<string name="music">Musik</string>
+	<string name="musicsumformat">(% d zuerst)</string>
+	<string name="photosumformat">(% d)</string>
+	<string name="videosumformat">(% d gesetzt)</string>
+	<string name="lrc_label">Keine texte</string>
+	<string name="music_scan1">Scangerät ...</string>
+	<string name="music_scan2">% D der Songs insgesamt</string>
+	<string name="video_scan2">Gesamt% d Video</string>
+	<string name="photo_scan2">% d Bilder insgesamt</string>
+	<string name="media_parking_prompt_contents">Bitte achten Sie auf die Fahrsicherheit!</string>
+	<string name="no_video">Keine abspielbaren Videodateien gefunden</string>
+	<string name="refresh">Aktualisieren</string>
+	<string name="vdec">Vdec</string>
+	<string name="fps">fps</string>
+	<string name="v_cache">v-seek</string>
+	<string name="a_cache">eine Abdeckung</string>
+	<string name="load_cost">Ladekosten</string>
+	<string name="seek_cost">seek_cost</string>
+	<string name="seek_load_cost">seek_load_cost</string>
+	<string name="tcp_speed">tcp_speed</string>
+	<string name="bit_rate">bit_rate</string>
+</resources>

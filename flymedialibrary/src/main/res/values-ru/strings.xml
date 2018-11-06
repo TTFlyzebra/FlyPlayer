@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">JancarPlayers</string>
+	<string name="giraffe_player_url_empty">Укажите адрес, в котором будет воспроизводиться видео.</string>
+	<string name="small_problem">Ошибка декодирования видео</string>
+	<string name="can_not_play">Невозможно воспроизвести это видео</string>
+	<string name="not_support">Плеер не поддерживает это устройство</string>
+	<string name="disk_list">Список дисков</string>
+	<string name="play_list">Playlist</string>
+	<string name="file_list">Список файлов</string>
+	<string name="photo_list">Список иллюстраций</string>
+	<string name="storage">память</string>
+	<string name="single">одиночный разряд</string>
+	<string name="artist">певец</string>
+	<string name="album">альбом</string>
+	<string name="folder">скоросшиватель</string>
+	<string name="storage_local">Местное хранилище</string>
+	<string name="storage_usb">USB</string>
+	<string name="no_artist">Неизвестный художник</string>
+	<string name="no_album">Неизвестный альбом</string>
+	<string name="no_album_start">неизвестный</string>
+	<string name="photo">изображение</string>
+	<string name="video">видео</string>
+	<string name="music">музыка</string>
+	<string name="musicsumformat">(сначала%d)</string>
+	<string name="photosumformat">(%d фото)</string>
+	<string name="videosumformat">(%d)</string>
+	<string name="lrc_label">Нет текста</string>
+	<string name="music_scan1">Сканирующее устройство ...</string>
+	<string name="music_scan2">Всего %d песен</string>
+	<string name="video_scan2">Всего %d видео</string>
+	<string name="photo_scan2">Всего изображений %d</string>
+	<string name="media_parking_prompt_contents">Для безопасности вождения, пожалуйста, обратите внимание на вождение!</string>
+	<string name="no_video">Нет воспроизводимых видеофайлов</string>
+	<string name="refresh">обновление</string>
+	<string name="vdec">vdec</string>
+	<string name="fps">кадров в секунду</string>
+	<string name="v_cache">v прятки</string>
+	<string name="a_cache">покрытие</string>
+	<string name="load_cost">нагрузки стоимость</string>
+	<string name="seek_cost">seek_cost</string>
+	<string name="seek_load_cost">seek_load_cost</string>
+	<string name="tcp_speed">tcp_speed</string>
+	<string name="bit_rate">bit_rate</string>
+</resources>
