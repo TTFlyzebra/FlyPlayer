@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">JancarPlayers</string>
+	<string name="giraffe_player_url_empty">Por favor, especifique la dirección donde se reproducirá el video.</string>
+	<string name="small_problem">Error de decodificación de video</string>
+	<string name="can_not_play">No se puede reproducir este video</string>
+	<string name="not_support">El reproductor no es compatible con este dispositivo.</string>
+	<string name="disk_list">Lista de discos</string>
+	<string name="play_list">Playlist</string>
+	<string name="file_list">Lista de archivos</string>
+	<string name="photo_list">Lista de imágenes</string>
+	<string name="storage">Memoria</string>
+	<string name="single">Soltero</string>
+	<string name="artist">Cantante</string>
+	<string name="album">Album</string>
+	<string name="folder">Carpeta</string>
+	<string name="storage_local">Almacenamiento local</string>
+	<string name="storage_usb">USB</string>
+	<string name="no_artist">Artista desconocido</string>
+	<string name="no_album">Album desconocido</string>
+	<string name="no_album_start">Desconocido</string>
+	<string name="photo">La imagen</string>
+	<string name="video">El video</string>
+	<string name="music">La musica</string>
+	<string name="musicsumformat">(% d primero)</string>
+	<string name="photosumformat">(% d)</string>
+	<string name="videosumformat">(% d set)</string>
+	<string name="lrc_label">Sin letras</string>
+	<string name="music_scan1">Dispositivo de escaneo ...</string>
+	<string name="music_scan2">Total de% d canciones</string>
+	<string name="video_scan2">Total% d video</string>
+	<string name="photo_scan2">% d imágenes en total</string>
+	<string name="media_parking_prompt_contents">Para la seguridad de conducción, preste atención a la conducción!</string>
+	<string name="no_video">No se encontraron archivos de video reproducibles</string>
+	<string name="refresh">Refrescar</string>
+	<string name="vdec">vdec</string>
+	<string name="fps">fps</string>
+	<string name="v_cache">v-seek</string>
+	<string name="a_cache">una cubierta</string>
+	<string name="load_cost">costo de carga</string>
+	<string name="seek_cost">buscar_costar</string>
+	<string name="seek_load_cost">seek_load_cost</string>
+	<string name="tcp_speed">tcp_speed</string>
+	<string name="bit_rate">bit_rate</string>
+</resources>
