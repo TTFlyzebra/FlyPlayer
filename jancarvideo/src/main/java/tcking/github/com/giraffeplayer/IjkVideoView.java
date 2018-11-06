@@ -75,6 +75,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
 
     private long mSeekStartTime = 0;
     private long mSeekEndTime = 0;
+    private long HEVC_DELAY = 500;
 
     public int getCurrentState() {
         return mCurrentState;
@@ -471,20 +472,23 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
             } catch (Exception e) {
                 FlyLog.e(e.toString());
             }
-            if(flag){
+            if (flag) {
                 if (seekToPosition != 0) {
                     seekTo((int) seekToPosition);
                 }
-            }else{
-                mHandler.removeCallbacksAndMessages(null);
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (seekToPosition != 0) {
+            } else {
+                if (seekToPosition != 0) {
+                    mMediaPlayer.setVolume(1f, 1f);
+                    mHandler.removeCallbacksAndMessages(null);
+                    mMediaPlayer.setVolume(0f, 0f);
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mMediaPlayer.setVolume(1f, 1f);
                             seekTo((int) seekToPosition);
                         }
-                    }
-                }, 100);
+                    }, HEVC_DELAY);
+                }
             }
             if (mVideoWidth != 0 && mVideoHeight != 0) {
                 //Log.i("@@@@", "video size: " + mVideoWidth +"/"+ mVideoHeight);
@@ -695,13 +699,16 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
                     if (flag) {
                         seekTo((int) mSeekWhenPrepared);
                     } else {
+                        mMediaPlayer.setVolume(1f, 1f);
                         mHandler.removeCallbacksAndMessages(null);
+                        mMediaPlayer.setVolume(0f, 0f);
                         mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
+                                mMediaPlayer.setVolume(1f, 1f);
                                 seekTo((int) mSeekWhenPrepared);
                             }
-                        }, 100);
+                        }, HEVC_DELAY);
                     }
                 }
                 start();
