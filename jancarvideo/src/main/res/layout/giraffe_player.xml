@@ -225,6 +225,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/rl_01"
+                android:layoutDirection="ltr"
                 android:gravity="center">
 
                 <ImageView
@@ -277,6 +278,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="-399px"
             android:layout_marginBottom="138px"
+            android:visibility="invisible"
             android:orientation="vertical">
 
             <View
@@ -286,7 +288,7 @@
 
             <com.jancar.media.view.FlyTabView
                 android:id="@+id/app_video_tabview"
-                android:layout_width="match_parent"
+                android:layout_width="400px"
                 android:layout_height="52px"
                 android:layout_alignParentTop="true"
                 android:background="@drawable/media_list_header" />

@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 
 import com.jancar.media.R;
 import com.jancar.media.utils.FlyLog;
+import com.jancar.media.utils.RtlTools;
 
 import java.util.List;
 
@@ -109,13 +110,17 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
 
     private void setSelectItem(int duration) {
         try {
-            if(focusView!=null&&textViews!=null) {
-                focusView.animate().translationX(childWidth * focusPos).setDuration(duration).start();
+            if (focusView != null && textViews != null) {
+                int x = childWidth * focusPos;
+                if (RtlTools.isLayoutRtl(this)) {
+                    x = -x;
+                }
+                focusView.animate().translationX(x).setDuration(duration).start();
                 for (int i = 0; i < textViews.length; i++) {
                     textViews[i].setEnabled(i != focusPos);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
     }

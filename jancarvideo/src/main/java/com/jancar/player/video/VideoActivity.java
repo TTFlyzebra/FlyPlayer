@@ -18,6 +18,7 @@ import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Video;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
+import com.jancar.media.utils.RtlTools;
 import com.jancar.media.utils.SystemPropertiesProxy;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
@@ -296,8 +297,11 @@ public class VideoActivity extends BaseActivity implements
 
     private void showLeftMenu(boolean flag) {
         leftLayout.setVisibility(View.VISIBLE);
+        boolean isRtl = RtlTools.isLayoutRtl(leftLayout);
         leftLayout.animate()
-                .translationX(flag ? -394 * DisplayUtils.getMetrices(this).widthPixels / 1024 : 0)
+                .translationX(flag ?
+                        isRtl ? 394 : -394 * DisplayUtils.getMetrices(this).widthPixels / 1024
+                        : 0)
                 .setDuration(300)
                 .setListener(new Animator.AnimatorListener() {
                     @Override
@@ -306,8 +310,9 @@ public class VideoActivity extends BaseActivity implements
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        if (leftLayout.getX() > ((1024 - 394) * DisplayUtils.getMetrices(VideoActivity.this).widthPixels / 1024)) {
-                            leftLayout.setVisibility(View.GONE);
+                        if (leftLayout.getX() > ((1024 - 394) * DisplayUtils.getMetrices(VideoActivity.this).widthPixels / 1024)
+                                || leftLayout.getX() < (-394 * DisplayUtils.getMetrices(VideoActivity.this).widthPixels / 1024)) {
+                            leftLayout.setVisibility(View.INVISIBLE);
                         } else {
                             leftLayout.setVisibility(View.VISIBLE);
                         }

@@ -19,6 +19,7 @@ import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Image;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
+import com.jancar.media.utils.RtlTools;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
 import com.jancar.media.view.TouchEventRelativeLayout;
@@ -154,8 +155,8 @@ public class PhotoActivity extends BaseActivity implements
 
     @Override
     public void notifyPathChange(String path) {
-        FlyLog.d("notifyPathChange path=%s",path);
-        if(isStop) return;
+        FlyLog.d("notifyPathChange path=%s", path);
+        if (isStop) return;
         isScan = true;
         imageList.clear();
         currentItem = 0;
@@ -167,7 +168,7 @@ public class PhotoActivity extends BaseActivity implements
     @Override
     public void imageUrlList(List<Image> imageUrlList) {
         FlyLog.d("get Image size=%d", imageUrlList == null ? 0 : imageUrlList.size());
-        if(isStop) return;
+        if (isStop) return;
         if (imageUrlList != null) {
 //            imageList.clear();
             imageList.addAll(imageUrlList);
@@ -185,8 +186,8 @@ public class PhotoActivity extends BaseActivity implements
 
     @Override
     public void scanFinish(String path) {
-        FlyLog.d("scanFinish path=%s",path);
-        if(isStop) return;
+        FlyLog.d("scanFinish path=%s", path);
+        if (isStop) return;
         isScan = false;
         if (imageList == null || imageList.isEmpty()) {
             replaceFragment(fmName[0], R.id.ac_replace_fragment);
@@ -278,8 +279,10 @@ public class PhotoActivity extends BaseActivity implements
 
     private void showLeftMenu(boolean flag) {
         leftLayout.setVisibility(View.VISIBLE);
+        boolean isRtl = RtlTools.isLayoutRtl(leftLayout);
         leftLayout.animate()
-                .translationX(flag ? -394 * DisplayUtils.getMetrices(this).widthPixels / 1024
+                .translationX(flag ?
+                        isRtl ? 394 : -394 * DisplayUtils.getMetrices(this).widthPixels / 1024
                         : 0)
                 .setDuration(300)
                 .setListener(new Animator.AnimatorListener() {
@@ -290,8 +293,9 @@ public class PhotoActivity extends BaseActivity implements
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        if (leftLayout.getX() > ((1024 - 394) * DisplayUtils.getMetrices(PhotoActivity.this).widthPixels / 1024)) {
-                            leftLayout.setVisibility(View.GONE);
+                        if (leftLayout.getX() > ((1024 - 394) * DisplayUtils.getMetrices(PhotoActivity.this).widthPixels / 1024)
+                                || leftLayout.getX() < (-394 * DisplayUtils.getMetrices(PhotoActivity.this).widthPixels / 1024)) {
+                            leftLayout.setVisibility(View.INVISIBLE);
                         } else {
                             leftLayout.setVisibility(View.VISIBLE);
                         }
@@ -356,7 +360,7 @@ public class PhotoActivity extends BaseActivity implements
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            PhotoView photoView =  (PhotoView) object;
+            PhotoView photoView = (PhotoView) object;
             photoView.recycle();
             viewSet.add(photoView);
             container.removeView(photoView);
