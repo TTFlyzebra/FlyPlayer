@@ -8,7 +8,7 @@ import android.util.Log;
 public class FlyLog {
     public static final String TAG = "com.jancar.plays";
     public static String[] filter = {
-//            "FlyTabView",
+            "FlyTabView",
             "AnimationImageView"
     };
 
