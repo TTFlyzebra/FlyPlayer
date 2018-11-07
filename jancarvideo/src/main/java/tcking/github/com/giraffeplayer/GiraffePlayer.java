@@ -319,6 +319,14 @@ public class GiraffePlayer {
 //                        Toaster.show("download rate:" + extra);
                         break;
                     case IMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
+                        int width = mp.getVideoWidth();
+                        int height = mp.getVideoHeight();
+                        if (width > 2880 && height > 1620) {
+                            FlyLog.e("no support video, width=%d,height=%d",width,height);
+                            statusChange(STATUS_ERROR);
+                            mp.stop();
+                            return false;
+                        }
                         statusChange(STATUS_PLAYING);
                         break;
                 }
