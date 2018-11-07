@@ -572,7 +572,9 @@ public class PhotoViewAttacher implements View.OnTouchListener,
     }
 
     private void setImageViewMatrix(Matrix matrix) {
+        FlyLog.d("setImageViewMatrix matrix="+matrix);
         mImageView.setImageMatrix(matrix);
+        mImageView.requestLayout();
 
         // Call MatrixChangedListener if needed
         if (mMatrixChangeListener != null) {
@@ -682,6 +684,7 @@ public class PhotoViewAttacher implements View.OnTouchListener,
 
         final RectF rect = getDisplayRect(getDrawMatrix());
         if (rect == null) {
+            FlyLog.d("checkMatrixBounds false");
             return false;
         }
 
@@ -733,6 +736,7 @@ public class PhotoViewAttacher implements View.OnTouchListener,
 
         // Finally actually translate the matrix
         mSuppMatrix.postTranslate(deltaX, deltaY);
+        FlyLog.d("checkMatrixBounds true");
         return true;
     }
 

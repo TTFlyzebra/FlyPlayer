@@ -3,14 +3,17 @@ package com.jancar.mediascan.service;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 
 import com.jancar.JancarManager;
@@ -43,6 +46,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static android.provider.MediaStore.Images.Media.query;
+
 public class FlyMediaService extends Service {
     private static final Executor executor = Executors.newFixedThreadPool(1);
     private static final HandlerThread sWorkerThread = new HandlerThread("notify-thread");
@@ -61,28 +66,24 @@ public class FlyMediaService extends Service {
     private static AtomicBoolean isNotifyVideo = new AtomicBoolean(false);
     private static AtomicBoolean isNotifyMusic = new AtomicBoolean(false);
     private static AtomicBoolean isNotifyImage = new AtomicBoolean(false);
-    private static List<Music> mMusicList = Collections.synchronizedList(new ArrayList<Music>());
-    private static List<Music> mMusicID3List = Collections.synchronizedList(new ArrayList<Music>());
-    private static List<Video> mVideoList = Collections.synchronizedList(new ArrayList<Video>());
-    private static List<Image> mImageList = Collections.synchronizedList(new ArrayList<Image>());
+    private static final List<Music> mMusicList = Collections.synchronizedList(new ArrayList<Music>());
+    private static final List<Music> mMusicID3List = Collections.synchronizedList(new ArrayList<Music>());
+    private static final List<Video> mVideoList = Collections.synchronizedList(new ArrayList<Video>());
+    private static final List<Image> mImageList = Collections.synchronizedList(new ArrayList<Image>());
     private static AtomicInteger mMusicStart = new AtomicInteger(0);
-    private static AtomicInteger mMusicID3Start = new AtomicInteger(0);
     private static AtomicInteger mVideoStart = new AtomicInteger(0);
     private static AtomicInteger mImageStart = new AtomicInteger(0);
 
     private static AtomicInteger mMusicEnd = new AtomicInteger(0);
-    private static AtomicInteger mMusicID3End = new AtomicInteger(0);
     private static AtomicInteger mVideoEnd = new AtomicInteger(0);
     private static AtomicInteger mImageEnd = new AtomicInteger(0);
 
     private static RemoteCallbackList<Notify> mNotifys = new RemoteCallbackList<>();
     private MusicDoubleCache mDoubleMusicCache;
     private ListFileDiskCache mListDiskCache;
-    private static String localPaths = "T";
     private static final String DEF_PATH = "/storage/emulated/0";
     private static String currentPath = "";
     private static final int UPDATE_DENSITY = 100;
-    private static final int ID3_UPDATE_DENSITY = 50;
     private static final int THREAD_WAIT_TIME = 100;
     private long startScanTime;
     private int tryCount = 0;
@@ -347,7 +348,7 @@ public class FlyMediaService extends Service {
                         mListDiskCache.put(path + "video", GsonUtils.obj2Json(mVideoList));
                     }
                     synchronized (mMusicList) {
-                        mListDiskCache.put(path + "player.music", GsonUtils.obj2Json(mMusicList));
+                        mListDiskCache.put(path + "music", GsonUtils.obj2Json(mMusicList));
                     }
                     synchronized (mImageList) {
                         mListDiskCache.put(path + "image", GsonUtils.obj2Json(mImageList));
@@ -357,13 +358,11 @@ public class FlyMediaService extends Service {
                     getMusicID3Info();
 
                     if (!isStoped.get()) {
-                        final int start = mMusicID3Start.get();
-                        final int end = Math.min(start + ID3_UPDATE_DENSITY, mMusicID3List.size());
                         sWorker.post(new Runnable() {
                             @Override
                             public void run() {
-                                synchronized (mImageList) {
-                                    notifyMusicID3Listener(start, end);
+                                synchronized (mMusicID3List) {
+                                    notifyID3MusicListener(mMusicID3List);
                                 }
                             }
                         });
@@ -396,12 +395,10 @@ public class FlyMediaService extends Service {
         mVideoStart.set(0);
         mMusicStart.set(0);
         mImageStart.set(0);
-        mMusicID3Start.set(0);
 
         mVideoEnd.set(0);
         mMusicEnd.set(0);
         mImageEnd.set(0);
-        mMusicID3End.set(0);
     }
 
     private void removePath(String path) {
@@ -859,6 +856,7 @@ public class FlyMediaService extends Service {
         synchronized (mMusicID3List) {
             mMusicID3List.clear();
         }
+
         for (int i = 0; i < mMusicList.size(); i++) {
             try {
                 if (isStoped.get()) {
@@ -903,24 +901,6 @@ public class FlyMediaService extends Service {
                 }
                 synchronized (mMusicID3List) {
                     mMusicID3List.add(music);
-                    if (!isStoped.get()) {
-                        if ((mMusicID3List.size() % ID3_UPDATE_DENSITY == 1)) {
-                            final int start = mMusicID3Start.get();
-                            final int end = Math.min(start + ID3_UPDATE_DENSITY, mMusicID3List.size());
-                            sWorker.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    synchronized (mImageList) {
-                                        notifyMusicID3Listener(start, end);
-                                    }
-                                }
-                            });
-                            mMusicID3Start.set(mMusicID3List.size());
-                        }
-                    } else {
-                        sWorker.removeCallbacksAndMessages(null);
-                        FlyLog.d("stop scan in getMusicID3Info");
-                    }
                 }
             } catch (Exception e) {
                 FlyLog.e(e.toString());
@@ -952,6 +932,7 @@ public class FlyMediaService extends Service {
     }
 
     private JacState.ePowerState mEState = JacState.ePowerState.ePowerOn;
+
     public class JacSystemStates extends JacState {
         @Override
         public void OnPower(ePowerState eState) {
@@ -971,5 +952,21 @@ public class FlyMediaService extends Service {
             }
         }
     }
+
+    public static final boolean isMediaScannerScanning(final ContentResolver cr) {
+        boolean result = false;
+        final Cursor cursor = query(cr, MediaStore.getMediaScannerUri(), new String[]{MediaStore.MEDIA_SCANNER_VOLUME}, null,
+                null, null);
+        if (cursor != null) {
+            if (cursor.getCount() == 1) {
+                cursor.moveToFirst();
+                result = "external".equals(cursor.getString(0));
+            }
+            cursor.close();
+        }
+        FlyLog.i("====isMediaScannerScanning======", "===result====" + result);
+        return result;
+    }
+
 
 }
