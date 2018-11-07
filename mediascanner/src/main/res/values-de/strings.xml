@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Dienst zum Scannen von Medien</string>
+	<string name="no_album">Unbekanntes Album</string>
+	<string name="no_artist">Unbekannter Künstler</string>
+</resources>

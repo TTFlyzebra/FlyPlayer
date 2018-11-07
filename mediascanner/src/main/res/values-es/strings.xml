@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Servicio de escaneo de medios</string>
+	<string name="no_album">Album desconocido</string>
+	<string name="no_artist">Artista desconocido</string>
+</resources>

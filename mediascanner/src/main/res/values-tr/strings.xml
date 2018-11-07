@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Medya tarama servisi</string>
+	<string name="no_album">Bilinmeyen albüm</string>
+	<string name="no_artist">Bilinmeyen sanatçı</string>
+</resources>

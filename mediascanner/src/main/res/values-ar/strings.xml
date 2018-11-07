@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">خدمة فحص الوسائط</string>
+	<string name="no_album">ألبوم غير معروف</string>
+	<string name="no_artist">فنان غير معروف</string>
+</resources>

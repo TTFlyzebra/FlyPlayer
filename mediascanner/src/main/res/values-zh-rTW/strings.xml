@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MediaScanner</string>
-    <string name="no_album">未知專輯</string>
-    <string name="no_artist">未知藝術家</string>
+	<string name="app_name">媒體掃描服務</string>
+	<string name="no_album">未知專輯</string>
+	<string name="no_artist">未知藝術家</string>
 </resources>

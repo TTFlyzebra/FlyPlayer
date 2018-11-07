@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Service de numérisation multimédia</string>
+	<string name="no_album">Album inconnu</string>
+	<string name="no_artist">Artiste inconnu</string>
+</resources>

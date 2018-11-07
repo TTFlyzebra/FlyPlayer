@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MediaScanner</string>
-    <string name="no_album">unknown album </string>
-    <string name="no_artist">unknown artist </string>
+	<string name="app_name">Media scanning service</string>
+	<string name="no_album">Unknown album</string>
+	<string name="no_artist">unknown artist</string>
 </resources>

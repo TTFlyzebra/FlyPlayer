@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Media szkennelési szolgáltatás</string>
+	<string name="no_album">Ismeretlen album</string>
+	<string name="no_artist">Ismeretlen előadó</string>
+</resources>

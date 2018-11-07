@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">บริการสแกนสื่อ</string>
+	<string name="no_album">อัลบั้มที่ไม่รู้จัก</string>
+	<string name="no_artist">ศิลปินที่ไม่รู้จัก</string>
+</resources>
