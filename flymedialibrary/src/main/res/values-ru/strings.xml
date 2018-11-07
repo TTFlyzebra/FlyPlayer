@@ -22,7 +22,7 @@
 	<string name="photo">изображение</string>
 	<string name="video">видео</string>
 	<string name="music">музыка</string>
-	<string name="musicsumformat">(сначала%d)</string>
+	<string name="musicsumformat">(%d сначала)</string>
 	<string name="photosumformat">(%d фото)</string>
 	<string name="videosumformat">(%d)</string>
 	<string name="lrc_label">Нет текста</string>
