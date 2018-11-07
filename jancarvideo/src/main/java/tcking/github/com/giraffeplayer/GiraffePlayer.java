@@ -327,21 +327,21 @@ public class GiraffePlayer {
                             mp.stop();
                             return false;
                         }
+                        if (isShowTestInfo) {
+                            ITrackInfo[] iTrackInfos = ijkVideoView.getTrackInfo();
+                            String viewInfo = "";
+                            for (ITrackInfo iTrackInfo : iTrackInfos) {
+                                viewInfo = viewInfo + iTrackInfo.getInfoInline() + "\n";
+                            }
+                            if (!TextUtils.isEmpty(viewInfo)) {
+                                viewInfo = viewInfo.substring(0, viewInfo.length() - 1);
+                                mVideoInfoText.setText(viewInfo);
+                            }
+                        }
+                        onInfoListener.onInfo(what, extra);
                         statusChange(STATUS_PLAYING);
                         break;
                 }
-                if (isShowTestInfo) {
-                    ITrackInfo[] iTrackInfos = ijkVideoView.getTrackInfo();
-                    String viewInfo = "";
-                    for (ITrackInfo iTrackInfo : iTrackInfos) {
-                        viewInfo = viewInfo + iTrackInfo.getInfoInline() + "\n";
-                    }
-                    if (!TextUtils.isEmpty(viewInfo)) {
-                        viewInfo = viewInfo.substring(0, viewInfo.length() - 1);
-                        mVideoInfoText.setText(viewInfo);
-                    }
-                }
-                onInfoListener.onInfo(what, extra);
                 return false;
             }
         });
