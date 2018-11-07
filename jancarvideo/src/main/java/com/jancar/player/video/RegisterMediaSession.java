@@ -1,4 +1,4 @@
-package com.jancar.player.music.model.musicplayer;
+package com.jancar.player.video;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,14 +10,16 @@ import android.view.KeyEvent;
 
 import com.jancar.media.utils.FlyLog;
 
-public class RegisterMusicSession {
+import tcking.github.com.giraffeplayer.GiraffePlayer;
+
+public class RegisterMediaSession {
     private MediaSession mMediaSession;
     private Context context;
-    private IMusicPlayer musicPlayer;
+    private GiraffePlayer mediaPlayer;
 
-    public RegisterMusicSession(Context context, IMusicPlayer bluetoothManager) {
+    public RegisterMediaSession(Context context, GiraffePlayer giraffePlayer) {
         this.context = context;
-        this.musicPlayer = bluetoothManager;
+        this.mediaPlayer = giraffePlayer;
         setupMediaSession();
     }
 
@@ -83,21 +85,21 @@ public class RegisterMusicSession {
         int keyCode = keyEvent.getKeyCode();
         if (KeyEvent.KEYCODE_MEDIA_NEXT == keyCode) {
             FlyLog.d("media key next");
-            musicPlayer.playNext();
+            mediaPlayer.playNext();
         } else if (KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE == keyCode) {
         } else if (KeyEvent.KEYCODE_HEADSETHOOK == keyCode) {
         } else if (KeyEvent.KEYCODE_MEDIA_PREVIOUS == keyCode) {
             FlyLog.d("media key fore");
-            musicPlayer.playFore();
+            mediaPlayer.playFore();
         } else if (KeyEvent.KEYCODE_MEDIA_STOP == keyCode) {
             FlyLog.d("media key stop");
-            musicPlayer.pause();
+            mediaPlayer.pause();
         } else if (KeyEvent.KEYCODE_MEDIA_PAUSE == keyCode) {
             FlyLog.d("media key pause");
-            musicPlayer.pause();
+            mediaPlayer.pause();
         } else if (KeyEvent.KEYCODE_MEDIA_PLAY == keyCode) {
             FlyLog.d("media key play");
-            musicPlayer.start();
+            mediaPlayer.start();
         }
     }
 }

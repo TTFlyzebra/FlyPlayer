@@ -43,7 +43,8 @@ public class VideoActivity extends BaseActivity implements
     public GiraffePlayer player;
     public List<Video> videoList = new ArrayList<>();
     private FlyTabView tabView;
-    RelativeLayout liveBox;
+    private RelativeLayout liveBox;
+    private RegisterMediaSession registerMediaSession;
 
 
     private String titles[] = new String[]{"磁盘列表", "播放列表", "文件列表"};
@@ -108,11 +109,14 @@ public class VideoActivity extends BaseActivity implements
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         player = new GiraffePlayer(this);
         player.addStatusChangeLiseter(this);
+
+        registerMediaSession = new RegisterMediaSession(this,player);
         initView();
     }
 
     @Override
     protected void onStart() {
+        registerMediaSession.requestMediaButton();
         touchTime = 0;
         showControlView(true);
         super.onStart();
@@ -170,6 +174,7 @@ public class VideoActivity extends BaseActivity implements
         mAudioManager.abandonAudioFocus(mAudioFocusListener);
         player.stop();
         mHandler.removeCallbacks(seekBarTask);
+        registerMediaSession.releaseMediaButton();
         super.onStop();
     }
 
@@ -225,14 +230,14 @@ public class VideoActivity extends BaseActivity implements
         });
     }
 
-    private void playNext() {
+    public void playNext() {
         if (videoList != null && !videoList.isEmpty()) {
             currenPos = (currenPos + 1) % videoList.size();
             player.play(videoList.get(currenPos).url);
         }
     }
 
-    private void playFore() {
+    public void playFore() {
         if (videoList != null && !videoList.isEmpty()) {
             currenPos = (currenPos - 1 + videoList.size()) % videoList.size();
             player.play(videoList.get(currenPos).url);

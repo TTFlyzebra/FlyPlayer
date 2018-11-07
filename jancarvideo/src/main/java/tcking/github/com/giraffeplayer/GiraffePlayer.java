@@ -851,6 +851,14 @@ public class GiraffePlayer {
         }
     }
 
+    public void playNext() {
+        activity.playNext();
+    }
+
+    public void playFore() {
+        activity.playFore();
+    }
+
     class Query {
         private final Activity activity;
         public View view;

@@ -175,6 +175,7 @@ public class MediaScan implements IMediaScan {
 
     @Override
     public void open() {
+        isReConnect = false;
         bindService();
     }
 
