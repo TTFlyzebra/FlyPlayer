@@ -19,7 +19,7 @@
 	<string name="no_artist">Ismeretlen előadó</string>
 	<string name="no_album">Ismeretlen album</string>
 	<string name="no_album_start">ismeretlen</string>
-	<string name="photo">kép</string>
+	<string name="photo">Fénykép</string>
 	<string name="video">videó</string>
 	<string name="music">zene</string>
 	<string name="musicsumformat">(%d először)</string>

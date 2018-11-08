@@ -19,7 +19,7 @@
 	<string name="no_artist">فنان غير معروف</string>
 	<string name="no_album">ألبوم غير معروف</string>
 	<string name="no_album_start">غير معروف</string>
-	<string name="photo">صور</string>
+	<string name="photo">صورة فوتوغرافية</string>
 	<string name="video">فيديو</string>
 	<string name="music">موسيقى</string>
 	<string name="musicsumformat">(d% أولاً)</string>

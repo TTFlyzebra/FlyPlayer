@@ -19,7 +19,7 @@
 	<string name="no_artist">Bilinmeyen sanatçı</string>
 	<string name="no_album">Bilinmeyen albüm</string>
 	<string name="no_album_start">bilinmeyen</string>
-	<string name="photo">resim</string>
+	<string name="photo">fotoğraf</string>
 	<string name="video">video</string>
 	<string name="music">müzik</string>
 	<string name="musicsumformat">(%d önce)</string>

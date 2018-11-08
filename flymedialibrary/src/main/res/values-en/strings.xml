@@ -19,9 +19,9 @@
     <string name="no_artist">unknown artist </string>
     <string name="no_album">unknown album </string>
     <string name="no_album_start">unknown</string>
-    <string name="photo">image</string>
-    <string name="video">video</string>
-    <string name="music">music</string>
+    <string name="photo">Photo</string>
+    <string name="video">Video</string>
+    <string name="music">Music</string>
     <string name="musicsumformat">(%d)</string>
     <string name="photosumformat">(%d)</string>
     <string name="videosumformat">(%d)</string>

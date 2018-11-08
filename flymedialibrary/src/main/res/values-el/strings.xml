@@ -19,7 +19,7 @@
 	<string name="no_artist">Άγνωστο καλλιτέχνη</string>
 	<string name="no_album">Άγνωστο άλμπουμ</string>
 	<string name="no_album_start">Άγνωστο</string>
-	<string name="photo">Εικόνα</string>
+	<string name="photo">φωτογραφία</string>
 	<string name="video">Βίντεο</string>
 	<string name="music">Μουσική</string>
 	<string name="musicsumformat">(%d πρώτα)</string>

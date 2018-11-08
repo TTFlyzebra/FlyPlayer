@@ -19,7 +19,7 @@
 	<string name="no_artist">Artista desconhecido</string>
 	<string name="no_album">Álbum Desconhecido</string>
 	<string name="no_album_start">Desconhecido</string>
-	<string name="photo">Imagem</string>
+	<string name="photo">foto</string>
 	<string name="video">Video</string>
 	<string name="music">Music</string>
 	<string name="musicsumformat">(%d primeiro)</string>

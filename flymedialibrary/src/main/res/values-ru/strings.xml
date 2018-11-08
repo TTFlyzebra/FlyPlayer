@@ -19,7 +19,7 @@
 	<string name="no_artist">Неизвестный художник</string>
 	<string name="no_album">Неизвестный альбом</string>
 	<string name="no_album_start">неизвестный</string>
-	<string name="photo">изображение</string>
+	<string name="photo">фото</string>
 	<string name="video">видео</string>
 	<string name="music">музыка</string>
 	<string name="musicsumformat">(%d сначала)</string>
