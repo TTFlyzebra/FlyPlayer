@@ -20,7 +20,7 @@
 	<string name="no_album">آلبوم ناشناخته</string>
 	<string name="no_album_start">نامعلوم</string>
 	<string name="photo">عکس</string>
-	<string name="video">ویدئو</string>
+	<string name="video">تصویری</string>
 	<string name="music">موسیقی</string>
 	<string name="musicsumformat">(%d اول)</string>
 	<string name="photosumformat">(%d)</string>

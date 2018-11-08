@@ -20,8 +20,8 @@
 	<string name="no_album">Album desconocido</string>
 	<string name="no_album_start">Desconocido</string>
 	<string name="photo">foto</string>
-	<string name="video">El video</string>
-	<string name="music">La musica</string>
+	<string name="video">vídeo</string>
+	<string name="music">música</string>
 	<string name="musicsumformat">(%d primero)</string>
 	<string name="photosumformat">(%d)</string>
 	<string name="videosumformat">(%d set)</string>
