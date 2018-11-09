@@ -81,6 +81,8 @@ android {
 dependencies {
     implementation project(path: ':flymedialibrary')
     implementation project(path: ':mp3id3library')
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     compileOnly 'com.android.support:appcompat-v7:23.+'
     compileOnly 'com.android.support:recyclerview-v7:23.+'
 }

@@ -64,6 +64,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     @Override
     protected void onDestroy() {
         jancarManager.unregisterJacStateListener(jacState.asBinder());
+        jacState = null;
         usbMediaScan.close();
         usbMediaScan.removeListener(this);
         super.onDestroy();
