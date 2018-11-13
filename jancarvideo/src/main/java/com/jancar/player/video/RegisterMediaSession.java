@@ -75,7 +75,7 @@ public class RegisterMediaSession {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mMediaSession.setCallback(null,null);
-                mMediaSession.setActive(true);
+                mMediaSession.setActive(false);
                 mMediaSession.release();
                 mMediaSession = null;
             }
