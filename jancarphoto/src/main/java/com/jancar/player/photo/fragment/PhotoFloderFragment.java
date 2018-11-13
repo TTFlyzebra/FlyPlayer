@@ -202,4 +202,11 @@ public class PhotoFloderFragment extends BaseFragment implements
     @Override
     public void onPageScrollStateChanged(int state) {
     }
+
+    @Override
+    public void onDestroy() {
+        adapter.setOnItemClickListener(null);
+        activity.viewPager.removeOnPageChangeListener(this);
+        super.onDestroy();
+    }
 }

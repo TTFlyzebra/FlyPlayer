@@ -68,6 +68,7 @@ public class VideoPlayListFragment extends BaseFragment implements
 
     @Override
     public void onDestroy() {
+        adapter.cancleAllTask();
         super.onDestroy();
     }
 

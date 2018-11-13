@@ -121,5 +121,9 @@ public class MusicPlayListFragment extends MusicFragment implements
 
     }
 
-
+    @Override
+    public void onDestroy() {
+        adapter.setOnItemClickListener(null);
+        super.onDestroy();
+    }
 }

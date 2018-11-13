@@ -125,6 +125,8 @@ public class PhotoPlayListFragment extends BaseFragment implements
 
     @Override
     public void onDestroy() {
+        adapter.setOnItemClickListener(null);
+        activity.viewPager.removeOnPageChangeListener(this);
         mHandler.removeCallbacksAndMessages(null);
         super.onDestroy();
     }

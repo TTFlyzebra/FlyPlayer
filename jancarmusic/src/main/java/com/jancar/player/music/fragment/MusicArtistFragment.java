@@ -155,4 +155,10 @@ public class MusicArtistFragment extends MusicFragment implements
         isClick = true;
         musicPlayer.play(url);
     }
+
+    @Override
+    public void onDestroy() {
+        adapter.setOnItemClickListener(null);
+        super.onDestroy();
+    }
 }

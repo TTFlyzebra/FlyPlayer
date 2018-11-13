@@ -151,4 +151,10 @@ public class MusicFloderFragment extends MusicFragment implements
         isClick = true;
         musicPlayer.play(string);
     }
+
+    @Override
+    public void onDestroy() {
+        adapter.setOnItemClickListener(null);
+        super.onDestroy();
+    }
 }

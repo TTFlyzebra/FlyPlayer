@@ -59,6 +59,7 @@ public class StorageFragment extends BaseFragment implements
 
     @Override
     public void onDestroy() {
+        adapater.setOnItemClickListener(null);
         getActivity().unregisterReceiver(receiver);
         super.onDestroy();
     }
@@ -135,4 +136,6 @@ public class StorageFragment extends BaseFragment implements
             }
         }
     }
+
+
 }
