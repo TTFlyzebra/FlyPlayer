@@ -124,20 +124,6 @@ public class PhotoActivity extends BaseActivity implements
         tabView.setFocusPos(1);
     }
 
-    boolean isStop = false;
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        isStop = false;
-    }
-
-    @Override
-    protected void onStop() {
-        isStop = true;
-        super.onStop();
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -150,6 +136,7 @@ public class PhotoActivity extends BaseActivity implements
     protected void onDestroy() {
         CURRENT_IMAGE = null;
         mHandler.removeCallbacksAndMessages(null);
+        viewPager.removeOnPageChangeListener(this);
         super.onDestroy();
     }
 

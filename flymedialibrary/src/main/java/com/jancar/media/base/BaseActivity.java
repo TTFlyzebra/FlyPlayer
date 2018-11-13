@@ -1,9 +1,12 @@
 package com.jancar.media.base;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 
@@ -15,11 +18,13 @@ import com.jancar.media.data.Video;
 import com.jancar.media.model.listener.IUsbMediaListener;
 import com.jancar.media.model.mediascan.IMediaScan;
 import com.jancar.media.model.mediascan.MediaScan;
+import com.jancar.media.utils.CleanLeakUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.SPUtil;
 import com.jancar.state.JacState;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,17 +32,17 @@ import java.util.List;
 public class BaseActivity extends AppCompatActivity implements IUsbMediaListener {
     protected IMediaScan usbMediaScan = MediaScan.getInstance();
     public static final String DEF_PATH = "/storage/emulated/0";
-    public String currenPath = DEF_PATH;
-    protected boolean isStop = false;
+    public static String currenPath = DEF_PATH;
+    protected static boolean isStop = false;
 
     @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currenPath = getSavePath();
+        mJancarHandler = new MyHandler(new WeakReference<>(this));
         usbMediaScan.addListener(this);
         usbMediaScan.open();
-        jacState = new JacSystemStates();
         jancarManager = (JancarManager) getSystemService("jancar_manager");
         jancarManager.registerJacStateListener(jacState.asBinder());
     }
@@ -68,6 +73,9 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
         jancarManager = null;
         usbMediaScan.close();
         usbMediaScan.removeListener(this);
+        mJancarHandler.stop();
+        mJancarHandler = null;
+        CleanLeakUtils.fixInputMethodManagerLeak(this);
         super.onDestroy();
     }
 
@@ -160,10 +168,11 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
         fragmentListeners.remove(iUsbMediaListener);
     }
 
-    private JacState jacState = null;
+    private JacState jacState = new JacSystemStates();
+    ;
     private JancarManager jancarManager;
 
-    public class JacSystemStates extends JacState {
+    public static class JacSystemStates extends JacState {
         @Override
         public void OnBackCar(boolean bState) {
             super.OnBackCar(bState);
@@ -193,7 +202,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
                         break;
                 }
                 FlyLog.d("current path is removed=" + flag);
-                onUsbMounted(flag);
+                mJancarHandler.obtainMessage(1, flag).sendToTarget();
                 super.OnStorage(state);
             } catch (Exception e) {
                 FlyLog.e(e.toString());
@@ -201,11 +210,42 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
         }
     }
 
-    public void onUsbMounted(boolean flag) {
+
+    @SuppressLint("HandlerLeak")
+    public class MyHandler extends Handler {
+        WeakReference<BaseActivity> softReference;
+
+        public MyHandler(WeakReference<BaseActivity> activity) {
+            softReference = activity;
+        }
+
+        public void stop(){
+            removeCallbacksAndMessages(null);
+            softReference.clear();
+            softReference = null;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    boolean flag = (boolean) msg.obj;
+                    if(softReference!=null) {
+                        Activity activity = softReference.get();
+                        onUsbMounted(activity, flag);
+                    }
+                    break;
+            }
+        }
+    }
+
+    protected static MyHandler mJancarHandler;
+
+    public void onUsbMounted(Activity activity, boolean flag) {
         if (!flag) {
             FlyLog.e("is back palying andr current(%s) path is removed, finish appliction!", currenPath);
             if (isStop) {
-                finish();
+                activity.finish();
             }
         }
     }

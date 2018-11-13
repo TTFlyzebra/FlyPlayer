@@ -1,6 +1,7 @@
 package com.jancar.player.video;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -22,11 +23,13 @@ import com.jancar.media.utils.RtlTools;
 import com.jancar.media.utils.SystemPropertiesProxy;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
+import com.jancar.media.view.ParkWarningView;
 import com.jancar.media.view.TouchEventRelativeLayout;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import tcking.github.com.giraffeplayer.GiraffePlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
@@ -181,6 +184,11 @@ public class VideoActivity extends BaseActivity implements
     @Override
     protected void onDestroy() {
         mHandler.removeCallbacksAndMessages(null);
+        try {
+            ((ParkWarningView) Objects.requireNonNull(findViewById(R.id.layout_parking))).onDestory();
+        }catch (Exception e){
+            FlyLog.e();
+        }
         super.onDestroy();
     }
 
@@ -520,15 +528,19 @@ public class VideoActivity extends BaseActivity implements
         }
     }
 
+
     @Override
-    public void onUsbMounted(boolean flag) {
+    public void onUsbMounted(Activity activity,boolean flag) {
         /**
          * 正在播放的U盘被拔
          */
         if (!flag) {
             FlyLog.e("palying usb is removed!");
             player.stop();
+            FlyLog.e("is back palying andr current(%s) path is removed, finish appliction!", currenPath);
+            if (isStop) {
+                activity.finish();
+            }
         }
-        super.onUsbMounted(flag);
     }
 }
