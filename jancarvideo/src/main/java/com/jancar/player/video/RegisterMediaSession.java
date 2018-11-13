@@ -20,7 +20,6 @@ public class RegisterMediaSession {
     public RegisterMediaSession(Context context, GiraffePlayer giraffePlayer) {
         this.context = context;
         this.mediaPlayer = giraffePlayer;
-        setupMediaSession();
     }
 
     /**
@@ -59,9 +58,8 @@ public class RegisterMediaSession {
     public void requestMediaButton() {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (!mMediaSession.isActive()) {
-                    mMediaSession.setActive(true);
-                }
+                setupMediaSession();
+                mMediaSession.setActive(true);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,7 +74,10 @@ public class RegisterMediaSession {
     public void releaseMediaButton() {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mMediaSession.setCallback(null,null);
+                mMediaSession.setActive(true);
                 mMediaSession.release();
+                mMediaSession = null;
             }
         } catch (Exception e) {
             e.printStackTrace();

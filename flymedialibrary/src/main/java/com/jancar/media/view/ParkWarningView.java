@@ -98,7 +98,6 @@ public class ParkWarningView extends LinearLayout {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    boolean flag = (boolean) msg.obj;
                     if (softReference != null) {
                         updateParkProperty();
                     }
@@ -113,7 +112,7 @@ public class ParkWarningView extends LinearLayout {
             super.OnBrake(bState);
             Log.e(TAG, "OnBrake: " + bState);
             mbUnderParking = bState;
-            if(mJancarHandler!=null){
+            if (mJancarHandler != null) {
                 mJancarHandler.obtainMessage(1).sendToTarget();
             }
         }
