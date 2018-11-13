@@ -57,7 +57,9 @@ public class RegisterMediaSession {
     public void requestMediaButton() {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mMediaSession.setActive(true);
+                if (!mMediaSession.isActive()) {
+                    mMediaSession.setActive(true);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

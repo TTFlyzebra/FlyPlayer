@@ -68,7 +68,9 @@ public class VideoPlayListFragment extends BaseFragment implements
 
     @Override
     public void onDestroy() {
+        activity.player.removeStatusChangeLiseter(this);
         adapter.cancleAllTask();
+        adapter.setOnItemClickListener(null);
         super.onDestroy();
     }
 

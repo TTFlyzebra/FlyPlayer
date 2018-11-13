@@ -212,4 +212,11 @@ public class VideoFloderFragment extends BaseFragment implements
         }
         isClick = false;
     }
+
+    @Override
+    public void onDestroy() {
+        adapter.cancleAllTask();
+        adapter.setOnItemClickListener(null);
+        super.onDestroy();
+    }
 }

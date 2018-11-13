@@ -78,7 +78,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
             Class<?> cls = Class.forName(getPackageName() + ".fragment." + fName);
             Constructor<?> cons = cls.getConstructor();
             Fragment fragment = (Fragment) cons.newInstance();
-            ft.replace(resID, fragment).commit();
+            ft.replace(resID, fragment).commitAllowingStateLoss();
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }
