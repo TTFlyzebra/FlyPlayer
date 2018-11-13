@@ -169,15 +169,9 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     }
 
     private JacState jacState = new JacSystemStates();
-    ;
     private JancarManager jancarManager;
 
     public static class JacSystemStates extends JacState {
-        @Override
-        public void OnBackCar(boolean bState) {
-            super.OnBackCar(bState);
-        }
-
         @Override
         public void OnStorage(StorageState state) {
             try {
@@ -202,7 +196,9 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
                         break;
                 }
                 FlyLog.d("current path is removed=" + flag);
-                mJancarHandler.obtainMessage(1, flag).sendToTarget();
+                if(mJancarHandler!=null){
+                    mJancarHandler.obtainMessage(1, flag).sendToTarget();
+                }
                 super.OnStorage(state);
             } catch (Exception e) {
                 FlyLog.e(e.toString());

@@ -184,6 +184,7 @@ public class VideoActivity extends BaseActivity implements
     @Override
     protected void onDestroy() {
         mHandler.removeCallbacksAndMessages(null);
+        player.removeStatusChangeLiseter(this);
         try {
             ((ParkWarningView) Objects.requireNonNull(findViewById(R.id.layout_parking))).onDestory();
         }catch (Exception e){
