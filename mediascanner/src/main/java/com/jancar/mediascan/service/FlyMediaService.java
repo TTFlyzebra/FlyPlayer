@@ -417,6 +417,9 @@ public class FlyMediaService extends Service {
             FlyLog.d("stop scan in getMediaFileFromPath");
             return;
         }
+        String filename = file.getName();
+        //不显示.开头的隐藏文件
+        if(filename.indexOf('.')==0) return;
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             if (files == null) return;
@@ -424,7 +427,6 @@ public class FlyMediaService extends Service {
                 getMediaFileFromPath(tempFile);
             }
         } else {
-            String filename = file.getName();
             String url = file.getAbsolutePath();
             int ret = file.getName().lastIndexOf('.');
             if (ret < 0) return;
