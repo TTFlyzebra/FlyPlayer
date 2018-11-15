@@ -154,20 +154,15 @@ public class VideoActivity extends BaseActivity implements
     protected void onResume() {
         super.onResume();
         FlyLog.d("onResume setpause=" + setPause);
-        if (isPause) {
-            player.start();
-        }
+        player.onResume();
         isPause = false;
     }
 
     @Override
     protected void onPause() {
         FlyLog.d("onPause");
-        isPause = false;
-        if (player.isPlaying()) {
-            player.pause();
-            isPause = true;
-        }
+        isPause = true;
+        player.pause();
         super.onPause();
     }
 
@@ -185,6 +180,7 @@ public class VideoActivity extends BaseActivity implements
     protected void onDestroy() {
         mHandler.removeCallbacksAndMessages(null);
         player.removeStatusChangeLiseter(this);
+        player.onDestroy();
         try {
             ((ParkWarningView) Objects.requireNonNull(findViewById(R.id.layout_parking))).onDestory();
         }catch (Exception e){
