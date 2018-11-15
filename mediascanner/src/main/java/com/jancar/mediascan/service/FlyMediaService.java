@@ -445,6 +445,8 @@ public class FlyMediaService extends Service {
                 case ".tp":
                 case ".vop":
                 case ".wmv":
+                    //视频文件小于2M不显示
+                    if (file.length() < (2 * 1024 * 1024)) break;
                     synchronized (mVideoList) {
                         mVideoList.add(new Video(url, mVideoEnd.get()));
                         mVideoEnd.getAndIncrement();
@@ -475,6 +477,8 @@ public class FlyMediaService extends Service {
 //                case ".ra":
                 case ".wav":
 //                case ".wma":
+                    //音乐文件小于1M不显示
+                    if (file.length() < (1024 * 1024)) break;
                     synchronized (mMusicList) {
                         mMusicList.add(new Music(url, mMusicEnd.get()));
                         mMusicEnd.getAndIncrement();
@@ -496,6 +500,8 @@ public class FlyMediaService extends Service {
                 case ".gif":
                 case ".jpg":
                 case ".ico":
+                    //图片文件小于1KB不显示
+                    if (file.length() < 1024) break;
                     synchronized (mImageList) {
                         mImageList.add(new Image(url, mImageEnd.get()));
                         mImageEnd.getAndIncrement();
