@@ -13,6 +13,8 @@ public class SystemPropertiesProxy {
      */
     public interface Property{
         String PERSIST_KEY_AUTOPLAY = "persist.jancar.autoplay";
+        String PERSIST_KEY_SHOWHIDE_FILE = "persist.jancar.showhide.file";
+        String PERSIST_KEY_SHOWALL_FILE = "persist.jancar.showall.file";
     }
 
     /**

@@ -89,6 +89,8 @@ public class FlyMediaService extends Service {
     private int tryCount = 0;
     private int TRY_MAX = 5;
     private MediaScannerReceiver mediaScannerReceiver;
+    private boolean isSetHideFile = false;
+    private boolean isSetAllFile = false;
     private IBinder mBinder = new FlyMedia.Stub() {
         @Override
         public void scanDisk(final String disk) throws RemoteException {
@@ -119,6 +121,10 @@ public class FlyMediaService extends Service {
     public void onCreate() {
         super.onCreate();
         FlyLog.d("onCreate");
+        String str1 = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_SHOWHIDE_FILE, "0");
+        isSetHideFile = !str1.endsWith("0");
+        String str2 = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_SHOWALL_FILE, "0");
+        isSetAllFile = !str2.endsWith("0");
         jancarManager = (JancarManager) getSystemService("jancar_manager");
         jancarManager.registerJacStateListener(jacState.asBinder());
         mDoubleMusicCache = MusicDoubleCache.getInstance(getApplicationContext());
@@ -419,7 +425,7 @@ public class FlyMediaService extends Service {
         }
         String filename = file.getName();
         //不显示.开头的隐藏文件
-        if(filename.indexOf('.')==0) return;
+        if (!isSetHideFile && filename.indexOf('.') == 0) return;
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             if (files == null) return;
@@ -448,7 +454,7 @@ public class FlyMediaService extends Service {
                 case ".vop":
                 case ".wmv":
                     //视频文件小于2M不显示
-                    if (file.length() < (2 * 1024 * 1024)) break;
+                    if (!isSetAllFile && file.length() < (2 * 1024 * 1024)) break;
                     synchronized (mVideoList) {
                         mVideoList.add(new Video(url, mVideoEnd.get()));
                         mVideoEnd.getAndIncrement();
@@ -480,7 +486,7 @@ public class FlyMediaService extends Service {
                 case ".wav":
 //                case ".wma":
                     //音乐文件小于1M不显示
-                    if (file.length() < (1024 * 1024)) break;
+                    if (!isSetAllFile && file.length() < (1024 * 1024)) break;
                     synchronized (mMusicList) {
                         mMusicList.add(new Music(url, mMusicEnd.get()));
                         mMusicEnd.getAndIncrement();
@@ -503,7 +509,7 @@ public class FlyMediaService extends Service {
                 case ".jpg":
                 case ".ico":
                     //图片文件小于1KB不显示
-                    if (file.length() < 1024) break;
+                    if (!isSetAllFile && file.length() < 1024) break;
                     synchronized (mImageList) {
                         mImageList.add(new Image(url, mImageEnd.get()));
                         mImageEnd.getAndIncrement();
@@ -526,6 +532,10 @@ public class FlyMediaService extends Service {
 
     private void startScanPath(String scanPath) {
         FlyLog.d("start scan disk!");
+        String str1 = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_SHOWHIDE_FILE, "0");
+        isSetHideFile = !str1.endsWith("0");
+        String str2 = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_SHOWALL_FILE, "0");
+        isSetAllFile = !str2.endsWith("0");
         sWorker.removeCallbacksAndMessages(null);
         startScanTime = System.currentTimeMillis();
         tryCount = 0;
