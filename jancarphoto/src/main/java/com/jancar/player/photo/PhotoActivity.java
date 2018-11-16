@@ -23,11 +23,10 @@ import com.jancar.media.utils.RtlTools;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
 import com.jancar.media.view.TouchEventRelativeLayout;
+import com.jancar.player.photo.data.PhotoViewPool;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 
 public class PhotoActivity extends BaseActivity implements
@@ -68,6 +67,17 @@ public class PhotoActivity extends BaseActivity implements
                 isShowControl = false;
             } else {
                 mHandler.postDelayed(hideControlTask, time + 100);
+            }
+        }
+    };
+    private View.OnClickListener photoOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            try {
+                touchTime = 0;
+                showControlView(!isShowControl);
+            } catch (Exception e) {
+                FlyLog.e();
             }
         }
     };
@@ -218,10 +228,6 @@ public class PhotoActivity extends BaseActivity implements
                     showControlView(!isShowControl);
                     break;
                 default:
-                    if (v instanceof PhotoView) {
-                        touchTime = 0;
-                        showControlView(!isShowControl);
-                    }
                     break;
             }
         } catch (Exception e) {
@@ -330,8 +336,6 @@ public class PhotoActivity extends BaseActivity implements
 
 
     private class MyPageAdapter extends PagerAdapter {
-        private HashSet<PhotoView> viewSet = new HashSet<>();
-
         public MyPageAdapter() {
         }
 
@@ -349,22 +353,14 @@ public class PhotoActivity extends BaseActivity implements
         public void destroyItem(ViewGroup container, int position, Object object) {
             PhotoView photoView = (PhotoView) object;
             photoView.recycle();
-            viewSet.add(photoView);
+            PhotoViewPool.recycle(photoView);
             container.removeView(photoView);
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            FlyLog.d("set size=%d", viewSet.size());
-            PhotoView photoView = null;
-            Iterator it = viewSet.iterator();
-            if (it.hasNext()) {
-                photoView = (PhotoView) it.next();
-                viewSet.remove(photoView);
-            } else {
-                photoView = new PhotoView(PhotoActivity.this);
-            }
-            photoView.setOnClickListener(PhotoActivity.this);
+            PhotoView photoView = PhotoViewPool.obtain(PhotoActivity.this);
+            photoView.setOnClickListener(photoOnClickListener);
             imageResIDs.put(position, View.generateViewId());
             photoView.setId(imageResIDs.get(position));
             photoView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
