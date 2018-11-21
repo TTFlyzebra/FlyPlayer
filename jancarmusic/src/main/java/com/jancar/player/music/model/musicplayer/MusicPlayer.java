@@ -270,16 +270,22 @@ public class MusicPlayer implements IMusicPlayer,
     public void savePathUrl(final String path) {
         final String url = mPlayUrl;
         final int seek = getCurrentPosition();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                if (url.startsWith(path)) {
-                    SPUtil.set(mContext, path + "MUSIC_URL", url);
-                    SPUtil.set(mContext, path + "MUSIC_SEEK", seek);
-                    FlyLog.d("savePathUrl seek=%d,path=%s,url=%s", seek, path, url);
+        if (!TextUtils.isEmpty(path) && TextUtils.isEmpty(url)) {
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (!TextUtils.isEmpty(url) && url.startsWith(path)) {
+                            SPUtil.set(mContext, path + "MUSIC_URL", url);
+                            SPUtil.set(mContext, path + "MUSIC_SEEK", seek);
+                            FlyLog.d("savePathUrl seek=%d,path=%s,url=%s", seek, path, url);
+                        }
+                    }catch (Exception e){
+                        FlyLog.e(e.toString());
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
 

@@ -322,7 +322,7 @@ public class GiraffePlayer {
                         int width = mp.getVideoWidth();
                         int height = mp.getVideoHeight();
                         if (width > 2880 && height > 1620) {
-                            FlyLog.e("no support video, width=%d,height=%d",width,height);
+                            FlyLog.e("no support video, width=%d,height=%d", width, height);
                             statusChange(STATUS_ERROR);
                             mp.stop();
                             return false;
@@ -824,16 +824,22 @@ public class GiraffePlayer {
     public void savePathUrl(final String path) {
         final String url = mPlayUrl;
         final int seek = getCurrentPosition();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                if (url.startsWith(path)) {
-                    SPUtil.set(activity, path + "VIDEO_URL", url);
-                    SPUtil.set(activity, path + "VIDEO_SEEK", seek);
-                    FlyLog.d("savePathUrl seek=%d,path=%s,url=%s", seek, path, url);
+        if (!TextUtils.isEmpty(path) && TextUtils.isEmpty(url)) {
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (!TextUtils.isEmpty(url) && url.startsWith(path)) {
+                            SPUtil.set(activity, path + "VIDEO_URL", url);
+                            SPUtil.set(activity, path + "VIDEO_SEEK", seek);
+                            FlyLog.d("savePathUrl seek=%d,path=%s,url=%s", seek, path, url);
+                        }
+                    } catch (Exception e) {
+                        FlyLog.e(e.toString());
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     public String playPath = "";
