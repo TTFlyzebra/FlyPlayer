@@ -19,6 +19,7 @@ import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
 import com.jancar.player.video.R;
 import com.jancar.player.video.VideoActivity;
+import com.ksyun.media.player.misc.KSYProbeMediaInfo;
 
 import java.util.HashSet;
 import java.util.List;
@@ -187,9 +188,9 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
         protected Bitmap doInBackground(String... strings) {
             Bitmap bitmap = null;
             try {
-//                final String path = strings[0];
-//                KSYProbeMediaInfo ksyProbeMediaInfo = new KSYProbeMediaInfo();
-//                bitmap = ksyProbeMediaInfo.getVideoThumbnailAtTime(strings[0], 1, smallImageWidth, smallImageHeight);
+                final String path = strings[0];
+                KSYProbeMediaInfo ksyProbeMediaInfo = new KSYProbeMediaInfo();
+                bitmap = ksyProbeMediaInfo.getVideoThumbnailAtTime(strings[0], 1, smallImageWidth, smallImageHeight);
 //                FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
 //                mmr.setDataSource(path);
 //                mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ALBUM);
@@ -199,11 +200,11 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
 //                    bitmap = BitmapTools.zoomImg(bitmap, smallImageWidth, smallImageHeight);
 //                }
 //                mmr.release();
-//                if (bitmap != null) {
-//                    if (doubleBitmapCache != null) {
-//                        doubleBitmapCache.put(path, bitmap);
-//                    }
-//                }
+                if (bitmap != null) {
+                    if (doubleBitmapCache != null) {
+                        doubleBitmapCache.put(path, bitmap);
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
