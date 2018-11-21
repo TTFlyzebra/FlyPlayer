@@ -17,7 +17,6 @@ import com.github.chrisbanes.photoview.PhotoView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Image;
-import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.RtlTools;
 import com.jancar.media.view.FlyTabTextView;
@@ -53,6 +52,12 @@ public class PhotoActivity extends BaseActivity implements
     private int hideTime = 5000;
     public static boolean isScan = true;
 
+    private int mAnimaDurtion = 300;
+    private float screen_width = 1024;
+    private float screen_height = 600;
+    private float photo_bottom_menu_height = 120;
+    private float photo_left_list_width = 400;
+
     private Runnable hideControlTask = new Runnable() {
         @Override
         public void run() {
@@ -61,8 +66,8 @@ public class PhotoActivity extends BaseActivity implements
                 showLeftMenu(false);
                 isShowLeftMenu = false;
                 controlLayout.animate()
-                        .translationY(150 * DisplayUtils.getMetrices(PhotoActivity.this).heightPixels / 600)
-                        .setDuration(300).start();
+                        .translationY(photo_bottom_menu_height)
+                        .setDuration(mAnimaDurtion).start();
                 getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
                 isShowControl = false;
             } else {
@@ -86,6 +91,11 @@ public class PhotoActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
+
+        screen_width = getResources().getDimensionPixelSize(R.dimen.photo_screen_width);
+        screen_height = getResources().getDimensionPixelSize(R.dimen.photo_screen_height);
+        photo_bottom_menu_height = getResources().getDimensionPixelSize(R.dimen.photo_bottom_menu_height);
+        photo_left_list_width = getResources().getDimensionPixelSize(R.dimen.photo_left_list_width);
 
         titles = new String[]{getString(R.string.disk_list), getString(R.string.photo_list), getString(R.string.file_list)};
         initView();
@@ -258,7 +268,7 @@ public class PhotoActivity extends BaseActivity implements
     private void showControlView(boolean flag) {
         isShowControl = flag;
         if (flag) {
-            controlLayout.animate().translationY(0).setDuration(300).start();
+            controlLayout.animate().translationY(0).setDuration(mAnimaDurtion).start();
             getWindow().getDecorView().setSystemUiVisibility(View.VISIBLE);
             mHandler.removeCallbacks(hideControlTask);
             mHandler.postDelayed(hideControlTask, hideTime);
@@ -275,9 +285,9 @@ public class PhotoActivity extends BaseActivity implements
         boolean isRtl = RtlTools.isLayoutRtl(leftLayout);
         leftLayout.animate()
                 .translationX(flag ?
-                        isRtl ? 394 : -394 * DisplayUtils.getMetrices(this).widthPixels / 1024
+                        isRtl ? photo_left_list_width : -(photo_left_list_width)
                         : 0)
-                .setDuration(300)
+                .setDuration(mAnimaDurtion)
                 .setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
@@ -286,8 +296,8 @@ public class PhotoActivity extends BaseActivity implements
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        if (leftLayout.getX() > ((1024 - 394) * DisplayUtils.getMetrices(PhotoActivity.this).widthPixels / 1024)
-                                || leftLayout.getX() < (-394 * DisplayUtils.getMetrices(PhotoActivity.this).widthPixels / 1024)) {
+                        if (leftLayout.getX() > (screen_width-photo_left_list_width)
+                                || leftLayout.getX() < (-photo_left_list_width)) {
                             leftLayout.setVisibility(View.INVISIBLE);
                         } else {
                             leftLayout.setVisibility(View.VISIBLE);

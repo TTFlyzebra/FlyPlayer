@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.Video;
+import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.player.video.R;
 import com.jancar.player.video.VideoActivity;
@@ -26,6 +27,7 @@ public class VideoPlayListFragment extends BaseFragment implements
     private VideoPlayListAdapater adapter;
     private RecyclerView recyclerView;
     private TextView textView;
+    private int spanCount = 3;
 
     public static VideoPlayListFragment newInstance(Bundle args) {
         VideoPlayListFragment listPlayFileFragment = new VideoPlayListFragment();
@@ -48,7 +50,16 @@ public class VideoPlayListFragment extends BaseFragment implements
         recyclerView = (RecyclerView) view.findViewById(R.id.fm_rv01);
         textView = (TextView) view.findViewById(R.id.fm_tv01);
         adapter = new VideoPlayListAdapater(getActivity(), activity.videoList, recyclerView);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
+
+        int width = DisplayUtils.getMetrices(getActivity()).widthPixels;
+        if(width>=1280){
+            spanCount = 4;
+        }else{
+            spanCount = 3;
+        }
+
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), spanCount);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapter);
         activity.player.addStatusChangeLiseter(this);

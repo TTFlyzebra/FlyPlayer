@@ -173,7 +173,7 @@
         <com.jancar.media.view.TouchEventRelativeLayout
             android:id="@+id/app_video_bottom_box"
             android:layout_width="match_parent"
-            android:layout_height="138px"
+            android:layout_height="@dimen/video_bottom_menu_height"
             android:layout_alignParentBottom="true"
             android:background="#BD000000"
             android:padding="8dp"
@@ -272,12 +272,12 @@
 
         <com.jancar.media.view.TouchEventRelativeLayout
             android:id="@+id/play_ll01_playlist"
-            android:layout_width="400px"
-            android:layout_height="403px"
+            android:layout_width="@dimen/video_left_list_width"
+            android:layout_height="@dimen/video_left_list_height"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="-399px"
-            android:layout_marginBottom="138px"
+            android:layout_marginEnd="@dimen/video_left_list_margin_end"
+            android:layout_marginBottom="@dimen/video_bottom_menu_height"
             android:visibility="invisible"
             android:orientation="vertical">
 
@@ -288,7 +288,7 @@
 
             <com.jancar.media.view.FlyTabView
                 android:id="@+id/app_video_tabview"
-                android:layout_width="400px"
+                android:layout_width="@dimen/video_left_list_width"
                 android:layout_height="52px"
                 android:layout_alignParentTop="true"
                 android:background="@drawable/media_list_header" />

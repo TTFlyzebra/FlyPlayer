@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Video;
-import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.RtlTools;
 import com.jancar.media.utils.SystemPropertiesProxy;
@@ -66,6 +65,12 @@ public class VideoActivity extends BaseActivity implements
 
     public static boolean isScan = false;
 
+    private int mAnimaDurtion = 300;
+    private float screen_width = 1024;
+    private float screen_height = 600;
+    private float video_bottom_menu_height = 138;
+    private float video_left_list_width = 400;
+
     private Runnable seekBarTask = new Runnable() {
         @Override
         public void run() {
@@ -90,8 +95,8 @@ public class VideoActivity extends BaseActivity implements
                 showLeftMenu(false);
                 isShowLeftMenu = false;
                 controlLayout.animate()
-                        .translationY(150 * DisplayUtils.getMetrices(VideoActivity.this).heightPixels / 600)
-                        .setDuration(300).start();
+                        .translationY(video_bottom_menu_height)
+                        .setDuration(mAnimaDurtion).start();
                 getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
                 isShowControl = false;
 //                mHandler.removeCallbacks(seekBarTask);
@@ -103,9 +108,14 @@ public class VideoActivity extends BaseActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.giraffe_player);
+
+        screen_width = getResources().getDimensionPixelSize(R.dimen.video_screen_width);
+        screen_height = getResources().getDimensionPixelSize(R.dimen.video_screen_height);
+        video_bottom_menu_height = getResources().getDimensionPixelSize(R.dimen.video_bottom_menu_height);
+        video_left_list_width = getResources().getDimensionPixelSize(R.dimen.video_left_list_width);
         // init player
         IjkMediaPlayer.loadLibrariesOnce(null);
         IjkMediaPlayer.native_profileBegin("libijkplayer.so");
@@ -113,7 +123,7 @@ public class VideoActivity extends BaseActivity implements
         player = new GiraffePlayer(this);
         player.addStatusChangeLiseter(this);
 
-        registerMediaSession = new RegisterMediaSession(this,player);
+        registerMediaSession = new RegisterMediaSession(this, player);
         initView();
     }
 
@@ -183,7 +193,7 @@ public class VideoActivity extends BaseActivity implements
         player.onDestroy();
         try {
             ((ParkWarningView) Objects.requireNonNull(findViewById(R.id.layout_parking))).onDestory();
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e();
         }
         super.onDestroy();
@@ -295,7 +305,7 @@ public class VideoActivity extends BaseActivity implements
             mHandler.post(seekBarTask);
         }
         if (flag) {
-            controlLayout.animate().translationY(0).setDuration(300).start();
+            controlLayout.animate().translationY(0).setDuration(mAnimaDurtion).start();
             getWindow().getDecorView().setSystemUiVisibility(View.VISIBLE);
             mHandler.removeCallbacks(hideControlTask);
             mHandler.postDelayed(hideControlTask, hideTime);
@@ -310,9 +320,9 @@ public class VideoActivity extends BaseActivity implements
         boolean isRtl = RtlTools.isLayoutRtl(leftLayout);
         leftLayout.animate()
                 .translationX(flag ?
-                        isRtl ? 394 : -394 * DisplayUtils.getMetrices(this).widthPixels / 1024
+                        isRtl ? video_left_list_width : -(video_left_list_width)
                         : 0)
-                .setDuration(300)
+                .setDuration(mAnimaDurtion)
                 .setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
@@ -320,8 +330,8 @@ public class VideoActivity extends BaseActivity implements
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        if (leftLayout.getX() > ((1024 - 394) * DisplayUtils.getMetrices(VideoActivity.this).widthPixels / 1024)
-                                || leftLayout.getX() < (-394 * DisplayUtils.getMetrices(VideoActivity.this).widthPixels / 1024)) {
+                        if (leftLayout.getX() > (screen_width - video_left_list_width)
+                                || leftLayout.getX() < (-video_left_list_width)) {
                             leftLayout.setVisibility(View.INVISIBLE);
                         } else {
                             leftLayout.setVisibility(View.VISIBLE);
@@ -527,7 +537,7 @@ public class VideoActivity extends BaseActivity implements
 
 
     @Override
-    public void onUsbMounted(Activity activity,boolean flag) {
+    public void onUsbMounted(Activity activity, boolean flag) {
         /**
          * 正在播放的U盘被拔
          */

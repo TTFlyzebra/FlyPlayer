@@ -21,7 +21,6 @@ import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.MarqueeTextView;
 import com.jancar.player.video.R;
 import com.jancar.player.video.VideoActivity;
-import com.ksyun.media.player.misc.KSYProbeMediaInfo;
 
 import java.io.File;
 import java.util.HashSet;
@@ -244,8 +243,8 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
             Bitmap bitmap = null;
             try {
                 final String path = strings[0];
-                KSYProbeMediaInfo ksyProbeMediaInfo = new KSYProbeMediaInfo();
-                bitmap = ksyProbeMediaInfo.getVideoThumbnailAtTime(strings[0], 1, smallImageWidth, smallImageHeight);
+//                KSYProbeMediaInfo ksyProbeMediaInfo = new KSYProbeMediaInfo();
+//                bitmap = ksyProbeMediaInfo.getVideoThumbnailAtTime(strings[0], 1, smallImageWidth, smallImageHeight);
 //                FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
 //                mmr.setDataSource(path);
 //                mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ALBUM);

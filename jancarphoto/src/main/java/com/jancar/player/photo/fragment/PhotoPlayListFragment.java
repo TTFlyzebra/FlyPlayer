@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.Image;
+import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.player.photo.PhotoActivity;
 import com.jancar.player.photo.R;
@@ -29,6 +30,8 @@ public class PhotoPlayListFragment extends BaseFragment implements
     private RecyclerView recyclerView;
     private TextView textView;
     private Handler mHandler = new Handler(Looper.getMainLooper());
+
+    private int spanCount = 3;
 
     public static PhotoPlayListFragment newInstance(Bundle args) {
         PhotoPlayListFragment listPlayFileFragment = new PhotoPlayListFragment();
@@ -53,7 +56,13 @@ public class PhotoPlayListFragment extends BaseFragment implements
         textView = (TextView) view.findViewById(R.id.fm_tv01);
         textView.setText(String.format(getString(R.string.photo_scan2), activity.imageList.size()));
         adapter = new PhotoPlayListAdapater(getActivity(), activity.imageList);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
+        int width = DisplayUtils.getMetrices(getActivity()).widthPixels;
+        if(width>=1280){
+            spanCount = 4;
+        }else{
+            spanCount = 3;
+        }
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), spanCount);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);

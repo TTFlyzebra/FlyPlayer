@@ -12,6 +12,7 @@ import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.FloderVideo;
 import com.jancar.media.data.Music;
 import com.jancar.media.data.Video;
+import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.player.video.R;
 import com.jancar.player.video.VideoActivity;
@@ -36,6 +37,7 @@ public class VideoFloderFragment extends BaseFragment implements
     private Set<String> mHashSet = new HashSet<>();
     private VideoFloderAdapater adapter;
     private boolean isClick = false;
+    private int spanCount = 3;
 
     public static VideoFloderFragment newInstance(Bundle args) {
         VideoFloderFragment musicAlbumFragment = new VideoFloderFragment();
@@ -55,9 +57,16 @@ public class VideoFloderFragment extends BaseFragment implements
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         recyclerView = (RecyclerView) view.findViewById(R.id.fm_rv01);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
+
+        int width = DisplayUtils.getMetrices(getActivity()).widthPixels;
+        if(width>=1280){
+            spanCount = 4;
+        }else{
+            spanCount = 3;
+        }
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), spanCount);
         recyclerView.setLayoutManager(gridLayoutManager);
-        adapter = new VideoFloderAdapater(getActivity(), mAdapterList, 3,recyclerView);
+        adapter = new VideoFloderAdapater(getActivity(), mAdapterList, spanCount,recyclerView);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
         videoUrlList(activity.videoList);

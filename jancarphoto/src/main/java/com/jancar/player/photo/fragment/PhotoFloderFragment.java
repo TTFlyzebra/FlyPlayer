@@ -13,6 +13,7 @@ import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.FloderImage;
 import com.jancar.media.data.Image;
 import com.jancar.media.data.Music;
+import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.player.photo.PhotoActivity;
 import com.jancar.player.photo.R;
@@ -35,6 +36,7 @@ public class PhotoFloderFragment extends BaseFragment implements
     private Set<String> mHashSet = new HashSet<>();
     private PhotoFloderAdapater adapter;
     private boolean isClick = false;
+    private int spanCount = 3;
 
     public static PhotoFloderFragment newInstance(Bundle args) {
         PhotoFloderFragment musicAlbumFragment = new PhotoFloderFragment();
@@ -55,9 +57,15 @@ public class PhotoFloderFragment extends BaseFragment implements
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         recyclerView = (RecyclerView) view.findViewById(R.id.fm_rv01);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
+        int width = DisplayUtils.getMetrices(getActivity()).widthPixels;
+        if (width >= 1280) {
+            spanCount = 4;
+        } else {
+            spanCount = 3;
+        }
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), spanCount);
         recyclerView.setLayoutManager(gridLayoutManager);
-        adapter = new PhotoFloderAdapater(getActivity(), mAdapterList, 3);
+        adapter = new PhotoFloderAdapater(getActivity(), mAdapterList, spanCount);
         recyclerView.setAdapter(adapter);
 //        recyclerView.addItemDecoration(new RecycleViewDivider(getActivity(),
 //                LinearLayoutManager.HORIZONTAL, 1, getActivity().getResources().getColor(R.color.divider)));
@@ -75,14 +83,14 @@ public class PhotoFloderFragment extends BaseFragment implements
     private void scrollCurrentPos() {
         int sort = activity.CURRENT_IMAGE == null ? -1 : activity.CURRENT_IMAGE.sort;
         int pos = -1;
-        for(int i=0;i<mAdapterList.size();i++){
-            if(mAdapterList.get(i).type==2&&mAdapterList.get(i).sort==sort){
+        for (int i = 0; i < mAdapterList.size(); i++) {
+            if (mAdapterList.get(i).type == 2 && mAdapterList.get(i).sort == sort) {
                 pos = i;
                 break;
             }
         }
         adapter.notifyDataSetChanged();
-        ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(pos,60);
+        ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(pos, 60);
     }
 
     @Override
@@ -142,7 +150,7 @@ public class PhotoFloderFragment extends BaseFragment implements
                     group = mAllList.get(i).group;
                     mAllList.get(i).isSelect = true;
                     FlyLog.d("sort = %d,group = %d", sort, group);
-                }else {
+                } else {
                     mAllList.get(i).isSelect = false;
                 }
                 continue;
