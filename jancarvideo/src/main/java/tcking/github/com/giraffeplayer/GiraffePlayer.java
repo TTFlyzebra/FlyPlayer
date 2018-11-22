@@ -324,7 +324,7 @@ public class GiraffePlayer {
                         if (width > 2880 && height > 1620) {
                             FlyLog.e("no support video, width=%d,height=%d", width, height);
                             statusChange(STATUS_ERROR);
-                            mp.stop();
+//                            mp.stop();
                             return false;
                         }
                         if (isShowTestInfo) {
