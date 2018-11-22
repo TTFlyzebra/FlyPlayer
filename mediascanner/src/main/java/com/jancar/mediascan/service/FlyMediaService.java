@@ -242,45 +242,60 @@ public class FlyMediaService extends Service {
                 isNotifyMusic.set(false);
                 final List<Music> musics = mListDiskCache.get(path + "player.music", Music.class);
                 if (musics != null && !musics.isEmpty()) {
-                    if ((new File(musics.get(0).url).exists()) && (new File(musics.get(musics.size() - 1).url).exists())) {
-                        isNotifyMusic.set(true);
-                        sWorker.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                notifyMusicListener(musics);
-                            }
-                        });
-                        FlyLog.d("loading save musics size=%d", musics.size());
+                    try {
+                        if ((new File(musics.get(0).url).exists()) && (new File(musics.get(musics.size() - 1).url).exists())) {
+                            isNotifyMusic.set(true);
+                            sWorker.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    notifyMusicListener(musics);
+                                }
+                            });
+                            FlyLog.d("loading save musics size=%d", musics.size());
+                        }
+                    }catch (Exception e){
+                        FlyLog.e(e.toString());
+                        e.printStackTrace();
                     }
                 }
 
                 isNotifyVideo.set(false);
                 final List<Video> videos = mListDiskCache.get(path + "video", Video.class);
                 if (videos != null && !videos.isEmpty()) {
-                    if ((new File(videos.get(0).url).exists()) && (new File(videos.get(videos.size() - 1).url).exists())) {
-                        isNotifyVideo.set(true);
-                        sWorker.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                notifyVideoListener(videos);
-                            }
-                        });
-                        FlyLog.d("loading save videos size=%d", videos.size());
+                    try {
+                        if ((new File(videos.get(0).url).exists()) && (new File(videos.get(videos.size() - 1).url).exists())) {
+                            isNotifyVideo.set(true);
+                            sWorker.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    notifyVideoListener(videos);
+                                }
+                            });
+                            FlyLog.d("loading save videos size=%d", videos.size());
+                        }
+                    }catch (Exception e){
+                        FlyLog.e(e.toString());
+                        e.printStackTrace();
                     }
                 }
 
                 isNotifyImage.set(false);
                 final List<Image> images = mListDiskCache.get(path + "image", Image.class);
                 if (images != null && !images.isEmpty()) {
-                    if ((new File(images.get(0).url).exists()) && (new File(images.get(images.size() - 1).url).exists())) {
-                        isNotifyImage.set(true);
-                        sWorker.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                notifyImageListener(images);
-                            }
-                        });
-                        FlyLog.d("loading save images size=%d", images.size());
+                    try {
+                        if ((new File(images.get(0).url).exists()) && (new File(images.get(images.size() - 1).url).exists())) {
+                            isNotifyImage.set(true);
+                            sWorker.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    notifyImageListener(images);
+                                }
+                            });
+                            FlyLog.d("loading save images size=%d", images.size());
+                        }
+                    }catch (Exception e){
+                        FlyLog.e(e.toString());
+                        e.printStackTrace();
                     }
                 }
 
