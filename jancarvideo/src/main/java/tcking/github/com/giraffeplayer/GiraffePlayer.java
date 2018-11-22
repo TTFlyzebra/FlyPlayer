@@ -824,7 +824,7 @@ public class GiraffePlayer {
     public void savePathUrl(final String path) {
         final String url = mPlayUrl;
         final int seek = getCurrentPosition();
-        if (!TextUtils.isEmpty(path) && TextUtils.isEmpty(url)) {
+        if (!TextUtils.isEmpty(path) && !TextUtils.isEmpty(url)) {
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -833,12 +833,16 @@ public class GiraffePlayer {
                             SPUtil.set(activity, path + "VIDEO_URL", url);
                             SPUtil.set(activity, path + "VIDEO_SEEK", seek);
                             FlyLog.d("savePathUrl seek=%d,path=%s,url=%s", seek, path, url);
+                        }else{
+                            FlyLog.e("save failed! seek=%d,path=%s,url=%s", seek, path, url);
                         }
                     } catch (Exception e) {
                         FlyLog.e(e.toString());
                     }
                 }
             });
+        }else{
+            FlyLog.e("save failed! seek=%d,path=%s,url=%s", seek, path, url);
         }
     }
 
