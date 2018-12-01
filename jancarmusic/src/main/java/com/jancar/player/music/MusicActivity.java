@@ -83,6 +83,8 @@ public class MusicActivity extends BaseActivity implements
 
     public static boolean isScan = true;
 
+    private float music_left_list_width = 456;
+
     private Runnable seekBarTask = new Runnable() {
         @Override
         public void run() {
@@ -117,6 +119,9 @@ public class MusicActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music);
+
+
+        music_left_list_width = getResources().getDimensionPixelSize(R.dimen.music_left_list_width);
 
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         requestAudioFocus();
@@ -308,7 +313,7 @@ public class MusicActivity extends BaseActivity implements
         mHandler.removeCallbacks(hideLeftLayoutTask);
         boolean isRtl = RtlTools.isLayoutRtl(leftLayout);
         leftLayout.animate().translationX(flag
-                ? isRtl ? 394 : -394 * DisplayUtils.getMetrices(this).widthPixels / 1024
+                ? (isRtl ? (music_left_list_width + 56) : (-music_left_list_width + 56))
                 : 0
         ).setDuration(300).start();
         if (flag) {

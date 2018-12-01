@@ -7,9 +7,19 @@
     <!--右边弹出列表宽度-->
     <dimen name="music_left_list_width">608px</dimen>
     <!--右边弹出列表宽度-->
-    <dimen name="music_left_list_margin_end">-542px</dimen>
+    <dimen name="music_left_list_margin_end">-553px</dimen>
     <!--右边弹出列表高度-->
-    <dimen name="music_left_list_height">286px</dimen>
+    <dimen name="music_left_list_height">306px</dimen>
     <!--底部菜单高度-->
-    <dimen name="music_bottom_menu_height">135px</dimen>
+    <dimen name="music_bottom_menu_height">115px</dimen>
+
+    <dimen name="music_iv01_margin_start">220px</dimen>
+
+    <dimen name="music_iv01_margin_top">5px</dimen>
+
+    <dimen name="music_iv02_margin_start">270px</dimen>
+
+    <dimen name="music_iv02_margin_top">55px</dimen>
+
+    <dimen name="music_lrcview_width">690px</dimen>
 </resources>

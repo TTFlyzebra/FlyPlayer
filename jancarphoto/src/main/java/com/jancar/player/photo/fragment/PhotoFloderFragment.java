@@ -89,8 +89,14 @@ public class PhotoFloderFragment extends BaseFragment implements
                 break;
             }
         }
-        adapter.notifyDataSetChanged();
-        ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(pos, 60);
+        try {
+            if (recyclerView.getScrollState() == RecyclerView.SCROLL_STATE_IDLE || (!recyclerView.isComputingLayout())) {
+                adapter.notifyDataSetChanged();
+                ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(pos, 60);
+            }
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
     }
 
     @Override
