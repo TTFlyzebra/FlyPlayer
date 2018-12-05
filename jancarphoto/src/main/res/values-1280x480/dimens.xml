@@ -9,7 +9,7 @@
     <!--右边弹出列表宽度-->
     <dimen name="photo_left_list_margin_end">-539px</dimen>
     <!--右边弹出列表高度-->
-    <dimen name="photo_left_list_height">283px</dimen>
+    <dimen name="photo_left_list_height">303px</dimen>
     <!--底部菜单高度-->
-    <dimen name="photo_bottom_menu_height">138px</dimen>
+    <dimen name="photo_bottom_menu_height">118px</dimen>
 </resources>

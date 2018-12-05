@@ -154,7 +154,6 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void stop() {
         FlyLog.d("player stop");
-        SPUtil.set(mContext, "LOOPSTATUS", mLoopStatus);
         mPlayUrls.clear();
         mPosMap.clear();
         mPlayPos = -1;
@@ -256,6 +255,7 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void switchLoopStatus() {
         mLoopStatus = (mLoopStatus + 1) % 3;
+        SPUtil.set(mContext, "LOOPSTATUS", mLoopStatus);
         for (IMusicPlayerListener iMusicPlayerListener : listeners) {
             iMusicPlayerListener.loopStatusChange(mLoopStatus);
         }

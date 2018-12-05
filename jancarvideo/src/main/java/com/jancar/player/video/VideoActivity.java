@@ -158,21 +158,17 @@ public class VideoActivity extends BaseActivity implements
         }
     }
 
-    boolean isPause = false;
-
     @Override
     protected void onResume() {
         super.onResume();
         FlyLog.d("onResume setpause=" + setPause);
-        player.onResume();
-        isPause = false;
+//        player.onResume();
     }
 
     @Override
     protected void onPause() {
         FlyLog.d("onPause");
-        isPause = true;
-        player.pause();
+//        player.pause();
         super.onPause();
     }
 
@@ -353,7 +349,7 @@ public class VideoActivity extends BaseActivity implements
     @Override
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s", path);
-        if (isPause) return;
+        if (isStop) return;
         isScan = true;
         if (player.isPlaying()) {
             player.savePathUrl(currenPath);
@@ -370,7 +366,7 @@ public class VideoActivity extends BaseActivity implements
     @Override
     public void videoUrlList(List<Video> videoUrlList) {
         FlyLog.d("get videos size=%d", videoUrlList == null ? 0 : videoUrlList.size());
-        if (isPause) return;
+        if (isStop) return;
         if (videoUrlList != null && !videoUrlList.isEmpty()) {
             videoList.addAll(videoUrlList);
             if ((new File(player.getPlayUrl()).exists()) && player.getPlayUrl().startsWith(currenPath)) {
@@ -395,7 +391,7 @@ public class VideoActivity extends BaseActivity implements
     @Override
     public void scanFinish(String path) {
         FlyLog.d("scanFinish path=%s", path);
-        if (isPause) return;
+        if (isStop) return;
         isScan = false;
         if (videoList == null || videoList.isEmpty()) {
             replaceFragment(fmName[0], R.id.ac_replace_fragment);

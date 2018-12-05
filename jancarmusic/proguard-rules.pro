@@ -170,6 +170,7 @@
 
 -keep class com.jancar.player.music.fragment.**{*;}
 -keep class com.jancar.media.data.** {*;}
+-keep class com.jancar.media.base.** {*;}
 #-----------处理js交互---------------
 
 

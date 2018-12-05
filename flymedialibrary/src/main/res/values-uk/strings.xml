@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">JancarPlayers</string>
+	<string name="giraffe_player_url_empty">Вкажіть адресу, на якій буде відтворено відео.</string>
+	<string name="small_problem">Помилка декодування відео</string>
+	<string name="can_not_play">Не вдається відтворити це відео</string>
+	<string name="not_support">Плеєр не підтримує цей пристрій</string>
+	<string name="disk_list">Список диска</string>
+	<string name="play_list">Список відтворення</string>
+	<string name="file_list">Список файлів</string>
+	<string name="photo_list">Список зображень</string>
+	<string name="storage">Пам\'ять</string>
+	<string name="single">Одинокий</string>
+	<string name="artist">Співак</string>
+	<string name="album">Альбом</string>
+	<string name="folder">Папка</string>
+	<string name="storage_local">Місцеве сховище</string>
+	<string name="storage_usb">USB</string>
+	<string name="no_artist">Невідомий художник</string>
+	<string name="no_album">Невідомий альбом</string>
+	<string name="no_album_start">Невідомий</string>
+	<string name="photo">фото</string>
+	<string name="video">Відео</string>
+	<string name="music">Музика</string>
+	<string name="musicsumformat">(перше %d)</string>
+	<string name="photosumformat">(%d)</string>
+	<string name="videosumformat">(%d набір)</string>
+	<string name="lrc_label">Немає текстів</string>
+	<string name="music_scan1">Сканування пристрою ...</string>
+	<string name="music_scan2">Усього %d пісень</string>
+	<string name="video_scan2">Усього %d відео</string>
+	<string name="photo_scan2">Всього %d зображень</string>
+	<string name="media_parking_prompt_contents">Для водіння, будь ласка, зверніть увагу на водіння!</string>
+	<string name="no_video">Не знайдено відтворюваних відеофайлів</string>
+	<string name="refresh">Оновити</string>
+	<string name="vdec">вдec</string>
+	<string name="fps">кадри / с</string>
+	<string name="v_cache">v хованки</string>
+	<string name="a_cache">покриття</string>
+	<string name="load_cost">вартість завантаження</string>
+	<string name="seek_cost">seek_cost</string>
+	<string name="seek_load_cost">шукати_користувача</string>
+	<string name="tcp_speed">tcp_speed</string>
+	<string name="bit_rate">bit_rate</string>
+</resources>

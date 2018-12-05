@@ -18,7 +18,6 @@ import com.jancar.player.music.R;
 import com.jancar.player.music.model.listener.IMusicPlayerListener;
 import com.jancar.player.music.model.musicplayer.IMusicPlayer;
 import com.jancar.player.music.model.musicplayer.MusicPlayer;
-import com.jancar.player.music.model.musicplayer.RegisterMediaSession;
 
 
 public class MusicService extends Service implements IMusicPlayerListener {
