@@ -10,7 +10,9 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.RemoteException;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.jancar.key.KeyDef;
+import com.jancar.media.JacMediaSession;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Music;
 import com.jancar.media.utils.DisplayUtils;
@@ -39,9 +43,12 @@ import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.jancar.key.KeyDef.KeyAction.KEY_ACTION_UP;
 
 public class MusicActivity extends BaseActivity implements
         SeekBar.OnSeekBarChangeListener,
@@ -72,6 +79,7 @@ public class MusicActivity extends BaseActivity implements
     private String artist = null;
     private String album = null;
     private String lyrics = null;
+    private String title = null;
 
     private int HIDE_TIME = 5000;
     private static final int REFRESH_SEEK_LRC_TIME = 1000;
@@ -112,14 +120,16 @@ public class MusicActivity extends BaseActivity implements
         }
     };
     private AudioManager mAudioManager;
+    private JacMediaSession jacMediaSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music);
-
+        initMediaSession();
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         requestAudioFocus();
+
 
         /**
          *监听通知栏退出广播
@@ -142,6 +152,42 @@ public class MusicActivity extends BaseActivity implements
          * 更新循环状态
          */
         loopStatusChange(musicPlayer.getLoopStatus());
+    }
+
+    private void initMediaSession() {
+        jacMediaSession = new JacMediaSession(this) {
+            @Override
+            public boolean OnKeyEvent(int key, int state) throws RemoteException {
+                boolean bRet = true;
+                try {
+                    KeyDef.KeyType keyType = KeyDef.KeyType.nativeToType(key);
+                    KeyDef.KeyAction keyAction = KeyDef.KeyAction.nativeToType(state);
+                    if (keyAction == KEY_ACTION_UP) {
+                        switch (keyType) {
+                            case KEY_PREV:
+                                musicPlayer.playFore();
+                                break;
+                            case KEY_NEXT:
+                                musicPlayer.playNext();
+                                break;
+                            case KEY_PAUSE:
+                                musicPlayer.pause();
+                                break;
+                            case KEY_PLAY:
+                                musicPlayer.start();
+                                break;
+                            default:
+                                bRet = false;
+                                break;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return bRet;
+            }
+        };
+        jacMediaSession.setActive(true);
     }
 
     private void initView() {
@@ -196,6 +242,7 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     protected void onDestroy() {
+        jacMediaSession.setActive(false);
         mHandler.removeCallbacksAndMessages(null);
         musicPlayer.savePathUrl(currenPath);
         musicPlayer.removeListener(this);
@@ -377,6 +424,7 @@ public class MusicActivity extends BaseActivity implements
                 ivImage.setImageResource(R.drawable.media_music_iv02);
                 break;
         }
+        jacMediaSession.notifyPlayState(statu);
         play.setImageResource(musicPlayer.isPlaying() ? R.drawable.media_pause : R.drawable.media_play);
         ivImage.setAnimatePlaying(musicPlayer.isPlaying());
 
@@ -384,6 +432,7 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     public void loopStatusChange(int staut) {
+        jacMediaSession.notifyRepeat(staut);
         switch (staut) {
             case MusicPlayer.LOOP_ALL:
                 ivLoop.setImageResource(R.drawable.media_loop_all);
@@ -399,6 +448,7 @@ public class MusicActivity extends BaseActivity implements
 
     private void initSeekBar() {
         int sumTime = musicPlayer.getDuration();
+        jacMediaSession.notifyProgress(sumTime, seekBarPos);
         seekBar.setMax(sumTime);
         int hou = sumTime / 3600000;
         int min = sumTime / 60000 % 60;
@@ -412,7 +462,8 @@ public class MusicActivity extends BaseActivity implements
     }
 
     private void upPlayInfo() {
-        tvSingle.setText(StringTools.getNameByPath(musicPlayer.getPlayUrl()));
+        title = StringTools.getNameByPath(musicPlayer.getPlayUrl());
+        tvSingle.setText(title);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -471,9 +522,20 @@ public class MusicActivity extends BaseActivity implements
                     }
                 }
             });
+            jacMediaSession.notifyPlayUri(title);
+            jacMediaSession.notifyId3(title, artist, album, Bitmap2Bytes(bitmap));
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }
+    }
+
+    public byte[] Bitmap2Bytes(Bitmap bm) {
+        if (bm == null) {
+            bm = defaultBitmap;
+        }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
     }
 
 
@@ -498,6 +560,7 @@ public class MusicActivity extends BaseActivity implements
     }
 
     public void setSeekStartText(int seekPos) {
+        jacMediaSession.notifyProgress(musicPlayer.getDuration(), seekPos);
         int hou = seekPos / 3600000;
         int min = seekPos / 60000 % 60;
         int sec = seekPos / 1000 % 60;

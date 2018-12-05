@@ -85,4 +85,5 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     compileOnly 'com.android.support:appcompat-v7:23.+'
     compileOnly 'com.android.support:recyclerview-v7:23.+'
+    compileOnly files('libs/classes.jar')
 }

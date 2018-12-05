@@ -31,7 +31,7 @@ public class MusicService extends Service implements IMusicPlayerListener {
     private IMusicPlayer musicPlayer = MusicPlayer.getInstance();
     private ServiceBroadCast broadcastreceiver = new ServiceBroadCast();
     public static final String MAIN_ACTION_BROADCAST_EXIT = "MAIN_ACTION_BROADCAST_EXIT";
-    private RegisterMediaSession registerMediaSession;
+    //    private RegisterMediaSession registerMediaSession;
 
     @SuppressLint("NewApi")
     @Override
@@ -74,8 +74,8 @@ public class MusicService extends Service implements IMusicPlayerListener {
         noti.bigContentView = remoteviews;
         noti.icon = android.R.drawable.ic_media_play;
         musicPlayer.addListener(this);
-        registerMediaSession = new RegisterMediaSession(this, musicPlayer);
-        registerMediaSession.requestMediaButton();
+//        registerMediaSession = new RegisterMediaSession(this, musicPlayer);
+//        registerMediaSession.requestMediaButton();
     }
 
     @Override
@@ -87,7 +87,7 @@ public class MusicService extends Service implements IMusicPlayerListener {
     @Override
     public void onDestroy() {
         FlyLog.d("onDestroy");
-        registerMediaSession.releaseMediaButton();
+//        registerMediaSession.releaseMediaButton();
 //        stopForeground(true);
         unregisterReceiver(broadcastreceiver);
         musicPlayer.removeListener(this);
@@ -131,9 +131,9 @@ public class MusicService extends Service implements IMusicPlayerListener {
                 if (intent.getStringExtra("ACTION").equals("FORE")) {
                     musicPlayer.playFore();
                 } else if (intent.getStringExtra("ACTION").equals("PLAY")) {
-                    if(musicPlayer.isPlaying()) {
+                    if (musicPlayer.isPlaying()) {
                         musicPlayer.pause();
-                    }else{
+                    } else {
                         musicPlayer.start();
                     }
                     showNotification();

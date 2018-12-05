@@ -29,5 +29,5 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:23.+'
     implementation files('libs/disklrucache.jar')
     implementation files('libs/glide-3.7.0.jar')
-    compileOnly files('libs/framworks.jar')
+    compileOnly files('libs/classes.jar')
 }
