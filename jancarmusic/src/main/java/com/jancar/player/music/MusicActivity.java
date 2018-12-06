@@ -485,6 +485,7 @@ public class MusicActivity extends BaseActivity implements
             artist = "";
             album = "";
             lyrics = "";
+            byte[] albumImageData = null;
             if (url.toLowerCase().endsWith(".mp3")) {
                 FlyLog.d("start get id3 info url=%s", url);
                 Mp3File mp3file = new Mp3File(url);
@@ -493,7 +494,7 @@ public class MusicActivity extends BaseActivity implements
                     artist = TextUtils.isEmpty(id3v2Tag.getArtist()) ? "" : id3v2Tag.getArtist();
                     album = TextUtils.isEmpty(id3v2Tag.getAlbum()) ? "" : id3v2Tag.getAlbum();
                     lyrics = TextUtils.isEmpty(id3v2Tag.getLyrics()) ? "" : id3v2Tag.getLyrics();
-                    byte[] albumImageData = id3v2Tag.getAlbumImage();
+                    albumImageData = id3v2Tag.getAlbumImage();
                     if (albumImageData != null) {
                         bitmap = BitmapFactory.decodeByteArray(albumImageData, 0, albumImageData.length);
                     }
@@ -526,21 +527,11 @@ public class MusicActivity extends BaseActivity implements
                 }
             });
             jacMediaSession.notifyPlayUri(title);
-            jacMediaSession.notifyId3(title, artist, album, Bitmap2Bytes(bitmap));
+            jacMediaSession.notifyId3(title, artist, album, albumImageData);
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }
     }
-
-    public byte[] Bitmap2Bytes(Bitmap bm) {
-        if (bm == null) {
-            bm = defaultBitmap;
-        }
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        return baos.toByteArray();
-    }
-
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -563,7 +554,7 @@ public class MusicActivity extends BaseActivity implements
     }
 
     public void setSeekStartText(int seekPos) {
-        jacMediaSession.notifyProgress(musicPlayer.getDuration(), seekPos);
+        jacMediaSession.notifyProgress(seekPos, musicPlayer.getDuration());
         int hou = seekPos / 3600000;
         int min = seekPos / 60000 % 60;
         int sec = seekPos / 1000 % 60;
