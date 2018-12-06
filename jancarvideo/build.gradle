@@ -34,7 +34,7 @@ android {
         versionCode gitCommitCount.toInteger()
         versionName "v1.0."+gitSHA
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        flavorDimensions "versionCode"
     }
 
     signingConfigs {
@@ -52,6 +52,33 @@ android {
             keyPassword 'android'
         }
     }
+
+    sourceSets {
+        one {
+//            manifest.srcFile 'src/default1/defaultAndroidManifest.xml'
+            java.srcDir 'src/one/java' // 指定源码目录
+            resources.srcDir 'src/one/res' //资源目录
+        }
+        two {
+//            manifest.srcFile 'src/volkswagen/volkswagenAndroidManifest.xml'
+            java.srcDir 'src/two/java' // 指定源码目录
+            resources.srcDir 'src/two/res' //资源目录
+        }
+    }
+
+    productFlavors {
+        one {
+//            manifestPlaceholders = [app_name:"ViewDVR",package_name:"com.longhorn.viewdvr"]
+//            applicationId = "com.longhorn.viewdvr"
+            versionName "1.0"
+        }
+        two {
+//            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
+//            applicationId = "com.longhorn.vwdvr"
+            versionName "1.0"
+        }
+    }
+
     buildTypes {
         release {
 //            minifyEnabled true //混淆
