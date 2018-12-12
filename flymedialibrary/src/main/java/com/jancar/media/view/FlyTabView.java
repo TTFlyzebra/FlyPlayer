@@ -47,6 +47,7 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
     }
 
     public void setTitles(String[] strs) {
+        removeAllViews();
         this.titles = strs;
         if (titles == null || titles.length == 0) return;
         textViews = new FlyTabTextView[titles.length];

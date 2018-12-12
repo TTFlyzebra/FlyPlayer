@@ -6,11 +6,13 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.jancar.media.Entry.StorageEntry;
 import com.jancar.media.R;
 import com.jancar.media.adpater.StorageAdapater;
 import com.jancar.media.base.BaseActivity;
@@ -22,6 +24,10 @@ import com.jancar.media.model.storage.IStorage;
 import com.jancar.media.model.storage.Storage;
 import com.jancar.media.receiver.DiskReceiver;
 import com.jancar.media.utils.FlyLog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +99,7 @@ public class StorageFragment extends BaseFragment implements
         mList.clear();
         mList.addAll(storageList);
         adapater.notifyDataSetChanged();
+        EventBus.getDefault().post(new StorageEntry(0,mList.size()));
     }
 
     @Override
@@ -136,6 +143,4 @@ public class StorageFragment extends BaseFragment implements
             }
         }
     }
-
-
 }
