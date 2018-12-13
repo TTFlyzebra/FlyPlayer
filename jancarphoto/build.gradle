@@ -88,12 +88,12 @@ android {
         AP1 {
 //            manifestPlaceholders = [app_name:"ViewDVR",package_name:"com.longhorn.viewdvr"]
 //            applicationId = "com.longhorn.viewdvr"
-            versionName "1.0"
+            versionName "v1.0."+gitSHA
         }
         AA1 {
 //            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
 //            applicationId = "com.longhorn.vwdvr"
-            versionName "1.0"
+            versionName "v2.0."+gitSHA
         }
     }
 
@@ -116,9 +116,9 @@ android {
         variant.outputs.all {
             def fileName
             if (variant.buildType.name.equals('release')) {
-                fileName = "${applicationId}_release_${gitSHA}_${gitCommitCount}_${createTime}.apk"
+                fileName = "${applicationId}_release_${gitCommitCount}_${createTime}_${versionName}.apk"
             } else if (variant.buildType.name.equals('debug')) {
-                fileName = "${applicationId}_debug_${gitSHA}_${gitCommitCount}_${createTime}.apk"
+                fileName = "${applicationId}_debug_${gitCommitCount}_${createTime}_${versionName}.apk"
             }
             outputFileName = fileName;
         }
