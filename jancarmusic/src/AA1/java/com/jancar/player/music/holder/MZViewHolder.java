@@ -1,4 +1,4 @@
-package com.jancar.player.music.banner.holder;
+package com.jancar.player.music.holder;
 
 import android.content.Context;
 import android.view.View;
@@ -7,7 +7,7 @@ import android.view.View;
  * Created by zhouwei on 17/5/26.
  */
 
-public interface ViewHolder<T> {
+public interface MZViewHolder<T> {
     /**
      *  创建View
      * @param context

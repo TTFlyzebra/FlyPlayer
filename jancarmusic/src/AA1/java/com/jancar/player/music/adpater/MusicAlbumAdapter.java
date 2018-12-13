@@ -2,7 +2,6 @@ package com.jancar.player.music.adpater;
 
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -24,14 +23,15 @@ public class MusicAlbumAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private List<String> groupList;
     private List<List<String>> itemList;
-//    List<Bitmap> albBitmap;
-
-    //    public MusicAlbumAdapter(Context context, List<String> groupList, List<List<String>> itemList, List<Bitmap> albBitmap) {
+//    List<String> albPhotoList;
+//
+//    public MusicAlbumAdapter(Context context, List<String> groupList, List<List<String>> itemList, List<String> albPhotoList) {
 //        mContext = context;
 //        this.groupList = groupList;
 //        this.itemList = itemList;
-//        this.albBitmap = albBitmap;
+//        this.albPhotoList = albPhotoList;
 //    }
+
     public MusicAlbumAdapter(Context context, List<String> groupList, List<List<String>> itemList) {
         mContext = context;
         this.groupList = groupList;
@@ -105,7 +105,8 @@ public class MusicAlbumAdapter extends BaseExpandableListAdapter {
             holder = (ViewHolderGroup) convertView.getTag();
         }
         holder.imageView1.setImageResource(isExpanded ? R.drawable.media_music_album_02 : R.drawable.media_music_album);
-//        holder.imageView1.setImageBitmap(albBitmap.get(groupPosition));
+//        holder.imageView1.setImageBitmap(getAlbBitMap(albPhotoList.get(groupPosition)));
+
         holder.imageView2.setImageResource(isExpanded ? R.drawable.media_down_02 : R.drawable.media_right);
         holder.imageViewbg.setVisibility(isExpanded ? View.GONE : View.VISIBLE);
         if (isExpanded) {

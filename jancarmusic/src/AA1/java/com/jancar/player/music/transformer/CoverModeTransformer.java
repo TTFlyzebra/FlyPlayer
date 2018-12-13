@@ -1,8 +1,11 @@
-package com.jancar.player.music.banner.transformer;
+package com.jancar.player.music.transformer;
 
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
+/**
+ * Created by zhouwei on 17/8/20.
+ */
 
 public class CoverModeTransformer implements ViewPager.PageTransformer {
 

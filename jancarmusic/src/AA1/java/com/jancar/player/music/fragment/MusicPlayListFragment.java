@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.jancar.media.Entry.StorageEntry;
 import com.jancar.media.data.Music;
 import com.jancar.media.module.RecycleViewDivider;
 import com.jancar.media.utils.FlyLog;
@@ -16,8 +15,6 @@ import com.jancar.player.music.MusicActivity;
 import com.jancar.player.music.R;
 import com.jancar.player.music.adpater.MusicPlayListAdapter;
 import com.jancar.player.music.model.musicplayer.MusicPlayer;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 

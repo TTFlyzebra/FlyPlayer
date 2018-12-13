@@ -4,28 +4,14 @@
                 android:clipChildren="false"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-     <com.mydemo.mzbanner.CustomViewPager
+     <com.jancar.player.music.CustomViewPager
          android:id="@+id/mzbanner_vp"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:clipChildren="false"
-         android:layout_marginLeft="60dp"
-         android:layout_marginRight="60dp"
-         >
+         android:layout_marginLeft="100px"
+         android:layout_marginRight="100px">
 
-     </com.mydemo.mzbanner.CustomViewPager>
-     <RelativeLayout
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:layout_alignParentBottom="true"
-         android:layout_marginBottom="20dp"
-         >
-         <LinearLayout
-             android:id="@+id/banner_indicator_container"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:orientation="horizontal"
-             android:layout_centerHorizontal="true"
-             />
-     </RelativeLayout>
+     </com.jancar.player.music.CustomViewPager>
+
 </RelativeLayout>

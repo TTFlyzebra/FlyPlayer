@@ -34,6 +34,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     public static final String DEF_PATH = "/storage/emulated/0";
     public static String currenPath = DEF_PATH;
     protected static boolean isStop = false;
+    public static int StorageNum;
 
     @SuppressLint("WrongConstant")
     @Override
@@ -196,7 +197,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
                         break;
                 }
                 FlyLog.d("current path is removed=" + flag);
-                if(mJancarHandler!=null){
+                if (mJancarHandler != null) {
                     mJancarHandler.obtainMessage(1, flag).sendToTarget();
                 }
                 super.OnStorage(state);
@@ -215,7 +216,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
             softReference = activity;
         }
 
-        public void stop(){
+        public void stop() {
             removeCallbacksAndMessages(null);
             softReference.clear();
             softReference = null;
@@ -226,7 +227,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
             switch (msg.what) {
                 case 1:
                     boolean flag = (boolean) msg.obj;
-                    if(softReference!=null) {
+                    if (softReference != null) {
                         Activity activity = softReference.get();
                         onUsbMounted(activity, flag);
                     }

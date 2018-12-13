@@ -1,18 +1,24 @@
-package com.jancar.player.music.banner;
+package com.jancar.player.music;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.SparseArray;
+import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-
 public class CustomViewPager extends ViewPager {
     private ArrayList<Integer> childCenterXAbs = new ArrayList<>();
     private SparseArray<Integer> childIndex = new SparseArray<>();
+    //是否可以进行滑动
+    private boolean isSlide = true;
+
+    public void setSlide(boolean slide) {
+        isSlide = slide;
+    }
 
     public CustomViewPager(Context context) {
         super(context);
@@ -24,7 +30,7 @@ public class CustomViewPager extends ViewPager {
         init();
     }
 
-    private void init(){
+    private void init() {
         setClipToPadding(false);
         setOverScrollMode(OVER_SCROLL_NEVER);
     }
@@ -60,5 +66,10 @@ public class CustomViewPager extends ViewPager {
         int[] array = new int[2];
         view.getLocationOnScreen(array);
         return array[0] + view.getWidth() / 2;
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return isSlide;
     }
 }

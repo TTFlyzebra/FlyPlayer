@@ -15,7 +15,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.jancar.media.Entry.StorageEntry;
+
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Video;
 import com.jancar.media.utils.FlyLog;
@@ -26,9 +26,7 @@ import com.jancar.media.view.FlyTabView;
 import com.jancar.media.view.ParkWarningView;
 import com.jancar.media.view.TouchEventRelativeLayout;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+
 
 import java.io.File;
 import java.util.ArrayList;
@@ -141,7 +139,6 @@ public class VideoActivity extends BaseActivity implements
     @Override
     protected void onStart() {
         registerMediaSession.requestMediaButton();
-        EventBus.getDefault().register(this);
         touchTime = 0;
         showControlView(true);
         super.onStart();
@@ -191,7 +188,6 @@ public class VideoActivity extends BaseActivity implements
         player.stop();
         mHandler.removeCallbacks(seekBarTask);
         registerMediaSession.releaseMediaButton();
-        EventBus.getDefault().unregister(this);
         super.onStop();
     }
 
@@ -432,7 +428,7 @@ public class VideoActivity extends BaseActivity implements
     }
 
     private void updateTabView(int floderNum, int size, int size1) {
-        String floder = String.format(getString(R.string.disk_list) + "\n" + "(" + "%d" + ")", floderNum);
+        String floder = String.format(getString(R.string.disk_list) + "\n" + "(" + "%d" + ")", BaseActivity.StorageNum);
         String photo = String.format(getString(R.string.play_list) + "\n" + "(" + "%d" + ")", size);
         String file = String.format(getString(R.string.file_list) + "\n" + "(" + "%d" + ")", size1);
         titles = new String[]{floder, photo, file};
@@ -581,16 +577,5 @@ public class VideoActivity extends BaseActivity implements
         }
     }
 
-    /**
-     * 事件响应方法
-     * 蓝牙连接上后消失提示框
-     *
-     * @param event
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onStorageEvent(StorageEntry event) {
-        if (event.getType() == 0) {
-            floderNum = event.getStorageNum();
-        }
-    }
+
 }

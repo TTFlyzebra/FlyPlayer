@@ -169,19 +169,39 @@ public class MusicActivity extends BaseActivity implements
                     switch (keyType) {
                         case KEY_PREV:
                             if (keyAction == KEY_ACTION_UP)
-                                musicPlayer.playFore();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        musicPlayer.playFore();
+                                    }
+                                });
                             break;
                         case KEY_NEXT:
                             if (keyAction == KEY_ACTION_UP)
-                                musicPlayer.playNext();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        musicPlayer.playNext();
+                                    }
+                                });
                             break;
                         case KEY_PAUSE:
                             if (keyAction == KEY_ACTION_UP)
-                                musicPlayer.pause();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        musicPlayer.pause();
+                                    }
+                                });
                             break;
                         case KEY_PLAY:
                             if (keyAction == KEY_ACTION_UP)
-                                musicPlayer.start();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        musicPlayer.start();
+                                    }
+                                });
                             break;
                         default:
                             bRet = false;

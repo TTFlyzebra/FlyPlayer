@@ -135,5 +135,4 @@ dependencies {
     compileOnly 'com.android.support:recyclerview-v7:23.+'
 //    implementation 'org.greenrobot:eventbus:3.1.1'
     compileOnly files('libs/glide-3.7.0.jar')
-    implementation 'org.greenrobot:eventbus:3.1.1'
 }

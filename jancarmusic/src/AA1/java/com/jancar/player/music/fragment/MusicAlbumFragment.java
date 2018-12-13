@@ -13,6 +13,7 @@ import android.widget.ExpandableListView;
 
 import com.jancar.media.data.Music;
 import com.jancar.media.utils.FlyLog;
+import com.jancar.player.music.MusicActivity;
 import com.jancar.player.music.R;
 import com.jancar.player.music.adpater.MusicAlbumAdapter;
 import com.jancar.player.music.model.musicplayer.MusicPlayer;
@@ -34,8 +35,8 @@ public class MusicAlbumFragment extends MusicFragment implements
     private List<Bitmap> albBitmap = new ArrayList<>();
     private MusicAlbumAdapter adapter;
     private boolean isClick = false;
-    private Bitmap bitmap = null;
     private Activity mActivity;
+
 
     public static MusicAlbumFragment newInstance(Bundle args) {
         MusicAlbumFragment musicAlbumFragment = new MusicAlbumFragment();
@@ -61,6 +62,7 @@ public class MusicAlbumFragment extends MusicFragment implements
     public void onViewCreated(View view, Bundle savedInstanceState) {
         expandableListView = (ExpandableListView) view.findViewById(R.id.fm_file_list_el01);
         expandableListView.setItemsCanFocus(true);
+//        adapter = new MusicAlbumAdapter(getActivity(), groupList, itemList, ((MusicActivity) getActivity()).albPhotoList);
         adapter = new MusicAlbumAdapter(getActivity(), groupList, itemList);
         expandableListView.setAdapter(adapter);
         expandableListView.setGroupIndicator(null);
@@ -132,26 +134,12 @@ public class MusicAlbumFragment extends MusicFragment implements
             if (musicUrlList != null && getActivity() != null && activity != null) {
                 groupList.clear();
                 itemList.clear();
-                byte[] albumImageData = null;
                 for (int i = 0; i < musicUrlList.size(); i++) {
                     String album = musicUrlList.get(i).album;
                     if (mHashMap.get(album) == null) {
                         mHashMap.put(album, new ArrayList<String>());
                     }
                     mHashMap.get(album).add(musicUrlList.get(i).url);
-                    String url = musicUrlList.get(i).url;
-//                    if (url.toLowerCase().endsWith(".mp3")) {
-//                        Mp3File mp3file = new Mp3File(url);
-//                        ID3v2 id3v2Tag = mp3file.getId3v2Tag();
-//                        albumImageData = id3v2Tag.getAlbumImage();
-//                        if (albumImageData != null) {
-//                            bitmap = BitmapFactory.decodeByteArray(albumImageData, 0, albumImageData.length);
-//
-//                        } else {
-//                            bitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.media_music_album_02);
-//                        }
-//                        albBitmap.add(bitmap);
-//                    }
                 }
                 Log.e("MusicAlbumFragment", "albBitmap:" + albBitmap.size());
                 groupList.addAll(mHashMap.keySet());

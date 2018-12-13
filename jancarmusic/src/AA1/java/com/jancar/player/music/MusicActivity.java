@@ -6,25 +6,28 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.jancar.key.KeyDef;
-import com.jancar.media.Entry.StorageEntry;
 import com.jancar.media.JacMediaSession;
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Music;
+import com.jancar.media.utils.BlurUtil;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.RtlTools;
 import com.jancar.media.utils.StringTools;
@@ -35,22 +38,20 @@ import com.jancar.media.view.FlyTabView;
 import com.jancar.media.view.MarqueeTextView;
 import com.jancar.media.view.TouchEventRelativeLayout;
 import com.jancar.media.view.lrcview.LrcView;
-import com.jancar.player.music.banner.BannerView;
-import com.jancar.player.music.banner.holder.HolderCreator;
-import com.jancar.player.music.banner.holder.ViewHolder;
+import com.jancar.player.music.holder.MZHolderCreator;
+import com.jancar.player.music.holder.MZViewHolder;
 import com.jancar.player.music.model.listener.IMusicPlayerListener;
 import com.jancar.player.music.model.musicplayer.IMusicPlayer;
 import com.jancar.player.music.model.musicplayer.MusicPlayer;
 import com.jancar.player.music.service.MusicService;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import com.mpatric.mp3agic.UnsupportedTagException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -81,6 +82,9 @@ public class MusicActivity extends BaseActivity implements
     private LrcView lrcView;
     private FlyTabView tabView;
     private LinearLayout llContent;
+    private RelativeLayout relaMusicBg;//背景
+    private MZBannerView mzBannerView;
+    public static final int[] BANNER = new int[]{R.mipmap.banner1, R.mipmap.banner2, R.mipmap.banner3, R.mipmap.banner4, R.mipmap.banner5};
 
     private int seekBarPos;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -108,6 +112,8 @@ public class MusicActivity extends BaseActivity implements
     private Map<String, List<String>> mHashMap = new HashMap<>();
     private int floderNum = 0;//存储器
     private int musicUrlNum = 0;
+    public List<String> albPhotoList = new ArrayList<>();//图片
+    private int viewpagerPos;
 
     private Runnable seekBarTask = new Runnable() {
         @Override
@@ -185,19 +191,39 @@ public class MusicActivity extends BaseActivity implements
                     switch (keyType) {
                         case KEY_PREV:
                             if (keyAction == KEY_ACTION_UP)
-                                musicPlayer.playFore();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        musicPlayer.playFore();
+                                    }
+                                });
                             break;
                         case KEY_NEXT:
                             if (keyAction == KEY_ACTION_UP)
-                                musicPlayer.playNext();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        musicPlayer.playNext();
+                                    }
+                                });
                             break;
                         case KEY_PAUSE:
                             if (keyAction == KEY_ACTION_UP)
-                                musicPlayer.pause();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        musicPlayer.pause();
+                                    }
+                                });
                             break;
                         case KEY_PLAY:
                             if (keyAction == KEY_ACTION_UP)
-                                musicPlayer.start();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        musicPlayer.start();
+                                    }
+                                });
                             break;
                         default:
                             bRet = false;
@@ -229,6 +255,8 @@ public class MusicActivity extends BaseActivity implements
         ivLoop = (ImageView) findViewById(R.id.ac_music_iv_loop);
         lrcView = (LrcView) findViewById(R.id.ac_music_lrcview);
         llContent = (LinearLayout) findViewById(R.id.ac_music_content);
+        mzBannerView = (MZBannerView) findViewById(R.id.banner);
+        relaMusicBg = (RelativeLayout) findViewById(R.id.rela_music_bg);
 
         tvSingle.enableMarquee(true);
         tvArtist.enableMarquee(true);
@@ -243,17 +271,56 @@ public class MusicActivity extends BaseActivity implements
         ivLoop.setOnClickListener(this);
         leftLayout.setOnTouchEventListener(this);
         llContent.setOnClickListener(this);
-
 //        tabView.setTitles(titles);
         replaceFragment(fmName[0], R.id.ac_replace_fragment);
         tabView.setFocusPos(0);
+
+//        initAlbPhoto();
+
+
+    }
+
+    private void initAlbPhoto() {
+        mzBannerView.setCanLoop(false);
+        //设置是否可以滑动
+        mzBannerView.setIsSlide(false);
+//        mzBannerView.setCanLoop(true);
+        mzBannerView.setPages(albPhotoList, new MZHolderCreator<BannerViewHolder>() {
+            @Override
+            public BannerViewHolder createViewHolder() {
+                return new BannerViewHolder();
+            }
+        });
+        updateAlbPos();
+        mzBannerView.addPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                viewpagerPos = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
+    }
+
+    private void updateAlbPos() {
+        for (int i = 0; i < albPhotoList.size(); i++) {
+            if (musicPlayer.getPlayUrl().equals(albPhotoList.get(i))) {
+                mzBannerView.setViewPagerItemNum(i);
+            }
+        }
     }
 
     private boolean isStop = true;
 
     protected void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
         isStop = false;
 
     }
@@ -262,7 +329,6 @@ public class MusicActivity extends BaseActivity implements
     protected void onStop() {
         isStop = true;
         super.onStop();
-        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -352,14 +418,17 @@ public class MusicActivity extends BaseActivity implements
         musicUrlNum = musicList.size();
         getArtistAndAlbum();
         updateTabView();
+        initAlbPhoto();
         super.scanFinish(path);
     }
+
 
     private void getArtistAndAlbum() {
         if (musicList != null && musicList.size() > 0) {
             for (int i = 0; i < musicList.size(); i++) {
-                String art = musicList.get(i).artist;
-                String alb = musicList.get(i).album;
+                Music music = musicList.get(i);
+                String art = music.artist;
+                String alb = music.album;
                 if (!artistSet.contains(art)) {
                     artistSet.add(art);
                 }
@@ -371,14 +440,13 @@ public class MusicActivity extends BaseActivity implements
     }
 
     private void updateTabView() {
-        String storage = String.format(getString(R.string.storage) + "\n" + "(" + "%d" + ")", floderNum);
+        String storage = String.format(getString(R.string.storage) + "\n" + "(" + "%d" + ")", BaseActivity.StorageNum);
         String single = String.format(getString(R.string.single) + "\n" + "(" + "%d" + ")", musicUrlNum);
         String ar = String.format(getString(R.string.artist) + "\n" + "(" + "%d" + ")", artistSet.size());
         String al = String.format(getString(R.string.album) + "\n" + "(" + "%d" + ")", albumSet.size());
         String fol = String.format(getString(R.string.folder) + "\n" + "(" + "%d" + ")", groupList.size());
         titles = new String[]{storage, single, ar, al, fol};
         tabView.setTitles(titles);
-
     }
 
     @Override
@@ -410,6 +478,7 @@ public class MusicActivity extends BaseActivity implements
                     musicList.get(sort).artist = musicUrlList.get(i).artist;
                     musicList.get(sort).album = musicUrlList.get(i).album;
                     musicList.get(sort).name = musicUrlList.get(i).name;
+                    albPhotoList.add(musicUrlList.get(i).url);
                 }
             } catch (Exception e) {
                 FlyLog.e(e.toString());
@@ -512,7 +581,7 @@ public class MusicActivity extends BaseActivity implements
 
     @Override
     public void loopStatusChange(int staut) {
-        jacMediaSession.notifyRepeat(staut);
+//        jacMediaSession.notifyRepeat(staut);
         switch (staut) {
             case MusicPlayer.LOOP_ALL:
                 ivLoop.setImageResource(R.drawable.media_loop_all);
@@ -587,7 +656,9 @@ public class MusicActivity extends BaseActivity implements
                 public void run() {
                     try {
                         if (isStop) return;
-                        ivImage.setImageBitmap(bitmap == null ? defaultBitmap : bitmap);
+//                        ivImage.setImageBitmap(bitmap == null ? defaultBitmap : bitmap);
+                        updateAlbPos();
+                        relaMusicBg.setBackground(new BitmapDrawable(BlurUtil.blur(MusicActivity.this, bitmap, 0.5f, 2)));
                         tvArtist.setText(TextUtils.isEmpty(artist) ? getString(R.string.no_artist) : artist);
                         tvAlbum.setText(TextUtils.isEmpty(album) ? getString(R.string.no_album) : album);
                         if (!TextUtils.isEmpty(lyrics)) {
@@ -700,17 +771,52 @@ public class MusicActivity extends BaseActivity implements
         mAudioManager.abandonAudioFocus(mAudioFocusListener);
     }
 
-    /**
-     * 事件响应方法
-     * 蓝牙连接上后消失提示框
-     *
-     * @param event
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onStorageEvent(StorageEntry event) {
-        if (event.getType() == 0) {
-            floderNum = event.getStorageNum();
+    public static class BannerViewHolder implements MZViewHolder<String> {
+        private ImageView mImageView;
+
+        @Override
+        public View createView(Context context) {
+            // 返回页面布局文件
+            View view = LayoutInflater.from(context).inflate(R.layout.banner_item, null);
+            mImageView = (ImageView) view.findViewById(R.id.banner_image);
+            return view;
         }
+
+        @Override
+        public void onBind(Context context, int position, String url) {
+            // 数据绑定
+//            mImageView.setImageResource(data);
+
+            mImageView.setImageBitmap(getAlbBitMap(url));
+        }
+
+    }
+
+    public static Bitmap getAlbBitMap(String url) {
+        Bitmap mBitmap = null;
+        byte[] albumImageData = null;
+        if (url.toLowerCase().endsWith(".mp3")) {
+            Mp3File mp3file = null;
+            try {
+                mp3file = new Mp3File(url);
+                if (mp3file.hasId3v2Tag()) {
+                    ID3v2 id3v2Tag = mp3file.getId3v2Tag();
+                    albumImageData = id3v2Tag.getAlbumImage();
+                    if (albumImageData != null) {
+                        mBitmap = BitmapFactory.decodeByteArray(albumImageData, 0, albumImageData.length);
+                    } else {
+                        //图片为空
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (UnsupportedTagException e) {
+                e.printStackTrace();
+            } catch (InvalidDataException e) {
+                e.printStackTrace();
+            }
+        }
+        return mBitmap;
     }
 
 }
