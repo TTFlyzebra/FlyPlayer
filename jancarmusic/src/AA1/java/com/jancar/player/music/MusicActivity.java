@@ -110,7 +110,6 @@ public class MusicActivity extends BaseActivity implements
     private Set<String> albumSet = new HashSet<>();
     private List<String> groupList = new ArrayList<>();//文件夹
     private Map<String, List<String>> mHashMap = new HashMap<>();
-    private int floderNum = 0;//存储器
     private int musicUrlNum = 0;
     public List<String> albPhotoList = new ArrayList<>();//图片
     private int viewpagerPos;
@@ -310,8 +309,10 @@ public class MusicActivity extends BaseActivity implements
     }
 
     private void updateAlbPos() {
-        for (int i = 0; i < albPhotoList.size(); i++) {
-            if (musicPlayer.getPlayUrl().equals(albPhotoList.get(i))) {
+        int size = albPhotoList.size();
+        for (int i = 0; i < size; i++) {
+            String s = albPhotoList.get(i);
+            if (musicPlayer.getPlayUrl().equals(s)) {
                 mzBannerView.setViewPagerItemNum(i);
             }
         }
@@ -475,10 +476,12 @@ public class MusicActivity extends BaseActivity implements
             try {
                 for (int i = 0; i < musicUrlList.size(); i++) {
                     int sort = musicUrlList.get(i).sort;
-                    musicList.get(sort).artist = musicUrlList.get(i).artist;
-                    musicList.get(sort).album = musicUrlList.get(i).album;
-                    musicList.get(sort).name = musicUrlList.get(i).name;
-                    albPhotoList.add(musicUrlList.get(i).url);
+                    Music music = musicList.get(sort);
+                    Music musicUrl = musicUrlList.get(i);
+                    music.artist = musicUrl.artist;
+                    music.album = musicUrl.album;
+                    music.name = musicUrl.name;
+                    albPhotoList.add(musicUrl.url);
                 }
             } catch (Exception e) {
                 FlyLog.e(e.toString());
