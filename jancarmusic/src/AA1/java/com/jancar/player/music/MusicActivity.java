@@ -576,7 +576,7 @@ public class MusicActivity extends BaseActivity implements
                 ivImage.setImageResource(R.drawable.media_music_iv02);
                 break;
         }
-        jacMediaSession.notifyPlayState(statu);
+        jacMediaSession.notifyPlayState(statu==MusicPlayer.STATUS_PLAYING?1:0);
         play.setImageResource(musicPlayer.isPlaying() ? R.drawable.media_pause : R.drawable.media_play);
         ivImage.setAnimatePlaying(musicPlayer.isPlaying());
 

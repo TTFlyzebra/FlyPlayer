@@ -203,6 +203,22 @@ public class MusicActivity extends BaseActivity implements
                                     }
                                 });
                             break;
+                        case KEY_PPAUSE:
+                            if (keyAction == KEY_ACTION_UP)
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            if (musicPlayer.isPlaying()) {
+                                                musicPlayer.pause();
+                                            } else {
+                                                musicPlayer.start();
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
                         default:
                             bRet = false;
                             break;
@@ -450,7 +466,7 @@ public class MusicActivity extends BaseActivity implements
                 ivImage.setImageResource(R.drawable.media_music_iv02);
                 break;
         }
-        jacMediaSession.notifyPlayState(statu);
+        jacMediaSession.notifyPlayState(statu==MusicPlayer.STATUS_PLAYING?1:0);
         play.setImageResource(musicPlayer.isPlaying() ? R.drawable.media_pause : R.drawable.media_play);
         ivImage.setAnimatePlaying(musicPlayer.isPlaying());
 
