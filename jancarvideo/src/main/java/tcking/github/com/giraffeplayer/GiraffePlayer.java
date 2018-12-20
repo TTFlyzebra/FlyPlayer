@@ -149,7 +149,7 @@ public class GiraffePlayer {
 
 
     /**
-     * try to play when error(only for live video)
+     * try to start when error(only for live video)
      *
      * @param defaultRetryTime millisecond,0 will stop retry,default is 5000 millisecond
      */
@@ -541,7 +541,7 @@ public class GiraffePlayer {
     }
 
     public void play(String url) {
-        FlyLog.d("play url=%s", url);
+        FlyLog.d("start url=%s", url);
         this.mPlayUrl = url;
         if (playerSupport) {
             $.id(R.id.app_video_loading).visible();
@@ -553,7 +553,7 @@ public class GiraffePlayer {
 
 
     public void play(String url, int seek) {
-        FlyLog.d("play url=%s,seek=%d", url, seek);
+        FlyLog.d("start url=%s,seek=%d", url, seek);
         this.mPlayUrl = url;
         if (playerSupport) {
             $.id(R.id.app_video_loading).visible();
@@ -855,7 +855,7 @@ public class GiraffePlayer {
         int seek = (int) SPUtil.get(activity, path + "VIDEO_SEEK", 0);
         FlyLog.d("get Save url=%s,seek=%d", url, seek);
         if (TextUtils.isEmpty(url) || url.equals(mPlayUrl)) {
-            FlyLog.e("play save is playing so return, play url=%s", url);
+            FlyLog.e("start save is playing so return, start url=%s", url);
             return;
         }
         if (!TextUtils.isEmpty(url)) {
@@ -864,7 +864,7 @@ public class GiraffePlayer {
                 play(url, seek);
             }
         } else {
-            FlyLog.e("play file no exists url=%s", url);
+            FlyLog.e("start file no exists url=%s", url);
             mPlayUrl = "";
         }
     }

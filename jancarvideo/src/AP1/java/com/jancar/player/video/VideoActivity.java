@@ -200,7 +200,7 @@ public class VideoActivity extends BaseActivity implements
 //        final String playUrl = intent.getStringExtra(Const.PLAYURL_KEY);
 //        FlyLog.d("playurl=%s", playUrl);
 //        if (!TextUtils.isEmpty(playUrl) && !player.isPlaying()) {
-//            player.play(playUrl);
+//            player.start(playUrl);
 //        }
         super.onNewIntent(intent);
     }
@@ -512,7 +512,7 @@ public class VideoActivity extends BaseActivity implements
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
                     if (player != null && lostPause && !setPause) {
-                        FlyLog.d("get Focus play!");
+                        FlyLog.d("get Focus start!");
                         player.start();
                     }
                     break;

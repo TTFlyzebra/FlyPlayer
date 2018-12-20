@@ -128,7 +128,7 @@ public class MusicService extends Service implements IMusicPlayerListener {
             String action = intent.getAction();
             if (action.equals(SERVICEACTION)) {
                 if (intent.getStringExtra("ACTION").equals("FORE")) {
-                    musicPlayer.playFore();
+                    musicPlayer.playPrev();
                 } else if (intent.getStringExtra("ACTION").equals("PLAY")) {
                     if (musicPlayer.isPlaying()) {
                         musicPlayer.pause();

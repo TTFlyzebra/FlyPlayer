@@ -68,7 +68,7 @@ public class GiraffePlayerActivity extends Activity {
     }
 
     /**
-     * play video
+     * start video
      *
      * @param context
      * @param url     url,title

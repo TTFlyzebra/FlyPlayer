@@ -40,7 +40,7 @@ public interface IMusicPlayer {
 
     void playNext();
 
-    void playFore();
+    void playPrev();
 
     int getPlayPos();
 

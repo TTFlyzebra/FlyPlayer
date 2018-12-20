@@ -34,6 +34,12 @@ android {
             java.srcDir 'src/AA1/java' // 指定源码目录
             resources.srcDir 'src/AA1/res' //资源目录
         }
+
+        AA2 {
+//            manifest.srcFile 'src/volkswagen/volkswagenAndroidManifest.xml'
+            java.srcDir 'src/AA1/java' // 指定源码目录
+            resources.srcDir 'src/AA1/res' //资源目录
+        }
     }
 
     productFlavors {
@@ -47,6 +53,11 @@ android {
 //            applicationId = "com.longhorn.vwdvr"
             versionName "1.0"
         }
+        AA2 {
+//            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
+//            applicationId = "com.longhorn.vwdvr"
+            versionName "1.0"
+        }
     }
 
 }
@@ -56,5 +67,5 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:23.+'
     implementation files('libs/disklrucache.jar')
     implementation files('libs/glide-3.7.0.jar')
-    compileOnly files('libs/classes.jar')
+    compileOnly files('libs/framework.jar')
 }

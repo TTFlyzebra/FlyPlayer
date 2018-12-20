@@ -101,7 +101,7 @@ public class RegisterMediaSession {
             FlyLog.d("media key pause");
             mediaPlayer.pause();
         } else if (KeyEvent.KEYCODE_MEDIA_PLAY == keyCode) {
-            FlyLog.d("media key play");
+            FlyLog.d("media key start");
             mediaPlayer.start();
         }
     }

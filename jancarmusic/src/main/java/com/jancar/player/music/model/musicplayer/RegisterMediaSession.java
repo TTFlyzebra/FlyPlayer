@@ -90,7 +90,7 @@ public class RegisterMediaSession {
         } else if (KeyEvent.KEYCODE_HEADSETHOOK == keyCode) {
         } else if (KeyEvent.KEYCODE_MEDIA_PREVIOUS == keyCode) {
             FlyLog.d("media key fore");
-            musicPlayer.playFore();
+            musicPlayer.playPrev();
         } else if (KeyEvent.KEYCODE_MEDIA_STOP == keyCode) {
             FlyLog.d("media key stop");
             musicPlayer.pause();
@@ -98,7 +98,7 @@ public class RegisterMediaSession {
             FlyLog.d("media key pause");
             musicPlayer.pause();
         } else if (KeyEvent.KEYCODE_MEDIA_PLAY == keyCode) {
-            FlyLog.d("media key play");
+            FlyLog.d("media key start");
             musicPlayer.start();
         }
     }
