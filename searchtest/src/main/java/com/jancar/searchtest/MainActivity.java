@@ -90,4 +90,18 @@ public class MainActivity extends AppCompatActivity {
         }
         tvShow.setText(stringBuffer.toString());
     }
+
+    public void onTitleSingerAlbumFind(View view) {
+        StringBuilder stringBuffer = new StringBuilder("开始按歌手歌名专辑搜索-->"+etSinger.getText().toString()+"-"+etTitle.getText().toString()+"-"+etAlbum.getText().toString()+"......\n");
+        tvShow.setText(stringBuffer.toString());
+        long startTime = System.currentTimeMillis();
+        List<String> list = iJancarSearch.searchMusic(etSinger.getText().toString(),etTitle.getText().toString(),etAlbum.getText().toString());
+        long endTime = System.currentTimeMillis();
+        stringBuffer.append("搜索结束，耗时").append(endTime-startTime).append("毫秒\n");
+        tvShow.setText(stringBuffer.toString());
+        for(String str:list){
+            stringBuffer.append(str).append("\n");
+        }
+        tvShow.setText(stringBuffer.toString());
+    }
 }

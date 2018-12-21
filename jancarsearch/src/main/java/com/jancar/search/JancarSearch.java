@@ -28,6 +28,7 @@ public class JancarSearch implements IJancarSearch {
     public interface Result {
         /**
          * 显示搜索返回结果
+         *
          * @param list
          */
         void notifySearch(List<String> list);
@@ -160,6 +161,33 @@ public class JancarSearch implements IJancarSearch {
     }
 
     @Override
+    public List<String> searchMusic(String singerName, String title, String album) {
+        SearchLog.d("search music singerName=%s,title=%s", singerName, title);
+        List<String> list = new ArrayList<>();
+        try {
+            if (mContext != null) {
+                Cursor cursor = mContext.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        new String[]{
+                                MediaStore.Audio.Media.TITLE,
+                                MediaStore.Audio.Media.ARTIST,
+                                MediaStore.Audio.Media.ALBUM,
+                                MediaStore.Audio.Media.DATA},
+                        MediaStore.Audio.Media.TITLE + " LIKE" + " '%" + title + "%'" +
+                                " AND " + MediaStore.Audio.Media.ARTIST + " LIKE" + " '%" + singerName + "%'" +
+                                " AND " + MediaStore.Audio.Media.ALBUM + " LIKE" + " '%" + album + "%'",
+                        null, MediaStore.Audio.Media.DATE_ADDED + " DESC");
+                while (cursor != null && cursor.moveToNext()) {
+                    String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+                    list.add(path);
+                }
+            }
+        } catch (Exception e) {
+            SearchLog.e(e.toString());
+        }
+        return list;
+    }
+
+    @Override
     public void searchFileByName(String fileName, Result result) {
         executor.execute(new Runnable() {
             @Override
@@ -204,7 +232,17 @@ public class JancarSearch implements IJancarSearch {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                result.notifySearch(searchMusic(singerName,title));
+                result.notifySearch(searchMusic(singerName, title));
+            }
+        });
+    }
+
+    @Override
+    public void searchMusic(final String singerName, final String title, final String album, final Result result) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                result.notifySearch(searchMusic(singerName, title, album));
             }
         });
     }

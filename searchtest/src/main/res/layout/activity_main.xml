@@ -50,7 +50,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="专棋:" />
+            android:text="专辑:" />
 
         <EditText
             android:id="@+id/etAlbum"
@@ -88,6 +88,11 @@
             android:layout_height="wrap_content"
             android:onClick="onTitleSingerFind"
             android:text="按歌名歌手搜索" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onTitleSingerAlbumFind"
+            android:text="按歌名歌手专辑搜索" />
     </LinearLayout>
 
     <ScrollView

@@ -70,6 +70,15 @@ public interface IJancarSearch {
 
 
     /**
+     * 按歌手名称,歌曲名称和专辑名称搜索
+     *
+     * @param singerName 歌手名称
+     * @param title      歌曲名称
+     * @return
+     */
+    List<String> searchMusic(String singerName, String title, String album);
+
+    /**
      * 按文件名搜索媒体文件（支持模糊搜索）
      *
      * @param fileName 文件名
@@ -109,6 +118,17 @@ public interface IJancarSearch {
      * @return
      */
     void searchMusic(String singerName, String title, Result result);
+
+
+    /**
+     * 按歌手名称,歌曲名称和专辑名称搜索
+     *
+     * @param singerName 歌手名称
+     * @param title      歌曲名称
+     * @return
+     */
+    void searchMusic(String singerName, String title, String album, Result result);
+
 
 
 }
