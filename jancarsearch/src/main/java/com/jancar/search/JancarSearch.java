@@ -9,6 +9,8 @@ import android.provider.MediaStore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * Author FlyZebra
@@ -18,10 +20,18 @@ import java.util.List;
 public class JancarSearch implements IJancarSearch {
     private Context mContext;
     private Handler mHandler = new Handler(Looper.getMainLooper());
+    private static final Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     private JancarSearch() {
     }
 
+    public interface Result {
+        /**
+         * 显示搜索返回结果
+         * @param list
+         */
+        void notifySearch(List<String> list);
+    }
 
     private static class JancarSearchHolder {
         @SuppressLint("StaticFieldLeak")
@@ -39,6 +49,7 @@ public class JancarSearch implements IJancarSearch {
 
     @Override
     public void unregister() {
+        mHandler.removeCallbacksAndMessages(null);
         this.mContext = null;
     }
 
@@ -148,9 +159,54 @@ public class JancarSearch implements IJancarSearch {
         return list;
     }
 
-    public interface NotifySearchResult {
-        void notifySearch(List<String> list);
+    @Override
+    public void searchFileByName(String fileName, Result result) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
     }
 
+    @Override
+    public void searchMusicBySinger(final String singerName, final Result result) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                result.notifySearch(searchMusicBySinger(singerName));
+            }
+        });
+    }
+
+    @Override
+    public void searchMusicByTitle(final String title, final Result result) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                result.notifySearch(searchMusicByTitle(title));
+            }
+        });
+    }
+
+    @Override
+    public void searchMusicByAlbum(final String album, final Result result) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                result.notifySearch(searchMusicByAlbum(album));
+            }
+        });
+    }
+
+    @Override
+    public void searchMusic(final String singerName, final String title, final Result result) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                result.notifySearch(searchMusic(singerName,title));
+            }
+        });
+    }
 
 }
