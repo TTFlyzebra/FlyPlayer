@@ -26,6 +26,7 @@ public class StartActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_PERMISSION_CODE);
             }
         }
+        finish();
     }
 
     @Override
