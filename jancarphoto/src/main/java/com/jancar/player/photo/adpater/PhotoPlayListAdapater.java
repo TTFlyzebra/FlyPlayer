@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.jancar.media.data.Image;
 import com.jancar.media.utils.StringTools;
-import com.jancar.player.photo.BasePhotoActivity2;
+import com.jancar.player.photo.PhotoActivity_AP1;
 import com.jancar.player.photo.R;
 
 import java.util.List;
@@ -60,7 +60,7 @@ public class PhotoPlayListAdapater extends RecyclerView.Adapter<PhotoPlayListAda
             }
         });
 
-        if(url.equals(((BasePhotoActivity2)mContext).CURRENT_IMAGE.url)){
+        if(url.equals(((PhotoActivity_AP1)mContext).CURRENT_IMAGE.url)){
             holder.itemView.setSelected(true);
         }else{
             holder.itemView.setSelected(false);

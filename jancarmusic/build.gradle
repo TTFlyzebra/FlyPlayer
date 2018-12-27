@@ -71,12 +71,12 @@ android {
         AP1 {
 //            manifestPlaceholders = [app_name:"ViewDVR",package_name:"com.longhorn.viewdvr"]
 //            applicationId = "com.longhorn.viewdvr"
-            versionName "v1.0."+gitSHA
+            versionName "AP1v1.0."+gitSHA
         }
         AA1 {
 //            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
 //            applicationId = "com.longhorn.vwdvr"
-            versionName "v2.0."+gitSHA
+            versionName "AA1v2.0."+gitSHA
         }
     }
 

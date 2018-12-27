@@ -735,7 +735,6 @@ public class PhotoViewAttacher implements View.OnTouchListener,
 
         // Finally actually translate the matrix
         mSuppMatrix.postTranslate(deltaX, deltaY);
-        FlyLog.d("checkMatrixBounds true");
         return true;
     }
 

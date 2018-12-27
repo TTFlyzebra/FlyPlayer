@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".BasePhotoActivity2"
+            android:name=".PhotoActivity"
             android:exported="true"
             android:icon="@drawable/ic_image"
             android:label="@string/photo"

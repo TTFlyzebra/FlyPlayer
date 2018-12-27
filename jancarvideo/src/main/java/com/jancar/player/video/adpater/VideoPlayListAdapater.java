@@ -18,7 +18,7 @@ import com.jancar.media.module.DoubleBitmapCache;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
 import com.jancar.player.video.R;
-import com.jancar.player.video.VideoActivity;
+import com.jancar.player.video.VideoActivity_AP1;
 import com.ksyun.media.player.misc.KSYProbeMediaInfo;
 
 import java.util.HashSet;
@@ -103,7 +103,7 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
             }
         });
 
-        if (url.equals(((VideoActivity) mContext).player.getPlayUrl())) {
+        if (url.equals(((VideoActivity_AP1) mContext).player.getPlayUrl())) {
             holder.itemView.setSelected(true);
         } else {
             holder.itemView.setSelected(false);

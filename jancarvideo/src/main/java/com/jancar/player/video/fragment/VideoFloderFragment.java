@@ -15,7 +15,7 @@ import com.jancar.media.data.Video;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.player.video.R;
-import com.jancar.player.video.VideoActivity;
+import com.jancar.player.video.VideoActivity_AP1;
 import com.jancar.player.video.adpater.VideoFloderAdapater;
 
 import java.io.File;
@@ -30,7 +30,7 @@ import tcking.github.com.giraffeplayer.GiraffePlayer;
 public class VideoFloderFragment extends BaseFragment implements
         VideoFloderAdapater.OnItemClickListener,
         GiraffePlayer.OnPlayStatusChangeLiseter{
-    private VideoActivity activity;
+    private VideoActivity_AP1 activity;
     private RecyclerView recyclerView;
     private List<FloderVideo> mAllList = new ArrayList<>();
     private List<FloderVideo> mAdapterList = new ArrayList<>();
@@ -50,7 +50,7 @@ public class VideoFloderFragment extends BaseFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        activity = (VideoActivity) getActivity();
+        activity = (VideoActivity_AP1) getActivity();
         return inflater.inflate(R.layout.fragment_rv_list2, null);
     }
 

@@ -13,42 +13,42 @@ import com.jancar.media.data.Video;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.player.video.R;
-import com.jancar.player.video.VideoActivity;
+import com.jancar.player.video.VideoActivity_AP1;
 import com.jancar.player.video.adpater.VideoPlayListAdapater;
 
 import java.util.List;
 
 import tcking.github.com.giraffeplayer.GiraffePlayer;
 
-public class VideoPlayListFragment extends BaseFragment implements
+public class VideoPlayListFragment_AP1 extends BaseFragment implements
         VideoPlayListAdapater.OnItemClickListener,
         GiraffePlayer.OnPlayStatusChangeLiseter {
-    private VideoActivity activity;
+    private VideoActivity_AP1 activity;
     private VideoPlayListAdapater adapter;
     private RecyclerView recyclerView;
-    private TextView textView;
+    protected TextView scanMsgTv;
     private int spanCount = 3;
 
-    public static VideoPlayListFragment newInstance(Bundle args) {
-        VideoPlayListFragment listPlayFileFragment = new VideoPlayListFragment();
+    public static VideoPlayListFragment_AP1 newInstance(Bundle args) {
+        VideoPlayListFragment_AP1 listPlayFileFragment = new VideoPlayListFragment_AP1();
         listPlayFileFragment.setArguments(args);
         return listPlayFileFragment;
     }
 
-    public VideoPlayListFragment() {
+    public VideoPlayListFragment_AP1() {
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        activity = (VideoActivity) getActivity();
+        activity = (VideoActivity_AP1) getActivity();
         return inflater.inflate(R.layout.fragment_rv_list, null);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         recyclerView = (RecyclerView) view.findViewById(R.id.fm_rv01);
-        textView = (TextView) view.findViewById(R.id.fm_tv01);
+        scanMsgTv = (TextView) view.findViewById(R.id.fm_tv01);
         adapter = new VideoPlayListAdapater(getActivity(), activity.videoList, recyclerView);
 
         int width = DisplayUtils.getMetrices(getActivity()).widthPixels;
@@ -69,10 +69,10 @@ public class VideoPlayListFragment extends BaseFragment implements
     @Override
     public void onResume() {
         super.onResume();
-        if(VideoActivity.isScan){
-            textView.setText(R.string.music_scan1);
+        if(VideoActivity_AP1.isScan){
+            scanMsgTv.setText(R.string.music_scan1);
         }else{
-            textView.setText(String.format(getString(R.string.video_scan2), activity.videoList.size()));
+            scanMsgTv.setText(String.format(getString(R.string.video_scan2), activity.videoList.size()));
         }
         scrollToCureentPlayItem();
     }
@@ -87,7 +87,7 @@ public class VideoPlayListFragment extends BaseFragment implements
 
     @Override
     public void notifyPathChange(String path) {
-        textView.setText(R.string.music_scan1);
+        scanMsgTv.setText(R.string.music_scan1);
         adapter.notifyDataSetChanged();
     }
 
@@ -101,7 +101,7 @@ public class VideoPlayListFragment extends BaseFragment implements
     @Override
     public void scanFinish(String path) {
         try {
-            textView.setText(String.format(getString(R.string.video_scan2), activity.videoList.size()));
+            scanMsgTv.setText(String.format(getString(R.string.video_scan2), activity.videoList.size()));
         }catch (Exception e){
             FlyLog.e(e.toString());
         }

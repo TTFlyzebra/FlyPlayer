@@ -16,12 +16,11 @@ import android.widget.TextView;
 
 import com.jancar.media.data.FloderVideo;
 import com.jancar.media.module.DoubleBitmapCache;
-import com.jancar.media.utils.BitmapTools;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.MarqueeTextView;
 import com.jancar.player.video.R;
-import com.jancar.player.video.VideoActivity;
+import com.jancar.player.video.VideoActivity_AP1;
 import com.ksyun.media.player.misc.KSYProbeMediaInfo;
 
 import java.io.File;
@@ -102,7 +101,7 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.itemView.setTag(position);
-        String crtUrl = ((VideoActivity)mContext).player.getPlayUrl();
+        String crtUrl = ((VideoActivity_AP1)mContext).player.getPlayUrl();
         if (holder instanceof PhotoHolder) {
             PhotoHolder photoHolder = (PhotoHolder) holder;
 //            Glide.with(mContext)

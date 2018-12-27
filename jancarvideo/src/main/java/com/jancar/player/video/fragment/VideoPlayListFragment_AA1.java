@@ -1,13 +1,9 @@
-package com.jancar.player.photo.fragment;
+package com.jancar.player.video.fragment;
 
 import android.os.Bundle;
 import android.view.View;
 
-/**
- * 不显示底部扫描信息
- */
-public class PhotoPlayListFragment extends Ap1PhotoPlayListFragment{
-
+public class VideoPlayListFragment_AA1 extends VideoPlayListFragment_AP1{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

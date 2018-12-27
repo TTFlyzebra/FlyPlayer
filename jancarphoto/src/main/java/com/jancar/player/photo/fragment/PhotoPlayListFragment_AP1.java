@@ -16,16 +16,16 @@ import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.Image;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
-import com.jancar.player.photo.BasePhotoActivity2;
+import com.jancar.player.photo.PhotoActivity_AP1;
 import com.jancar.player.photo.R;
 import com.jancar.player.photo.adpater.PhotoPlayListAdapater;
 
 import java.util.List;
 
-public class Ap1PhotoPlayListFragment extends BaseFragment implements
+public class PhotoPlayListFragment_AP1 extends BaseFragment implements
         PhotoPlayListAdapater.OnItemClickListener,
         ViewPager.OnPageChangeListener {
-    protected BasePhotoActivity2 activity;
+    protected PhotoActivity_AP1 activity;
     protected PhotoPlayListAdapater adapter;
     protected RecyclerView recyclerView;
     protected TextView scanMsgTv;
@@ -33,19 +33,19 @@ public class Ap1PhotoPlayListFragment extends BaseFragment implements
 
     protected int spanCount = 3;
 
-    public static Ap1PhotoPlayListFragment newInstance(Bundle args) {
-        Ap1PhotoPlayListFragment listPlayFileFragment = new Ap1PhotoPlayListFragment();
+    public static PhotoPlayListFragment_AP1 newInstance(Bundle args) {
+        PhotoPlayListFragment_AP1 listPlayFileFragment = new PhotoPlayListFragment_AP1();
         listPlayFileFragment.setArguments(args);
         return listPlayFileFragment;
     }
 
-    public Ap1PhotoPlayListFragment() {
+    public PhotoPlayListFragment_AP1() {
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        activity = (BasePhotoActivity2) getActivity();
+        activity = (PhotoActivity_AP1) getActivity();
         activity.viewPager.addOnPageChangeListener(this);
         return inflater.inflate(R.layout.fragment_rv_list, null);
     }
@@ -71,7 +71,7 @@ public class Ap1PhotoPlayListFragment extends BaseFragment implements
     @Override
     public void onResume() {
         super.onResume();
-        if (BasePhotoActivity2.isScan) {
+        if (PhotoActivity_AP1.isScan) {
             scanMsgTv.setText(R.string.music_scan1);
         } else {
             scanMsgTv.setText(String.format(getString(R.string.photo_scan2), activity.imageList.size()));

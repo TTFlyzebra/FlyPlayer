@@ -31,7 +31,7 @@ import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.SPUtil;
 import com.jancar.media.utils.SystemPropertiesProxy;
 import com.jancar.player.video.R;
-import com.jancar.player.video.VideoActivity;
+import com.jancar.player.video.VideoActivity_AP1;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -78,7 +78,7 @@ public class GiraffePlayer {
     private static final int MESSAGE_SEEK_NEW_POSITION = 3;
     private static final int MESSAGE_HIDE_CENTER_BOX = 4;
     private static final int MESSAGE_RESTART_PLAY = 5;
-    private final VideoActivity activity;
+    private final VideoActivity_AP1 activity;
     private final IjkVideoView ijkVideoView;
     private final TableLayout mHudView;
     private final TextView mVideoInfoText;
@@ -271,7 +271,7 @@ public class GiraffePlayer {
         } catch (Throwable e) {
             Log.e("GiraffePlayer", "loadLibraries error", e);
         }
-        this.activity = (VideoActivity) activity;
+        this.activity = (VideoActivity_AP1) activity;
 //        app_video_bottom_box = (RelativeLayout) activity.findViewById(R.id.app_video_bottom_box);
         screenWidthPixels = activity.getResources().getDisplayMetrics().widthPixels;
         $ = new Query(activity);

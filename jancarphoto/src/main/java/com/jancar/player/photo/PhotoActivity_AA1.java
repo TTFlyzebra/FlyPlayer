@@ -1,12 +1,13 @@
 package com.jancar.player.photo;
 
 import com.jancar.media.data.Image;
+import com.jancar.media.data.StorageInfo;
 import com.jancar.media.model.storage.Storage;
 import com.jancar.media.utils.FlyLog;
 
 import java.util.List;
 
-public class BasePhotoActivity2 extends BasePhotoActivity1 {
+public class PhotoActivity_AA1 extends PhotoActivity_AP1 {
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(R.layout.activity_photo);
@@ -14,14 +15,16 @@ public class BasePhotoActivity2 extends BasePhotoActivity1 {
 
     @Override
     public void initFragment() {
-        fmName = new String[]{"PhotoStorageFragment", "PhotoPlayListFragment", "PhotoFloderFragment"};
+        fmName = new String[]{"PhotoStorageFragment", "PhotoPlayListFragment_AA1", "PhotoFloderFragment"};
     }
+
 
     @Override
     protected void onStart() {
         super.onStart();
         updateTabView();
     }
+
 
     @Override
     public void imageUrlList(List<Image> imageUrlList) {
@@ -38,7 +41,13 @@ public class BasePhotoActivity2 extends BasePhotoActivity1 {
         String photo = String.format(getString(R.string.photo_list) + "\n" + "(" + "%d" + ")", imgSum);
         String file = String.format(getString(R.string.file_list) + "\n" + "(" + "%d" + ")", fileSum);
         titles = new String[]{floder, photo, file};
-        tabView.setNewTitles(titles);
+        if(tabView!=null){
+            tabView.setNewTitles(titles);
+        }
     }
 
+    @Override
+    public void storageList(List<StorageInfo> storageList) {
+        updateTabView();
+    }
 }

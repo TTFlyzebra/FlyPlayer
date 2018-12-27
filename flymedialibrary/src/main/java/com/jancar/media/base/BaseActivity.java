@@ -16,9 +16,12 @@ import com.jancar.media.data.Image;
 import com.jancar.media.data.Music;
 import com.jancar.media.data.StorageInfo;
 import com.jancar.media.data.Video;
+import com.jancar.media.model.listener.IStorageListener;
 import com.jancar.media.model.listener.IUsbMediaListener;
 import com.jancar.media.model.mediascan.IMediaScan;
 import com.jancar.media.model.mediascan.MediaScan;
+import com.jancar.media.model.storage.IStorage;
+import com.jancar.media.model.storage.Storage;
 import com.jancar.media.utils.CleanLeakUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.SPUtil;
@@ -30,12 +33,13 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseActivity extends AppCompatActivity implements IUsbMediaListener {
+public class BaseActivity extends AppCompatActivity implements IUsbMediaListener,IStorageListener {
     protected IMediaScan usbMediaScan = MediaScan.getInstance();
     public static final String DEF_PATH = "/storage/emulated/0";
     public static String currenPath = DEF_PATH;
     protected static boolean isStop = false;
     public static int StorageNum;
+    private IStorage iStorage = Storage.getInstance();
 
     @SuppressLint("WrongConstant")
     @Override
@@ -43,6 +47,9 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
         super.onCreate(savedInstanceState);
         currenPath = getSavePath();
         mJancarHandler = new MyHandler(new WeakReference<>(this));
+
+        iStorage.addListener(this);
+
         usbMediaScan.addListener(this);
         usbMediaScan.open();
         jancarManager = (JancarManager) getSystemService("jancar_manager");
@@ -84,6 +91,9 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
         jancarManager.unregisterJacStateListener(jacState.asBinder());
         jacState = null;
         jancarManager = null;
+
+        iStorage.removeListener(this);
+
         usbMediaScan.close();
         usbMediaScan.removeListener(this);
         mJancarHandler.stop();
@@ -184,6 +194,11 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     private JacState jacState = new JacSystemStates();
     private JancarManager jancarManager;
 
+    @Override
+    public void storageList(List<StorageInfo> storageList) {
+
+    }
+
     public static class JacSystemStates extends JacState {
         @Override
         public void OnStorage(StorageState state) {
@@ -249,7 +264,6 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     }
 
     protected static MyHandler mJancarHandler;
-
     public void onUsbMounted(Activity activity, boolean flag) {
         if (!flag) {
             FlyLog.e("is back palying andr current(%s) path is removed, finish appliction!", currenPath);

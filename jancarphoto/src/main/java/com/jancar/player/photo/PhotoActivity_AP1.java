@@ -31,7 +31,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
-public abstract class BasePhotoActivity1 extends BaseActivity implements
+public abstract class PhotoActivity_AP1 extends BaseActivity implements
         View.OnClickListener,
         ViewPager.OnPageChangeListener,
         FlyTabView.OnItemClickListener,
@@ -39,7 +39,7 @@ public abstract class BasePhotoActivity1 extends BaseActivity implements
 
     public FlyTabView tabView;
     public String titles[] = new String[]{"磁盘列表", "图片列表", "文件列表"};
-    protected String fmName[] = new String[]{"PhotoStorageFragment", "PhotoPlayListFragment", "PhotoFloderFragment"};
+    protected String fmName[] = new String[]{"PhotoStorageFragment", "PhotoPlayListFragment_AP1", "PhotoFloderFragment"};
     public ViewPager viewPager;
     private MyPageAdapter adapter;
     public List<Image> imageList = new ArrayList<>();
@@ -117,7 +117,9 @@ public abstract class BasePhotoActivity1 extends BaseActivity implements
 
     }
 
-    public abstract void initFragment();
+    public void initFragment(){
+
+    }
 
     private void initView() {
         viewPager = (ViewPager) findViewById(R.id.ac_photo_viewpager);
@@ -377,13 +379,13 @@ public abstract class BasePhotoActivity1 extends BaseActivity implements
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            PhotoView photoView = PhotoViewPool.obtain(BasePhotoActivity1.this);
+            PhotoView photoView = PhotoViewPool.obtain(PhotoActivity_AP1.this);
             photoView.setOnClickListener(photoOnClickListener);
             imageResIDs.put(position, View.generateViewId());
             photoView.setId(imageResIDs.get(position));
             photoView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             photoView.setZoomable(true);
-            Glide.with(BasePhotoActivity1.this)
+            Glide.with(PhotoActivity_AP1.this)
                     .load(imageList.get(position).url)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .error(R.drawable.media_image_error)
