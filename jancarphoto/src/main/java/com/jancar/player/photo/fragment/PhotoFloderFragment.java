@@ -15,7 +15,7 @@ import com.jancar.media.data.Image;
 import com.jancar.media.data.Music;
 import com.jancar.media.utils.DisplayUtils;
 import com.jancar.media.utils.FlyLog;
-import com.jancar.player.photo.PhotoActivity;
+import com.jancar.player.photo.BasePhotoActivity2;
 import com.jancar.player.photo.R;
 import com.jancar.player.photo.adpater.PhotoFloderAdapater;
 
@@ -29,7 +29,7 @@ import java.util.Set;
 public class PhotoFloderFragment extends BaseFragment implements
         PhotoFloderAdapater.OnItemClickListener,
         ViewPager.OnPageChangeListener {
-    private PhotoActivity activity;
+    private BasePhotoActivity2 activity;
     private RecyclerView recyclerView;
     private List<FloderImage> mAllList = new ArrayList<>();
     private List<FloderImage> mAdapterList = new ArrayList<>();
@@ -49,7 +49,7 @@ public class PhotoFloderFragment extends BaseFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        activity = (PhotoActivity) getActivity();
+        activity = (BasePhotoActivity2) getActivity();
         activity.viewPager.addOnPageChangeListener(this);
         return inflater.inflate(R.layout.fragment_rv_list2, null);
     }

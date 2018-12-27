@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.jancar.media.data.FloderImage;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.MarqueeTextView;
-import com.jancar.player.photo.PhotoActivity;
+import com.jancar.player.photo.BasePhotoActivity2;
 import com.jancar.player.photo.R;
 
 import java.io.File;
@@ -69,7 +69,7 @@ public class PhotoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.itemView.setTag(position);
-        String crtUrl = ((PhotoActivity)mContext).CURRENT_IMAGE ==null?"":((PhotoActivity)mContext).CURRENT_IMAGE.url;
+        String crtUrl = ((BasePhotoActivity2)mContext).CURRENT_IMAGE ==null?"":((BasePhotoActivity2)mContext).CURRENT_IMAGE.url;
         if (holder instanceof PhotoHolder) {
             PhotoHolder photoHolder = (PhotoHolder) holder;
             Glide.with(mContext).load((mList.get(position)).url).into(photoHolder.imageView1);

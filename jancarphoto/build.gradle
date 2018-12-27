@@ -82,18 +82,54 @@ android {
             java.srcDir 'src/AA1/java' // 指定源码目录
             resources.srcDir 'src/AA1/res' //资源目录
         }
+
+        AA2 {
+//            manifest.srcFile 'src/volkswagen/volkswagenAndroidManifest.xml'
+            java.srcDir 'src/AA2/java' // 指定源码目录
+            resources.srcDir 'src/AA2/res' //资源目录
+        }
+
+        AA3 {
+//            manifest.srcFile 'src/volkswagen/volkswagenAndroidManifest.xml'
+            java.srcDir 'src/AA2/java' // 指定源码目录
+            resources.srcDir 'src/AA3/res' //资源目录
+        }
+
+        AA4 {
+//            manifest.srcFile 'src/volkswagen/volkswagenAndroidManifest.xml'
+            java.srcDir 'src/AA2/java' // 指定源码目录
+            resources.srcDir 'src/AA4/res' //资源目录
+        }
     }
 
     productFlavors {
         AP1 {
 //            manifestPlaceholders = [app_name:"ViewDVR",package_name:"com.longhorn.viewdvr"]
 //            applicationId = "com.longhorn.viewdvr"
-            versionName "v1.0."+gitSHA
+            versionName "AP1_v1.0."+gitSHA
         }
         AA1 {
 //            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
 //            applicationId = "com.longhorn.vwdvr"
-            versionName "v2.0."+gitSHA
+            versionName "AA1_v1.0."+gitSHA
+        }
+
+        AA2 {
+//            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
+//            applicationId = "com.longhorn.vwdvr"
+            versionName "AA2_v1.0."+gitSHA
+        }
+
+        AA3 {
+//            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
+//            applicationId = "com.longhorn.vwdvr"
+            versionName "AA3_v1.0."+gitSHA
+        }
+
+        AA4 {
+//            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
+//            applicationId = "com.longhorn.vwdvr"
+            versionName "AA4_v1.0."+gitSHA
         }
     }
 

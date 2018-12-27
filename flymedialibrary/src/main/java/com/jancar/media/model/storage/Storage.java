@@ -27,6 +27,7 @@ public class Storage implements IStorage {
         return StorageManagerHolder.sInstance;
     }
 
+
     @Override
     public void addListener(IStorageListener iStorageListener) {
         listeners.add(iStorageListener);
@@ -69,10 +70,22 @@ public class Storage implements IStorage {
         });
     }
 
+    @Override
+    public int getStorageSum() {
+        if (mStorageList.isEmpty()) {
+            final List<StorageInfo> list = StorageTools.getAvaliableStorage(StorageTools.listAllStorage(mContext));
+            if (list != null && !list.isEmpty()) {
+                mStorageList.clear();
+                mStorageList.addAll(list);
+            }
+            return mStorageList.size();
+        }
+        return mStorageList.size();
+    }
+
     public void close() {
         listeners.clear();
     }
-
 
 
 }

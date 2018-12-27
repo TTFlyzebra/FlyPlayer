@@ -74,6 +74,7 @@ public interface IJancarSearch {
      *
      * @param singerName 歌手名称
      * @param title      歌曲名称
+     * @param album      专辑名称
      * @return
      */
     List<String> searchMusic(String singerName, String title, String album);

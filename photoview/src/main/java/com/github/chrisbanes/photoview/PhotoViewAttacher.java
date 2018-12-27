@@ -572,7 +572,6 @@ public class PhotoViewAttacher implements View.OnTouchListener,
     }
 
     private void setImageViewMatrix(Matrix matrix) {
-        FlyLog.d("setImageViewMatrix matrix="+matrix);
         mImageView.setImageMatrix(matrix);
         mImageView.requestLayout();
 

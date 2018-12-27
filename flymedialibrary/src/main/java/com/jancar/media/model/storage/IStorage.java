@@ -10,4 +10,6 @@ public interface IStorage {
     void removeListener(IStorageListener iStorageListener);
 
     void refresh();
+
+    int getStorageSum();
 }

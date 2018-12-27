@@ -44,7 +44,7 @@ public class ListFileDiskCache {
         }
     }
 
-    public <T> List<T> get(String key,Class<T> cls) {
+    public <T> List<T> get(String key, Class<T> cls) {
         List<T> list = null;
         DiskLruCache.Snapshot snapShot = null;
         InputStream in = null;
@@ -53,8 +53,10 @@ public class ListFileDiskCache {
             if (snapShot != null) {
                 in = snapShot.getInputStream(0);
                 int len = in.read(bytes);
-                String json = new String(bytes, 0, len);
-                list = GsonUtils.json2ListObj(json, cls);
+                if (len > 0) {
+                    String json = new String(bytes, 0, len);
+                    list = GsonUtils.json2ListObj(json, cls);
+                }
             }
         } catch (IOException e) {
             FlyLog.e(e.toString());

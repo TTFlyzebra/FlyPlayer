@@ -217,6 +217,22 @@ public class MusicPlayer implements IMusicPlayer,
                     mPlayPos = -1;
                 }
                 break;
+            case LOOP_SINGER:
+                if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
+                    String artist = mPlayUrls.get(mPlayPos).artist;
+                    int i = 0;
+                    while (i < mPlayUrls.size()) {
+                        int num = (mPlayPos + i + 1) % (mPlayUrls.size());
+                        if(mPlayUrls.get(num).artist.equals(artist)){
+                            mPlayPos = num;
+                            break;
+                        }
+                        i++;
+                    }
+                } else {
+                    mPlayPos = -1;
+                }
+                break;
         }
         if (mPlayPos >= 0 && mPlayUrls != null && mPlayUrls.size() > mPlayPos) {
             play(mPlayUrls.get(mPlayPos).url);
@@ -238,6 +254,8 @@ public class MusicPlayer implements IMusicPlayer,
                     mPlayPos = -1;
                 }
                 break;
+            case LOOP_SINGER:
+                break;
         }
         if (mPlayPos >= 0 && mPlayUrls != null && mPlayUrls.size() > mPlayPos) {
             play(mPlayUrls.get(mPlayPos).url);
@@ -254,11 +272,17 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void switchLoopStatus() {
-        mLoopStatus = (mLoopStatus + 1) % 3;
+        mLoopStatus = (mLoopStatus + 1) % LOOP_SUM;
         SPUtil.set(mContext, "LOOPSTATUS", mLoopStatus);
         for (IMusicPlayerListener iMusicPlayerListener : listeners) {
             iMusicPlayerListener.loopStatusChange(mLoopStatus);
         }
+    }
+
+    @Override
+    public void setLoopStatus(int loopStatus) {
+        mLoopStatus = loopStatus;
+        notifyStatus();
     }
 
     @Override
@@ -317,6 +341,22 @@ public class MusicPlayer implements IMusicPlayer,
     }
 
     @Override
+    public void playOpenFile(List<String> fileStr) {
+        String url = fileStr.get(0);
+        if (!TextUtils.isEmpty(url)) {
+            File file = new File(url);
+            if (file.exists()) {
+                play(url);
+            }
+        } else {
+            FlyLog.e("start file no exists url=%s", url);
+            mPlayUrl = "";
+            saveSeek = 0;
+        }
+    }
+
+
+    @Override
     public void setVolume(float v, float v1) {
         if (mMediaPlayer != null) {
             mMediaPlayer.setVolume(v, v1);
@@ -342,6 +382,7 @@ public class MusicPlayer implements IMusicPlayer,
         switch (mLoopStatus) {
             case LOOP_RAND:
             case LOOP_ALL:
+            case LOOP_SINGER:
                 playNext();
                 break;
             case LOOP_ONE:

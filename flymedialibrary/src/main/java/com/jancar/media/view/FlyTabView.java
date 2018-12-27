@@ -51,30 +51,39 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
         this.titles = strs;
         if (titles == null || titles.length == 0) return;
         textViews = new FlyTabTextView[titles.length];
+        for (int i = 0; i < textViews.length; i++) {
+            LayoutParams lp = new LayoutParams(childWidth, height);
+            lp.setMarginStart(i * childWidth);
+            textViews[i] = new FlyTabTextView(context);
+            textViews[i].setGravity(Gravity.CENTER);
+            textViews[i].setText(titles[i]);
+            textViews[i].setTextColor(colorStateList);
+            textViews[i].setTag(i);
+            textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                    context.getResources().getDimensionPixelSize(R.dimen.lrc_divider_height));
+            textViews[i].setOnClickListener(FlyTabView.this);
+            addView(textViews[i], lp);
+        }
+        focusView = new View(context);
+        addView(focusView);
+        focusView.setBackgroundResource(R.drawable.bottom_line_blue);
+        setSelectItem(0);
         post(new Runnable() {
             @Override
             public void run() {
                 width = getMeasuredWidth();
                 height = getMeasuredHeight();
                 childWidth = width / textViews.length;
-
                 for (int i = 0; i < textViews.length; i++) {
                     LayoutParams lp = new LayoutParams(childWidth, height);
                     lp.setMarginStart(i * childWidth);
-                    textViews[i] = new FlyTabTextView(context);
-                    textViews[i].setGravity(Gravity.CENTER);
-                    textViews[i].setText(titles[i]);
-                    textViews[i].setTextColor(colorStateList);
-                    textViews[i].setTag(i);
-                    textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                            context.getResources().getDimensionPixelSize(R.dimen.lrc_divider_height));
-                    textViews[i].setOnClickListener(FlyTabView.this);
-                    addView(textViews[i], lp);
+                    textViews[i].setLayoutParams(lp);
                 }
-                focusView = new View(context);
-                LayoutParams lpbak = new LayoutParams(childWidth, height - 5);
-                addView(focusView, lpbak);
-                focusView.setBackgroundResource(R.drawable.bottom_line_blue);
+                LayoutParams lpbak = (LayoutParams) focusView.getLayoutParams();
+                lpbak.width = childWidth;
+                lpbak.height = height - 5;
+                focusView.setLayoutParams(lpbak);
+
                 setSelectItem(0);
             }
         });
@@ -130,6 +139,17 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
         FlyLog.d("setFocusPos=%d", pos);
         focusPos = pos;
         setSelectItem(0);
+    }
+
+    public void setNewTitles(String[] titles) {
+        try {
+            if (titles == null || textViews == null || titles.length != textViews.length) return;
+            for (int i = 0; i < titles.length; i++) {
+                textViews[i].setText(titles[i]);
+            }
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
     }
 
     public interface OnItemClickListener {

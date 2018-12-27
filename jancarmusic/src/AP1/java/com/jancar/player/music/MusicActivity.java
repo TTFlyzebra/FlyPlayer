@@ -155,6 +155,30 @@ public class MusicActivity extends BaseActivity implements
          * 更新循环状态
          */
         loopStatusChange(musicPlayer.getLoopStatus());
+
+        playOpenIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        FlyLog.d("onNewIntent" + intent.toUri(0));
+        playOpenIntent(intent);
+    }
+
+    private List<String> openList;
+
+    private void playOpenIntent(Intent intent) {
+        FlyLog.d("intent=" + intent);
+        if (intent == null) return;
+        String test = intent.getStringExtra("test");
+        FlyLog.d("playOpenIntent test=" + test);
+        openList = intent.getStringArrayListExtra("music_list");
+        FlyLog.d("openList=%s", openList == null ? "" : openList.toString());
+        if (openList != null && !openList.isEmpty()) {
+            musicPlayer.playOpenFile(openList);
+            musicPlayer.setLoopStatus(MusicPlayer.LOOP_SINGER);
+        }
     }
 
     private void initView() {
@@ -402,6 +426,9 @@ public class MusicActivity extends BaseActivity implements
                 break;
             case MusicPlayer.LOOP_RAND:
                 ivLoop.setImageResource(R.drawable.media_loop_rand);
+                break;
+            case MusicPlayer.LOOP_SINGER:
+                ivLoop.setImageResource(R.drawable.media_loop_singer);
                 break;
         }
     }
