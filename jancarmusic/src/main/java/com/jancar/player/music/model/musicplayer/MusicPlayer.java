@@ -283,7 +283,10 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void setLoopStatus(int loopStatus) {
         mLoopStatus = loopStatus;
-        notifyStatus();
+        SPUtil.set(mContext, "LOOPSTATUS", mLoopStatus);
+        for (IMusicPlayerListener iMusicPlayerListener : listeners) {
+            iMusicPlayerListener.loopStatusChange(mLoopStatus);
+        }
     }
 
     @Override

@@ -157,25 +157,15 @@ public class MusicActivity extends BaseActivity implements
          * 更新循环状态
          */
         loopStatusChange(musicPlayer.getLoopStatus());
-
-        playOpenIntent(getIntent());
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        FlyLog.d("onNewIntent" + intent.toUri(0));
-        playOpenIntent(intent);
-    }
-
-    private List<String> openList;
-
-    private void playOpenIntent(Intent intent) {
+    protected void playOpenIntent(Intent intent) {
         FlyLog.d("intent=" + intent);
         if (intent == null) return;
         String test = intent.getStringExtra("test");
         FlyLog.d("playOpenIntent test=" + test);
-        openList = intent.getStringArrayListExtra("music_list");
+        List<String> openList = intent.getStringArrayListExtra("music_list");
         FlyLog.d("openList=%s", openList == null ? "" : openList.toString());
         if (openList != null && !openList.isEmpty()) {
             currenPath = Storage.ALL_STORAGE;
@@ -343,7 +333,6 @@ public class MusicActivity extends BaseActivity implements
     }
 
     private boolean isShowLeftMenu = false;
-
 
     private void showLeftMenu(boolean flag) {
         isShowLeftMenu = flag;

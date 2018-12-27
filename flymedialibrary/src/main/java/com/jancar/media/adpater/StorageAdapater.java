@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.jancar.media.R;
 import com.jancar.media.data.StorageInfo;
+import com.jancar.media.model.storage.Storage;
 
 import java.util.List;
 
@@ -61,7 +62,11 @@ public class StorageAdapater extends RecyclerView.Adapter<StorageAdapater.ViewHo
             }
         });
 
-        holder.imageView.setImageResource(storage.isRemoveable ? R.drawable.media_usb : R.drawable.media_disk);
+        if(storage.mPath.equals(Storage.ALL_STORAGE)){
+            holder.imageView.setImageResource(R.drawable.media_storge);
+        }else{
+            holder.imageView.setImageResource(storage.isRemoveable ? R.drawable.media_usb : R.drawable.media_disk);
+        }
         holder.textView.setText(storage.mDescription);
         boolean flag = path.equals(storage.mPath);
         holder.itemView.setSelected(flag);

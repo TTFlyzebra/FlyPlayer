@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -46,6 +47,17 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
         usbMediaScan.open();
         jancarManager = (JancarManager) getSystemService("jancar_manager");
         jancarManager.registerJacStateListener(jacState.asBinder());
+
+        playOpenIntent(getIntent());
+    }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        FlyLog.d("onNewIntent" + intent.toUri(0));
+        playOpenIntent(intent);
+    }
+
+    protected void playOpenIntent(Intent intent) {
     }
 
     @Override
