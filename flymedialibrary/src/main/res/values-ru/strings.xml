@@ -33,6 +33,7 @@
 	<string name="media_parking_prompt_contents">Для безопасности вождения, пожалуйста, обратите внимание на вождение!</string>
 	<string name="no_video">Нет воспроизводимых видеофайлов</string>
 	<string name="refresh">обновление</string>
+	<string name="allstorage">Все хранилище</string>
 	<string name="vdec">vdec</string>
 	<string name="fps">кадров в секунду</string>
 	<string name="v_cache">v прятки</string>

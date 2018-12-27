@@ -33,6 +33,7 @@
 	<string name="media_parking_prompt_contents">Para la seguridad de conducción, preste atención a la conducción!</string>
 	<string name="no_video">No se encontraron archivos de video reproducibles</string>
 	<string name="refresh">Refrescar</string>
+	<string name="allstorage">Todo el almacenamiento</string>
 	<string name="vdec">vdec</string>
 	<string name="fps">fps</string>
 	<string name="v_cache">v-seek</string>

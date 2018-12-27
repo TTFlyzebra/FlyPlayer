@@ -33,6 +33,7 @@
 	<string name="media_parking_prompt_contents">Dla bezpieczeństwa jazdy, należy zwrócić uwagę na prowadzenie pojazdu!</string>
 	<string name="no_video">Nie znaleziono plików wideo nadających się do odtworzenia</string>
 	<string name="refresh">Odśwież</string>
+	<string name="allstorage">Całe miejsce do przechowywania</string>
 	<string name="vdec">vdec</string>
 	<string name="fps">fps</string>
 	<string name="v_cache">v chowanego</string>

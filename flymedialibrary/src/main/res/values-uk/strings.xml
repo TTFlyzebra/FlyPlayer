@@ -33,6 +33,7 @@
 	<string name="media_parking_prompt_contents">Для водіння, будь ласка, зверніть увагу на водіння!</string>
 	<string name="no_video">Не знайдено відтворюваних відеофайлів</string>
 	<string name="refresh">Оновити</string>
+	<string name="allstorage">Всі сховища</string>
 	<string name="vdec">вдec</string>
 	<string name="fps">кадри / с</string>
 	<string name="v_cache">v хованки</string>

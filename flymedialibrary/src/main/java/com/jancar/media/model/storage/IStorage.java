@@ -12,4 +12,6 @@ public interface IStorage {
     void refresh();
 
     int getStorageSum();
+
+    String getStorageByUrl(String url);
 }

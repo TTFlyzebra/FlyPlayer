@@ -20,9 +20,11 @@ import android.widget.TextView;
 
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Music;
+import com.jancar.media.data.StorageInfo;
 import com.jancar.media.model.listener.IMediaEventListerner;
 import com.jancar.media.model.mediaSession.IMediaSession;
 import com.jancar.media.model.mediaSession.MediaSession;
+import com.jancar.media.model.storage.Storage;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.RtlTools;
 import com.jancar.media.utils.StringTools;
@@ -176,8 +178,9 @@ public class MusicActivity extends BaseActivity implements
         openList = intent.getStringArrayListExtra("music_list");
         FlyLog.d("openList=%s", openList == null ? "" : openList.toString());
         if (openList != null && !openList.isEmpty()) {
+            currenPath = Storage.ALL_STORAGE;
+            usbMediaScan.openStorager(new StorageInfo(currenPath));
             musicPlayer.playOpenFile(openList);
-            musicPlayer.setLoopStatus(MusicPlayer.LOOP_SINGER);
         }
     }
 
@@ -262,7 +265,7 @@ public class MusicActivity extends BaseActivity implements
             tvArtist.setText("");
             tvSingle.setText("");
         }
-        musicPlayer.playSavePath(path);
+        musicPlayer.playSaveUrlByPath(path);
         super.notifyPathChange(path);
     }
 

@@ -33,6 +33,7 @@
 	<string name="media_parking_prompt_contents">为了行驶安全，请注意驾驶！</string>
 	<string name="no_video">未发现可播放的视频文件</string>
 	<string name="refresh">刷新</string>
+	<string name="allstorage">所有存储设备</string>
 	<string name="vdec">vdec</string>
 	<string name="fps">fps</string>
 	<string name="v_cache">v-cache</string>

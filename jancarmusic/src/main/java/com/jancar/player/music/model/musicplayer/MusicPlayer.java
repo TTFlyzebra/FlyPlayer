@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 import android.text.TextUtils;
 
 import com.jancar.media.data.Music;
+import com.jancar.media.model.storage.Storage;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.SPUtil;
 import com.jancar.player.music.model.listener.IMusicPlayerListener;
@@ -223,7 +224,7 @@ public class MusicPlayer implements IMusicPlayer,
                     int i = 0;
                     while (i < mPlayUrls.size()) {
                         int num = (mPlayPos + i + 1) % (mPlayUrls.size());
-                        if(mPlayUrls.get(num).artist.equals(artist)){
+                        if (mPlayUrls.get(num).artist.equals(artist)) {
                             mPlayPos = num;
                             break;
                         }
@@ -318,8 +319,8 @@ public class MusicPlayer implements IMusicPlayer,
 
 
     @Override
-    public void playSavePath(String path) {
-        FlyLog.d("playSavePath path=%s", path);
+    public void playSaveUrlByPath(String path) {
+        FlyLog.d("playSaveUrlByPath path=%s", path);
         mPlayPath = path;
         String url = (String) SPUtil.get(mContext, path + "MUSIC_URL", "");
         int seek = (int) SPUtil.get(mContext, mPlayPath + "MUSIC_SEEK", 0);
@@ -342,10 +343,15 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void playOpenFile(List<String> fileStr) {
+        if (fileStr == null) return;
         String url = fileStr.get(0);
         if (!TextUtils.isEmpty(url)) {
             File file = new File(url);
             if (file.exists()) {
+                setLoopStatus(LOOP_SINGER);
+                mPlayPath = Storage.ALL_STORAGE;
+                SPUtil.set(mContext, mPlayPath + "MUSIC_URL", url);
+                SPUtil.set(mContext, mPlayPath + "MUSIC_SEEK", 0);
                 play(url);
             }
         } else {

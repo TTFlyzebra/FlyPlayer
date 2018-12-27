@@ -33,6 +33,7 @@
 	<string name="media_parking_prompt_contents">Pentru siguranța conducerii, vă rugăm să acordați atenție conducerii!</string>
 	<string name="no_video">Nu au fost găsite fișiere video care pot fi redate</string>
 	<string name="refresh">reîmprospăta</string>
+	<string name="allstorage">Toate depozitele</string>
 	<string name="vdec">vDEC</string>
 	<string name="fps">fps</string>
 	<string name="v_cache">v-ați ascunselea</string>

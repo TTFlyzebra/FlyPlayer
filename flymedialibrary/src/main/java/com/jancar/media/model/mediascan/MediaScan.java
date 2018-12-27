@@ -188,7 +188,9 @@ public class MediaScan implements IMediaScan {
     public void openStorager(StorageInfo storageInfo) {
         try {
             FlyLog.d("openStorager path=%s", storageInfo.mPath);
-            mFlyMedia.scanDisk(storageInfo.mPath);
+            if(mFlyMedia!=null){
+                mFlyMedia.scanDisk(storageInfo.mPath);
+            }
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }

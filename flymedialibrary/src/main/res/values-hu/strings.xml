@@ -33,6 +33,7 @@
 	<string name="media_parking_prompt_contents">A vezetés biztonsága érdekében figyeljen a vezetésre!</string>
 	<string name="no_video">Nem található lejátszható videofájlok</string>
 	<string name="refresh">felfrissít</string>
+	<string name="allstorage">Minden tárolás</string>
 	<string name="vdec">vdec</string>
 	<string name="fps">fps</string>
 	<string name="v_cache">v-keresik</string>

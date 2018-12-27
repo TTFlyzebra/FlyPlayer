@@ -4,7 +4,7 @@ import android.os.UserHandle;
 
 public class StorageInfo {
     public String mPath;
-    public boolean isRemoveable;
+    public boolean isRemoveable = false;
     public String state;
     public String mDescription;
     public long mMtpReserveSize;

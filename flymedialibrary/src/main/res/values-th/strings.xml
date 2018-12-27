@@ -33,6 +33,7 @@
 	<string name="media_parking_prompt_contents">เพื่อความปลอดภัยในการขับขี่โปรดใส่ใจกับการขับขี่!</string>
 	<string name="no_video">ไม่พบไฟล์วิดีโอที่เล่นได้</string>
 	<string name="refresh">รีเฟรช</string>
+	<string name="allstorage">ที่เก็บข้อมูลทั้งหมด</string>
 	<string name="vdec">vdec</string>
 	<string name="fps">เฟรมต่อวินาที</string>
 	<string name="v_cache">V-แสวงหา</string>

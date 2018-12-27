@@ -33,6 +33,7 @@
 	<string name="media_parking_prompt_contents">لقيادة السلامة ، يرجى الانتباه إلى القيادة!</string>
 	<string name="no_video">لم يتم العثور على ملفات فيديو قابلة للتشغيل</string>
 	<string name="refresh">تحديث</string>
+	<string name="allstorage">كل التخزين</string>
 	<string name="vdec">vdec</string>
 	<string name="fps">إطارا في الثانية</string>
 	<string name="v_cache">الخامس السعي</string>

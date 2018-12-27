@@ -33,6 +33,7 @@
 	<string name="media_parking_prompt_contents">Για την ασφάλεια οδήγησης, δώστε προσοχή στην οδήγηση!</string>
 	<string name="no_video">Δεν βρέθηκαν αρχεία βίντεο που να μπορούν να αναπαραχθούν</string>
 	<string name="refresh">Ανανέωση</string>
+	<string name="allstorage">Όλα αποθήκευσης</string>
 	<string name="vdec">vdec</string>
 	<string name="fps">fps</string>
 	<string name="v_cache">v-επιδιώκουν</string>

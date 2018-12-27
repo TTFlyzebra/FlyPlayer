@@ -33,6 +33,7 @@
 	<string name="media_parking_prompt_contents">Sürüş güvenliği için lütfen sürüşe dikkat edin!</string>
 	<string name="no_video">Oynatılabilir video dosyası bulunamadı</string>
 	<string name="refresh">Yenile</string>
+	<string name="allstorage">Tüm depolama</string>
 	<string name="vdec">vdec</string>
 	<string name="fps">fps</string>
 	<string name="v_cache">v-seek</string>

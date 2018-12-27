@@ -50,7 +50,7 @@ public interface IMusicPlayer {
 
     int getLoopStatus();
 
-    void playSavePath(String path);
+    void playSaveUrlByPath(String path);
 
     void playOpenFile(List<String> fileStr);
 

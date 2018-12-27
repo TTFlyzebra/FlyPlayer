@@ -33,6 +33,7 @@
 	<string name="media_parking_prompt_contents">برای رانندگی ایمن، لطفا توجه داشته باشید به رانندگی!</string>
 	<string name="no_video">هیچ فایل ویدئویی قابل پخش یافت نشد</string>
 	<string name="refresh">تازه کردن</string>
+	<string name="allstorage">تمام ذخیره سازی</string>
 	<string name="vdec">vdec</string>
 	<string name="fps">fps</string>
 	<string name="v_cache">V-به دنبال</string>
