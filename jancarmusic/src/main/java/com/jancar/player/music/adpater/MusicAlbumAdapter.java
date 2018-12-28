@@ -23,14 +23,6 @@ public class MusicAlbumAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private List<String> groupList;
     private List<List<String>> itemList;
-//    List<String> albPhotoList;
-//
-//    public MusicAlbumAdapter(Context context, List<String> groupList, List<List<String>> itemList, List<String> albPhotoList) {
-//        mContext = context;
-//        this.groupList = groupList;
-//        this.itemList = itemList;
-//        this.albPhotoList = albPhotoList;
-//    }
 
     public MusicAlbumAdapter(Context context, List<String> groupList, List<List<String>> itemList) {
         mContext = context;
@@ -96,7 +88,6 @@ public class MusicAlbumAdapter extends BaseExpandableListAdapter {
         if (null == convertView) {
             convertView = View.inflate(mContext, R.layout.explist_music_album_item_group, null);
             holder.imageView1 = (ImageView) convertView.findViewById(R.id.item_iv01);
-            holder.imageViewbg = (ImageView) convertView.findViewById(R.id.iv_music_album_bg);
             holder.textView1 = (MarqueeTextView) convertView.findViewById(R.id.item_tv01);
             holder.textView2 = (TextView) convertView.findViewById(R.id.item_tv02);
             holder.imageView2 = (ImageView) convertView.findViewById(R.id.item_iv02);
@@ -105,21 +96,18 @@ public class MusicAlbumAdapter extends BaseExpandableListAdapter {
             holder = (ViewHolderGroup) convertView.getTag();
         }
         holder.imageView1.setImageResource(isExpanded ? R.drawable.media_music_album_02 : R.drawable.media_music_album);
-//        holder.imageView1.setImageBitmap(getAlbBitMap(albPhotoList.get(groupPosition)));
-
         holder.imageView2.setImageResource(isExpanded ? R.drawable.media_down_02 : R.drawable.media_right);
-        holder.imageViewbg.setVisibility(isExpanded ? View.GONE : View.VISIBLE);
-        if (isExpanded) {
+        if(isExpanded){
             holder.textView1.setTextColor(0xFF0370E5);
             holder.textView2.setTextColor(0xFF0370E5);
-        } else {
-            holder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor_blue_white));
-            holder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor_blue_white));
+        }else{
+            holder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
+            holder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
         }
         String str = groupList.get(groupPosition);
         holder.textView1.setText(str);
         holder.textView1.enableMarquee(isExpanded);
-        holder.textView2.setText(String.format(mContext.getString(R.string.musicsumformat), itemList.get(groupPosition).size()));
+        holder.textView2.setText(String.format(mContext.getString(R.string.musicsumformat),itemList.get(groupPosition).size()));
         return convertView;
     }
 
@@ -138,7 +126,7 @@ public class MusicAlbumAdapter extends BaseExpandableListAdapter {
         }
 
 
-        convertView.setTag(R.id.tag1, itemList.get(groupPosition).get(childPosition));
+        convertView.setTag(R.id.tag1,itemList.get(groupPosition).get(childPosition));
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,7 +141,7 @@ public class MusicAlbumAdapter extends BaseExpandableListAdapter {
         holder.textView1.setText(StringTools.getNameByPath(url));
         holder.textView1.setTextColor(flag ? 0xFF0370E5 : 0xFFFFFFFF);
         holder.textView1.enableMarquee(flag);
-        holder.imageView.setVisibility(flag ? View.VISIBLE : View.INVISIBLE);
+        holder.imageView.setVisibility(flag?View.VISIBLE:View.INVISIBLE);
         return convertView;
     }
 
@@ -164,7 +152,6 @@ public class MusicAlbumAdapter extends BaseExpandableListAdapter {
     }
 
     private class ViewHolderGroup {
-        public ImageView imageViewbg;
         public ImageView imageView1;
         public MarqueeTextView textView1;
         public TextView textView2;

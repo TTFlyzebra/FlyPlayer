@@ -33,7 +33,7 @@
         android:marqueeRepeatLimit="1"
         android:singleLine="true"
         android:text="video "
-        android:textColor="@color/textcolor_blue_white"
+        android:textColor="@color/textcolor"
         android:textSize="18px" />
 
 </RelativeLayout>

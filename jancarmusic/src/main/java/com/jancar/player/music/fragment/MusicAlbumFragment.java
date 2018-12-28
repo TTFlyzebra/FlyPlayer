@@ -1,11 +1,6 @@
 package com.jancar.player.music.fragment;
 
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +8,9 @@ import android.widget.ExpandableListView;
 
 import com.jancar.media.data.Music;
 import com.jancar.media.utils.FlyLog;
-import com.jancar.player.music.MusicActivity;
 import com.jancar.player.music.R;
 import com.jancar.player.music.adpater.MusicAlbumAdapter;
 import com.jancar.player.music.model.musicplayer.MusicPlayer;
-import com.mpatric.mp3agic.ID3v2;
-import com.mpatric.mp3agic.Mp3File;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,14 +21,11 @@ import java.util.Map;
 public class MusicAlbumFragment extends MusicFragment implements
         MusicAlbumAdapter.OnItemClickListener {
     private ExpandableListView expandableListView;
-    private List<String> groupList = new ArrayList<>();
-    private List<List<String>> itemList = new ArrayList<>();
-    private Map<String, List<String>> mHashMap = new HashMap<>();
-    private List<Bitmap> albBitmap = new ArrayList<>();
+    private List<String> albumGroupList = new ArrayList<>();
+    private List<List<String>> albumItemList = new ArrayList<>();
+    private Map<String, List<String>> ablumHashMap = new HashMap<>();
     private MusicAlbumAdapter adapter;
     private boolean isClick = false;
-    private Activity mActivity;
-
 
     public static MusicAlbumFragment newInstance(Bundle args) {
         MusicAlbumFragment musicAlbumFragment = new MusicAlbumFragment();
@@ -48,12 +37,6 @@ public class MusicAlbumFragment extends MusicFragment implements
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mActivity = (Activity) context;
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_ex_list, null);
     }
@@ -62,12 +45,11 @@ public class MusicAlbumFragment extends MusicFragment implements
     public void onViewCreated(View view, Bundle savedInstanceState) {
         expandableListView = (ExpandableListView) view.findViewById(R.id.fm_file_list_el01);
         expandableListView.setItemsCanFocus(true);
-//        adapter = new MusicAlbumAdapter(getActivity(), groupList, itemList, ((MusicActivity) getActivity()).albPhotoList);
-        adapter = new MusicAlbumAdapter(getActivity(), groupList, itemList);
+        adapter = new MusicAlbumAdapter(getActivity(), albumGroupList, albumItemList);
         expandableListView.setAdapter(adapter);
         expandableListView.setGroupIndicator(null);
         adapter.setOnItemClickListener(this);
-        mHashMap.clear();
+        ablumHashMap.clear();
         musicID3UrlList(mMusicList);
     }
 
@@ -95,10 +77,10 @@ public class MusicAlbumFragment extends MusicFragment implements
     private void scrollCurrentPos() {
         int findPos1 = -1;
         int findPos2 = -1;
-        for (int i = 0; i < itemList.size(); i++) {
+        for (int i = 0; i < albumItemList.size(); i++) {
             if (findPos1 == -1) {
-                for (int j = 0; j < itemList.get(i).size(); j++) {
-                    if (itemList.get(i).get(j).equals(musicPlayer.getPlayUrl())) {
+                for (int j = 0; j < albumItemList.get(i).size(); j++) {
+                    if (albumItemList.get(i).get(j).equals(musicPlayer.getPlayUrl())) {
                         expandableListView.expandGroup(i, false);
                         findPos1 = i;
                         findPos2 = j;
@@ -121,7 +103,7 @@ public class MusicAlbumFragment extends MusicFragment implements
 
     @Override
     public void notifyPathChange(String path) {
-        mHashMap.clear();
+        ablumHashMap.clear();
         adapter.notifyDataSetChanged();
     }
 
@@ -132,17 +114,16 @@ public class MusicAlbumFragment extends MusicFragment implements
         FlyLog.d("get id3musics size=%d", musicUrlList == null ? 0 : musicUrlList.size());
         try {
             if (musicUrlList != null && getActivity() != null && activity != null) {
-                groupList.clear();
-                itemList.clear();
+                albumGroupList.clear();
+                albumItemList.clear();
                 for (int i = 0; i < musicUrlList.size(); i++) {
                     String album = musicUrlList.get(i).album;
-                    if (mHashMap.get(album) == null) {
-                        mHashMap.put(album, new ArrayList<String>());
+                    if (ablumHashMap.get(album) == null) {
+                        ablumHashMap.put(album, new ArrayList<String>());
                     }
-                    mHashMap.get(album).add(musicUrlList.get(i).url);
+                    ablumHashMap.get(album).add(musicUrlList.get(i).url);
                 }
-                Log.e("MusicAlbumFragment", "albBitmap:" + albBitmap.size());
-                groupList.addAll(mHashMap.keySet());
+                albumGroupList.addAll(ablumHashMap.keySet());
 
 //                Collections.sort(groupList, new Comparator<String>() {
 //                    public int compare(String p1, String p2) {
@@ -156,8 +137,8 @@ public class MusicAlbumFragment extends MusicFragment implements
 //                    }
 //                });
 
-                for (String key : groupList) {
-                    itemList.add(mHashMap.get(key));
+                for (String key : albumGroupList) {
+                    albumItemList.add(ablumHashMap.get(key));
                 }
                 if (isFistGet) {
                     isFistGet = false;

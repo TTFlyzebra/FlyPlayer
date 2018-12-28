@@ -39,7 +39,7 @@
                 android:gravity="left|bottom"
                 android:ellipsize="marquee"
                 android:singleLine="true"
-                android:textColor="@color/textcolor_blue_white"
+                android:textColor="@color/textcolor"
                 android:textSize="22px" />
             <TextView
                 android:id="@+id/item_tv03"
@@ -49,7 +49,7 @@
                 android:duplicateParentState="true"
                 android:gravity="left|bottom"
                 android:singleLine="true"
-                android:textColor="@color/textcolor_blue_white"
+                android:textColor="@color/textcolor"
                 android:textSize="22px" />
         </RelativeLayout>
 
@@ -62,7 +62,7 @@
             android:gravity="left|top"
             android:ellipsize="marquee"
             android:singleLine="true"
-            android:textColor="@color/textcolor_blue_white"
+            android:textColor="@color/textcolor"
             android:textSize="16px" />
     </LinearLayout>
 

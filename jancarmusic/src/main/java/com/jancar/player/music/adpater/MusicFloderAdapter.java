@@ -8,11 +8,11 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.jancar.player.music.R;
-import com.jancar.player.music.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.AnimationImageView;
 import com.jancar.media.view.MarqueeTextView;
+import com.jancar.player.music.R;
+import com.jancar.player.music.model.musicplayer.MusicPlayer;
 
 import java.io.File;
 import java.util.List;
@@ -101,9 +101,9 @@ public class MusicFloderAdapter extends BaseExpandableListAdapter {
             holder.textView2.setTextColor(0xFF0370E5);
             holder.textView3.setTextColor(0xFF0370E5);
         } else {
-            holder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor_blue_white));
-            holder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor_blue_white));
-            holder.textView3.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor_blue_white));
+            holder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
+            holder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
+            holder.textView3.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
         }
         holder.textView3.setText(String.format(mContext.getString(R.string.musicsumformat),itemList.get(groupPosition).size()));
         return convertView;
@@ -141,7 +141,7 @@ public class MusicFloderAdapter extends BaseExpandableListAdapter {
         if (flag) {
             holder.textView1.setTextColor(0xFF0370E5);
         } else {
-            holder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor_blue_white));
+            holder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
         }
         holder.textView1.enableMarquee(flag);
         holder.imageView.setVisibility(flag ? View.VISIBLE : View.INVISIBLE);

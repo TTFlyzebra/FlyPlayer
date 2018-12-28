@@ -32,7 +32,7 @@
             android:gravity="left|center"
             android:marqueeRepeatLimit="1"
             android:singleLine="true"
-            android:textColor="@color/textcolor_blue_white"
+            android:textColor="@color/textcolor"
             android:textSize="22px" />
 
         <TextView
@@ -41,7 +41,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:gravity="left|center"
-            android:textColor="@color/textcolor_blue_white"
+            android:textColor="@color/textcolor"
             android:textSize="22px"/>
     </RelativeLayout>
 

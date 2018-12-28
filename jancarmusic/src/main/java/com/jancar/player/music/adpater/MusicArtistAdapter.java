@@ -8,12 +8,12 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.jancar.player.music.R;
-import com.jancar.player.music.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.AnimationImageView;
 import com.jancar.media.view.MarqueeTextView;
+import com.jancar.player.music.R;
+import com.jancar.player.music.model.musicplayer.MusicPlayer;
 
 import java.util.List;
 
@@ -103,8 +103,8 @@ public class MusicArtistAdapter extends BaseExpandableListAdapter {
             holder.textView1.setTextColor(0xFF0370E5);
             holder.textView2.setTextColor(0xFF0370E5);
         }else{
-            holder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor_blue_white));
-            holder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor_blue_white));
+            holder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
+            holder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
         }
         String str = groupList.get(groupPosition);
         holder.textView1.setText(str);

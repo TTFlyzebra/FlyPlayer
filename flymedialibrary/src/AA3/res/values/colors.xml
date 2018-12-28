@@ -15,6 +15,6 @@
     <color name="child_divider">#0FFFFFFF</color>
 
     <!--文字颜色-->
-    <color name="text_focus">#FF0370E5</color>
+    <color name="text_focus">#FF00FF9C</color>
     <color name="text_no_focus">#FFFFFFFF</color>
 </resources>

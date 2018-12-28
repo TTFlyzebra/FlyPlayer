@@ -11,26 +11,26 @@ import android.widget.TextView;
 import com.jancar.media.data.Music;
 import com.jancar.media.module.RecycleViewDivider;
 import com.jancar.media.utils.FlyLog;
-import com.jancar.player.music.MusicActivity;
+import com.jancar.player.music.MusicActivity_AP1;
 import com.jancar.player.music.R;
 import com.jancar.player.music.adpater.MusicPlayListAdapter;
 import com.jancar.player.music.model.musicplayer.MusicPlayer;
 
 import java.util.List;
 
-public class MusicPlayListFragment extends MusicFragment implements
+public class MusicPlayListFragment_AP1 extends MusicFragment implements
         MusicPlayListAdapter.OnItemClickListener {
     private RecyclerView recyclerView;
-    private TextView textView;
+    protected TextView scanMsgTv;
     private MusicPlayListAdapter adapter;
 
-    public static MusicPlayListFragment newInstance(Bundle args) {
-        MusicPlayListFragment musicPlayListFragment = new MusicPlayListFragment();
+    public static MusicPlayListFragment_AP1 newInstance(Bundle args) {
+        MusicPlayListFragment_AP1 musicPlayListFragment = new MusicPlayListFragment_AP1();
         musicPlayListFragment.setArguments(args);
         return musicPlayListFragment;
     }
 
-    public MusicPlayListFragment() {
+    public MusicPlayListFragment_AP1() {
     }
 
     @Override
@@ -41,7 +41,7 @@ public class MusicPlayListFragment extends MusicFragment implements
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         recyclerView = (RecyclerView) view.findViewById(R.id.fm_rv01);
-        textView = (TextView) view.findViewById(R.id.fm_tv01);
+        scanMsgTv = (TextView) view.findViewById(R.id.fm_tv01);
         adapter = new MusicPlayListAdapter(activity, mMusicList, recyclerView);
         adapter.setOnItemClickListener(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -57,7 +57,7 @@ public class MusicPlayListFragment extends MusicFragment implements
     public void notifyPathChange(String path) {
         FlyLog.d("notifyPathChange path=%s",path);
         mMusicList.clear();
-        textView.setText(R.string.music_scan1);
+        scanMsgTv.setText(R.string.music_scan1);
         adapter.notifyDataSetChanged();
     }
 
@@ -71,7 +71,7 @@ public class MusicPlayListFragment extends MusicFragment implements
     @Override
     public void scanFinish(String path) {
         FlyLog.d("finish scan path=%s",path);
-        textView.setText(String.format(getString(R.string.music_scan2), mMusicList.size()));
+        scanMsgTv.setText(String.format(getString(R.string.music_scan2), mMusicList.size()));
         adapter.notifyDataSetChanged();
     }
 
@@ -84,10 +84,10 @@ public class MusicPlayListFragment extends MusicFragment implements
     @Override
     public void onResume() {
         super.onResume();
-        if(MusicActivity.isScan){
-            textView.setText(R.string.music_scan1);
+        if(MusicActivity_AP1.isScan){
+            scanMsgTv.setText(R.string.music_scan1);
         }else{
-            textView.setText(String.format(getString(R.string.music_scan2), mMusicList.size()));
+            scanMsgTv.setText(String.format(getString(R.string.music_scan2), mMusicList.size()));
         }
         scrollToCureentPlayItem();
     }

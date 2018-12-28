@@ -13,7 +13,7 @@ import android.support.v4.app.NotificationCompat.Builder;
 import android.widget.RemoteViews;
 
 import com.jancar.media.utils.FlyLog;
-import com.jancar.player.music.MusicActivity;
+import com.jancar.player.music.MusicActivity_AP1;
 import com.jancar.player.music.R;
 import com.jancar.player.music.model.listener.IMusicPlayerListener;
 import com.jancar.player.music.model.musicplayer.IMusicPlayer;
@@ -60,7 +60,7 @@ public class MusicService extends Service implements IMusicPlayerListener {
         remoteviews.setOnClickPendingIntent(R.id.noti_butnext, forePI);
         remoteviews.setOnClickPendingIntent(R.id.noti_butexit, exitPI);
         setRemoteViews();
-        Intent notiintent = new Intent(this, MusicActivity.class);
+        Intent notiintent = new Intent(this, MusicActivity_AP1.class);
         notiintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent PdIntent = PendingIntent.getActivity(this, 0, notiintent, PendingIntent.FLAG_UPDATE_CURRENT);
         // Bitmap icon =

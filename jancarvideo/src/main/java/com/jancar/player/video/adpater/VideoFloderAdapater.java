@@ -48,6 +48,7 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
     private Set<GetVideoBitmatTask> tasks = new HashSet<>();
     private DoubleBitmapCache doubleBitmapCache;
     private Handler mHandler = new Handler(Looper.getMainLooper());
+    private int focusColor,nofocusColor;
 
     public interface OnItemClickListener {
         void onItemClick(View v, FloderVideo floderVideo);
@@ -76,6 +77,8 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
                 }
             }
         });
+        focusColor = mContext.getResources().getColor(R.color.text_focus);
+        nofocusColor = mContext.getResources().getColor(R.color.text_no_focus);
     }
 
     @Override
@@ -123,7 +126,7 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
 
             boolean flag = mList.get(position).url.equals(crtUrl);
             photoHolder.textView.setText(StringTools.getNameByPath(mList.get(position).url));
-            photoHolder.textView.setTextColor(flag ? 0xFF0370E5 : 0xFFFFFFFF);
+            photoHolder.textView.setTextColor(flag ? focusColor : nofocusColor);
             photoHolder.textView.enableMarquee(flag);
             photoHolder.imageView2.setImageResource(flag ? R.drawable.media_list_item_select_02 : R.drawable.media_list_item_select_01);
         } else if (holder instanceof MenuHolder) {
@@ -137,13 +140,13 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
             String selectPath = crtUrl.substring(0,last2);
             boolean flag = path.equals(selectPath);
             if (flag) {
-                textHolder.textView1.setTextColor(0xFF0370E5);
-                textHolder.textView2.setTextColor(0xFF0370E5);
-                textHolder.textView3.setTextColor(0xFF0370E5);
+                textHolder.textView1.setTextColor(focusColor);
+                textHolder.textView2.setTextColor(focusColor);
+                textHolder.textView3.setTextColor(focusColor);
             } else {
-                textHolder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor_blue_white));
-                textHolder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor_blue_white));
-                textHolder.textView3.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor_blue_white));
+                textHolder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
+                textHolder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
+                textHolder.textView3.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
             }
             textHolder.imageView1.setImageResource(flag ? R.drawable.media_file_02 : R.drawable.media_file);
             textHolder.imageView2.setImageResource(mList.get(position).isSelect ?

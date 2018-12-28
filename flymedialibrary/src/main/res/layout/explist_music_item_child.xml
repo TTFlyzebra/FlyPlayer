@@ -26,7 +26,7 @@
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="1"
         android:singleLine="true"
-        android:textColor="@color/textcolor_blue_white"
+        android:textColor="@color/textcolor"
         android:textSize="20px" />
 
     <TextView
@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="48px"
         android:singleLine="true"
-        android:textColor="@color/textcolor_blue_white"
+        android:textColor="@color/textcolor"
         android:textSize="20px" />
 
 </LinearLayout>

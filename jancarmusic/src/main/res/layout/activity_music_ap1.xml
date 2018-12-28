@@ -2,12 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rela_music_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
     android:fitsSystemWindows="true"
-    tools:context=".MusicActivity">
+    tools:context=".MusicActivity_AP1">
 
 
     <LinearLayout
@@ -28,11 +27,10 @@
                 android:layout_height="250px"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="170px"
-                android:layout_marginTop="78px"
+                android:layout_marginStart="@dimen/music_iv01_margin_start"
+                android:layout_marginTop="@dimen/music_iv01_margin_top"
                 android:scaleType="fitXY"
-                android:src="@drawable/media_music_iv01"
-                android:visibility="gone" />
+                android:src="@drawable/media_music_iv01" />
 
             <com.jancar.media.view.CircleImageView
                 android:id="@+id/ac_music_iv_image"
@@ -40,30 +38,13 @@
                 android:layout_height="150px"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="220px"
-                android:layout_marginTop="128px"
+                android:layout_marginStart="@dimen/music_iv02_margin_start"
+                android:layout_marginTop="@dimen/music_iv02_margin_top"
                 android:background="#00000000"
                 android:scaleType="fitXY"
-                android:src="@drawable/media_music_iv02"
-                android:visibility="gone" />
-
-            <com.jancar.player.music.MZBannerView
-                android:id="@+id/banner"
-                android:layout_width="370px"
-                android:layout_height="250px"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="100px"
-                android:layout_marginTop="78px"
-                app:canLoop="true"
-                app:indicatorAlign="center"
-                app:indicatorPaddingBottom="50dp"
-                app:indicatorPaddingLeft="10dp"
-                app:middle_page_cover="true"
-                app:open_mz_mode="true" />
+                android:src="@drawable/media_music_iv02" />
 
         </RelativeLayout>
-
 
         <LinearLayout
             android:layout_width="0dp"
@@ -89,8 +70,8 @@
                     android:id="@+id/ac_music_single"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="50px"
                     android:layout_marginStart="20px"
+                    android:layout_marginEnd="50px"
                     android:ellipsize="marquee"
                     android:singleLine="true"
                     android:textColor="#FFF"
@@ -115,8 +96,8 @@
                     android:id="@+id/ac_music_album"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="50px"
                     android:layout_marginStart="20px"
+                    android:layout_marginEnd="50px"
                     android:ellipsize="marquee"
                     android:singleLine="true"
                     android:textColor="#FFF"
@@ -141,8 +122,8 @@
                     android:id="@+id/ac_music_artist"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="50px"
                     android:layout_marginStart="20px"
+                    android:layout_marginEnd="50px"
                     android:ellipsize="marquee"
                     android:singleLine="true"
                     android:textColor="#FFF"
@@ -153,7 +134,7 @@
 
     <com.jancar.media.view.lrcview.LrcView
         android:id="@+id/ac_music_lrcview"
-        android:layout_width="580px"
+        android:layout_width="@dimen/music_lrcview_width"
         android:layout_height="56px"
         android:layout_above="@+id/ac_music_control"
         app:lrcTextSize="22px" />
@@ -170,7 +151,7 @@
         <LinearLayout
             android:id="@+id/rl_01"
             android:layout_width="match_parent"
-            android:layout_height="30px"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:gravity="center"
             android:orientation="horizontal">
@@ -178,30 +159,32 @@
             <TextView
                 android:id="@+id/ac_music_currentTime"
                 android:layout_width="78px"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:gravity="end"
+                android:layout_marginEnd="-10px"
                 android:text="00:00"
+                android:gravity="end"
                 android:textColor="@android:color/white"
                 android:textSize="20px" />
 
             <SeekBar
                 android:id="@+id/ac_music_seekBar"
                 android:layout_width="868px"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:progressDrawable="@drawable/media_seekbar_style"
                 android:splitTrack="false"
-                android:thumb="@drawable/media_seekbar_thumb" />
+                android:thumb="@drawable/media_seekbar_thumb"
+                android:thumbOffset="5px" />
 
             <TextView
                 android:id="@+id/ac_music_endTime"
                 android:layout_width="78px"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="5px"
-                android:gravity="start"
+                android:layout_marginStart="-10px"
                 android:text="00:00"
+                android:gravity="start"
                 android:textColor="@android:color/white"
                 android:textSize="20px" />
 
@@ -211,16 +194,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/rl_01"
-            android:gravity="center"
-            android:layoutDirection="ltr">
+            android:layoutDirection="ltr"
+            android:gravity="center">
 
             <ImageView
                 android:id="@+id/ac_music_play_fore"
                 android:layout_width="70px"
                 android:layout_height="70px"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="50px"
                 android:layout_marginStart="50px"
+                android:layout_marginEnd="50px"
                 android:scaleType="fitXY"
                 android:src="@drawable/media_fore" />
 
@@ -229,8 +212,8 @@
                 android:layout_width="70px"
                 android:layout_height="70px"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="50px"
                 android:layout_marginStart="50px"
+                android:layout_marginEnd="50px"
                 android:scaleType="fitXY"
                 android:src="@drawable/media_play" />
 
@@ -239,8 +222,8 @@
                 android:layout_width="70px"
                 android:layout_height="70px"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="50px"
                 android:layout_marginStart="50px"
+                android:layout_marginEnd="50px"
                 android:scaleType="fitXY"
                 android:src="@drawable/media_next" />
         </LinearLayout>
@@ -290,7 +273,7 @@
         <com.jancar.media.view.FlyTabView
             android:id="@+id/ac_music_tabview"
             android:layout_width="match_parent"
-            android:layout_height="75px"
+            android:layout_height="52px"
             android:layout_alignParentTop="true"
             android:layout_marginStart="56px"
             android:background="@drawable/media_list_header" />

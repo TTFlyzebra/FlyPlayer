@@ -26,7 +26,7 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
     private int childWidth = 0;
     private int[][] states = new int[][]{{android.R.attr.state_enabled}, {}};
     private int[] colors = new int[]{0xFFFFFFFF, 0xFF0370E5};
-    private ColorStateList colorStateList = new ColorStateList(states, colors);
+    private ColorStateList colorStateList ;
     private OnItemClickListener onItemClickListener;
 
     public FlyTabView(Context context) {
@@ -44,6 +44,8 @@ public class FlyTabView extends FrameLayout implements View.OnClickListener {
 
     private void init(Context context) {
         this.context = context;
+        colors = new int[]{context.getResources().getColor(R.color.text_no_focus), context.getResources().getColor(R.color.text_focus)};
+        colorStateList = new ColorStateList(states, colors);
     }
 
     public void setTitles(String[] strs) {
