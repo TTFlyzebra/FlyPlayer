@@ -74,13 +74,13 @@ android {
 
         AA3 {
 //            manifest.srcFile 'src/volkswagen/volkswagenAndroidManifest.xml'
-            java.srcDir 'src/AA2/java' // 指定源码目录
+            java.srcDir 'src/AA3/java' // 指定源码目录
             resources.srcDir 'src/AA3/res' //资源目录
         }
 
         AA4 {
 //            manifest.srcFile 'src/volkswagen/volkswagenAndroidManifest.xml'
-            java.srcDir 'src/AA2/java' // 指定源码目录
+            java.srcDir 'src/AA4/java' // 指定源码目录
             resources.srcDir 'src/AA4/res' //资源目录
         }
     }

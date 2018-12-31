@@ -24,11 +24,14 @@ public class MusicArtistAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private List<String> groupList;
     private List<List<String>> itemList;
+    private int focusColor,nofocusColor;
 
     public MusicArtistAdapter(Context context, List<String> groupList, List<List<String>> itemList) {
         mContext = context;
         this.groupList = groupList;
         this.itemList = itemList;
+        focusColor = mContext.getResources().getColor(R.color.text_focus);
+        nofocusColor = mContext.getResources().getColor(R.color.text_no_focus);
     }
 
     private OnItemClickListener onItemClickListener;
@@ -100,8 +103,8 @@ public class MusicArtistAdapter extends BaseExpandableListAdapter {
         holder.imageView1.setImageResource(isExpanded ? R.drawable.media_music_artist_02 : R.drawable.media_music_artist);
         holder.imageView2.setImageResource(isExpanded ? R.drawable.media_down_02 : R.drawable.media_right);
         if(isExpanded){
-            holder.textView1.setTextColor(0xFF0370E5);
-            holder.textView2.setTextColor(0xFF0370E5);
+            holder.textView1.setTextColor(focusColor);
+            holder.textView2.setTextColor(focusColor);
         }else{
             holder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
             holder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
@@ -145,7 +148,7 @@ public class MusicArtistAdapter extends BaseExpandableListAdapter {
         String url = itemList.get(groupPosition).get(childPosition);
         boolean flag = url.equals(MusicPlayer.getInstance().getPlayUrl());
         holder.textView1.setText(StringTools.getNameByPath(url));
-        holder.textView1.setTextColor(flag ? 0xFF0370E5 : 0xFFFFFFFF);
+        holder.textView1.setTextColor(flag ? focusColor : nofocusColor);
         holder.textView1.enableMarquee(flag);
         holder.imageView.setVisibility(flag?View.VISIBLE:View.INVISIBLE);
         return convertView;

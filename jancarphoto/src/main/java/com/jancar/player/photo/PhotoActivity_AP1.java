@@ -22,12 +22,12 @@ import com.jancar.media.utils.RtlTools;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
 import com.jancar.media.view.TouchEventRelativeLayout;
-import com.jancar.player.photo.data.PhotoViewPool;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -356,6 +356,8 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
 
 
     private class MyPageAdapter extends PagerAdapter {
+        private HashSet<PhotoView> viewSet = new HashSet<>();
+
         public MyPageAdapter() {
         }
 
@@ -373,14 +375,22 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
         public void destroyItem(ViewGroup container, int position, Object object) {
             PhotoView photoView = (PhotoView) object;
             photoView.recycle();
-            PhotoViewPool.recycle(photoView);
+            viewSet.add(photoView);
             container.removeView(photoView);
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            PhotoView photoView = PhotoViewPool.obtain(PhotoActivity_AP1.this);
-            photoView.setOnClickListener(photoOnClickListener);
+            FlyLog.d("set size=%d", viewSet.size());
+            PhotoView photoView = null;
+            Iterator it = viewSet.iterator();
+            if (it.hasNext()) {
+                photoView = (PhotoView) it.next();
+                viewSet.remove(photoView);
+            } else {
+                photoView = new PhotoView(PhotoActivity_AP1.this);
+            }
+            photoView.setOnClickListener(PhotoActivity_AP1.this);
             imageResIDs.put(position, View.generateViewId());
             photoView.setId(imageResIDs.get(position));
             photoView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);

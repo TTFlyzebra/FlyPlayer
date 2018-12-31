@@ -256,6 +256,22 @@ public class MusicPlayer implements IMusicPlayer,
                 }
                 break;
             case LOOP_SINGER:
+                if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
+                    String artist = mPlayUrls.get(mPlayPos).artist;
+                    int i = mPlayUrls.size();
+                    int count = 0;
+                    while (i > 0) {
+                        count++;
+                        int num = (mPlayPos + mPlayUrls.size() - count) % (mPlayUrls.size());
+                        if (mPlayUrls.get(num).artist.equals(artist)) {
+                            mPlayPos = num;
+                            break;
+                        }
+                        i--;
+                    }
+                } else {
+                    mPlayPos = -1;
+                }
                 break;
         }
         if (mPlayPos >= 0 && mPlayUrls != null && mPlayUrls.size() > mPlayPos) {

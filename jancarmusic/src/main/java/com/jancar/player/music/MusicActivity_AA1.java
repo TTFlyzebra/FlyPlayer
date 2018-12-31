@@ -10,11 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MusicActivity_AA1 extends MusicActivity_AP1 {
-    @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(R.layout.activity_music_aa1);
-    }
+public class MusicActivity_AA1 extends BaseMusicActivity {
 
     @Override
     public void initFragment() {

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#FF00FF9C</color>
+    <color name="colorPrimaryDark">#FF00FF9C</color>
     <color name="colorAccent">#FF4081</color>
 
 
     <color name="lrc_normal_text_color">#FF9E9E9E</color>
-    <color name="lrc_current_text_color">#FF07AAFF</color>
-    <color name="lrc_timeline_text_color">#8007AAFF</color>
+    <color name="lrc_current_text_color">#FF00FF9C</color>
+    <color name="lrc_timeline_text_color">#8000FF9C</color>
     <color name="lrc_timeline_color">#209E9E9E</color>
     <color name="lrc_time_text_color">#209E9E9E</color>
 

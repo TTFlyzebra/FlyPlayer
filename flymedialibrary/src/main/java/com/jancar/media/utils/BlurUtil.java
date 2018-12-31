@@ -1,17 +1,15 @@
 package com.jancar.media.utils;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 
 public class BlurUtil {
-    private static final float BITMAP_SCALE = 0.2f;
-    private static final int BLUR_RADIUS = 8;
+    private static final float BITMAP_SCALE = 0.5f;
+    private static final int BLUR_RADIUS = 5;
 
     public static Bitmap blur(Context context, Bitmap bitmap) {
         return blur(context, bitmap, BITMAP_SCALE, BLUR_RADIUS);
@@ -25,7 +23,6 @@ public class BlurUtil {
         return blur(context, bitmap, BITMAP_SCALE, blur_radius);
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static Bitmap blur(Context context, Bitmap bitmap, float bitmap_scale, int blur_radius) {
         Bitmap inputBitmap = Bitmap.createScaledBitmap(bitmap, Math.round(bitmap.getWidth() * bitmap_scale),
                 Math.round(bitmap.getHeight() * bitmap_scale), false);
@@ -39,8 +36,6 @@ public class BlurUtil {
         theIntrinsic.forEach(tmpOut);
         tmpOut.copyTo(outputBitmap);
         rs.destroy();
-        bitmap.recycle();
-
         return outputBitmap;
     }
 }

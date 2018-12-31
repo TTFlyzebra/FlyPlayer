@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.Music;
-import com.jancar.player.music.MusicActivity_AP1;
+import com.jancar.player.music.BaseMusicActivity;
 import com.jancar.player.music.model.listener.IMusicPlayerListener;
 import com.jancar.player.music.model.musicplayer.IMusicPlayer;
 import com.jancar.player.music.model.musicplayer.MusicPlayer;
@@ -14,14 +14,14 @@ import java.util.List;
 public class MusicFragment extends BaseFragment implements
         IMusicPlayerListener {
     protected List<Music> mMusicList;
-    protected MusicActivity_AP1 activity;
+    protected BaseMusicActivity activity;
     protected IMusicPlayer musicPlayer = MusicPlayer.getInstance();
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = (MusicActivity_AP1) getActivity();
+        activity = (BaseMusicActivity) getActivity();
         mMusicList = activity.musicList;
     }
 

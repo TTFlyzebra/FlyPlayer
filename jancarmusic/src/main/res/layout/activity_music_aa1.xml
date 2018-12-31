@@ -9,6 +9,11 @@
     android:fitsSystemWindows="true"
     tools:context=".MusicActivity">
 
+    <ImageView
+        android:id="@+id/ac_music_bkimg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY" />
 
     <LinearLayout
         android:id="@+id/ac_music_content"
@@ -21,46 +26,17 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.5">
+            android:layout_weight="0.5"
+            android:gravity="center">
 
-            <ImageView
-                android:layout_width="250px"
+            <com.jancar.player.music.view.FlyViewPager
+                android:id="@+id/ac_music_viewpager"
+                android:layout_width="370px"
                 android:layout_height="250px"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="170px"
-                android:layout_marginTop="78px"
-                android:scaleType="fitXY"
-                android:src="@drawable/media_music_iv01"
-                android:visibility="visible" />
-
-            <com.jancar.media.view.CircleImageView
-                android:id="@+id/ac_music_iv_image"
-                android:layout_width="150px"
-                android:layout_height="150px"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="220px"
-                android:layout_marginTop="128px"
-                android:background="#00000000"
-                android:scaleType="fitXY"
-                android:src="@drawable/media_music_iv02"
-                android:visibility="visible" />
-
-            <!--<com.jancar.player.music.MZBannerView-->
-                <!--android:id="@+id/banner"-->
-                <!--android:layout_width="370px"-->
-                <!--android:layout_height="250px"-->
-                <!--android:layout_alignParentStart="true"-->
-                <!--android:layout_alignParentTop="true"-->
-                <!--android:layout_marginStart="100px"-->
-                <!--android:layout_marginTop="78px"-->
-                <!--app:canLoop="true"-->
-                <!--app:indicatorAlign="center"-->
-                <!--app:indicatorPaddingBottom="50dp"-->
-                <!--app:indicatorPaddingLeft="10dp"-->
-                <!--app:middle_page_cover="true"-->
-                <!--app:open_mz_mode="true" />-->
+                android:layout_marginStart="100px"
+                android:layout_marginTop="100px" />
 
         </RelativeLayout>
 
@@ -89,8 +65,8 @@
                     android:id="@+id/ac_music_single"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="50px"
                     android:layout_marginStart="20px"
+                    android:layout_marginEnd="50px"
                     android:ellipsize="marquee"
                     android:singleLine="true"
                     android:textColor="#FFF"
@@ -115,8 +91,8 @@
                     android:id="@+id/ac_music_album"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="50px"
                     android:layout_marginStart="20px"
+                    android:layout_marginEnd="50px"
                     android:ellipsize="marquee"
                     android:singleLine="true"
                     android:textColor="#FFF"
@@ -141,8 +117,8 @@
                     android:id="@+id/ac_music_artist"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="50px"
                     android:layout_marginStart="20px"
+                    android:layout_marginEnd="50px"
                     android:ellipsize="marquee"
                     android:singleLine="true"
                     android:textColor="#FFF"
@@ -219,9 +195,9 @@
                 android:layout_width="70px"
                 android:layout_height="70px"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="50px"
                 android:layout_marginStart="50px"
-                android:scaleType="fitXY"
+                android:layout_marginEnd="50px"
+                android:scaleType="fitCenter"
                 android:src="@drawable/media_fore" />
 
             <ImageView
@@ -229,9 +205,9 @@
                 android:layout_width="70px"
                 android:layout_height="70px"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="50px"
                 android:layout_marginStart="50px"
-                android:scaleType="fitXY"
+                android:layout_marginEnd="50px"
+                android:scaleType="fitCenter"
                 android:src="@drawable/media_play" />
 
             <ImageView
@@ -239,17 +215,17 @@
                 android:layout_width="70px"
                 android:layout_height="70px"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="50px"
                 android:layout_marginStart="50px"
-                android:scaleType="fitXY"
+                android:layout_marginEnd="50px"
+                android:scaleType="fitCenter"
                 android:src="@drawable/media_next" />
         </LinearLayout>
 
         <RelativeLayout
             android:layout_width="75px"
             android:layout_height="75px"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:gravity="center">
 
             <ImageView
@@ -266,10 +242,10 @@
         android:id="@+id/ac_music_left_layout"
         android:layout_width="@dimen/music_left_list_width"
         android:layout_height="@dimen/music_left_list_height"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="@dimen/music_bottom_menu_height"
+        android:layout_alignParentBottom="true"
         android:layout_marginEnd="@dimen/music_left_list_margin_end"
+        android:layout_marginBottom="@dimen/music_bottom_menu_height"
         android:orientation="vertical">
 
         <ImageView

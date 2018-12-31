@@ -24,12 +24,15 @@ public class MusicFloderAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private List<String> groupList;
     private List<List<String>> itemList;
+    private int focusColor,nofocusColor;
 
     public MusicFloderAdapter(Context context, List<String> groupList,
                               List<List<String>> itemList) {
         mContext = context;
         this.groupList = groupList;
         this.itemList = itemList;
+        focusColor = mContext.getResources().getColor(R.color.text_focus);
+        nofocusColor = mContext.getResources().getColor(R.color.text_no_focus);
     }
 
     @Override
@@ -97,9 +100,9 @@ public class MusicFloderAdapter extends BaseExpandableListAdapter {
         holder.textView1.enableMarquee(isExpanded);
         holder.textView2.enableMarquee(isExpanded);
         if (isExpanded) {
-            holder.textView1.setTextColor(0xFF0370E5);
-            holder.textView2.setTextColor(0xFF0370E5);
-            holder.textView3.setTextColor(0xFF0370E5);
+            holder.textView1.setTextColor(focusColor);
+            holder.textView2.setTextColor(focusColor);
+            holder.textView3.setTextColor(focusColor);
         } else {
             holder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
             holder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
@@ -139,7 +142,7 @@ public class MusicFloderAdapter extends BaseExpandableListAdapter {
         holder.textView1.setText(StringTools.getNameByPath(url));
 
         if (flag) {
-            holder.textView1.setTextColor(0xFF0370E5);
+            holder.textView1.setTextColor(focusColor);
         } else {
             holder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
         }
