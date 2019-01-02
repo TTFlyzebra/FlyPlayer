@@ -390,7 +390,7 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
             } else {
                 photoView = new PhotoView(PhotoActivity_AP1.this);
             }
-            photoView.setOnClickListener(PhotoActivity_AP1.this);
+            photoView.setOnClickListener(photoOnClickListener);
             imageResIDs.put(position, View.generateViewId());
             photoView.setId(imageResIDs.get(position));
             photoView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);

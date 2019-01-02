@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.jancar.player.music.R;
 import com.jancar.media.data.Music;
-import com.jancar.player.music.model.musicplayer.MusicPlayer;
 import com.jancar.media.view.MarqueeTextView;
+import com.jancar.player.music.R;
+import com.jancar.player.music.model.musicplayer.MusicPlayer;
 
 import java.io.File;
 import java.util.List;

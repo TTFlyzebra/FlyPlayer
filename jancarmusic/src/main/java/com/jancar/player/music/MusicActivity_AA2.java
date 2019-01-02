@@ -5,7 +5,7 @@ import android.widget.ImageView;
 
 import com.jancar.player.music.model.musicplayer.MusicPlayer;
 
-public class MusicActivity_AA2 extends MusicActivity_AA1 {
+public class MusicActivity_AA2 extends BaseMusicActivity1 {
     private ImageView ivImage;
 
     @Override

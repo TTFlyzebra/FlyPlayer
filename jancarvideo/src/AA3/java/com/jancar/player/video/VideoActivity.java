@@ -1,7 +1,5 @@
 package com.jancar.player.video;
 
-import android.app.Activity;
-
 /**
  * Author FlyZebra
  * 2018/12/27 15:20

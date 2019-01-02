@@ -252,7 +252,8 @@
             android:id="@+id/ac_music_iv_loop"
             android:layout_width="56px"
             android:layout_height="32px"
-            android:layout_marginTop="8px"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="18px"
             android:paddingEnd="10px"
             android:scaleType="fitXY"
             android:src="@drawable/media_loop_all" />

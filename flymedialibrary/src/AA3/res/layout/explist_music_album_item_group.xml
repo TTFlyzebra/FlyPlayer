@@ -5,29 +5,15 @@
     android:gravity="center"
     android:orientation="horizontal">
 
-    <FrameLayout
+    <ImageView
+        android:id="@+id/item_iv01"
         android:layout_width="0dp"
         android:layout_height="64px"
-        android:layout_marginStart="5px"
-        android:layout_weight="0.18">
-
-        <ImageView
-            android:id="@+id/iv_music_album_bg"
-            android:layout_width="45px"
-            android:layout_height="45px"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="25px"
-            android:src="@drawable/media_music_alb_bg" />
-
-        <ImageView
-            android:id="@+id/item_iv01"
-            android:layout_width="50px"
-            android:layout_height="50px"
-            android:layout_gravity="center_vertical"
-            android:duplicateParentState="true"
-            android:scaleType="centerInside"
-            android:src="@drawable/media_music_album" />
-    </FrameLayout>
+        android:layout_marginStart="10px"
+        android:layout_weight="0.15"
+        android:duplicateParentState="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/media_music_album" />
 
 
     <RelativeLayout
@@ -56,7 +42,7 @@
             android:layout_alignParentEnd="true"
             android:gravity="left|center"
             android:textColor="@color/textcolor"
-            android:textSize="22px" />
+            android:textSize="22px"/>
     </RelativeLayout>
 
 
