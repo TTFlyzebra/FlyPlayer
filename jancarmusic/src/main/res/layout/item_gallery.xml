@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="250px"
-    android:layout_height="250px">
+    android:id="@+id/bkground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bk_re_white">
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="250px"
-        android:layout_height="250px"
-        android:scaleType="centerCrop" />
-
-    <FrameLayout
-        android:id="@+id/overlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="150px"
+        android:layout_height="150px"
+        android:layout_margin="2px"
+        android:scaleType="fitXY" />
 </FrameLayout>
 

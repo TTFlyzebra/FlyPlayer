@@ -312,9 +312,6 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
         }
     }
 
-
-
-
     public void update() {
         cancleAllTask();
         this.notifyDataSetChanged();

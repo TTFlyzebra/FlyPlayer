@@ -26,21 +26,13 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginStart="50px"
             android:layout_weight="0.5"
             android:gravity="center">
-
-            <LinearLayout
+            <com.yarolegovich.discretescrollview.DiscreteScrollView
+                android:id="@+id/ac_music_viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="250px"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <com.yarolegovich.discretescrollview.DiscreteScrollView
-                    android:id="@+id/ac_music_viewpager"
-                    android:layout_width="match_parent"
-                    android:layout_height="250px"/>
-            </LinearLayout>
+                android:layout_height="match_parent" />
         </RelativeLayout>
 
         <LinearLayout
