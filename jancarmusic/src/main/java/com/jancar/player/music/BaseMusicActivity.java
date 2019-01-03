@@ -444,7 +444,7 @@ public class BaseMusicActivity extends BaseActivity implements
         mHandler.post(seekBarTask);
     }
 
-    private void upPlayInfo(String url) {
+    protected void upPlayInfo(String url) {
         title = StringTools.getNameByPath(url);
         tvSingle.setText(title);
         executor.execute(new Runnable() {

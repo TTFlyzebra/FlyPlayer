@@ -29,17 +29,19 @@
             android:layout_weight="0.5"
             android:gravity="center">
 
-            <com.jancar.player.music.view.FlyViewPager
-                android:id="@+id/ac_music_viewpager"
-                android:layout_width="370px"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="250px"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="100px"
-                android:layout_marginTop="100px" />
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="horizontal">
 
+                <com.yarolegovich.discretescrollview.DiscreteScrollView
+                    android:id="@+id/ac_music_viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="250px"/>
+            </LinearLayout>
         </RelativeLayout>
-
 
         <LinearLayout
             android:layout_width="0dp"

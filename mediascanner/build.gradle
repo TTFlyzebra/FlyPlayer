@@ -26,7 +26,7 @@ android {
     defaultConfig {
         applicationId "com.jancar.mediascan"
         minSdkVersion 19
-        targetSdkVersion 23
+        targetSdkVersion 27
         versionCode gitCommitCount.toInteger()
         versionName "v1.0."+gitSHA
 

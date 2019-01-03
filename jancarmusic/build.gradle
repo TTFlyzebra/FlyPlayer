@@ -23,16 +23,14 @@ def getGitCommitCount() {
 }
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 28
 
     defaultConfig {
         applicationId "com.jancar.player.music"
         minSdkVersion 19
-        targetSdkVersion 23
+        targetSdkVersion 27
         versionCode gitCommitCount.toInteger()
         versionName "v1.0."+gitSHA
-        renderscriptTargetApi 25
-        renderscriptSupportModeEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         flavorDimensions "versionCode"
     }
@@ -152,6 +150,7 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     implementation 'com.android.support:support-annotations:27.+'
-    compileOnly 'com.android.support:appcompat-v7:23.+'
-    compileOnly 'com.android.support:recyclerview-v7:23.+'
+    compileOnly 'com.android.support:appcompat-v7:28.0.0'
+    compileOnly 'com.android.support:recyclerview-v7:28.0.0'
+    compile project(path: ':discretescrollview')
 }

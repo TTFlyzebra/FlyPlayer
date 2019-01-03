@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.session.MediaSession;
 import android.os.Build;
-import android.support.v4.media.session.MediaSessionCompat;
 import android.view.KeyEvent;
 
 import com.jancar.media.utils.FlyLog;
@@ -30,7 +29,7 @@ public class RegisterMediaSession {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mMediaSession = new MediaSession(context, context.getPackageName());
             mMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
-            mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+//            mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
             mMediaSession.setCallback(new MediaSession.Callback() {
                 @SuppressLint("Override")
                 public boolean onMediaButtonEvent(Intent intent) {
