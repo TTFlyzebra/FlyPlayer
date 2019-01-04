@@ -120,7 +120,7 @@ public class MediaSession implements IMediaSession {
 
     @Override
     public void notifyProgress(int seekBarPos, int sumTime) {
-        FlyLog.d("notifyProgress sumTime=%d,seekBarPos=%d", seekBarPos, sumTime);
+//        FlyLog.d("notifyProgress sumTime=%d,seekBarPos=%d", seekBarPos, sumTime);
         jacMediaSession.notifyProgress(seekBarPos, sumTime);
     }
 

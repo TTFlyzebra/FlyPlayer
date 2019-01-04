@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +20,9 @@ import com.jancar.player.music.R;
 import com.jancar.player.music.model.musicplayer.MusicPlayer;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
+import com.yarolegovich.discretescrollview.DiscreteScrollView;
 
+import java.nio.channels.ClosedByInterruptException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +33,7 @@ import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
  * Created by yarolegovich on 07.03.2017.
  */
 
-public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
+public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
 
     private List<Music> mList;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -40,14 +41,14 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
     private Context mContext;
     private DoubleBitmapCache doubleBitmapCache;
     private Set<GetVideoBitmatTask> tasks = new HashSet<>();
-    private RecyclerView mRecyclerView;
+    private DiscreteScrollView discreteScrollView;
 
-    public ShopAdapter(Context context,List<Music> data,RecyclerView recyclerView) {
+    public GalleryAdapter(Context context, List<Music> data, DiscreteScrollView recyclerView) {
         this.mContext = context;
         this.mList = data;
         doubleBitmapCache = DoubleBitmapCache.getInstance(context.getApplicationContext());
-        mRecyclerView = recyclerView;
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        discreteScrollView = recyclerView;
+        discreteScrollView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 switch (newState) {
@@ -132,8 +133,11 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
                         }
                         FlyLog.d("get id3 info url=%s", url);
                     }
+                }catch (ClosedByInterruptException e){
+                    FlyLog.d("Error ID3 Info");
                 } catch (Exception e) {
-                    FlyLog.e(e.toString());
+                    FlyLog.e("url=%s,%s",url,e.toString());
+                    e.printStackTrace();
                 }
                 if (bitmap != null) {
                     if (doubleBitmapCache != null) {
@@ -148,7 +152,7 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            ImageView imageView = (ImageView) mRecyclerView.findViewWithTag(url);
+            ImageView imageView = (ImageView) discreteScrollView.findViewWithTag(url);
             if (imageView != null) {
                 if (bitmap != null) {
                     imageView.setImageBitmap(bitmap);
@@ -165,6 +169,7 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
             task.cancel(true);
         }
         tasks.clear();
+        mHandler.removeCallbacksAndMessages(null);
     }
 
     public void loadImageView(int first, int last) {
@@ -176,7 +181,7 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
             for (int i = first; i <= last; i++) {
                 Bitmap bitmap = doubleBitmapCache.get(mList.get(i).url);
                 if (null != bitmap) {
-                    ImageView imageView = (ImageView) mRecyclerView.findViewWithTag(mList.get(i));
+                    ImageView imageView = (ImageView) discreteScrollView.findViewWithTag(mList.get(i));
                     if (null != imageView) {
                         imageView.setImageBitmap(bitmap);
                     }
@@ -194,16 +199,16 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
     public void update() {
         cancleAllTask();
         this.notifyDataSetChanged();
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                int first = ((GridLayoutManager) (mRecyclerView.getLayoutManager())).findFirstVisibleItemPosition();
-                int last = ((GridLayoutManager) (mRecyclerView.getLayoutManager())).findLastVisibleItemPosition();
-                if (first >= 0 && last >= first) {
-                    loadImageView(first, last);
-                }
-            }
-        }, 0);
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                int first = ((RecyclerView.LayoutManager) (discreteScrollView.getLayoutManager())).findFirstVisibleItemPosition();
+//                int last = ((LinearLayoutManager) (discreteScrollView.getLayoutManager())).findLastVisibleItemPosition();
+//                if (first >= 0 && last >= first) {
+//                    loadImageView(first, last);
+//                }
+//            }
+//        }, 0);
 
     }
 }
