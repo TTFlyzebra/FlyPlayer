@@ -1,7 +1,6 @@
 package com.jancar.player.video;
 
 import android.animation.Animator;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -457,6 +456,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
                 break;
             case GiraffePlayer.STATUS_PLAYING:
                 setCurrentPos();
+                player.savePathUrl(currenPath);
                 mHandler.removeCallbacks(seekBarTask);
                 mHandler.post(seekBarTask);
                 break;
@@ -573,20 +573,20 @@ public class VideoActivity_AP1 extends BaseActivity implements
     }
 
 
-    @Override
-    public void onUsbMounted(Activity activity, boolean flag) {
-        /**
-         * 正在播放的U盘被拔
-         */
-        if (!flag) {
-            FlyLog.e("palying usb is removed!");
-            player.stop();
-            FlyLog.e("is back palying andr current(%s) path is removed, finish appliction!", currenPath);
-            if (isStop) {
-                activity.finish();
-            }
-        }
-    }
+//    @Override
+//    public void onUsbMounted(Activity activity, boolean flag) {
+//        /**
+//         * 正在播放的U盘被拔
+//         */
+//        if (!flag) {
+//            FlyLog.e("palying usb is removed!");
+//            player.stop();
+//            FlyLog.e("is back palying andr current(%s) path is removed, finish appliction!", currenPath);
+//            if (isStop) {
+//                activity.finish();
+//            }
+//        }
+//    }
 
     protected int getFloderSum() {
         Set<String> set = new HashSet<>();
