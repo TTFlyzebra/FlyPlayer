@@ -423,8 +423,8 @@ public class FlyMediaService extends Service {
     }
 
     private void removePath(String path) {
-        FlyLog.d("remove mPath=%s", path);
-        if (currentPath.equals(path) && mEState == JacState.ePowerState.ePowerOn) {
+        FlyLog.d("remove mPath=%s,currentPath=%s", path,currentPath);
+        if ((currentPath.equals("/storage")||currentPath.equals(path)) && mEState == JacState.ePowerState.ePowerOn) {
             FlyLog.d("clear all list");
             clearData();
             startScanPath(DEF_PATH);

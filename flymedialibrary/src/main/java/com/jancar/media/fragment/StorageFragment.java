@@ -1,5 +1,6 @@
 package com.jancar.media.fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -20,7 +21,6 @@ import com.jancar.media.model.listener.IStorageListener;
 import com.jancar.media.model.mediascan.MediaScan;
 import com.jancar.media.model.storage.IStorage;
 import com.jancar.media.model.storage.Storage;
-import com.jancar.media.receiver.DiskReceiver;
 import com.jancar.media.utils.FlyLog;
 
 import java.util.ArrayList;
@@ -124,7 +124,7 @@ public class StorageFragment extends BaseFragment implements
         MediaScan.getInstance().openStorager(mList.get(pos));
     }
 
-    public class MyReceiver extends DiskReceiver {
+    public class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             FlyLog.d(intent.toUri(0));

@@ -15,7 +15,6 @@ public class SystemPropertiesProxy {
         String PERSIST_KEY_GISMIX = "persist.jancar.gpsmix";                // 导航混音比例
         String PERSIST_KEY_BRAKEWARN = "persist.jancar.brakewarn";          // 行车禁止视频警告
         String PERSIST_KEY_VIDEOTEST = "persist.jancar.videotest";          // 视频解码信息显示
-
     }
 
     /**

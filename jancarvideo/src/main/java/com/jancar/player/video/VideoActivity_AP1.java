@@ -17,6 +17,9 @@ import android.widget.RelativeLayout;
 
 import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Video;
+import com.jancar.media.model.listener.IMediaEventListerner;
+import com.jancar.media.model.mediaSession.IMediaSession;
+import com.jancar.media.model.mediaSession.MediaSession;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.RtlTools;
 import com.jancar.media.utils.SystemPropertiesProxy;
@@ -39,7 +42,8 @@ public class VideoActivity_AP1 extends BaseActivity implements
         View.OnClickListener,
         FlyTabView.OnItemClickListener,
         GiraffePlayer.OnPlayStatusChangeLiseter,
-        TouchEventRelativeLayout.OnTouchEventListener {
+        TouchEventRelativeLayout.OnTouchEventListener
+,IMediaEventListerner {
     private ImageView play_fore, play_next, play_pause, leftMenu;
     private TouchEventRelativeLayout leftLayout;
     private TouchEventRelativeLayout controlLayout;
@@ -108,6 +112,8 @@ public class VideoActivity_AP1 extends BaseActivity implements
         }
     };
 
+    private IMediaSession mediaSession;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -128,6 +134,10 @@ public class VideoActivity_AP1 extends BaseActivity implements
         registerMediaSession = new RegisterMediaSession(this, player);
         initFragment();
         initView();
+
+        mediaSession = new MediaSession(this);
+        mediaSession.init();
+        mediaSession.addEventListener(this);
     }
 
     public void initFragment() {
@@ -190,6 +200,8 @@ public class VideoActivity_AP1 extends BaseActivity implements
 
     @Override
     protected void onDestroy() {
+        mediaSession.removeEventListener(this);
+        mediaSession.release();
         mHandler.removeCallbacksAndMessages(null);
         player.removeStatusChangeLiseter(this);
         player.onDestroy();
@@ -247,6 +259,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
         });
     }
 
+    @Override
     public void playNext() {
         if (videoList != null && !videoList.isEmpty()) {
             currenPos = (currenPos + 1) % videoList.size();
@@ -254,11 +267,33 @@ public class VideoActivity_AP1 extends BaseActivity implements
         }
     }
 
-    public void playFore() {
+    @Override
+    public void playPrev() {
         if (videoList != null && !videoList.isEmpty()) {
             currenPos = (currenPos - 1 + videoList.size()) % videoList.size();
             player.play(videoList.get(currenPos).url);
         }
+    }
+
+    @Override
+    public void playOrPause() {
+        if (player.isPlaying()) {
+            setPause = true;
+            player.pause();
+        } else {
+            setPause = false;
+            player.start();
+        }
+    }
+
+    @Override
+    public void start() {
+        player.start();
+    }
+
+    @Override
+    public void pause() {
+        player.pause();
     }
 
     private boolean setPause = false;
@@ -271,7 +306,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
                 showLeftMenu(isShowLeftMenu);
                 break;
             case R.id.ac_video_play_fore:
-                playFore();
+                playPrev();
                 break;
             case R.id.ac_video_play_next:
                 playNext();
@@ -483,7 +518,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
                 playNext();
                 return true;
             case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-                playFore();
+                playPrev();
                 return true;
 
         }

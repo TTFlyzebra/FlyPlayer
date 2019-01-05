@@ -24,8 +24,8 @@ import java.util.List;
  */
 
 public class ListFileDiskCache {
-    private final int max_size = 10 * 1024 * 1024;
-    private static byte[] bytes = new byte[4 * 1024 * 1024];
+    private final int max_size = 20 * 1024 * 1024;
+    private static byte[] bytes = new byte[8 * 1024 * 1024];
     private DiskLruCache mDiskLruCache;
     private Context mContext;
 
@@ -58,7 +58,7 @@ public class ListFileDiskCache {
                     list = GsonUtils.json2ListObj(json, cls);
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         } finally {
             try {
@@ -68,7 +68,7 @@ public class ListFileDiskCache {
                 if (snapShot != null) {
                     snapShot.close();
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 FlyLog.e(e.toString());
             }
         }
@@ -90,14 +90,14 @@ public class ListFileDiskCache {
             outputStream.flush();
             editor.commit();
             mDiskLruCache.flush();
-        } catch (IOException e) {
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         } finally {
             try {
                 if (outputStream != null) {
                     outputStream.close();
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 FlyLog.e(e.toString());
             }
         }

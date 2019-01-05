@@ -57,7 +57,7 @@ public class MusicDiskCache implements ICache<Music> {
                 String json = new String(bytes, 0, len);
                 music = GsonUtils.json2Object(json, Music.class);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         } finally {
             try {
@@ -67,7 +67,7 @@ public class MusicDiskCache implements ICache<Music> {
                 if (snapShot != null) {
                     snapShot.close();
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 FlyLog.e(e.toString());
             }
         }
@@ -88,14 +88,14 @@ public class MusicDiskCache implements ICache<Music> {
             outputStream.flush();
             editor.commit();
             mDiskLruCache.flush();
-        } catch (IOException e) {
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         } finally {
             try {
                 if (outputStream != null) {
                     outputStream.close();
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 FlyLog.e(e.toString());
             }
         }

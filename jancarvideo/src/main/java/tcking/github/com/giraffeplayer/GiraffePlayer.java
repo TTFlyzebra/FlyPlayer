@@ -804,13 +804,17 @@ public class GiraffePlayer {
     }
 
     public void start() {
-        ijkVideoView.start();
-        statusChange(STATUS_PLAYING);
+        if(ijkVideoView!=null) {
+            ijkVideoView.start();
+            statusChange(STATUS_PLAYING);
+        }
     }
 
     public void pause() {
-        ijkVideoView.pause();
-        statusChange(STATUS_PAUSE);
+        if(ijkVideoView!=null) {
+            ijkVideoView.pause();
+            statusChange(STATUS_PAUSE);
+        }
     }
 
     public boolean onBackPressed() {
@@ -874,7 +878,7 @@ public class GiraffePlayer {
     }
 
     public void playFore() {
-        activity.playFore();
+        activity.playPrev();
     }
 
     class Query {

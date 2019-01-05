@@ -24,6 +24,7 @@ public class MediaSession implements IMediaSession {
         jacMediaSession = new JacMediaSession(context) {
             @Override
             public boolean OnKeyEvent(int key, int state) throws RemoteException {
+                FlyLog.d("OnKeyEvent key=%d,state=%d",key,state);
                 boolean bRet = false;
                 try {
                     KeyDef.KeyType keyType = KeyDef.KeyType.nativeToType(key);

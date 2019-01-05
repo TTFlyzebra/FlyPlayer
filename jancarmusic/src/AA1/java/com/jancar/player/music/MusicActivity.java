@@ -36,7 +36,12 @@ public class MusicActivity extends MusicActivity_AA1 {
                 FlyLog.d("onCurrentItemChanged adapterPosition=%d", adapterPosition);
                 if(adapterPosition==0){
                     if(musicPlayer.isPlaying()){
-                        discreteScrollView.smoothScrollToPosition(musicPlayer.getPlayPos());
+                        try{
+                            discreteScrollView.smoothScrollToPosition(musicPlayer.getPlayPos());
+                        }catch (Exception e){
+                            FlyLog.e(e.toString());
+                            e.printStackTrace();
+                        }
                     }
                 } else if (adapterPosition >= 0 && musicPlayer.getPlayPos() > 0) {
                     try {
@@ -70,7 +75,12 @@ public class MusicActivity extends MusicActivity_AA1 {
         switch (statu) {
             case MusicPlayer.STATUS_PLAYING:
                 if (musicPlayer.getPlayPos() >= 0 && discreteScrollView.getCurrentItem() != musicPlayer.getPlayPos()) {
-                    discreteScrollView.smoothScrollToPosition(musicPlayer.getPlayPos());
+                    try{
+                        discreteScrollView.smoothScrollToPosition(musicPlayer.getPlayPos());
+                    }catch (Exception e){
+                        FlyLog.e(e.toString());
+                        e.printStackTrace();
+                    }
                 }
                 break;
             case MusicPlayer.STATUS_IDLE:

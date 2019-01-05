@@ -203,24 +203,27 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
         @Override
         public void OnStorage(StorageState state) {
             try {
-                FlyLog.d("usb state:" + state.isUsbMounted());
-                boolean flag = true;
+                FlyLog.d("currentPath=%s,usb state:" + state.isUsbMounted(),currenPath);
+                boolean flag = false;
                 int statu = state.toInteger();
                 switch (currenPath) {
+                    case "/storage":
+                        flag = true;
+                        break;
                     case "/storage/udisk1":
-                        flag = (statu & 8) > 0;
+                        flag = (statu & 8) <= 0;
                         break;
                     case "/storage/udisk2":
-                        flag = (statu & 16) > 0;
+                        flag = (statu & 16) <= 0;
                         break;
                     case "/storage/udisk3":
-                        flag = (statu & 32) > 0;
+                        flag = (statu & 32) <= 0;
                         break;
                     case "/storage/udisk4":
-                        flag = (statu & 64) > 0;
+                        flag = (statu & 64) <= 0;
                         break;
                     case "/storage/udisk5":
-                        flag = (statu & 128) > 0;
+                        flag = (statu & 128) <= 0;
                         break;
                 }
                 FlyLog.d("current path is removed=" + flag);
@@ -265,7 +268,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
 
     protected static MyHandler mJancarHandler;
     public void onUsbMounted(Activity activity, boolean flag) {
-        if (!flag) {
+        if (flag) {
             FlyLog.e("is back palying andr current(%s) path is removed, finish appliction!", currenPath);
             if (isStop) {
                 activity.finish();

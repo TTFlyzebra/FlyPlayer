@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -175,10 +176,25 @@ public class BaseMusicActivity extends BaseActivity implements
         FlyLog.d("playOpenIntent test=" + test);
         List<String> openList = intent.getStringArrayListExtra("music_list");
         FlyLog.d("openList=%s", openList == null ? "" : openList.toString());
+        if (openList == null) {
+            Uri uri = intent.getData();
+            if (uri != null) {
+                String url = uri.getPath();
+                if (!TextUtils.isEmpty(url)) {
+                    FlyLog.d("open uri=%s", url);
+                    openList = new ArrayList<>();
+                    openList.add(url);
+                    musicPlayer.setLoopStatus(MusicPlayer.LOOP_ONE);
+                }
+            }
+        } else {
+            musicPlayer.setLoopStatus(MusicPlayer.LOOP_SINGER);
+        }
         if (openList != null && !openList.isEmpty()) {
             currenPath = Storage.ALL_STORAGE;
+            musicPlayer.play(openList.get(0));
+            musicPlayer.savePathUrl(currenPath);
             usbMediaScan.openStorager(new StorageInfo(currenPath));
-            musicPlayer.playOpenFile(openList);
         }
     }
 
@@ -638,4 +654,19 @@ public class BaseMusicActivity extends BaseActivity implements
         mAudioManager.abandonAudioFocus(mAudioFocusListener);
     }
 
+
+//    @Override
+//    public void onUsbMounted(Activity activity, boolean flag) {
+//        if (flag) {
+//            FlyLog.e("is back palying andr current(%s) path is removed, finish appliction!", currenPath);
+//            musicList.clear();
+//            musicPlayer.stop();
+//            tvAlbum.setText("");
+//            tvArtist.setText("");
+//            tvSingle.setText("");
+//            if (isStop) {
+//                activity.finish();
+//            }
+//        }
+//    }
 }
