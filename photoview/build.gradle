@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 27
 
     lintOptions {
         abortOnError false
@@ -19,6 +19,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:23.+'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
 }
 
