@@ -54,23 +54,6 @@ android {
         }
     }
 
-    signingConfigs {
-        release {
-            storeFile file("../platform8.0.keystore")
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-        }
-
-        debug {
-            storeFile file("../platform8.0.keystore")
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-        }
-    }
-
-
     sourceSets {
         AP1 {
 //            manifest.srcFile 'src/default1/defaultAndroidManifest.xml'

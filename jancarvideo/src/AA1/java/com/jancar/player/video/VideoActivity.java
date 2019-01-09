@@ -6,4 +6,5 @@ package com.jancar.player.video;
  * Describ:
  **/
 public class VideoActivity extends VideoActivity_AA1 {
+
 }

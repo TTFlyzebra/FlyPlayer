@@ -30,6 +30,7 @@ import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.RtlTools;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.utils.SystemPropertiesProxy;
+import com.jancar.media.utils.UriTools;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
 import com.jancar.media.view.MarqueeTextView;
@@ -132,6 +133,9 @@ public class BaseMusicActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_ap1);
+
+        playIntent(getIntent());
+
         mediaSession = new MediaSession(this);
         mediaSession.init();
         mediaSession.addEventListener(this);
@@ -169,7 +173,12 @@ public class BaseMusicActivity extends BaseActivity implements
     }
 
     @Override
-    protected void playOpenIntent(Intent intent) {
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        playIntent(intent);
+    }
+
+    private void playIntent(Intent intent) {
         FlyLog.d("intent=" + intent);
         if (intent == null) return;
         String test = intent.getStringExtra("test");
@@ -179,12 +188,12 @@ public class BaseMusicActivity extends BaseActivity implements
         if (openList == null) {
             Uri uri = intent.getData();
             if (uri != null) {
-                String url = uri.getPath();
+                String url = UriTools.getFilePath(this,uri);
                 if (!TextUtils.isEmpty(url)) {
                     FlyLog.d("open uri=%s", url);
                     openList = new ArrayList<>();
                     openList.add(url);
-                    musicPlayer.setLoopStatus(MusicPlayer.LOOP_ONE);
+//                    musicPlayer.setLoopStatus(MusicPlayer.LOOP_ONE);
                 }
             }
         } else {
@@ -669,4 +678,5 @@ public class BaseMusicActivity extends BaseActivity implements
 //            }
 //        }
 //    }
+
 }

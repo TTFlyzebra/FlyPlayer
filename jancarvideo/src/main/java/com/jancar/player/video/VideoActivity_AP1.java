@@ -4,9 +4,11 @@ import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,13 +17,16 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.jancar.media.base.BaseActivity;
+import com.jancar.media.data.StorageInfo;
 import com.jancar.media.data.Video;
 import com.jancar.media.model.listener.IMediaEventListerner;
 import com.jancar.media.model.mediaSession.IMediaSession;
 import com.jancar.media.model.mediaSession.MediaSession;
+import com.jancar.media.model.storage.Storage;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.RtlTools;
 import com.jancar.media.utils.SystemPropertiesProxy;
+import com.jancar.media.utils.UriTools;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
 import com.jancar.media.view.ParkWarningView;
@@ -137,6 +142,14 @@ public class VideoActivity_AP1 extends BaseActivity implements
         mediaSession = new MediaSession(this);
         mediaSession.init();
         mediaSession.addEventListener(this);
+
+        playIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        playIntent(intent);
     }
 
     public void initFragment() {
@@ -212,14 +225,31 @@ public class VideoActivity_AP1 extends BaseActivity implements
         super.onDestroy();
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-//        final String playUrl = intent.getStringExtra(Const.PLAYURL_KEY);
-//        FlyLog.d("playurl=%s", playUrl);
-//        if (!TextUtils.isEmpty(playUrl) && !player.isPlaying()) {
-//            player.start(playUrl);
-//        }
-        super.onNewIntent(intent);
+    private void playIntent(Intent intent) {
+        FlyLog.d("intent=" + intent);
+        if (intent == null) return;
+        String test = intent.getStringExtra("test");
+        FlyLog.d("playOpenIntent test=" + test);
+        List<String> openList = intent.getStringArrayListExtra("music_list");
+        FlyLog.d("openList=%s", openList == null ? "" : openList.toString());
+        String url;
+        if (openList == null) {
+            Uri uri = intent.getData();
+            if (uri != null) {
+                url = UriTools.getFilePath(this,uri);
+                if (!TextUtils.isEmpty(url)) {
+                    FlyLog.d("open uri=%s", url);
+                    openList = new ArrayList<>();
+                    openList.add(url);
+                }
+            }
+        }
+        if (openList != null && !openList.isEmpty()) {
+            currenPath = Storage.ALL_STORAGE;
+            player.play(openList.get(0));
+            player.savePathUrl(currenPath);
+            usbMediaScan.openStorager(new StorageInfo(currenPath));
+        }
     }
 
     private void initView() {

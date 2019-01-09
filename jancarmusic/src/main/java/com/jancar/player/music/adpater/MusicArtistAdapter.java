@@ -1,6 +1,7 @@
 package com.jancar.player.music.adpater;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,6 +86,7 @@ public class MusicArtistAdapter extends BaseExpandableListAdapter {
     }
 
 
+    @SuppressLint("StringFormatInvalid")
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup
             parent) {
