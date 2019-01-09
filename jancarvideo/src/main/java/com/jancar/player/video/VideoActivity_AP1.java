@@ -154,11 +154,10 @@ public class VideoActivity_AP1 extends BaseActivity implements
 
     @Override
     protected void onStart() {
-        mediaSession.addEventListener(this);
+        FlyLog.d("onStart");
         touchTime = 0;
         showControlView(true);
         super.onStart();
-        FlyLog.d("onStart");
         player.playSavePath(currenPath);
         mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         if (setPause) {
@@ -181,6 +180,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
                 }
             }, 1100);
         }
+        mediaSession.addEventListener(this);
     }
 
     @Override
