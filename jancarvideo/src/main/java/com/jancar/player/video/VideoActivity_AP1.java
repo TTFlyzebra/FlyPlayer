@@ -46,8 +46,8 @@ public class VideoActivity_AP1 extends BaseActivity implements
         View.OnClickListener,
         FlyTabView.OnItemClickListener,
         GiraffePlayer.OnPlayStatusChangeLiseter,
-        TouchEventRelativeLayout.OnTouchEventListener
-,IMediaEventListerner {
+        TouchEventRelativeLayout.OnTouchEventListener,
+        IMediaEventListerner {
     private ImageView play_fore, play_next, play_pause, leftMenu;
     private TouchEventRelativeLayout leftLayout;
     private TouchEventRelativeLayout controlLayout;
@@ -56,7 +56,6 @@ public class VideoActivity_AP1 extends BaseActivity implements
     public List<Video> videoList = new ArrayList<>();
     protected FlyTabView tabView;
     private RelativeLayout liveBox;
-    private RegisterMediaSession registerMediaSession;
 
 
     protected String titles[] = new String[]{"磁盘列表", "播放列表", "文件列表"};
@@ -135,13 +134,11 @@ public class VideoActivity_AP1 extends BaseActivity implements
         player = new GiraffePlayer(this);
         player.addStatusChangeLiseter(this);
 
-        registerMediaSession = new RegisterMediaSession(this, player);
         initFragment();
         initView();
 
         mediaSession = new MediaSession(this);
         mediaSession.init();
-        mediaSession.addEventListener(this);
 
         playIntent(getIntent());
     }
@@ -157,7 +154,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
 
     @Override
     protected void onStart() {
-        registerMediaSession.requestMediaButton();
+        mediaSession.addEventListener(this);
         touchTime = 0;
         showControlView(true);
         super.onStart();
@@ -202,17 +199,16 @@ public class VideoActivity_AP1 extends BaseActivity implements
 
     @Override
     protected void onStop() {
+        mediaSession.removeEventListener(this);
         FlyLog.d("onStop");
         mAudioManager.abandonAudioFocus(mAudioFocusListener);
         player.stop();
         mHandler.removeCallbacks(seekBarTask);
-        registerMediaSession.releaseMediaButton();
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        mediaSession.removeEventListener(this);
         mediaSession.release();
         mHandler.removeCallbacksAndMessages(null);
         player.removeStatusChangeLiseter(this);
@@ -236,7 +232,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
         if (openList == null) {
             Uri uri = intent.getData();
             if (uri != null) {
-                url = UriTools.getFilePath(this,uri);
+                url = UriTools.getFilePath(this, uri);
                 if (!TextUtils.isEmpty(url)) {
                     FlyLog.d("open uri=%s", url);
                     openList = new ArrayList<>();
