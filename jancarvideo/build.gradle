@@ -147,10 +147,9 @@ android {
 dependencies {
     implementation project(path: ':ijkplayer-java')
     implementation project(path: ':flymedialibrary')
-    implementation files('libs/libksystat.jar')
-    implementation files('libs/libksyplayer.jar')
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     compileOnly 'com.android.support:appcompat-v7:27.1.1'
     compileOnly 'com.android.support:recyclerview-v7:27.1.1'
+    implementation "com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.14"
 }

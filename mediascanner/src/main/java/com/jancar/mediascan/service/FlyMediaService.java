@@ -439,9 +439,14 @@ public class FlyMediaService extends Service {
             return;
         }
         String filename = file.getName();
-        //不显示.开头的隐藏文件
+        //不显示.开头的隐藏文件 不扫描.nomedia文件夹
         if (!isSetHideFile && filename.indexOf('.') == 0) return;
         if (file.isDirectory()) {
+            String nomedia = file.getAbsolutePath()+File.separator+".nomedia";
+            File noMedia = new File(nomedia);
+            if(noMedia.exists()){
+                return;
+            }
             File[] files = file.listFiles();
             if (files == null) return;
             for (File tempFile : files) {
@@ -453,22 +458,44 @@ public class FlyMediaService extends Service {
             if (ret < 0) return;
             String strSuffix = filename.substring(ret, filename.length()).toLowerCase();
             switch (strSuffix) {
-                case ".mp4":
-                case ".mkv":
-                case ".mov":
-                case ".ts":
-                case ".avi":
                 case ".3gp":
                 case ".3gpp":
                 case ".3g2":
+//                case ".asf":
+//                case ".asp":
+//                case ".asx":
+                case ".avi":
+//                case ".fvi":
                 case ".flv":
+//                case ".lsf":
+//                case ".lsx":
+//                case ".mng":
+//                case ".mp2":
+//                case ".movie":
+                case ".mp4":
+//                case ".mpg4":
+                case ".mkv":
+                case ".mov":
                 case ".mpeg":
                 case ".mpg":
+//                case ".pvx":
+//                case ".qt":
+//                case ".rv":
                 case ".rm":
-                case ".tp":
-                case ".vop":
-                case ".wmv":
                 case ".rmvb":
+//                case ".rtx":
+                case ".ts":
+                case ".tp":
+//                case ".vdo":
+//                case ".viv":
+//                case ".vivo":
+                case ".vop":
+//                case ".wm":
+                case ".wma":
+                case ".wmv":
+//                case ".wmx":
+//                case ".wv":
+//                case ".wvx":
                     //视频文件小于2M不显示
                     if (!isSetAllFile && file.length() < (2 * 1024 * 1024)) break;
                     synchronized (mVideoList) {
