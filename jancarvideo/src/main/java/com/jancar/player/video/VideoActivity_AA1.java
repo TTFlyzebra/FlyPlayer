@@ -37,7 +37,7 @@ public class VideoActivity_AA1 extends VideoActivity_AP1 {
         int fileSum = getFloderSum();
         FlyLog.d("updateTabView num=%d,%d,%d", diskSum, imgSum, fileSum);
         String floder = String.format(getString(R.string.disk_list) + "\n" + "(" + "%d" + ")", diskSum);
-        String photo = String.format(getString(R.string.photo_list) + "\n" + "(" + "%d" + ")", imgSum);
+        String photo = String.format(getString(R.string.play_list) + "\n" + "(" + "%d" + ")", imgSum);
         String file = String.format(getString(R.string.file_list) + "\n" + "(" + "%d" + ")", fileSum);
         titles = new String[]{floder, photo, file};
         if(tabView!=null){

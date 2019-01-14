@@ -468,6 +468,7 @@ public class FlyMediaService extends Service {
                 case ".tp":
                 case ".vop":
                 case ".wmv":
+                case ".rmvb":
                     //视频文件小于2M不显示
                     if (!isSetAllFile && file.length() < (2 * 1024 * 1024)) break;
                     synchronized (mVideoList) {
