@@ -28,7 +28,7 @@ android {
     defaultConfig {
         applicationId "com.jancar.player.music"
         minSdkVersion 19
-        targetSdkVersion 27
+        targetSdkVersion 23
         versionCode gitCommitCount.toInteger()
         versionName "v1.0."+gitSHA
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
