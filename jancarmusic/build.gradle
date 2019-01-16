@@ -23,12 +23,12 @@ def getGitCommitCount() {
 }
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
         applicationId "com.jancar.player.music"
-        minSdkVersion 19
-        targetSdkVersion 23
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode gitCommitCount.toInteger()
         versionName "v1.0."+gitSHA
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -58,28 +58,28 @@ android {
             java.srcDir 'src/AP1/java' // 指定源码目录
             resources.srcDir 'src/AP1/res' //资源目录
         }
-        AA1 {
+        AP2 {
 //            manifest.srcFile 'src/volkswagen/volkswagenAndroidManifest.xml'
-            java.srcDir 'src/AA1/java' // 指定源码目录
-            resources.srcDir 'src/AA1/res' //资源目录
+            java.srcDir 'src/AP2/java' // 指定源码目录
+            resources.srcDir 'src/AP2/res' //资源目录
         }
 
-        AA2 {
+        AP3 {
 //            manifest.srcFile 'src/volkswagen/volkswagenAndroidManifest.xml'
-            java.srcDir 'src/AA2/java' // 指定源码目录
-            resources.srcDir 'src/AA2/res' //资源目录
+            java.srcDir 'src/AP3/java' // 指定源码目录
+            resources.srcDir 'src/AP3/res' //资源目录
         }
 
-        AA3 {
+        AP4 {
 //            manifest.srcFile 'src/volkswagen/volkswagenAndroidManifest.xml'
-            java.srcDir 'src/AA3/java' // 指定源码目录
-            resources.srcDir 'src/AA3/res' //资源目录
+            java.srcDir 'src/AP4/java' // 指定源码目录
+            resources.srcDir 'src/AP4/res' //资源目录
         }
 
-        AA4 {
+        AP5 {
 //            manifest.srcFile 'src/volkswagen/volkswagenAndroidManifest.xml'
-            java.srcDir 'src/AA4/java' // 指定源码目录
-            resources.srcDir 'src/AA4/res' //资源目录
+            java.srcDir 'src/AP5/java' // 指定源码目录
+            resources.srcDir 'src/AP5/res' //资源目录
         }
     }
 
@@ -89,28 +89,28 @@ android {
 //            applicationId = "com.longhorn.viewdvr"
             versionName "AP1_v1.0."+gitSHA
         }
-        AA1 {
+        AP2 {
 //            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
 //            applicationId = "com.longhorn.vwdvr"
-            versionName "AA1_v1.0."+gitSHA
+            versionName "AP2_v1.0."+gitSHA
         }
 
-        AA2 {
+        AP3 {
 //            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
 //            applicationId = "com.longhorn.vwdvr"
-            versionName "AA2_v1.0."+gitSHA
+            versionName "AP3_v1.0."+gitSHA
         }
 
-        AA3 {
+        AP4 {
 //            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
 //            applicationId = "com.longhorn.vwdvr"
-            versionName "AA3_v1.0."+gitSHA
+            versionName "AP4_v1.0."+gitSHA
         }
 
-        AA4 {
+        AP5 {
 //            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
 //            applicationId = "com.longhorn.vwdvr"
-            versionName "AA4_v1.0."+gitSHA
+            versionName "AP5_v1.0."+gitSHA
         }
     }
 

@@ -22,17 +22,18 @@ def getGitCommitCount() {
     return gitCommitCount;
 }
 android {
-    compileSdkVersion 27
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
     defaultConfig {
         applicationId "com.jancar.mediascan"
-        minSdkVersion 19
-        targetSdkVersion 23
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode gitCommitCount.toInteger()
         versionName "v1.0."+gitSHA
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
+
     signingConfigs {
         release {
             storeFile file("../platform8.0.keystore")

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioAttributes;
+import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -123,10 +125,7 @@ public class BaseMusicActivity extends BaseActivity implements
             }
         }
     };
-    private AudioManager mAudioManager;
     private IMediaSession mediaSession;
-
-
     protected static final Executor executor = Executors.newFixedThreadPool(1);
 
     @Override
@@ -188,7 +187,7 @@ public class BaseMusicActivity extends BaseActivity implements
         if (openList == null) {
             Uri uri = intent.getData();
             if (uri != null) {
-                String url = UriTools.getFilePath(this,uri);
+                String url = UriTools.getFilePath(this, uri);
                 if (!TextUtils.isEmpty(url)) {
                     FlyLog.d("open uri=%s", url);
                     openList = new ArrayList<>();
@@ -615,6 +614,8 @@ public class BaseMusicActivity extends BaseActivity implements
 
     private boolean lostPause = false;
     private boolean jancarMixPause = true;
+    private AudioManager mAudioManager;
+    private AudioFocusRequest audioFocusRequest;
     private AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
         public void onAudioFocusChange(int focusChange) {
             FlyLog.d("onAudioFocusChange focusChange=%d", focusChange);
@@ -654,29 +655,25 @@ public class BaseMusicActivity extends BaseActivity implements
             }
         }
     };
-
     private void requestAudioFocus() {
-        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            audioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                    .setAcceptsDelayedFocusGain(true)
+                    .setWillPauseWhenDucked(true)
+                    .setOnAudioFocusChangeListener(mAudioFocusListener)
+                    .build();
+            mAudioManager.requestAudioFocus(audioFocusRequest);
+        } else {
+            mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        }
     }
 
     private void abandonAudioFocus() {
-        mAudioManager.abandonAudioFocus(mAudioFocusListener);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            mAudioManager.abandonAudioFocusRequest(audioFocusRequest);
+        } else {
+            mAudioManager.abandonAudioFocus(mAudioFocusListener);
+        }
     }
-
-
-//    @Override
-//    public void onUsbMounted(Activity activity, boolean flag) {
-//        if (flag) {
-//            FlyLog.e("is back palying andr current(%s) path is removed, finish appliction!", currenPath);
-//            musicList.clear();
-//            musicPlayer.stop();
-//            tvAlbum.setText("");
-//            tvArtist.setText("");
-//            tvSingle.setText("");
-//            if (isStop) {
-//                activity.finish();
-//            }
-//        }
-//    }
 
 }

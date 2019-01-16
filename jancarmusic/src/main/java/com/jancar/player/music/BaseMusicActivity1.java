@@ -14,7 +14,7 @@ public class BaseMusicActivity1 extends BaseMusicActivity {
 
     @Override
     public void initFragment() {
-        fmName = new String[]{"MusicStorageFragment", "MusicPlayListFragment_AA1",
+        fmName = new String[]{"MusicStorageFragment", "MusicPlayListFragment_AP2",
                 "MusicArtistFragment", "MusicAlbumFragment", "MusicFloderFragment"};
     }
 

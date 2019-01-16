@@ -3,6 +3,8 @@ package com.jancar.player.video;
 import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioAttributes;
+import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -60,10 +62,6 @@ public class VideoActivity_AP1 extends BaseActivity implements
 
     protected String titles[] = new String[]{"磁盘列表", "播放列表", "文件列表"};
     protected String fmName[] = new String[]{"VideoStorageFragment", "VideoPlayListFragment_AP1", "VideoFloderFragment"};
-
-    private AudioManager mAudioManager;
-
-    private boolean lostPause = false;
     private boolean isShowLeftMenu = false;
     public boolean isShowControl = true;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -159,7 +157,9 @@ public class VideoActivity_AP1 extends BaseActivity implements
         showControlView(true);
         super.onStart();
         player.playSavePath(currenPath);
-        mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+
+        requestAudioFocus();
+
         if (setPause) {
             final int resetVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
             mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
@@ -201,7 +201,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
     protected void onStop() {
         mediaSession.removeEventListener(this);
         FlyLog.d("onStop");
-        mAudioManager.abandonAudioFocus(mAudioFocusListener);
+        abandonAudioFocus();
         player.stop();
         mHandler.removeCallbacks(seekBarTask);
         super.onStop();
@@ -551,6 +551,32 @@ public class VideoActivity_AP1 extends BaseActivity implements
         return super.onKeyDown(keyCode, event);
     }
 
+    public long touchTime;
+
+    @Override
+    public void onFlyTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                touchTime = System.currentTimeMillis();
+                break;
+        }
+    }
+
+
+    protected int getFloderSum() {
+        Set<String> set = new HashSet<>();
+        for (Video video : videoList) {
+            String url = video.url;
+            int last = url.lastIndexOf(File.separator);
+            String path = url.substring(0, last).intern();
+            set.add(path);
+        }
+        return set.size();
+    }
+
+    private boolean lostPause = false;
+    private AudioManager mAudioManager;
+    private AudioFocusRequest audioFocusRequest;
     private AudioManager.OnAudioFocusChangeListener mAudioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
         public void onAudioFocusChange(int focusChange) {
             FlyLog.d("onAudioFocusChange focusChange=%d", focusChange);
@@ -586,43 +612,25 @@ public class VideoActivity_AP1 extends BaseActivity implements
             }
         }
     };
-
-    public long touchTime;
-
-    @Override
-    public void onFlyTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                touchTime = System.currentTimeMillis();
-                break;
+    private void requestAudioFocus() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            audioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                    .setAcceptsDelayedFocusGain(true)
+                    .setWillPauseWhenDucked(true)
+                    .setOnAudioFocusChangeListener(mAudioFocusListener)
+                    .build();
+            mAudioManager.requestAudioFocus(audioFocusRequest);
+        } else {
+            mAudioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         }
     }
 
-
-//    @Override
-//    public void onUsbMounted(Activity activity, boolean flag) {
-//        /**
-//         * 正在播放的U盘被拔
-//         */
-//        if (!flag) {
-//            FlyLog.e("palying usb is removed!");
-//            player.stop();
-//            FlyLog.e("is back palying andr current(%s) path is removed, finish appliction!", currenPath);
-//            if (isStop) {
-//                activity.finish();
-//            }
-//        }
-//    }
-
-    protected int getFloderSum() {
-        Set<String> set = new HashSet<>();
-        for (Video video : videoList) {
-            String url = video.url;
-            int last = url.lastIndexOf(File.separator);
-            String path = url.substring(0, last).intern();
-            set.add(path);
+    private void abandonAudioFocus() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            mAudioManager.abandonAudioFocusRequest(audioFocusRequest);
+        } else {
+            mAudioManager.abandonAudioFocus(mAudioFocusListener);
         }
-        return set.size();
     }
 
 }

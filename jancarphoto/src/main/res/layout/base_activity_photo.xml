@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#000000"
     android:layoutDirection="ltr"
-    tools:context=".PhotoActivity_AA1">
+    tools:context=".PhotoActivity_AP2">
 
     <com.jancar.media.view.PhotoViewPager
         android:id="@+id/ac_photo_viewpager"
