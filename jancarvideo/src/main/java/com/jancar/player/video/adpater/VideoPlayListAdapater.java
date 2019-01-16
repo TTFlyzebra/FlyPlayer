@@ -2,6 +2,7 @@ package com.jancar.player.video.adpater;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,7 +16,6 @@ import android.widget.TextView;
 
 import com.jancar.media.data.Video;
 import com.jancar.media.module.DoubleBitmapCache;
-import com.jancar.media.utils.BitmapTools;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
 import com.jancar.player.video.R;
@@ -27,6 +27,7 @@ import java.util.Set;
 
 import wseemann.media.FFmpegMediaMetadataRetriever;
 
+import static android.provider.MediaStore.Video.Thumbnails.MINI_KIND;
 import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 /**
@@ -191,21 +192,25 @@ public class VideoPlayListAdapater extends RecyclerView.Adapter<VideoPlayListAda
             Bitmap bitmap = null;
             try {
                 final String path = strings[0];
-//                KSYProbeMediaInfo ksyProbeMediaInfo = new KSYProbeMediaInfo();
-//                bitmap = ksyProbeMediaInfo.getVideoThumbnailAtTime(strings[0], 1, smallImageWidth, smallImageHeight);
-                FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
-                mmr.setDataSource(path);
-                mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ALBUM);
-                mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST);
-                bitmap = mmr.getFrameAtTime(-1, FFmpegMediaMetadataRetriever.OPTION_CLOSEST); // frame at 2 seconds
-                if (bitmap != null) {
-                    bitmap = BitmapTools.zoomImg(bitmap, smallImageWidth, smallImageHeight);
+                bitmap = ThumbnailUtils.createVideoThumbnail(path, MINI_KIND);
+                if (bitmap == null) {
+                    FlyLog.d("get bitmap from FFmpegMedia. url="+path);
+                    FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
+                    mmr.setDataSource(path);
+                    bitmap = mmr.getFrameAtTime();
+                    if (bitmap != null) {
+                        bitmap = ThumbnailUtils.extractThumbnail(bitmap, smallImageWidth, smallImageHeight, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+                    }
+                    mmr.release();
+                }else{
+                    FlyLog.d("get bitmap from ThumbnailUtils. url="+path);
                 }
-                mmr.release();
                 if (bitmap != null) {
                     if (doubleBitmapCache != null) {
                         doubleBitmapCache.put(path, bitmap);
                     }
+                }else{
+                    FlyLog.d("get video bitmap Failed! url="+path);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
