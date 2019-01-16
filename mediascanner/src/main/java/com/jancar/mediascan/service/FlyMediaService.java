@@ -253,7 +253,7 @@ public class FlyMediaService extends Service {
                             });
                             FlyLog.d("loading save musics size=%d", musics.size());
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         FlyLog.e(e.toString());
                         e.printStackTrace();
                     }
@@ -273,7 +273,7 @@ public class FlyMediaService extends Service {
                             });
                             FlyLog.d("loading save videos size=%d", videos.size());
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         FlyLog.e(e.toString());
                         e.printStackTrace();
                     }
@@ -293,7 +293,7 @@ public class FlyMediaService extends Service {
                             });
                             FlyLog.d("loading save images size=%d", images.size());
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         FlyLog.e(e.toString());
                         e.printStackTrace();
                     }
@@ -423,8 +423,8 @@ public class FlyMediaService extends Service {
     }
 
     private void removePath(String path) {
-        FlyLog.d("remove mPath=%s,currentPath=%s", path,currentPath);
-        if ((currentPath.equals("/storage")||currentPath.equals(path)) && mEState == JacState.ePowerState.ePowerOn) {
+        FlyLog.d("remove mPath=%s,currentPath=%s", path, currentPath);
+        if ((currentPath.equals("/storage") || currentPath.equals(path)) && mEState == JacState.ePowerState.ePowerOn) {
             FlyLog.d("clear all list");
             clearData();
             startScanPath(DEF_PATH);
@@ -442,11 +442,12 @@ public class FlyMediaService extends Service {
         //不显示.开头的隐藏文件 不扫描.nomedia文件夹
         if (!isSetHideFile && filename.indexOf('.') == 0) return;
         if (file.isDirectory()) {
-            String nomedia = file.getAbsolutePath()+File.separator+".nomedia";
-            File noMedia = new File(nomedia);
-            if(noMedia.exists()){
-                return;
-            }
+//            String nomedia = file.getAbsolutePath() + File.separator + ".nomedia";
+//            File noMedia = new File(nomedia);
+//            if (noMedia.exists()) {
+//                FlyLog.d(".nomedia don't scan");
+//                return;
+//            }
             File[] files = file.listFiles();
             if (files == null) return;
             for (File tempFile : files) {
