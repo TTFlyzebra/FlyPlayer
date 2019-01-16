@@ -50,7 +50,7 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
     private Set<GetVideoBitmatTask> tasks = new HashSet<>();
     private DoubleBitmapCache doubleBitmapCache;
     private Handler mHandler = new Handler(Looper.getMainLooper());
-    private int focusColor,nofocusColor;
+    private int focusColor, nofocusColor;
 
     public interface OnItemClickListener {
         void onItemClick(View v, FloderVideo floderVideo);
@@ -60,7 +60,7 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
         mOnItemClick = onItemClick;
     }
 
-    public VideoFloderAdapater(Context context, List<FloderVideo> list, int columnNum,RecyclerView recyclerView) {
+    public VideoFloderAdapater(Context context, List<FloderVideo> list, int columnNum, RecyclerView recyclerView) {
         mContext = context;
         mList = list;
         mColumnNum = columnNum;
@@ -105,64 +105,71 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.itemView.setTag(position);
-        String crtUrl = ((VideoActivity_AP1)mContext).player.getPlayUrl();
-        if (holder instanceof PhotoHolder) {
-            PhotoHolder photoHolder = (PhotoHolder) holder;
+        try {
+            holder.itemView.setTag(position);
+            String crtUrl = ((VideoActivity_AP1) mContext).player.getPlayUrl();
+            if (holder instanceof PhotoHolder) {
+                PhotoHolder photoHolder = (PhotoHolder) holder;
 //            Glide.with(mContext)
 //                    .load((mList.get(position)).url)
 //                    .placeholder(R.drawable.media_default_image)
 //                    .error(R.drawable.media_image_error)
 //                    .into(photoHolder.imageView1);
 
-            photoHolder.imageView1.setTag(mList.get(position).url);
-            Bitmap bitmap = doubleBitmapCache.get(mList.get(position).url);
-            if (null != bitmap) {
-                photoHolder.imageView1.setImageBitmap(bitmap);
-            } else {
-                photoHolder.imageView1.setImageResource(R.drawable.media_default_video);
-                GetVideoBitmatTask task = new GetVideoBitmatTask(mList.get(position).url);
-                task.execute(mList.get(position).url);
-                tasks.add(task);
-            }
-
-            boolean flag = mList.get(position).url.equals(crtUrl);
-            photoHolder.textView.setText(StringTools.getNameByPath(mList.get(position).url));
-            photoHolder.textView.setTextColor(flag ? focusColor : nofocusColor);
-            photoHolder.textView.enableMarquee(flag);
-            photoHolder.imageView2.setImageResource(flag ? R.drawable.media_list_item_select_02 : R.drawable.media_list_item_select_01);
-        } else if (holder instanceof MenuHolder) {
-            MenuHolder textHolder = (MenuHolder) holder;
-            String path = mList.get(position).url;
-            int last1 = path.lastIndexOf(File.separator);
-            textHolder.textView1.setText(path.substring(last1 + 1, path.length()));
-            textHolder.textView2.setText(path.substring(0, last1));
-            textHolder.textView3.setText(String.format(mContext.getString(R.string.photosumformat),mList.get(position).sum));
-            int last2 = crtUrl.lastIndexOf(File.separator);
-            String selectPath = crtUrl.substring(0,last2);
-            boolean flag = path.equals(selectPath);
-            if (flag) {
-                textHolder.textView1.setTextColor(focusColor);
-                textHolder.textView2.setTextColor(focusColor);
-                textHolder.textView3.setTextColor(focusColor);
-            } else {
-                textHolder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
-                textHolder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
-                textHolder.textView3.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
-            }
-            textHolder.imageView1.setImageResource(flag ? R.drawable.media_file_02 : R.drawable.media_file);
-            textHolder.imageView2.setImageResource(mList.get(position).isSelect ?
-                    flag?R.drawable.media_down_02:R.drawable.media_down_01
-                    : flag?R.drawable.media_right_02:R.drawable.media_right_01);
-        }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOnItemClick != null) {
-                    mOnItemClick.onItemClick(v, mList.get((Integer) v.getTag()));
+                photoHolder.imageView1.setTag(mList.get(position).url);
+                Bitmap bitmap = doubleBitmapCache.get(mList.get(position).url);
+                if (null != bitmap) {
+                    photoHolder.imageView1.setImageBitmap(bitmap);
+                } else {
+                    photoHolder.imageView1.setImageResource(R.drawable.media_default_video);
+                    GetVideoBitmatTask task = new GetVideoBitmatTask(mList.get(position).url);
+                    task.execute(mList.get(position).url);
+                    tasks.add(task);
                 }
+
+                boolean flag = mList.get(position).url.equals(crtUrl);
+                photoHolder.textView.setText(StringTools.getNameByPath(mList.get(position).url));
+                photoHolder.textView.setTextColor(flag ? focusColor : nofocusColor);
+                photoHolder.textView.enableMarquee(flag);
+                photoHolder.imageView2.setImageResource(flag ? R.drawable.media_list_item_select_02 : R.drawable.media_list_item_select_01);
+            } else if (holder instanceof MenuHolder) {
+                MenuHolder textHolder = (MenuHolder) holder;
+                String path = mList.get(position).url;
+                int last1 = path.lastIndexOf(File.separator);
+                if (last1 > 0) {
+                    textHolder.textView1.setText(path.substring(last1 + 1, path.length()));
+                    textHolder.textView2.setText(path.substring(0, last1));
+                    textHolder.textView3.setText(String.format(mContext.getString(R.string.photosumformat), mList.get(position).sum));
+                }
+                int last2 = crtUrl.lastIndexOf(File.separator);
+                String selectPath = last2 > 0 ? crtUrl.substring(0, last2) : crtUrl;
+                boolean flag = path.equals(selectPath);
+                if (flag) {
+                    textHolder.textView1.setTextColor(focusColor);
+                    textHolder.textView2.setTextColor(focusColor);
+                    textHolder.textView3.setTextColor(focusColor);
+                } else {
+                    textHolder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
+                    textHolder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
+                    textHolder.textView3.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
+                }
+                textHolder.imageView1.setImageResource(flag ? R.drawable.media_file_02 : R.drawable.media_file);
+                textHolder.imageView2.setImageResource(mList.get(position).isSelect ?
+                        flag ? R.drawable.media_down_02 : R.drawable.media_down_01
+                        : flag ? R.drawable.media_right_02 : R.drawable.media_right_01);
+
             }
-        });
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnItemClick != null) {
+                        mOnItemClick.onItemClick(v, mList.get((Integer) v.getTag()));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
     }
 
     @Override
@@ -237,6 +244,7 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
         }
 
     }
+
     public class GetVideoBitmatTask extends AsyncTask<String, Bitmap, Bitmap> {
         private String url;
 

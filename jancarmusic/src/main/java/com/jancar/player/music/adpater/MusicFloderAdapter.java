@@ -1,6 +1,7 @@
 package com.jancar.player.music.adpater;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,7 @@ public class MusicFloderAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private List<String> groupList;
     private List<List<String>> itemList;
-    private int focusColor,nofocusColor;
+    private int focusColor, nofocusColor;
 
     public MusicFloderAdapter(Context context, List<String> groupList,
                               List<List<String>> itemList) {
@@ -75,6 +76,7 @@ public class MusicFloderAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
+    @SuppressLint("StringFormatInvalid")
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup
             parent) {
@@ -95,8 +97,8 @@ public class MusicFloderAdapter extends BaseExpandableListAdapter {
 
         String path = groupList.get(groupPosition);
         int last = path.lastIndexOf(File.separator);
-        holder.textView1.setText(path.substring(last + 1, path.length()));
-        holder.textView2.setText(path.substring(0, last));
+        holder.textView1.setText(last>0?path.substring(last + 1, path.length()):path);
+        holder.textView2.setText(last>0?path.substring(0, last):path);
         holder.textView1.enableMarquee(isExpanded);
         holder.textView2.enableMarquee(isExpanded);
         if (isExpanded) {
@@ -108,7 +110,7 @@ public class MusicFloderAdapter extends BaseExpandableListAdapter {
             holder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
             holder.textView3.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
         }
-        holder.textView3.setText(String.format(mContext.getString(R.string.musicsumformat),itemList.get(groupPosition).size()));
+        holder.textView3.setText(String.format(mContext.getString(R.string.musicsumformat), itemList.get(groupPosition).size()));
         return convertView;
     }
 

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jancar.media.data.FloderImage;
+import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.MarqueeTextView;
 import com.jancar.player.photo.PhotoActivity_AP1;
@@ -31,7 +32,7 @@ public class PhotoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
     private Context mContext;
     private int mColumnNum;
     private OnItemClickListener mOnItemClick;
-    private int focusColor,nofocusColor;
+    private int focusColor, nofocusColor;
 
     public interface OnItemClickListener {
         void onItemClick(View v, FloderImage floderImage);
@@ -71,48 +72,54 @@ public class PhotoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.itemView.setTag(position);
-        String crtUrl = ((PhotoActivity_AP1)mContext).CURRENT_IMAGE ==null?"":((PhotoActivity_AP1)mContext).CURRENT_IMAGE.url;
-        if (holder instanceof PhotoHolder) {
-            PhotoHolder photoHolder = (PhotoHolder) holder;
-            Glide.with(mContext).load((mList.get(position)).url).into(photoHolder.imageView1);
-            boolean flag = mList.get(position).url.equals(crtUrl);
-            photoHolder.textView.setText(StringTools.getNameByPath(mList.get(position).url));
-            photoHolder.textView.setTextColor(flag ? focusColor : nofocusColor);
-            photoHolder.textView.enableMarquee(flag);
-            photoHolder.imageView2.setImageResource(flag ? R.drawable.media_list_item_select_02 : R.drawable.media_list_item_select_01);
-        } else if (holder instanceof MenuHolder) {
-            MenuHolder textHolder = (MenuHolder) holder;
-            String path = mList.get(position).url;
-            int last1 = path.lastIndexOf(File.separator);
-            textHolder.textView1.setText(path.substring(last1 + 1, path.length()));
-            textHolder.textView2.setText(path.substring(0, last1));
-            textHolder.textView3.setText(String.format(mContext.getString(R.string.photosumformat),mList.get(position).sum));
-            int last2 = crtUrl.lastIndexOf(File.separator);
-            String selectPath = crtUrl.substring(0,last2);
-            boolean flag = path.equals(selectPath);
-            if (flag) {
-                textHolder.textView1.setTextColor(focusColor);
-                textHolder.textView2.setTextColor(focusColor);
-                textHolder.textView3.setTextColor(focusColor);
-            } else {
-                textHolder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
-                textHolder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
-                textHolder.textView3.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
-            }
-            textHolder.imageView1.setImageResource(flag ? R.drawable.media_file_02 : R.drawable.media_file);
-            textHolder.imageView2.setImageResource(mList.get(position).isSelect ?
-                    flag?R.drawable.media_down_02:R.drawable.media_down_01
-                    : flag?R.drawable.media_right_02:R.drawable.media_right_01);
-        }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOnItemClick != null) {
-                    mOnItemClick.onItemClick(v, mList.get((Integer) v.getTag()));
+        try {
+            holder.itemView.setTag(position);
+            String crtUrl = ((PhotoActivity_AP1) mContext).CURRENT_IMAGE == null ? "" : ((PhotoActivity_AP1) mContext).CURRENT_IMAGE.url;
+            if (holder instanceof PhotoHolder) {
+                PhotoHolder photoHolder = (PhotoHolder) holder;
+                Glide.with(mContext).load((mList.get(position)).url).into(photoHolder.imageView1);
+                boolean flag = mList.get(position).url.equals(crtUrl);
+                photoHolder.textView.setText(StringTools.getNameByPath(mList.get(position).url));
+                photoHolder.textView.setTextColor(flag ? focusColor : nofocusColor);
+                photoHolder.textView.enableMarquee(flag);
+                photoHolder.imageView2.setImageResource(flag ? R.drawable.media_list_item_select_02 : R.drawable.media_list_item_select_01);
+            } else if (holder instanceof MenuHolder) {
+                MenuHolder textHolder = (MenuHolder) holder;
+                String path = mList.get(position).url;
+                int last1 = path.lastIndexOf(File.separator);
+                if(last1>0) {
+                    textHolder.textView1.setText(path.substring(last1 + 1, path.length()));
+                    textHolder.textView2.setText(path.substring(0, last1));
+                    textHolder.textView3.setText(String.format(mContext.getString(R.string.photosumformat), mList.get(position).sum));
                 }
+                int last2 = crtUrl.lastIndexOf(File.separator);
+                String selectPath = last2 > 0 ? crtUrl.substring(0, last2) : crtUrl;
+                boolean flag = path.equals(selectPath);
+                if (flag) {
+                    textHolder.textView1.setTextColor(focusColor);
+                    textHolder.textView2.setTextColor(focusColor);
+                    textHolder.textView3.setTextColor(focusColor);
+                } else {
+                    textHolder.textView1.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
+                    textHolder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
+                    textHolder.textView3.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
+                }
+                textHolder.imageView1.setImageResource(flag ? R.drawable.media_file_02 : R.drawable.media_file);
+                textHolder.imageView2.setImageResource(mList.get(position).isSelect ?
+                        flag ? R.drawable.media_down_02 : R.drawable.media_down_01
+                        : flag ? R.drawable.media_right_02 : R.drawable.media_right_01);
             }
-        });
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnItemClick != null) {
+                        mOnItemClick.onItemClick(v, mList.get((Integer) v.getTag()));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
     }
 
     @Override
