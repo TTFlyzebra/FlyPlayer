@@ -145,8 +145,9 @@ android {
 dependencies {
     implementation project(path: ':flymedialibrary')
     implementation project(path: ':photoview')
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
     compileOnly 'com.android.support:appcompat-v7:27.1.1'
     compileOnly 'com.android.support:recyclerview-v7:27.1.1'
 //    implementation 'org.greenrobot:eventbus:3.1.1'

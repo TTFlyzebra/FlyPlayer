@@ -492,7 +492,7 @@ public class FlyMediaService extends Service {
 //                case ".vivo":
                 case ".vop":
 //                case ".wm":
-                case ".wma":
+//                case ".wma":
                 case ".wmv":
 //                case ".wmx":
 //                case ".wv":

@@ -223,10 +223,17 @@ public class MusicPlayer implements IMusicPlayer,
                     String artist = mPlayUrls.get(mPlayPos).artist;
                     int i = 0;
                     while (i < mPlayUrls.size()) {
-                        int num = (mPlayPos + i + 1) % (mPlayUrls.size());
-                        if (mPlayUrls.get(num).artist.equals(artist)) {
-                            mPlayPos = num;
-                            break;
+                        try {
+                            int num = (mPlayPos + i + 1) % (mPlayUrls.size());
+                            if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
+                                continue;
+                            }
+                            if (mPlayUrls.get(num).artist.equals(artist)) {
+                                mPlayPos = num;
+                                break;
+                            }
+                        } catch (Exception e) {
+                            FlyLog.e(e.toString());
                         }
                         i++;
                     }
@@ -237,6 +244,8 @@ public class MusicPlayer implements IMusicPlayer,
         }
         if (mPlayPos >= 0 && mPlayUrls != null && mPlayUrls.size() > mPlayPos) {
             play(mPlayUrls.get(mPlayPos).url);
+        } else {
+            play(mPlayUrl);
         }
     }
 
@@ -262,10 +271,17 @@ public class MusicPlayer implements IMusicPlayer,
                     int count = 0;
                     while (i > 0) {
                         count++;
-                        int num = (mPlayPos + mPlayUrls.size() - count) % (mPlayUrls.size());
-                        if (mPlayUrls.get(num).artist.equals(artist)) {
-                            mPlayPos = num;
-                            break;
+                        try {
+                            int num = (mPlayPos + mPlayUrls.size() - count) % (mPlayUrls.size());
+                            if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
+                                continue;
+                            }
+                            if (mPlayUrls.get(num).artist.equals(artist)) {
+                                mPlayPos = num;
+                                break;
+                            }
+                        } catch (Exception e) {
+                            FlyLog.e(e.toString());
                         }
                         i--;
                     }
@@ -276,6 +292,8 @@ public class MusicPlayer implements IMusicPlayer,
         }
         if (mPlayPos >= 0 && mPlayUrls != null && mPlayUrls.size() > mPlayPos) {
             play(mPlayUrls.get(mPlayPos).url);
+        } else {
+            play(mPlayUrl);
         }
     }
 
