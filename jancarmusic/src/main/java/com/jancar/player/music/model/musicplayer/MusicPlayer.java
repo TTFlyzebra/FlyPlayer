@@ -244,18 +244,14 @@ public class MusicPlayer implements IMusicPlayer,
                                 String artist = mPlayUrls.get(mPlayPos).artist;
                                 int i = 0;
                                 while (i < mPlayUrls.size()) {
-                                    try {
-                                        int num = (mPlayPos + i + 1) % (mPlayUrls.size());
-                                        if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
-                                            i++;
-                                            continue;
-                                        }
-                                        if (mPlayUrls.get(num).artist.equals(artist)) {
-                                            mPlayPos = num;
-                                            break;
-                                        }
-                                    } catch (Exception e) {
-                                        FlyLog.e(e.toString());
+                                    int num = (mPlayPos + i + 1) % (mPlayUrls.size());
+                                    if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
+                                        i++;
+                                        continue;
+                                    }
+                                    if (mPlayUrls.get(num).artist.equals(artist)) {
+                                        mPlayPos = num;
+                                        break;
                                     }
                                     i++;
                                 }
@@ -309,18 +305,14 @@ public class MusicPlayer implements IMusicPlayer,
                                 int count = 0;
                                 while (i > 0) {
                                     count++;
-                                    try {
-                                        int num = (mPlayPos + mPlayUrls.size() - count) % (mPlayUrls.size());
-                                        if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
-                                            i++;
-                                            continue;
-                                        }
-                                        if (mPlayUrls.get(num).artist.equals(artist)) {
-                                            mPlayPos = num;
-                                            break;
-                                        }
-                                    } catch (Exception e) {
-                                        FlyLog.e(e.toString());
+                                    int num = (mPlayPos + mPlayUrls.size() - count) % (mPlayUrls.size());
+                                    if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
+                                        i--;
+                                        continue;
+                                    }
+                                    if (mPlayUrls.get(num).artist.equals(artist)) {
+                                        mPlayPos = num;
+                                        break;
                                     }
                                     i--;
                                 }
