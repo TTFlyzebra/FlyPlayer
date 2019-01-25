@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -420,6 +419,8 @@ public class BaseMusicActivity extends BaseActivity implements
                 lrcView.setVisibility(View.GONE);
                 break;
             case MusicPlayer.STATUS_PLAYING:
+                playFore.setEnabled(true);
+                playNext.setEnabled(true);
                 initSeekBar();
                 upPlayInfo(musicPlayer.getPlayUrl());
                 break;
@@ -570,14 +571,21 @@ public class BaseMusicActivity extends BaseActivity implements
         seekBarSartTime.setText(text);
     }
 
+
     @Override
     public void playNext() {
-        musicPlayer.playNext();
+        if (playNext.isEnabled() && musicList != null && musicList.size() > 0) {
+            playNext.setEnabled(false);
+            musicPlayer.playNext();
+        }
     }
 
     @Override
     public void playPrev() {
-        musicPlayer.playPrev();
+        if (playFore.isEnabled() && musicList != null && musicList.size() > 0) {
+            playFore.setEnabled(false);
+            musicPlayer.playPrev();
+        }
     }
 
     @Override
