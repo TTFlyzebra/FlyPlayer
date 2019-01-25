@@ -246,6 +246,7 @@ public class MusicPlayer implements IMusicPlayer,
                                 try {
                                     int num = (mPlayPos + i + 1) % (mPlayUrls.size());
                                     if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
+                                        i++;
                                         continue;
                                     }
                                     if (mPlayUrls.get(num).artist.equals(artist)) {
@@ -305,6 +306,7 @@ public class MusicPlayer implements IMusicPlayer,
                                 try {
                                     int num = (mPlayPos + mPlayUrls.size() - count) % (mPlayUrls.size());
                                     if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
+                                        i++;
                                         continue;
                                     }
                                     if (mPlayUrls.get(num).artist.equals(artist)) {
