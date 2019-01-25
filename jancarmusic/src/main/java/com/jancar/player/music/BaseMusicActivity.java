@@ -398,10 +398,10 @@ public class BaseMusicActivity extends BaseActivity implements
                 showLeftMenu(!isShowLeftMenu);
                 break;
             case R.id.ac_music_play_fore:
-                musicPlayer.playPrev();
+                playPrev();
                 break;
             case R.id.ac_music_play_next:
-                musicPlayer.playNext();
+                playNext();
                 break;
             case R.id.ac_music_play:
                 playOrPause();
@@ -655,6 +655,7 @@ public class BaseMusicActivity extends BaseActivity implements
             }
         }
     };
+
     private void requestAudioFocus() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             audioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)

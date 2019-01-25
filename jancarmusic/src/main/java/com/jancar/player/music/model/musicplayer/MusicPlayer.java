@@ -2,6 +2,9 @@ package com.jancar.player.music.model.musicplayer;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.text.TextUtils;
 
 import com.jancar.media.data.Music;
@@ -13,6 +16,7 @@ import com.jancar.player.music.model.listener.IMusicPlayerListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,10 +36,20 @@ public class MusicPlayer implements IMusicPlayer,
     private int mPlayStatus = STATUS_IDLE;
     private int mLoopStatus = LOOP_ALL;
     private String mPlayUrl = "";
-    private List<Music> mPlayUrls = new ArrayList<>();
+    private List<Music> mPlayUrls = Collections.synchronizedList(new ArrayList<Music>());
     private int mPlayPos = -1;
     private String mPlayPath = "";
     private Map<String, Integer> mPosMap = new HashMap<>();
+
+
+    private static final HandlerThread sWorkerThread = new HandlerThread("music-thread");
+
+    static {
+        sWorkerThread.start();
+    }
+
+    private static final Handler sWorker = new Handler(sWorkerThread.getLooper());
+    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private MusicPlayer() {
     }
@@ -155,6 +169,8 @@ public class MusicPlayer implements IMusicPlayer,
     @Override
     public void stop() {
         FlyLog.d("player stop");
+        sWorker.removeCallbacksAndMessages(null);
+        mHandler.removeCallbacksAndMessages(null);
         mPlayUrls.clear();
         mPosMap.clear();
         mPlayPos = -1;
@@ -205,96 +221,119 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void playNext() {
-        FlyLog.d("playNext");
-        switch (mLoopStatus) {
-            case LOOP_RAND:
-                mPlayPos = (int) (Math.random() * mPlayUrls.size());
-                break;
-            case LOOP_ALL:
-            case LOOP_ONE:
-                if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
-                    mPlayPos = (mPlayPos + 1) % (mPlayUrls.size());
-                } else {
-                    mPlayPos = -1;
-                }
-                break;
-            case LOOP_SINGER:
-                if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
-                    String artist = mPlayUrls.get(mPlayPos).artist;
-                    int i = 0;
-                    while (i < mPlayUrls.size()) {
-                        try {
-                            int num = (mPlayPos + i + 1) % (mPlayUrls.size());
-                            if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
-                                continue;
-                            }
-                            if (mPlayUrls.get(num).artist.equals(artist)) {
-                                mPlayPos = num;
-                                break;
-                            }
-                        } catch (Exception e) {
-                            FlyLog.e(e.toString());
+//        FlyLog.d("playNext");
+//        sWorker.removeCallbacksAndMessages(null);
+        sWorker.post(new Runnable() {
+            @Override
+            public void run() {
+                switch (mLoopStatus) {
+                    case LOOP_RAND:
+                        mPlayPos = (int) (Math.random() * mPlayUrls.size());
+                        break;
+                    case LOOP_ALL:
+                    case LOOP_ONE:
+                        if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
+                            mPlayPos = (mPlayPos + 1) % (mPlayUrls.size());
+                        } else {
+                            mPlayPos = -1;
                         }
-                        i++;
-                    }
-                } else {
-                    mPlayPos = -1;
+                        break;
+                    case LOOP_SINGER:
+                        if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
+                            String artist = mPlayUrls.get(mPlayPos).artist;
+                            int i = 0;
+                            while (i < mPlayUrls.size()) {
+                                try {
+                                    int num = (mPlayPos + i + 1) % (mPlayUrls.size());
+                                    if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
+                                        continue;
+                                    }
+                                    if (mPlayUrls.get(num).artist.equals(artist)) {
+                                        mPlayPos = num;
+                                        break;
+                                    }
+                                } catch (Exception e) {
+                                    FlyLog.e(e.toString());
+                                }
+                                i++;
+                            }
+                        } else {
+                            mPlayPos = -1;
+                        }
+                        break;
                 }
-                break;
-        }
-        if (mPlayPos >= 0 && mPlayUrls != null && mPlayUrls.size() > mPlayPos) {
-            play(mPlayUrls.get(mPlayPos).url);
-        } else {
-            play(mPlayUrl);
-        }
+                mHandler.removeCallbacksAndMessages(null);
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mPlayPos >= 0 && mPlayUrls != null && mPlayUrls.size() > mPlayPos) {
+                            play(mPlayUrls.get(mPlayPos).url);
+                        } else {
+                            play(mPlayUrl);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override
     public void playPrev() {
-        FlyLog.d("playPrev");
-        switch (mLoopStatus) {
-            case LOOP_RAND:
-                mPlayPos = (int) (Math.random() * mPlayUrls.size());
-                break;
-            case LOOP_ALL:
-            case LOOP_ONE:
-                if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
-                    mPlayPos = (mPlayPos - 1 + mPlayUrls.size()) % mPlayUrls.size();
-                } else {
-                    mPlayPos = -1;
-                }
-                break;
-            case LOOP_SINGER:
-                if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
-                    String artist = mPlayUrls.get(mPlayPos).artist;
-                    int i = mPlayUrls.size();
-                    int count = 0;
-                    while (i > 0) {
-                        count++;
-                        try {
-                            int num = (mPlayPos + mPlayUrls.size() - count) % (mPlayUrls.size());
-                            if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
-                                continue;
-                            }
-                            if (mPlayUrls.get(num).artist.equals(artist)) {
-                                mPlayPos = num;
-                                break;
-                            }
-                        } catch (Exception e) {
-                            FlyLog.e(e.toString());
+//        FlyLog.d("playPrev");
+        sWorker.post(new Runnable() {
+            @Override
+            public void run() {
+                switch (mLoopStatus) {
+                    case LOOP_RAND:
+                        mPlayPos = (int) (Math.random() * mPlayUrls.size());
+                        break;
+                    case LOOP_ALL:
+                    case LOOP_ONE:
+                        if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
+                            mPlayPos = (mPlayPos - 1 + mPlayUrls.size()) % mPlayUrls.size();
+                        } else {
+                            mPlayPos = -1;
                         }
-                        i--;
-                    }
-                } else {
-                    mPlayPos = -1;
+                        break;
+                    case LOOP_SINGER:
+                        if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
+                            String artist = mPlayUrls.get(mPlayPos).artist;
+                            int i = mPlayUrls.size();
+                            int count = 0;
+                            while (i > 0) {
+                                count++;
+                                try {
+                                    int num = (mPlayPos + mPlayUrls.size() - count) % (mPlayUrls.size());
+                                    if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
+                                        continue;
+                                    }
+                                    if (mPlayUrls.get(num).artist.equals(artist)) {
+                                        mPlayPos = num;
+                                        break;
+                                    }
+                                } catch (Exception e) {
+                                    FlyLog.e(e.toString());
+                                }
+                                i--;
+                            }
+                        } else {
+                            mPlayPos = -1;
+                        }
+                        break;
                 }
-                break;
-        }
-        if (mPlayPos >= 0 && mPlayUrls != null && mPlayUrls.size() > mPlayPos) {
-            play(mPlayUrls.get(mPlayPos).url);
-        } else {
-            play(mPlayUrl);
-        }
+                mHandler.removeCallbacksAndMessages(null);
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mPlayPos >= 0 && mPlayUrls != null && mPlayUrls.size() > mPlayPos) {
+                            play(mPlayUrls.get(mPlayPos).url);
+                        } else {
+                            play(mPlayUrl);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override
