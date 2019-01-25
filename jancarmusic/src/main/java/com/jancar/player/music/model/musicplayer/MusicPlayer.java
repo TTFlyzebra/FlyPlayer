@@ -226,42 +226,47 @@ public class MusicPlayer implements IMusicPlayer,
         sWorker.post(new Runnable() {
             @Override
             public void run() {
-                switch (mLoopStatus) {
-                    case LOOP_RAND:
-                        mPlayPos = (int) (Math.random() * mPlayUrls.size());
-                        break;
-                    case LOOP_ALL:
-                    case LOOP_ONE:
-                        if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
-                            mPlayPos = (mPlayPos + 1) % (mPlayUrls.size());
-                        } else {
-                            mPlayPos = -1;
-                        }
-                        break;
-                    case LOOP_SINGER:
-                        if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
-                            String artist = mPlayUrls.get(mPlayPos).artist;
-                            int i = 0;
-                            while (i < mPlayUrls.size()) {
-                                try {
-                                    int num = (mPlayPos + i + 1) % (mPlayUrls.size());
-                                    if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
-                                        i++;
-                                        continue;
-                                    }
-                                    if (mPlayUrls.get(num).artist.equals(artist)) {
-                                        mPlayPos = num;
-                                        break;
-                                    }
-                                } catch (Exception e) {
-                                    FlyLog.e(e.toString());
-                                }
-                                i++;
+                try {
+                    switch (mLoopStatus) {
+                        case LOOP_RAND:
+                            mPlayPos = (int) (Math.random() * mPlayUrls.size());
+                            break;
+                        case LOOP_ALL:
+                        case LOOP_ONE:
+                            if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
+                                mPlayPos = (mPlayPos + 1) % (mPlayUrls.size());
+                            } else {
+                                mPlayPos = -1;
                             }
-                        } else {
-                            mPlayPos = -1;
-                        }
-                        break;
+                            break;
+                        case LOOP_SINGER:
+                            if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
+                                String artist = mPlayUrls.get(mPlayPos).artist;
+                                int i = 0;
+                                while (i < mPlayUrls.size()) {
+                                    try {
+                                        int num = (mPlayPos + i + 1) % (mPlayUrls.size());
+                                        if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
+                                            i++;
+                                            continue;
+                                        }
+                                        if (mPlayUrls.get(num).artist.equals(artist)) {
+                                            mPlayPos = num;
+                                            break;
+                                        }
+                                    } catch (Exception e) {
+                                        FlyLog.e(e.toString());
+                                    }
+                                    i++;
+                                }
+                            } else {
+                                mPlayPos = -1;
+                            }
+                            break;
+                    }
+                } catch (Exception e) {
+                    mPlayPos = -1;
+                    FlyLog.e(e.toString());
                 }
                 mHandler.removeCallbacksAndMessages(null);
                 mHandler.post(new Runnable() {
@@ -284,44 +289,49 @@ public class MusicPlayer implements IMusicPlayer,
         sWorker.post(new Runnable() {
             @Override
             public void run() {
-                switch (mLoopStatus) {
-                    case LOOP_RAND:
-                        mPlayPos = (int) (Math.random() * mPlayUrls.size());
-                        break;
-                    case LOOP_ALL:
-                    case LOOP_ONE:
-                        if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
-                            mPlayPos = (mPlayPos - 1 + mPlayUrls.size()) % mPlayUrls.size();
-                        } else {
-                            mPlayPos = -1;
-                        }
-                        break;
-                    case LOOP_SINGER:
-                        if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
-                            String artist = mPlayUrls.get(mPlayPos).artist;
-                            int i = mPlayUrls.size();
-                            int count = 0;
-                            while (i > 0) {
-                                count++;
-                                try {
-                                    int num = (mPlayPos + mPlayUrls.size() - count) % (mPlayUrls.size());
-                                    if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
-                                        i++;
-                                        continue;
-                                    }
-                                    if (mPlayUrls.get(num).artist.equals(artist)) {
-                                        mPlayPos = num;
-                                        break;
-                                    }
-                                } catch (Exception e) {
-                                    FlyLog.e(e.toString());
-                                }
-                                i--;
+                try {
+                    switch (mLoopStatus) {
+                        case LOOP_RAND:
+                            mPlayPos = (int) (Math.random() * mPlayUrls.size());
+                            break;
+                        case LOOP_ALL:
+                        case LOOP_ONE:
+                            if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
+                                mPlayPos = (mPlayPos - 1 + mPlayUrls.size()) % mPlayUrls.size();
+                            } else {
+                                mPlayPos = -1;
                             }
-                        } else {
-                            mPlayPos = -1;
-                        }
-                        break;
+                            break;
+                        case LOOP_SINGER:
+                            if (mPlayUrls != null && !mPlayUrls.isEmpty()) {
+                                String artist = mPlayUrls.get(mPlayPos).artist;
+                                int i = mPlayUrls.size();
+                                int count = 0;
+                                while (i > 0) {
+                                    count++;
+                                    try {
+                                        int num = (mPlayPos + mPlayUrls.size() - count) % (mPlayUrls.size());
+                                        if (TextUtils.isEmpty(mPlayUrls.get(num).artist)) {
+                                            i++;
+                                            continue;
+                                        }
+                                        if (mPlayUrls.get(num).artist.equals(artist)) {
+                                            mPlayPos = num;
+                                            break;
+                                        }
+                                    } catch (Exception e) {
+                                        FlyLog.e(e.toString());
+                                    }
+                                    i--;
+                                }
+                            } else {
+                                mPlayPos = -1;
+                            }
+                            break;
+                    }
+                } catch (Exception e) {
+                    mPlayPos = -1;
+                    FlyLog.e(e.toString());
                 }
                 mHandler.removeCallbacksAndMessages(null);
                 mHandler.post(new Runnable() {
