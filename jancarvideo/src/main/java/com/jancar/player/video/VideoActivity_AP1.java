@@ -3,7 +3,6 @@ package com.jancar.player.video;
 import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -286,7 +285,8 @@ public class VideoActivity_AP1 extends BaseActivity implements
 
     @Override
     public void playNext() {
-        if (videoList != null && !videoList.isEmpty()) {
+        if (play_next.isEnabled() && videoList != null && !videoList.isEmpty()) {
+            play_next.setEnabled(false);
             currenPos = (currenPos + 1) % videoList.size();
             player.play(videoList.get(currenPos).url);
         }
@@ -294,7 +294,8 @@ public class VideoActivity_AP1 extends BaseActivity implements
 
     @Override
     public void playPrev() {
-        if (videoList != null && !videoList.isEmpty()) {
+        if (play_fore.isEnabled() && videoList != null && !videoList.isEmpty()) {
+            play_fore.setEnabled(false);
             currenPos = (currenPos - 1 + videoList.size()) % videoList.size();
             player.play(videoList.get(currenPos).url);
         }
@@ -481,6 +482,8 @@ public class VideoActivity_AP1 extends BaseActivity implements
                 playNext();
                 break;
             case GiraffePlayer.STATUS_PLAYING:
+                play_fore.setEnabled(true);
+                play_next.setEnabled(true);
                 setCurrentPos();
                 player.savePathUrl(currenPath);
                 mHandler.removeCallbacks(seekBarTask);
