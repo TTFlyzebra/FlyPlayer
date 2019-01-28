@@ -40,6 +40,7 @@ public class MusicPlayer implements IMusicPlayer,
     private int mPlayPos = -1;
     private String mPlayPath = "";
     private Map<String, Integer> mPosMap = new HashMap<>();
+    private boolean isPlayNext = true;
 
 
     private static final HandlerThread sWorkerThread = new HandlerThread("music-thread");
@@ -94,6 +95,7 @@ public class MusicPlayer implements IMusicPlayer,
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setOnCompletionListener(this);
         mMediaPlayer.setOnPreparedListener(this);
+        mMediaPlayer.setOnErrorListener(this);
 //        mMediaPlayer.setOnInfoListener(this);
     }
 
@@ -227,6 +229,7 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void playNext() {
+        isPlayNext = true;
 //        FlyLog.d("playNext");
 //        sWorker.removeCallbacksAndMessages(null);
         sWorker.post(new Runnable() {
@@ -291,6 +294,7 @@ public class MusicPlayer implements IMusicPlayer,
 
     @Override
     public void playPrev() {
+        isPlayNext = false;
 //        FlyLog.d("playPrev");
         sWorker.post(new Runnable() {
             @Override
@@ -477,17 +481,28 @@ public class MusicPlayer implements IMusicPlayer,
         /**
          * 拔掉U盘停止播放
          */
-        mPlayStatus = STATUS_COMPLETED;
-        notifyStatus();
-        switch (mLoopStatus) {
-            case LOOP_RAND:
-            case LOOP_ALL:
-            case LOOP_SINGER:
+
+        if (mPlayStatus == STATUS_ERROR) {
+            if (isPlayNext) {
                 playNext();
-                break;
-            case LOOP_ONE:
-                play(mPlayUrl);
-                break;
+            } else {
+                playPrev();
+            }
+        } else {
+            mPlayStatus = STATUS_COMPLETED;
+            notifyStatus();
+            switch (mLoopStatus) {
+                case LOOP_RAND:
+                case LOOP_ALL:
+                case LOOP_SINGER:
+                    playNext();
+                    break;
+                case LOOP_ONE:
+                    play(mPlayUrl);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -496,7 +511,6 @@ public class MusicPlayer implements IMusicPlayer,
         FlyLog.d("onError what=%d,extra=%d", what, extra);
         mPlayStatus = STATUS_ERROR;
         notifyStatus();
-        playNext();
         return false;
     }
 

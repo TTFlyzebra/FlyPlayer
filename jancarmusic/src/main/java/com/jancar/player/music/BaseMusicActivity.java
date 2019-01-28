@@ -424,6 +424,10 @@ public class BaseMusicActivity extends BaseActivity implements
                 initSeekBar();
                 upPlayInfo(musicPlayer.getPlayUrl());
                 break;
+            case MusicPlayer.STATUS_ERROR:
+                playFore.setEnabled(true);
+                playNext.setEnabled(true);
+                break;
             case MusicPlayer.STATUS_IDLE:
                 tvSingle.setText("");
                 tvArtist.setText("");
