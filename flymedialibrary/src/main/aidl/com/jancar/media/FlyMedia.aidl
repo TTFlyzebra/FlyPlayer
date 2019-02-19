@@ -2,17 +2,21 @@
 package com.jancar.media;
 
 import com.jancar.media.Notify;
-// Declare any non-default types here with import statements
 
 interface FlyMedia {
+
     /**
-     * Demonstrates some basic types that you can use as parameters
-     * and return values in AIDL.
-     *
+     * 通知扫描服务扫描指定路径。
      */
     void scanDisk(String disk);
 
+    /**
+     * 注册接收扫描获取的信息通知
+     */
     void registerNotify(Notify notify);
 
+    /**
+     * 注销接收扫描获取的信息通知
+     */
     void unregisterNotify(Notify notify);
 }
