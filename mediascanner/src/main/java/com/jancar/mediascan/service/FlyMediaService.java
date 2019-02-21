@@ -949,6 +949,11 @@ public class FlyMediaService extends Service {
                             music.album = getString(R.string.no_album);
                             music.name = StringTools.getNameByPath(music.url);
                             FlyLog.d(e.toString());
+                        } catch (Throwable e){
+                            music.artist = getString(R.string.no_artist);
+                            music.album = getString(R.string.no_album);
+                            music.name = StringTools.getNameByPath(music.url);
+                            FlyLog.d("File too big");
                         }
                     } else {
                         music.artist = getString(R.string.no_artist);
