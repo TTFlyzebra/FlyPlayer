@@ -6,10 +6,8 @@ import android.util.Log;
  * Created by FlyZebra on 2018/3/28-下午3:28.
  */
 public class FlyLog {
-    public static final String TAG = "jancar.plays";
+    public static final String TAG = "JAC-plays";
     public static String[] filter = {
-            "FlyTabView",
-            "AnimationImageView"
     };
 
     public static void d() {

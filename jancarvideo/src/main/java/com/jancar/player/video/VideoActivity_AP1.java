@@ -41,6 +41,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import tcking.github.com.giraffeplayer.GiraffePlayer;
+import tcking.github.com.giraffeplayer.IjkVideoView;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class VideoActivity_AP1 extends BaseActivity implements
@@ -57,6 +58,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
     public List<Video> videoList = new ArrayList<>();
     protected FlyTabView tabView;
     private RelativeLayout liveBox;
+    private IjkVideoView ijkVideoView;
 
 
     protected String titles[] = new String[]{"磁盘列表", "播放列表", "文件列表"};
@@ -257,8 +259,9 @@ public class VideoActivity_AP1 extends BaseActivity implements
         tabView = (FlyTabView) findViewById(R.id.app_video_tabview);
         leftLayout = (TouchEventRelativeLayout) findViewById(R.id.play_ll01_playlist);
         liveBox = (RelativeLayout) findViewById(R.id.app_video_box);
+        ijkVideoView = (IjkVideoView) findViewById(R.id.video_view);
 
-        findViewById(R.id.video_view).setOnClickListener(this);
+        ijkVideoView.setOnClickListener(this);
         tabView.setOnItemClickListener(this);
         play_fore.setOnClickListener(this);
         play_next.setOnClickListener(this);
@@ -286,7 +289,8 @@ public class VideoActivity_AP1 extends BaseActivity implements
     @Override
     public void playNext() {
         if (play_next.isEnabled() && videoList != null && !videoList.isEmpty()) {
-            play_next.setEnabled(false);
+            setViewEnable(false);
+            play_fore.setImageResource(R.drawable.media_fore_01);
             currenPos = (currenPos + 1) % videoList.size();
             player.play(videoList.get(currenPos).url);
         }
@@ -295,7 +299,8 @@ public class VideoActivity_AP1 extends BaseActivity implements
     @Override
     public void playPrev() {
         if (play_fore.isEnabled() && videoList != null && !videoList.isEmpty()) {
-            play_fore.setEnabled(false);
+            setViewEnable(false);
+            play_next.setImageResource(R.drawable.media_next_01);
             currenPos = (currenPos - 1 + videoList.size()) % videoList.size();
             player.play(videoList.get(currenPos).url);
         }
@@ -479,18 +484,22 @@ public class VideoActivity_AP1 extends BaseActivity implements
         switch (statu) {
             case GiraffePlayer.STATUS_ERROR:
             case GiraffePlayer.STATUS_COMPLETED:
+                setViewEnable(true);
                 playNext();
                 break;
             case GiraffePlayer.STATUS_PLAYING:
-                play_fore.setEnabled(true);
-                play_next.setEnabled(true);
                 setCurrentPos();
                 player.savePathUrl(currenPath);
                 mHandler.removeCallbacks(seekBarTask);
                 mHandler.post(seekBarTask);
+                mHandler.removeCallbacks(enableViewTask);
+                mHandler.postDelayed(enableViewTask,5000);
                 break;
             case GiraffePlayer.STATUS_PAUSE:
                 player.savePathUrl(currenPath);
+                break;
+            case GiraffePlayer.STATUS_START:
+                setViewEnable(true);
                 break;
             case GiraffePlayer.STATUS_LOADING:
             default:
@@ -615,6 +624,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
             }
         }
     };
+
     private void requestAudioFocus() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             audioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
@@ -635,5 +645,29 @@ public class VideoActivity_AP1 extends BaseActivity implements
             mAudioManager.abandonAudioFocus(mAudioFocusListener);
         }
     }
+
+    private void setViewEnable(boolean flag) {
+        ijkVideoView.setEnabled(flag);
+        tabView.setEnabled(flag);
+        play_fore.setEnabled(flag);
+        play_next.setEnabled(flag);
+        play_pause.setEnabled(flag);
+        leftMenu.setEnabled(flag);
+        controlLayout.setEnabled(flag);
+        controlLayout.setEnabled(flag);
+        leftLayout.setEnabled(flag);
+        liveBox.setEnabled(flag);
+        if(flag){
+            play_next.setImageResource(R.drawable.media_next);
+            play_fore.setImageResource(R.drawable.media_fore);
+        }
+    }
+
+    private Runnable enableViewTask = new Runnable() {
+        @Override
+        public void run() {
+            setViewEnable(true);
+        }
+    };
 
 }

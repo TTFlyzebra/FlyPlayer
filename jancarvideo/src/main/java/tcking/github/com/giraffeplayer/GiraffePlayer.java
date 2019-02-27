@@ -96,6 +96,7 @@ public class GiraffePlayer {
     public static final int STATUS_PLAYING = 2;
     public static final int STATUS_PAUSE = 3;
     public static final int STATUS_COMPLETED = 4;
+    public static final int STATUS_START = 5;
     public int status = STATUS_IDLE;
     private boolean isLive = false;//是否为直播
     private OrientationEventListener orientationEventListener;
@@ -307,6 +308,14 @@ public class GiraffePlayer {
         ijkVideoView.setOnInfoListener(new IMediaPlayer.OnInfoListener() {
             @Override
             public boolean onInfo(IMediaPlayer mp, int what, int extra) {
+                int width = mp.getVideoWidth();
+                int height = mp.getVideoHeight();
+                if (width > 2880 && height > 1620) {
+                    FlyLog.e("no support video, width=%d,height=%d", width, height);
+                    stop();
+                    statusChange(STATUS_ERROR);
+                    return false;
+                }
                 switch (what) {
                     case IMediaPlayer.MEDIA_INFO_BUFFERING_START:
                         statusChange(STATUS_LOADING);
@@ -319,14 +328,6 @@ public class GiraffePlayer {
 //                        Toaster.show("download rate:" + extra);
                         break;
                     case IMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
-                        int width = mp.getVideoWidth();
-                        int height = mp.getVideoHeight();
-                        if (width > 2880 && height > 1620) {
-                            FlyLog.e("no support video, width=%d,height=%d", width, height);
-                            statusChange(STATUS_ERROR);
-//                            mp.stop();
-                            return false;
-                        }
                         if (isShowTestInfo) {
                             ITrackInfo[] iTrackInfos = ijkVideoView.getTrackInfo();
                             String viewInfo = "";
@@ -340,6 +341,7 @@ public class GiraffePlayer {
                         }
                         onInfoListener.onInfo(what, extra);
                         statusChange(STATUS_PLAYING);
+                        statusChange(STATUS_START);
                         break;
                 }
                 return false;
