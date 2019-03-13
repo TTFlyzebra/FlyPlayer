@@ -46,6 +46,9 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currenPath = getSavePath();
+        if (!(new File(currenPath).exists())) {
+            currenPath = DEF_PATH;
+        }
 
         iStorage.addListener(this);
 
@@ -71,6 +74,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
          * 程序于后台被拔掉U盘，已经打不开当前盘符，刷新为当前磁盘
          */
         if (!(new File(currenPath).exists())) {
+            currenPath = DEF_PATH;
             usbMediaScan.openStorager(new StorageInfo("REFRESH"));
         }
     }
