@@ -3,9 +3,15 @@ package com.jancar.media.base;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 
 import com.jancar.media.data.Image;
 import com.jancar.media.data.Music;
@@ -26,13 +32,14 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseActivity extends AppCompatActivity implements IUsbMediaListener,IStorageListener {
+public class BaseActivity extends AppCompatActivity implements IUsbMediaListener, IStorageListener {
     protected IMediaScan usbMediaScan = MediaScan.getInstance();
     public static final String DEF_PATH = "/storage/emulated/0";
     public static String currenPath = DEF_PATH;
     protected static boolean isStop = false;
     public static int StorageNum;
     private IStorage iStorage = Storage.getInstance();
+    private DiskReceiver diskReceiver;
 
     @SuppressLint("WrongConstant")
     @Override
@@ -44,6 +51,16 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
 
         usbMediaScan.addListener(this);
         usbMediaScan.open();
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_MEDIA_MOUNTED);
+        intentFilter.addAction(Intent.ACTION_MEDIA_EJECT);
+        intentFilter.addAction(Intent.ACTION_MEDIA_REMOVED);
+        intentFilter.addAction(Intent.ACTION_MEDIA_BAD_REMOVAL);
+        intentFilter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
+        intentFilter.addDataScheme("file");
+        diskReceiver = new DiskReceiver();
+        registerReceiver(diskReceiver, intentFilter);
     }
 
     @Override
@@ -71,6 +88,7 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
         usbMediaScan.close();
         usbMediaScan.removeListener(this);
         CleanLeakUtils.fixInputMethodManagerLeak(this);
+        unregisterReceiver(diskReceiver);
         super.onDestroy();
     }
 
@@ -167,5 +185,40 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     public void storageList(List<StorageInfo> storageList) {
 
     }
+
+    public class DiskReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            FlyLog.d("DiskReceiver intent=" + intent.toUri(0));
+            String action = intent.getAction();
+            if (TextUtils.isEmpty(action)) {
+                return;
+            }
+            switch (action) {
+                case Intent.ACTION_MEDIA_MOUNTED:
+                    break;
+                case Intent.ACTION_MEDIA_EJECT:
+                case Intent.ACTION_MEDIA_REMOVED:
+                case Intent.ACTION_MEDIA_BAD_REMOVAL:
+                case Intent.ACTION_MEDIA_UNMOUNTED:
+                    final Uri uri = intent.getData();
+                    if (uri == null) return;
+                    if (!("file".equals(uri.getScheme()))) return;
+                    String path = uri.getPath();
+                    if (path == null) return;
+                    FlyLog.d("MEDIA_UNMOUNTED path=%s", path);
+                    if (isStop) {
+                        if (currenPath.equals(Storage.ALL_STORAGE) || currenPath.equals(path)) {
+                            finish();
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+        }
+    }
+
 
 }

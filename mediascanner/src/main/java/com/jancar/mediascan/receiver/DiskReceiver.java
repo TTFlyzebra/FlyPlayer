@@ -23,7 +23,7 @@ public class DiskReceiver extends BroadcastReceiver {
             case Intent.ACTION_MEDIA_MOUNTED: {
                 final Uri uri = intent.getData();
                 if (uri == null) return;
-                if (!uri.getScheme().equals("file")) return;
+                if (!("file".equals(uri.getScheme()))) return;
                 String path = uri.getPath();
                 if (path == null) return;
                 FlyLog.d("MEDIA_MOUNTED path=%s", path);
