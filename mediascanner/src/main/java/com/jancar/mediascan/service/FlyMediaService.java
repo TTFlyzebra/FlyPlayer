@@ -26,6 +26,7 @@ import com.jancar.mediascan.R;
 import com.jancar.mediascan.data.Const;
 import com.jancar.mediascan.model.cache.ListFileDiskCache;
 import com.jancar.mediascan.model.cache.MusicDoubleCache;
+import com.jancar.mediascan.receiver.DiskReceiver;
 import com.jancar.mediascan.utils.FlyLog;
 import com.jancar.mediascan.utils.GsonUtils;
 import com.jancar.mediascan.utils.SPUtil;
@@ -110,6 +111,7 @@ public class FlyMediaService extends Service {
             FlyLog.d("unregisterNotify client=%s", notify.toString());
         }
     };
+    private DiskReceiver diskReceiver;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -132,13 +134,25 @@ public class FlyMediaService extends Service {
         String path = (String) SPUtil.get(this, "SAVEPATH", DEF_PATH);
         startScanPath(path);
         mediaScannerReceiver = new MediaScannerReceiver();
-
         IntentFilter f = new IntentFilter();
         f.addAction(Intent.ACTION_MEDIA_SCANNER_STARTED);
         f.addAction(Intent.ACTION_MEDIA_SCANNER_FINISHED);
         f.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
         f.addDataScheme("file");
         registerReceiver(mediaScannerReceiver, f);
+
+        /**
+         * NOTE 静态注册广播比动态注册在开机的时刻收到广播的时间要延时5秒
+         */
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_MEDIA_MOUNTED);
+        intentFilter.addAction(Intent.ACTION_MEDIA_EJECT);
+        intentFilter.addAction(Intent.ACTION_MEDIA_REMOVED);
+        intentFilter.addAction(Intent.ACTION_MEDIA_BAD_REMOVAL);
+        intentFilter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
+        intentFilter.addDataScheme("file");
+        diskReceiver = new DiskReceiver();
+        registerReceiver(diskReceiver, intentFilter);
     }
 
     @Override
@@ -171,6 +185,11 @@ public class FlyMediaService extends Service {
         sWorker.removeCallbacksAndMessages(null);
         unregisterReceiver(mediaScannerReceiver);
         jancarManager.unregisterJacStateListener(jacState.asBinder());
+        try{
+            unregisterReceiver(diskReceiver);
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
         super.onDestroy();
     }
 
