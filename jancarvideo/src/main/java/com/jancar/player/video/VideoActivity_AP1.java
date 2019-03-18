@@ -657,7 +657,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
         controlLayout.setEnabled(flag);
         leftLayout.setEnabled(flag);
         liveBox.setEnabled(flag);
-        if(flag){
+        if (flag) {
             play_next.setImageResource(R.drawable.media_next);
             play_fore.setImageResource(R.drawable.media_fore);
         }
