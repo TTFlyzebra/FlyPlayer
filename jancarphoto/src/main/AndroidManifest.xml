@@ -11,7 +11,7 @@
         android:name=".MyApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_image"
-        android:label="@string/app_name"
+        android:label="@string/photo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
