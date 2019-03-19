@@ -44,7 +44,7 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
     private MyPageAdapter adapter;
     public List<Image> imageList = new ArrayList<>();
     private Hashtable<Integer, Integer> imageResIDs = new Hashtable<>();
-    private ImageView photoFore, photoNext, photoRotate, photoZoomIn, photoZoomOut;
+    private ImageView photoFore, photoNext, photoRotate, photoZoomIn, photoZoomOut, photoPlay;
     private ImageView leftMenu;
     private TouchEventRelativeLayout controlLayout;
     private TouchEventRelativeLayout leftLayout;
@@ -117,7 +117,7 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
 
     }
 
-    public void initFragment(){
+    public void initFragment() {
 
     }
 
@@ -128,6 +128,7 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
         photoRotate = (ImageView) findViewById(R.id.ac_photo_rotate);
         photoZoomIn = (ImageView) findViewById(R.id.ac_photo_zoomin);
         photoZoomOut = (ImageView) findViewById(R.id.ac_photo_zoomout);
+        photoPlay = (ImageView) findViewById(R.id.ac_photo_paly_pause);
         leftMenu = (ImageView) findViewById(R.id.ac_photo_left_menu);
         leftLayout = (TouchEventRelativeLayout) findViewById(R.id.ac_photo_left_layout);
         controlLayout = (TouchEventRelativeLayout) findViewById(R.id.ac_photo_control);
@@ -143,6 +144,7 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
         photoRotate.setOnClickListener(this);
         photoZoomIn.setOnClickListener(this);
         photoZoomOut.setOnClickListener(this);
+        photoPlay.setOnClickListener(this);
         viewPager.addOnPageChangeListener(this);
         leftMenu.setOnClickListener(this);
         tabView.setOnItemClickListener(this);
@@ -221,10 +223,10 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
         try {
             switch (v.getId()) {
                 case R.id.ac_photo_play_fore:
-                    viewPager.setCurrentItem(Math.max(0, currentItem - 1));
+                    onPlayFore(false);
                     break;
                 case R.id.ac_photo_play_next:
-                    viewPager.setCurrentItem(Math.min(imageList == null ? 0 : imageList.size() - 1, currentItem + 1));
+                    onPlayNext(false);
                     break;
                 case R.id.ac_photo_rotate:
                     PhotoView photoView1 = (PhotoView) viewPager.findViewById(imageResIDs.get(currentItem));
@@ -237,6 +239,9 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
                 case R.id.ac_photo_zoomout:
                     PhotoView photoView3 = (PhotoView) viewPager.findViewById(imageResIDs.get(currentItem));
                     photoView3.setScale(Math.min(PhotoViewAttacher.DEFAULT_MAX_SCALE, photoView3.getScale() + 0.25f), true);
+                    break;
+                case R.id.ac_photo_paly_pause:
+                    onPlayStatus();
                     break;
                 case R.id.ac_photo_left_menu:
                     isShowLeftMenu = !isShowLeftMenu;
@@ -306,7 +311,7 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        if (leftLayout.getX() > (screen_width-photo_left_list_width)
+                        if (leftLayout.getX() > (screen_width - photo_left_list_width)
                                 || leftLayout.getX() < (-photo_left_list_width)) {
                             leftLayout.setVisibility(View.INVISIBLE);
                         } else {
@@ -426,4 +431,66 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
         return set.size();
     }
 
+    private void onPlayFore(boolean isLoop) {
+        if (imageList == null || imageList.isEmpty()) {
+            return;
+        }
+        viewPager.setCurrentItem(isLoop ? (currentItem + imageList.size() - 1) % imageList.size() : Math.max(0, currentItem - 1));
+    }
+
+    private void onPlayNext(boolean isLoop) {
+        if (imageList == null || imageList.isEmpty()) {
+            return;
+        }
+        viewPager.setCurrentItem(isLoop ? (currentItem + 1) % imageList.size() : Math.min(imageList.size() - 1, currentItem + 1));
+    }
+
+
+    /**
+     * 添加幻灯片播放功能
+     */
+
+    private Runnable playTask = new Runnable() {
+        @Override
+        public void run() {
+            onPlayNext(true);
+            mHandler.postDelayed(playTask, playTime);
+        }
+    };
+
+    private long playTime = 3000;
+    private static final int STATU_PAUSE = 0;
+    private static final int STATU_PALY = 1;
+    private int playStatu = STATU_PAUSE;
+
+    private void onPlayStatus() {
+        if (imageList == null || imageList.isEmpty()) {
+            return;
+        }
+        switch (playStatu) {
+            case STATU_PALY:
+                mHandler.removeCallbacks(playTask);
+                photoPlay.setImageResource(R.drawable.media_play);
+                playStatu = STATU_PAUSE;
+                break;
+            case STATU_PAUSE:
+                mHandler.postDelayed(playTask, playTime);
+                photoPlay.setImageResource(R.drawable.media_pause);
+                playStatu = STATU_PALY;
+                break;
+            default:
+                mHandler.removeCallbacks(playTask);
+                photoPlay.setImageResource(R.drawable.media_play);
+                break;
+        }
+
+    }
+
+    @Override
+    protected void onStop() {
+        mHandler.postDelayed(playTask, playTime);
+        photoPlay.setImageResource(R.drawable.media_pause);
+        playStatu = STATU_PALY;
+        super.onStop();
+    }
 }

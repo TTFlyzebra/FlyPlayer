@@ -44,6 +44,16 @@
                 android:layout_centerVertical="true"
                 android:scaleType="center"
                 android:src="@drawable/media_photo_zoomin" />
+
+            <ImageView
+                android:layout_marginTop="1px"
+                android:id="@+id/ac_photo_rotate"
+                android:layout_width="60px"
+                android:padding="10px"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/media_photo_rotate" />
         </LinearLayout>
 
         <LinearLayout
@@ -63,14 +73,14 @@
                 android:src="@drawable/media_fore" />
 
             <ImageView
-                android:id="@+id/ac_photo_rotate"
+                android:id="@+id/ac_photo_paly_pause"
                 android:layout_width="70px"
                 android:layout_height="70px"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="50px"
                 android:layout_marginStart="50px"
                 android:scaleType="fitCenter"
-                android:src="@drawable/media_photo_rotate" />
+                android:src="@drawable/media_play" />
 
             <ImageView
                 android:id="@+id/ac_photo_play_next"

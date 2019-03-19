@@ -147,6 +147,8 @@
             android:id="@+id/app_video_status"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:background="@android:color/background_dark"
             android:gravity="center"
             android:visibility="visible">
@@ -225,8 +227,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/rl_01"
-                android:layoutDirection="ltr"
-                android:gravity="center">
+                android:gravity="center"
+                android:layoutDirection="ltr">
 
                 <ImageView
                     android:id="@+id/ac_video_play_fore"
@@ -259,6 +261,16 @@
                     android:src="@drawable/media_next" />
             </LinearLayout>
 
+
+            <ImageView
+                android:id="@+id/menu_play_mode"
+                android:layout_width="120px"
+                android:layout_height="match_parent"
+                android:layout_below="@id/rl_01"
+                android:layout_alignParentStart="true"
+                android:scaleType="center"
+                android:src="@drawable/media_video_mode1" />
+
             <ImageView
                 android:id="@+id/menu_play_list"
                 android:layout_width="75px"
@@ -278,8 +290,8 @@
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="@dimen/video_left_list_margin_end"
             android:layout_marginBottom="@dimen/video_bottom_menu_height"
-            android:visibility="invisible"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="invisible">
 
             <View
                 android:layout_width="match_parent"
@@ -308,8 +320,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="180px"
-        android:orientation="vertical"
-        android:background="#7FFF0000">
+        android:background="#7FFF0000"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/video_info"

@@ -26,6 +26,7 @@ import com.jancar.media.model.storage.Storage;
 import com.jancar.media.utils.CleanLeakUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.SPUtil;
+import com.jancar.media.utils.SystemPropertiesProxy;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -45,9 +46,23 @@ public class BaseActivity extends AppCompatActivity implements IUsbMediaListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currenPath = getSavePath();
-        if (!(new File(currenPath).exists())) {
+
+        /**
+         * 判断ACC掉电状态是否需要清除记忆缓存
+         */
+        if ("false".equals(SystemPropertiesProxy.get(this, "sys.jancar.bootbyacc", "true"))) {
+            SPUtil.set(this, "SAVA_PATH", DEF_PATH);
+            SPUtil.set(this, "LOOPSTATUS", 0);
+            SPUtil.set(this, "VIDEO_URL", "");
+            SPUtil.set(this, "VIDEO_SEEK", 0);
+            SPUtil.set(this, "MUSIC_URL", "");
+            SPUtil.set(this, "MUSIC_SEEK", 0);
             currenPath = DEF_PATH;
+        } else {
+            currenPath = getSavePath();
+            if (!(new File(currenPath).exists())) {
+                currenPath = DEF_PATH;
+            }
         }
 
         iStorage.addListener(this);

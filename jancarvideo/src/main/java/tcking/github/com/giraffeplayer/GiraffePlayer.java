@@ -1211,4 +1211,8 @@ public class GiraffePlayer {
         onPlayStatusChangeLiseters.remove(onPlayStatusChangeLiseter);
     }
 
+    public int switchMode(){
+        return ijkVideoView.toggleAspectRatio();
+    }
+
 }

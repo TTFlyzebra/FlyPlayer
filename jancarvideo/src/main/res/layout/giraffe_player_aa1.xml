@@ -260,6 +260,15 @@
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/menu_play_mode"
+                android:layout_width="120px"
+                android:layout_height="match_parent"
+                android:layout_below="@id/rl_01"
+                android:layout_alignParentStart="true"
+                android:scaleType="center"
+                android:src="@drawable/media_video_mode1" />
+
+            <ImageView
                 android:id="@+id/menu_play_list"
                 android:layout_width="75px"
                 android:layout_height="75px"

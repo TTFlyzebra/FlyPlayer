@@ -41,6 +41,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import tcking.github.com.giraffeplayer.GiraffePlayer;
+import tcking.github.com.giraffeplayer.IRenderView;
 import tcking.github.com.giraffeplayer.IjkVideoView;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
@@ -50,7 +51,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
         GiraffePlayer.OnPlayStatusChangeLiseter,
         TouchEventRelativeLayout.OnTouchEventListener,
         IMediaEventListerner {
-    private ImageView play_fore, play_next, play_pause, leftMenu;
+    private ImageView play_fore, play_next, play_pause, leftMenu, play_mode;
     private TouchEventRelativeLayout leftLayout;
     private TouchEventRelativeLayout controlLayout;
     public int currenPos = 0;
@@ -255,6 +256,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
         play_pause = (ImageView) findViewById(R.id.ac_video_play_pause);
         play_next = (ImageView) findViewById(R.id.ac_video_play_next);
         leftMenu = (ImageView) findViewById(R.id.menu_play_list);
+        play_mode = (ImageView) findViewById(R.id.menu_play_mode);
         controlLayout = (TouchEventRelativeLayout) findViewById(R.id.app_video_bottom_box);
         tabView = (FlyTabView) findViewById(R.id.app_video_tabview);
         leftLayout = (TouchEventRelativeLayout) findViewById(R.id.play_ll01_playlist);
@@ -267,6 +269,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
         play_next.setOnClickListener(this);
         play_pause.setOnClickListener(this);
         leftMenu.setOnClickListener(this);
+        play_mode.setOnClickListener(this);
         controlLayout.setOnClickListener(this);
         controlLayout.setOnTouchEventListener(this);
         leftLayout.setOnTouchEventListener(this);
@@ -354,6 +357,28 @@ public class VideoActivity_AP1 extends BaseActivity implements
             case R.id.app_video_box:
             case R.id.video_view:
                 touchTime = 0;
+                break;
+            case R.id.menu_play_mode:
+                try {
+                    int mode = player.switchMode();
+                    switch (mode) {
+                        case IRenderView.AR_MATCH_PARENT:
+                            play_mode.setImageResource(R.drawable.media_video_mode2);
+                            break;
+                        case IRenderView.AR_16_9_FIT_PARENT:
+                            play_mode.setImageResource(R.drawable.media_video_mode3);
+                            break;
+                        case IRenderView.AR_4_3_FIT_PARENT:
+                            play_mode.setImageResource(R.drawable.media_video_mode4);
+                            break;
+                        case IRenderView.AR_ASPECT_FIT_PARENT:
+                        default:
+                            play_mode.setImageResource(R.drawable.media_video_mode1);
+                            break;
+                    }
+                } catch (Exception e) {
+                    FlyLog.e(e.toString());
+                }
                 break;
         }
     }
@@ -493,7 +518,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
                 mHandler.removeCallbacks(seekBarTask);
                 mHandler.post(seekBarTask);
                 mHandler.removeCallbacks(enableViewTask);
-                mHandler.postDelayed(enableViewTask,5000);
+                mHandler.postDelayed(enableViewTask, 5000);
                 break;
             case GiraffePlayer.STATUS_PAUSE:
                 player.savePathUrl(currenPath);
