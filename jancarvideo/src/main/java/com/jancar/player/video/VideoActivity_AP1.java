@@ -571,7 +571,10 @@ public class VideoActivity_AP1 extends BaseActivity implements
                 }
                 return true;
             case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
+                player.forward(0.10f);
+                return true;
             case KeyEvent.KEYCODE_MEDIA_REWIND:
+                player.forward(-0.10f);
                 return true;
             case KeyEvent.KEYCODE_MEDIA_STOP:
             case KeyEvent.KEYCODE_BACK:
