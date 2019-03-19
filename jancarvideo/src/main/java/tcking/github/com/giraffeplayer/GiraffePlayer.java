@@ -531,7 +531,6 @@ public class GiraffePlayer {
     }
 
     public void onDestroy() {
-        mHandler.removeCallbacksAndMessages(null);
         orientationEventListener.disable();
         handler.removeCallbacksAndMessages(null);
         ijkVideoView.stopPlayback();
@@ -807,14 +806,14 @@ public class GiraffePlayer {
     }
 
     public void start() {
-        if(ijkVideoView!=null) {
+        if (ijkVideoView != null) {
             ijkVideoView.start();
             statusChange(STATUS_PLAYING);
         }
     }
 
     public void pause() {
-        if(ijkVideoView!=null) {
+        if (ijkVideoView != null) {
             ijkVideoView.pause();
             statusChange(STATUS_PAUSE);
         }
@@ -840,7 +839,7 @@ public class GiraffePlayer {
                             SPUtil.set(activity, path + "VIDEO_URL", url);
                             SPUtil.set(activity, path + "VIDEO_SEEK", seek);
                             FlyLog.d("savePathUrl seek=%d,path=%s,url=%s", seek, path, url);
-                        }else{
+                        } else {
                             FlyLog.e("save failed! seek=%d,path=%s,url=%s", seek, path, url);
                         }
                     } catch (Exception e) {
@@ -848,7 +847,7 @@ public class GiraffePlayer {
                     }
                 }
             });
-        }else{
+        } else {
             FlyLog.e("save failed! seek=%d,path=%s,url=%s", seek, path, url);
         }
     }
@@ -988,8 +987,6 @@ public class GiraffePlayer {
     }
 
 
-    private Handler mHandler = new Handler(Looper.getMainLooper());
-
     public class PlayerGestureListener extends GestureDetector.SimpleOnGestureListener {
         private boolean firstTouch;
         private boolean volumeControl;
@@ -1040,18 +1037,13 @@ public class GiraffePlayer {
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (isShowing) {
-                        hide(false);
-                    } else {
-                        show(defaultTimeout);
-                    }
-                    activity.touchTime = 0;
-                    activity.showControlView(!activity.isShowControl);
-                }
-            },200);
+            if (isShowing) {
+                hide(false);
+            } else {
+                show(defaultTimeout);
+            }
+            activity.touchTime = 0;
+            activity.showControlView(!activity.isShowControl);
             return true;
         }
 
@@ -1060,8 +1052,7 @@ public class GiraffePlayer {
          */
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            mHandler.removeCallbacksAndMessages(null);
-            ijkVideoView.toggleAspectRatio();
+//            ijkVideoView.toggleAspectRatio();
             return true;
         }
 
@@ -1211,7 +1202,7 @@ public class GiraffePlayer {
         onPlayStatusChangeLiseters.remove(onPlayStatusChangeLiseter);
     }
 
-    public int switchMode(){
+    public int switchMode() {
         return ijkVideoView.toggleAspectRatio();
     }
 
