@@ -51,6 +51,8 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import static com.jancar.player.music.model.musicplayer.ILoopStatus.LOOP_RAND;
+
 public class BaseMusicActivity extends BaseActivity implements
         SeekBar.OnSeekBarChangeListener,
         IMusicPlayerListener,
@@ -449,7 +451,7 @@ public class BaseMusicActivity extends BaseActivity implements
             case MusicPlayer.LOOP_ONE:
                 ivLoop.setImageResource(R.drawable.media_loop_one);
                 break;
-            case MusicPlayer.LOOP_RAND:
+            case LOOP_RAND:
                 ivLoop.setImageResource(R.drawable.media_loop_rand);
                 break;
             case MusicPlayer.LOOP_SINGER:
@@ -613,6 +615,26 @@ public class BaseMusicActivity extends BaseActivity implements
     @Override
     public void pause() {
         musicPlayer.pause();
+    }
+
+    @Override
+    public void KEY_FF() {
+
+    }
+
+    @Override
+    public void KEY_FB() {
+
+    }
+
+    @Override
+    public void KEY_REPEAT() {
+        musicPlayer.switchLoopStatus();
+    }
+
+    @Override
+    public void KEY_SHUFFLE() {
+        musicPlayer.setLoopStatus(LOOP_RAND);
     }
 
     private class MyReceiver extends BroadcastReceiver {

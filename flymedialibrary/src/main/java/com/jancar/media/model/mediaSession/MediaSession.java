@@ -86,6 +86,50 @@ public class MediaSession implements IMediaSession {
                                         }
                                     }
                                 });
+                        case KEY_FF:
+                            if (keyAction == KEY_ACTION_UP)
+                                mHander.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        for (IMediaEventListerner listerner : iMediaEventListerners) {
+                                            listerner.KEY_FF();
+                                        }
+                                    }
+                                });
+                            break;
+                        case KEY_FB:
+                            if (keyAction == KEY_ACTION_UP)
+                                mHander.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        for (IMediaEventListerner listerner : iMediaEventListerners) {
+                                            listerner.KEY_FB();
+                                        }
+                                    }
+                                });
+                            break;
+                        case KEY_REPEAT:
+                            if (keyAction == KEY_ACTION_UP)
+                                mHander.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        for (IMediaEventListerner listerner : iMediaEventListerners) {
+                                            listerner.KEY_REPEAT();
+                                        }
+                                    }
+                                });
+                            break;
+                        case KEY_SHUFFLE:
+                            if (keyAction == KEY_ACTION_UP)
+                                mHander.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        for (IMediaEventListerner listerner : iMediaEventListerners) {
+                                            listerner.KEY_SHUFFLE();
+                                        }
+                                    }
+                                });
+                            break;
                         default:
                             bRet = false;
                             break;

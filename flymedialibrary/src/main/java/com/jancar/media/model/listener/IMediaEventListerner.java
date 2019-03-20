@@ -10,4 +10,12 @@ public interface IMediaEventListerner {
     void start();
 
     void pause();
+
+    void KEY_FF();
+
+    void KEY_FB();
+
+    void KEY_REPEAT();
+
+    void KEY_SHUFFLE();
 }

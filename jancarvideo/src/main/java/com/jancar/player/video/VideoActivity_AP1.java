@@ -330,6 +330,26 @@ public class VideoActivity_AP1 extends BaseActivity implements
         player.pause();
     }
 
+    @Override
+    public void KEY_FF() {
+        player.forward(0.10f);
+    }
+
+    @Override
+    public void KEY_FB() {
+        player.forward(-0.10f);
+    }
+
+    @Override
+    public void KEY_REPEAT() {
+
+    }
+
+    @Override
+    public void KEY_SHUFFLE() {
+
+    }
+
     private boolean setPause = false;
 
     @Override
