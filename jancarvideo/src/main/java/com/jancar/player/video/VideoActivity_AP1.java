@@ -350,6 +350,13 @@ public class VideoActivity_AP1 extends BaseActivity implements
 
     }
 
+    @Override
+    public void KEY_LIST() {
+        showControlView(true);
+        isShowLeftMenu = !isShowLeftMenu;
+        showLeftMenu(isShowLeftMenu);
+    }
+
     private boolean setPause = false;
 
     @Override

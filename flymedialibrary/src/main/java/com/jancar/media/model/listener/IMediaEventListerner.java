@@ -18,4 +18,6 @@ public interface IMediaEventListerner {
     void KEY_REPEAT();
 
     void KEY_SHUFFLE();
+
+    void KEY_LIST();
 }

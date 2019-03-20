@@ -130,6 +130,17 @@ public class MediaSession implements IMediaSession {
                                     }
                                 });
                             break;
+                        case KEY_LIST:
+                            if (keyAction == KEY_ACTION_UP)
+                                mHander.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        for (IMediaEventListerner listerner : iMediaEventListerners) {
+                                            listerner.KEY_LIST();
+                                        }
+                                    }
+                                });
+                            break;
                         default:
                             bRet = false;
                             break;

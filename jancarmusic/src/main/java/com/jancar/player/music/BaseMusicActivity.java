@@ -637,6 +637,11 @@ public class BaseMusicActivity extends BaseActivity implements
         musicPlayer.setLoopStatus(LOOP_RAND);
     }
 
+    @Override
+    public void KEY_LIST() {
+        showLeftMenu(!isShowLeftMenu);
+    }
+
     private class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
