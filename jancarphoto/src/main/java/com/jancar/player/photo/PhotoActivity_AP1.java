@@ -488,9 +488,9 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
 
     @Override
     protected void onStop() {
-        mHandler.postDelayed(playTask, playTime);
-        photoPlay.setImageResource(R.drawable.media_pause);
-        playStatu = STATU_PALY;
+        mHandler.removeCallbacks(playTask);
+        photoPlay.setImageResource(R.drawable.media_play);
+        playStatu = STATU_PAUSE;
         super.onStop();
     }
 }
