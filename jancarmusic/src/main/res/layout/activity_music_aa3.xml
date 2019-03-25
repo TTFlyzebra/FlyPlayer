@@ -5,8 +5,10 @@
     android:id="@+id/rela_music_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@drawable/focus_background"
     android:fitsSystemWindows="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".MusicActivity">
 
     <ImageView
@@ -21,6 +23,9 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/ac_music_control"
         android:layout_alignParentTop="true"
+        android:background="@drawable/focus_background"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:weightSum="1">
 
         <RelativeLayout
@@ -47,8 +52,8 @@
                 android:layout_marginStart="@dimen/music_iv01_margin_start"
                 android:layout_marginTop="@dimen/music_iv01_margin_top"
                 android:paddingStart="18px"
-                android:paddingEnd="16px"
                 android:paddingTop="16px"
+                android:paddingEnd="16px"
                 android:paddingBottom="18px"
                 android:src="@drawable/media_music_iv01">
 

@@ -3,12 +3,17 @@
     android:id="@+id/app_video_box"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000">
+    android:background="@drawable/focus_background"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <tcking.github.com.giraffeplayer.IjkVideoView
         android:id="@+id/video_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@drawable/focus_background"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
     <include
         layout="@layout/video_parkwarning"

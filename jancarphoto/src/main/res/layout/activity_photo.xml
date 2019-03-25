@@ -4,14 +4,19 @@
     android:id="@+id/ac_photo_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@drawable/focus_background"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
     android:layoutDirection="ltr"
     tools:context=".PhotoActivity_AP2">
 
     <com.jancar.media.view.PhotoViewPager
         android:id="@+id/ac_photo_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@drawable/focus_background"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
 
 
     <com.jancar.media.view.TouchEventRelativeLayout
@@ -46,12 +51,12 @@
                 android:src="@drawable/media_photo_zoomin" />
 
             <ImageView
-                android:layout_marginTop="1px"
                 android:id="@+id/ac_photo_rotate"
                 android:layout_width="60px"
-                android:padding="10px"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
+                android:layout_marginTop="1px"
+                android:padding="10px"
                 android:scaleType="fitCenter"
                 android:src="@drawable/media_photo_rotate" />
         </LinearLayout>
@@ -67,8 +72,8 @@
                 android:layout_width="70px"
                 android:layout_height="70px"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="50px"
                 android:layout_marginStart="50px"
+                android:layout_marginEnd="50px"
                 android:scaleType="fitCenter"
                 android:src="@drawable/media_fore" />
 
@@ -77,8 +82,8 @@
                 android:layout_width="70px"
                 android:layout_height="70px"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="50px"
                 android:layout_marginStart="50px"
+                android:layout_marginEnd="50px"
                 android:scaleType="fitCenter"
                 android:src="@drawable/media_play" />
 
@@ -87,8 +92,8 @@
                 android:layout_width="70px"
                 android:layout_height="70px"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="50px"
                 android:layout_marginStart="50px"
+                android:layout_marginEnd="50px"
                 android:scaleType="fitCenter"
                 android:src="@drawable/media_next" />
         </LinearLayout>
@@ -96,8 +101,8 @@
         <RelativeLayout
             android:layout_width="75px"
             android:layout_height="75px"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:gravity="center">
 
             <ImageView
@@ -115,10 +120,10 @@
         android:id="@+id/ac_photo_left_layout"
         android:layout_width="@dimen/photo_left_list_width"
         android:layout_height="@dimen/photo_left_list_height"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="@dimen/photo_bottom_menu_height"
+        android:layout_alignParentBottom="true"
         android:layout_marginEnd="@dimen/photo_left_list_margin_end"
+        android:layout_marginBottom="@dimen/photo_bottom_menu_height"
         android:orientation="vertical"
         android:visibility="invisible">
 

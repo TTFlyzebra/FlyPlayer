@@ -3,12 +3,17 @@
     android:id="@+id/app_video_box"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000">
+    android:background="@drawable/focus_background"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <tcking.github.com.giraffeplayer.IjkVideoView
         android:id="@+id/video_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@drawable/focus_background"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
     <include
         layout="@layout/video_parkwarning"
@@ -225,8 +230,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/rl_01"
-                android:layoutDirection="ltr"
-                android:gravity="center">
+                android:gravity="center"
+                android:layoutDirection="ltr">
 
                 <ImageView
                     android:id="@+id/ac_video_play_fore"
@@ -287,8 +292,8 @@
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="@dimen/video_left_list_margin_end"
             android:layout_marginBottom="@dimen/video_bottom_menu_height"
-            android:visibility="invisible"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="invisible">
 
             <View
                 android:layout_width="match_parent"
@@ -317,8 +322,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="180px"
-        android:orientation="vertical"
-        android:background="#7FFF0000">
+        android:background="#7FFF0000"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/video_info"

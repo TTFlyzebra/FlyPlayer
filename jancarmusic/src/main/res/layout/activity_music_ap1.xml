@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@drawable/focus_background"
     android:fitsSystemWindows="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".MusicActivity_AP1">
 
 
@@ -15,6 +17,9 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/ac_music_control"
         android:layout_alignParentTop="true"
+        android:background="@drawable/focus_background"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:weightSum="1">
 
         <RelativeLayout
@@ -162,8 +167,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="-10px"
-                android:text="00:00"
                 android:gravity="end"
+                android:text="00:00"
                 android:textColor="@android:color/white"
                 android:textSize="20px" />
 
@@ -183,8 +188,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="-10px"
-                android:text="00:00"
                 android:gravity="start"
+                android:text="00:00"
                 android:textColor="@android:color/white"
                 android:textSize="20px" />
 
@@ -194,8 +199,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/rl_01"
-            android:layoutDirection="ltr"
-            android:gravity="center">
+            android:gravity="center"
+            android:layoutDirection="ltr">
 
             <ImageView
                 android:id="@+id/ac_music_play_fore"
@@ -231,8 +236,8 @@
         <RelativeLayout
             android:layout_width="75px"
             android:layout_height="75px"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:gravity="center">
 
             <ImageView
@@ -249,10 +254,10 @@
         android:id="@+id/ac_music_left_layout"
         android:layout_width="@dimen/music_left_list_width"
         android:layout_height="@dimen/music_left_list_height"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="@dimen/music_bottom_menu_height"
+        android:layout_alignParentBottom="true"
         android:layout_marginEnd="@dimen/music_left_list_margin_end"
+        android:layout_marginBottom="@dimen/music_bottom_menu_height"
         android:orientation="vertical">
 
         <ImageView
