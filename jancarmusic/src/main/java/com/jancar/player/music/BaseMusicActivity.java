@@ -224,9 +224,9 @@ public class BaseMusicActivity extends BaseActivity implements
         lrcView = (LrcView) findViewById(R.id.ac_music_lrcview);
         llContent = (LinearLayout) findViewById(R.id.ac_music_content);
 
-        tvSingle.enableMarquee(true);
-        tvArtist.enableMarquee(true);
-        tvAlbum.enableMarquee(true);
+        tvSingle.enableMarquee(false);
+        tvArtist.enableMarquee(false);
+        tvAlbum.enableMarquee(false);
 
         playFore.setOnClickListener(this);
         playNext.setOnClickListener(this);
