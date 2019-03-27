@@ -140,6 +140,8 @@ public class VideoActivity_AP1 extends BaseActivity implements
         mediaSession = new MediaSession(this);
 
         playIntent(getIntent());
+
+        requestAudioFocus();
     }
 
     @Override
@@ -159,9 +161,6 @@ public class VideoActivity_AP1 extends BaseActivity implements
         super.onStart();
         player.playSavePath(currenPath);
         mediaSession.init();
-
-        requestAudioFocus();
-
         if (setPause) {
             final int resetVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
             mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
@@ -204,7 +203,6 @@ public class VideoActivity_AP1 extends BaseActivity implements
         mediaSession.removeEventListener(this);
         mediaSession.release();
         FlyLog.d("onStop");
-        abandonAudioFocus();
         player.stop();
         mHandler.removeCallbacks(seekBarTask);
         super.onStop();
@@ -212,6 +210,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
 
     @Override
     protected void onDestroy() {
+        abandonAudioFocus();
         mHandler.removeCallbacksAndMessages(null);
         player.removeStatusChangeLiseter(this);
         player.onDestroy();
