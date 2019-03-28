@@ -5,7 +5,7 @@
     android:id="@+id/rela_music_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/focus_background"
+    android:background="@drawable/focus_background1"
     android:fitsSystemWindows="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/ac_music_control"
         android:layout_alignParentTop="true"
-        android:background="@drawable/focus_background"
+        android:background="@drawable/focus_background2"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:weightSum="1">
@@ -198,7 +198,8 @@
                 android:layout_centerVertical="true"
                 android:progressDrawable="@drawable/media_seekbar_style"
                 android:splitTrack="false"
-                android:thumb="@drawable/media_seekbar_thumb" />
+                android:thumb="@drawable/media_seekbar_thumb"
+                android:thumbOffset="5px" />
 
             <TextView
                 android:id="@+id/ac_music_endTime"

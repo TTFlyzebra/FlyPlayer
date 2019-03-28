@@ -20,7 +20,7 @@ public class MusicActivity_AP4 extends MusicActivity_AP1 {
 
     @Override
     public void setContentView(int layoutResID) {
-        super.setContentView(R.layout.activity_music_aa3);
+        super.setContentView(R.layout.activity_music_ap4);
     }
 
     @Override

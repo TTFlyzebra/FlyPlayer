@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/focus_background"
+    android:background="@drawable/focus_background1"
     android:fitsSystemWindows="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/ac_music_control"
         android:layout_alignParentTop="true"
-        android:background="@drawable/focus_background"
+        android:background="@drawable/focus_background2"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:weightSum="1">

@@ -5,10 +5,10 @@
     android:id="@+id/rela_music_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/focus_background"
+    android:background="@drawable/focus_background1"
+    android:fitsSystemWindows="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:fitsSystemWindows="true"
     tools:context=".MusicActivity">
 
     <ImageView
@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/ac_music_control"
         android:layout_alignParentTop="true"
-        android:background="@drawable/focus_background"
+        android:background="@drawable/focus_background2"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:weightSum="1">
@@ -31,34 +31,15 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.5">
+            android:layout_marginStart="50px"
+            android:layout_weight="0.5"
+            android:gravity="center">
 
-            <ImageView
-                android:layout_width="248px"
-                android:layout_height="248px"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="@dimen/music_iv01_margin_start"
-                android:layout_marginTop="@dimen/music_iv01_margin_top"
-                android:scaleType="fitXY"
-                android:src="@drawable/media_music_iv01" />
-
-            <ImageView
-                android:id="@+id/ac_music_iv_image"
-                android:layout_width="248px"
-                android:layout_height="248px"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:paddingStart="24px"
-                android:paddingEnd="25px"
-                android:paddingTop="25px"
-                android:paddingBottom="25px"
-                android:layout_marginStart="@dimen/music_iv01_margin_start"
-                android:layout_marginTop="@dimen/music_iv01_margin_top"
-                android:scaleType="fitXY"/>
-
+            <com.yarolegovich.discretescrollview.DiscreteScrollView
+                android:id="@+id/ac_music_viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </RelativeLayout>
-
 
         <LinearLayout
             android:layout_width="0dp"
@@ -187,7 +168,8 @@
                 android:layout_centerVertical="true"
                 android:progressDrawable="@drawable/media_seekbar_style"
                 android:splitTrack="false"
-                android:thumb="@drawable/media_seekbar_thumb" />
+                android:thumb="@drawable/media_seekbar_thumb"
+                android:thumbOffset="5px" />
 
             <TextView
                 android:id="@+id/ac_music_endTime"
