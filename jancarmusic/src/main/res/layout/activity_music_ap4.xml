@@ -159,7 +159,7 @@
 
     <com.jancar.media.view.lrcview.LrcView
         android:id="@+id/ac_music_lrcview"
-        android:layout_width="580px"
+        android:layout_width="@dimen/music_lrcview_width"
         android:layout_height="56px"
         android:layout_above="@+id/ac_music_control"
         app:lrcTextSize="22px" />
@@ -228,8 +228,8 @@
                 android:layout_width="70px"
                 android:layout_height="70px"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="50px"
-                android:layout_marginEnd="50px"
+                android:layout_marginStart="@dimen/play_button_magrin"
+                android:layout_marginEnd="@dimen/play_button_magrin"
                 android:scaleType="fitCenter"
                 android:src="@drawable/media_fore" />
 
@@ -238,8 +238,8 @@
                 android:layout_width="70px"
                 android:layout_height="70px"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="50px"
-                android:layout_marginEnd="50px"
+                android:layout_marginStart="@dimen/play_button_magrin"
+                android:layout_marginEnd="@dimen/play_button_magrin"
                 android:scaleType="fitCenter"
                 android:src="@drawable/media_play" />
 
@@ -248,8 +248,8 @@
                 android:layout_width="70px"
                 android:layout_height="70px"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="50px"
-                android:layout_marginEnd="50px"
+                android:layout_marginStart="@dimen/play_button_magrin"
+                android:layout_marginEnd="@dimen/play_button_magrin"
                 android:scaleType="fitCenter"
                 android:src="@drawable/media_next" />
         </LinearLayout>

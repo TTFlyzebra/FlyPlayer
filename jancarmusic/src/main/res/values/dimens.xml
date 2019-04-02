@@ -22,4 +22,6 @@
     <dimen name="music_iv02_margin_top">128px</dimen>
 
     <dimen name="music_lrcview_width">580px</dimen>
+
+    <dimen name="play_button_magrin">50px</dimen>
 </resources>

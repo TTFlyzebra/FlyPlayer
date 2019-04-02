@@ -15,11 +15,13 @@
 
     <dimen name="music_iv01_margin_start">220px</dimen>
 
-    <dimen name="music_iv01_margin_top">35px</dimen>
+    <dimen name="music_iv01_margin_top">10px</dimen>
 
     <dimen name="music_iv02_margin_start">270px</dimen>
 
-    <dimen name="music_iv02_margin_top">85px</dimen>
+    <dimen name="music_iv02_margin_top">60px</dimen>
 
     <dimen name="music_lrcview_width">690px</dimen>
+
+    <dimen name="play_button_magrin">50px</dimen>
 </resources>

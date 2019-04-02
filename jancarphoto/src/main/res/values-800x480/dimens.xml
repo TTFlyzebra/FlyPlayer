@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--屏幕宽度-->
-    <dimen name="photo_screen_width">1280px</dimen>
+    <dimen name="photo_screen_width">800px</dimen>
     <!--屏幕高度-->
-    <dimen name="photo_screen_height">480px</dimen>
+    <dimen name="photo_screen_height">600px</dimen>
     <!--右边弹出列表宽度-->
-    <dimen name="photo_left_list_width">640px</dimen>
+    <dimen name="photo_left_list_width">500px</dimen>
     <!--右边弹出列表宽度-->
-    <dimen name="photo_left_list_margin_end">-639px</dimen>
+    <dimen name="photo_left_list_margin_end">-499px</dimen>
     <!--右边弹出列表高度-->
     <dimen name="photo_left_list_height">303px</dimen>
     <!--底部菜单高度-->
     <dimen name="photo_bottom_menu_height">118px</dimen>
 
-    <dimen name="play_button_magrin">50px</dimen>
+    <dimen name="play_button_magrin">30px</dimen>
 </resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--屏幕宽度-->
-    <dimen name="music_screen_width">1280px</dimen>
+    <dimen name="music_screen_width">800px</dimen>
     <!--屏幕高度-->
     <dimen name="music_screen_height">480px</dimen>
     <!--右边弹出列表宽度-->
@@ -15,11 +15,13 @@
 
     <dimen name="music_iv01_margin_start">100px</dimen>
 
-    <dimen name="music_iv01_margin_top">25px</dimen>
+    <dimen name="music_iv01_margin_top">10px</dimen>
 
     <dimen name="music_iv02_margin_start">150px</dimen>
 
-    <dimen name="music_iv02_margin_top">75px</dimen>
+    <dimen name="music_iv02_margin_top">60px</dimen>
 
     <dimen name="music_lrcview_width">450px</dimen>
+
+    <dimen name="play_button_magrin">30px</dimen>
 </resources>
