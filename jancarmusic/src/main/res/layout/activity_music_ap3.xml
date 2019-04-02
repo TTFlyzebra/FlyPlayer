@@ -149,7 +149,7 @@
     <com.jancar.media.view.lrcview.LrcView
         android:id="@+id/ac_music_lrcview"
         android:layout_width="@dimen/music_lrcview_width"
-        android:layout_height="56px"
+        android:layout_height="40px"
         android:layout_above="@+id/ac_music_control"
         app:lrcTextSize="22px" />
 
