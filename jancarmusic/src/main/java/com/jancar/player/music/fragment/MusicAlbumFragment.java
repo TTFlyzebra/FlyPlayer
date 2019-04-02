@@ -13,6 +13,8 @@ import com.jancar.player.music.adpater.MusicAlbumAdapter;
 import com.jancar.player.music.model.musicplayer.MusicPlayer;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -116,6 +118,7 @@ public class MusicAlbumFragment extends MusicFragment implements
             if (musicUrlList != null && getActivity() != null && activity != null) {
                 albumGroupList.clear();
                 albumItemList.clear();
+                adapter.notifyDataSetChanged();
                 for (int i = 0; i < musicUrlList.size(); i++) {
                     String album = musicUrlList.get(i).album;
                     if (ablumHashMap.get(album) == null) {
@@ -125,17 +128,17 @@ public class MusicAlbumFragment extends MusicFragment implements
                 }
                 albumGroupList.addAll(ablumHashMap.keySet());
 
-//                Collections.sort(groupList, new Comparator<String>() {
-//                    public int compare(String p1, String p2) {
-//                        if (p1.startsWith(getString(R.string.no_album_start))) {
-//                            return 1;
-//                        } else if (p2.startsWith(getString(R.string.no_album_start))) {
-//                            return -1;
-//                        } else {
-//                            return p1.compareToIgnoreCase(p2);
-//                        }
-//                    }
-//                });
+                Collections.sort(albumGroupList, new Comparator<String>() {
+                    public int compare(String p1, String p2) {
+                        if (p1.startsWith(getString(R.string.no_album_start))) {
+                            return 1;
+                        } else if (p2.startsWith(getString(R.string.no_album_start))) {
+                            return -1;
+                        } else {
+                            return p1.compareToIgnoreCase(p2);
+                        }
+                    }
+                });
 
                 for (String key : albumGroupList) {
                     albumItemList.add(ablumHashMap.get(key));

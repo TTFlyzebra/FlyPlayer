@@ -14,6 +14,8 @@ import com.jancar.player.music.model.musicplayer.MusicPlayer;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -109,6 +111,7 @@ public class MusicFloderFragment extends MusicFragment implements
             if (musicUrlList != null && getActivity() != null && activity != null) {
                 groupList.clear();
                 itemList.clear();
+                adapter.notifyDataSetChanged();
                 for (int i = 0; i < musicUrlList.size(); i++) {
                     String url = musicUrlList.get(i).url;
                     int last = url.lastIndexOf(File.separator);
@@ -120,11 +123,11 @@ public class MusicFloderFragment extends MusicFragment implements
                 }
                 groupList.addAll(mHashMap.keySet());
 
-//                Collections.sort(groupList, new Comparator<String>() {
-//                    public int compare(String p1, String p2) {
-//                        return p1.compareToIgnoreCase(p2);
-//                    }
-//                });
+                Collections.sort(groupList, new Comparator<String>() {
+                    public int compare(String p1, String p2) {
+                        return p1.compareToIgnoreCase(p2);
+                    }
+                });
 
                 for (String key : groupList) {
                     itemList.add(mHashMap.get(key));

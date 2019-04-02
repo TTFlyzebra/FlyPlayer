@@ -13,6 +13,8 @@ import com.jancar.player.music.adpater.MusicArtistAdapter;
 import com.jancar.player.music.model.musicplayer.MusicPlayer;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,19 +124,20 @@ public class MusicArtistFragment extends MusicFragment implements
                     mHashMap.get(artist).add(musicUrlList.get(i).url);
                 }
                 groupList.clear();
-                groupList.addAll(mHashMap.keySet());
-//                Collections.sort(groupList, new Comparator<String>() {
-//                    public int compare(String p1, String p2) {
-//                        if (p1.startsWith(getString(R.string.no_album_start))) {
-//                            return 1;
-//                        } else if (p2.startsWith(getString(R.string.no_album_start))) {
-//                            return -1;
-//                        } else {
-//                            return p1.compareToIgnoreCase(p2);
-//                        }
-//                    }
-//                });
                 itemList.clear();
+                adapter.notifyDataSetChanged();
+                groupList.addAll(mHashMap.keySet());
+                Collections.sort(groupList, new Comparator<String>() {
+                    public int compare(String p1, String p2) {
+                        if (p1.startsWith(getString(R.string.no_album_start))) {
+                            return 1;
+                        } else if (p2.startsWith(getString(R.string.no_album_start))) {
+                            return -1;
+                        } else {
+                            return p1.compareToIgnoreCase(p2);
+                        }
+                    }
+                });
                 for (String key : groupList) {
                     itemList.add(mHashMap.get(key));
                 }

@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:divider="@color/divider"
     android:dividerHeight="1px"
+    android:fastScrollEnabled="false"
+    android:scrollbars="none"
     android:childDivider="@color/child_divider">
 
 </ExpandableListView>

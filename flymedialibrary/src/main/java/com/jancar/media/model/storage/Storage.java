@@ -1,6 +1,5 @@
 package com.jancar.media.model.storage;
 
-import android.annotation.NonNull;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -88,7 +87,7 @@ public class Storage implements IStorage {
     }
 
     @Override
-    public String getStorageByUrl(@NonNull String url) {
+    public String getStorageByUrl(String url) {
         refreshStorage();
         for(StorageInfo storageInfo:mStorageList){
             if(url.contains(storageInfo.mPath)){
