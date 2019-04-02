@@ -182,23 +182,23 @@
 
             <TextView
                 android:id="@+id/ac_music_currentTime"
-                android:layout_width="90px"
+                android:layout_width="100px"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:gravity="end"
-                android:paddingEnd="10px"
+                android:paddingEnd="5px"
                 android:textColor="@android:color/white"
                 android:textSize="20px" />
 
             <TextView
                 android:id="@+id/ac_music_endTime"
-                android:layout_width="90px"
+                android:layout_width="100px"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:gravity="start"
-                android:paddingStart="10px"
+                android:paddingStart="5px"
                 android:textColor="@android:color/white"
                 android:textSize="20px" />
 
@@ -211,7 +211,7 @@
                 android:layout_toEndOf="@id/ac_music_currentTime"
                 android:progressDrawable="@drawable/media_seekbar_style"
                 android:splitTrack="false"
-                android:thumb="@drawable/media_seekbar_thumb" />
+                android:thumb="@drawable/media_seekbar_thumb"/>
 
 
         </RelativeLayout>
