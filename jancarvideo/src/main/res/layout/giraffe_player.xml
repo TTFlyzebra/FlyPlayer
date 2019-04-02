@@ -186,47 +186,46 @@
             android:padding="8dp"
             android:visibility="visible">
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/rl_01"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30px"
                 android:layout_alignParentTop="true"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/app_video_currentTime"
-                    android:layout_width="78px"
+                    android:layout_width="100px"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="-10px"
-                    android:gravity="right"
-                    android:text="00:00"
+                    android:layout_marginEnd="10px"
+                    android:gravity="end"
+                    android:textColor="@android:color/white"
+                    android:textSize="20px" />
+
+                <TextView
+                    android:id="@+id/app_video_endTime"
+                    android:layout_width="100px"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10px"
+                    android:gravity="start"
                     android:textColor="@android:color/white"
                     android:textSize="20px" />
 
                 <SeekBar
                     android:id="@+id/app_video_seekBar"
-                    android:layout_width="868px"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/app_video_endTime"
+                    android:layout_toEndOf="@id/app_video_currentTime"
                     android:progressDrawable="@drawable/media_seekbar_style"
                     android:splitTrack="false"
-                    android:thumb="@drawable/media_seekbar_thumb"
-                    android:thumbOffset="5px" />
-
-                <TextView
-                    android:id="@+id/app_video_endTime"
-                    android:layout_width="78px"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="-10px"
-                    android:gravity="left"
-                    android:text="00:00"
-                    android:textColor="@android:color/white"
-                    android:textSize="20px" />
-
-            </LinearLayout>
+                    android:thumb="@drawable/media_seekbar_thumb" />
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

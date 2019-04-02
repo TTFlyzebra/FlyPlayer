@@ -143,46 +143,48 @@
         android:padding="8dp"
         android:visibility="visible">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/rl_01"
             android:layout_width="match_parent"
-            android:layout_height="30px"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/ac_music_currentTime"
-                android:layout_width="78px"
-                android:layout_height="match_parent"
+                android:layout_width="90px"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:gravity="end"
-                android:text="00:00"
+                android:paddingEnd="10px"
+                android:textColor="@android:color/white"
+                android:textSize="20px" />
+
+            <TextView
+                android:id="@+id/ac_music_endTime"
+                android:layout_width="90px"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:gravity="start"
+                android:paddingStart="10px"
                 android:textColor="@android:color/white"
                 android:textSize="20px" />
 
             <SeekBar
                 android:id="@+id/ac_music_seekBar"
-                android:layout_width="868px"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/ac_music_endTime"
+                android:layout_toEndOf="@id/ac_music_currentTime"
                 android:progressDrawable="@drawable/media_seekbar_style"
                 android:splitTrack="false"
-                android:thumb="@drawable/media_seekbar_thumb"
-                android:thumbOffset="5px" />
+                android:thumb="@drawable/media_seekbar_thumb" />
 
-            <TextView
-                android:id="@+id/ac_music_endTime"
-                android:layout_width="78px"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="5px"
-                android:gravity="start"
-                android:text="00:00"
-                android:textColor="@android:color/white"
-                android:textSize="20px" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
