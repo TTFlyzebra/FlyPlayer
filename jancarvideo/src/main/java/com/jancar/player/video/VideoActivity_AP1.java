@@ -212,7 +212,6 @@ public class VideoActivity_AP1 extends BaseActivity implements
     protected void onDestroy() {
         abandonAudioFocus();
         mHandler.removeCallbacksAndMessages(null);
-        player.resetMode();
         player.removeStatusChangeLiseter(this);
         player.onDestroy();
         try {
