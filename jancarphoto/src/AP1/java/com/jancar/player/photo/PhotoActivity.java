@@ -1,4 +1,4 @@
 package com.jancar.player.photo;
 
-public class PhotoActivity extends PhotoActivity_AP1 {
+public class PhotoActivity extends PhotoActivity_AP2 {
 }

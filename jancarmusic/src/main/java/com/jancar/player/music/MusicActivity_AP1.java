@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import com.jancar.media.view.CircleImageView;
 import com.jancar.player.music.model.musicplayer.MusicPlayer;
 
-public class MusicActivity_AP1 extends BaseMusicActivity{
+public class MusicActivity_AP1 extends BaseMusicActivity1{
     private CircleImageView ivImage;
 
     @Override
