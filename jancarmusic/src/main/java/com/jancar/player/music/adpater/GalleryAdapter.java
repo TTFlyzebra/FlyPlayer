@@ -14,10 +14,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.jancar.media.data.Music;
+import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.module.DoubleBitmapCache;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.player.music.R;
-import com.jancar.player.music.model.musicplayer.MusicPlayer;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
 import com.yarolegovich.discretescrollview.DiscreteScrollView;

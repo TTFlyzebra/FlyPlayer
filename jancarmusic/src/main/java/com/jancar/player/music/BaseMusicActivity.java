@@ -24,8 +24,11 @@ import com.jancar.media.base.BaseActivity;
 import com.jancar.media.data.Music;
 import com.jancar.media.data.StorageInfo;
 import com.jancar.media.model.listener.IMediaEventListerner;
+import com.jancar.media.model.listener.IMusicPlayerListener;
 import com.jancar.media.model.mediaSession.IMediaSession;
 import com.jancar.media.model.mediaSession.MediaSession;
+import com.jancar.media.model.musicplayer.IMusicPlayer;
+import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.model.storage.Storage;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.RtlTools;
@@ -37,9 +40,6 @@ import com.jancar.media.view.FlyTabView;
 import com.jancar.media.view.MarqueeTextView;
 import com.jancar.media.view.TouchEventRelativeLayout;
 import com.jancar.media.view.lrcview.LrcView;
-import com.jancar.player.music.model.listener.IMusicPlayerListener;
-import com.jancar.player.music.model.musicplayer.IMusicPlayer;
-import com.jancar.player.music.model.musicplayer.MusicPlayer;
 import com.jancar.player.music.service.MusicService;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
@@ -51,7 +51,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import static com.jancar.player.music.model.musicplayer.ILoopStatus.LOOP_RAND;
+import static com.jancar.media.model.musicplayer.ILoopStatus.LOOP_RAND;
 
 public class BaseMusicActivity extends BaseActivity implements
         SeekBar.OnSeekBarChangeListener,

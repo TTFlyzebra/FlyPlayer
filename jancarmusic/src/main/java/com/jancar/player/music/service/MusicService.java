@@ -12,12 +12,12 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.widget.RemoteViews;
 
+import com.jancar.media.model.listener.IMusicPlayerListener;
+import com.jancar.media.model.musicplayer.IMusicPlayer;
+import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.player.music.MusicActivity_AP1;
 import com.jancar.player.music.R;
-import com.jancar.player.music.model.listener.IMusicPlayerListener;
-import com.jancar.player.music.model.musicplayer.IMusicPlayer;
-import com.jancar.player.music.model.musicplayer.MusicPlayer;
 
 
 public class MusicService extends Service implements IMusicPlayerListener {

@@ -1,4 +1,4 @@
-package com.jancar.player.music.model.listener;
+package com.jancar.media.model.listener;
 
 public interface IMusicPlayerListener {
     void playStatusChange(int statu);

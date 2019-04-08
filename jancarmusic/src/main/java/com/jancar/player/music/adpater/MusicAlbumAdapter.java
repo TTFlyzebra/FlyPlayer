@@ -8,11 +8,11 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.AnimationImageView;
 import com.jancar.media.view.MarqueeTextView;
 import com.jancar.player.music.R;
-import com.jancar.player.music.model.musicplayer.MusicPlayer;
 
 import java.util.List;
 

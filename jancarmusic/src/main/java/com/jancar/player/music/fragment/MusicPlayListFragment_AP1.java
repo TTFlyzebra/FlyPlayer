@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jancar.media.data.Music;
+import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.module.RecycleViewDivider;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.player.music.MusicActivity_AP1;
 import com.jancar.player.music.R;
 import com.jancar.player.music.adpater.MusicPlayListAdapter;
-import com.jancar.player.music.model.musicplayer.MusicPlayer;
 
 import java.util.List;
 

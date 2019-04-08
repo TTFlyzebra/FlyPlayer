@@ -3,7 +3,7 @@ package com.jancar.player.music;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
-import com.jancar.player.music.model.musicplayer.MusicPlayer;
+import com.jancar.media.model.musicplayer.MusicPlayer;
 
 public class MusicActivity_AP3 extends BaseMusicActivity1 {
     private ImageView ivImage;

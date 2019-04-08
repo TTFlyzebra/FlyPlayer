@@ -4,10 +4,10 @@ import android.os.Bundle;
 
 import com.jancar.media.base.BaseFragment;
 import com.jancar.media.data.Music;
+import com.jancar.media.model.listener.IMusicPlayerListener;
+import com.jancar.media.model.musicplayer.IMusicPlayer;
+import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.player.music.BaseMusicActivity;
-import com.jancar.player.music.model.listener.IMusicPlayerListener;
-import com.jancar.player.music.model.musicplayer.IMusicPlayer;
-import com.jancar.player.music.model.musicplayer.MusicPlayer;
 
 import java.util.List;
 

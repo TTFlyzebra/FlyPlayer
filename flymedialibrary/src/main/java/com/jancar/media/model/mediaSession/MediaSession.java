@@ -86,6 +86,7 @@ public class MediaSession implements IMediaSession {
                                         }
                                     }
                                 });
+                            break;
                         case KEY_FF:
                             if (keyAction == KEY_ACTION_UP)
                                 mHander.post(new Runnable() {

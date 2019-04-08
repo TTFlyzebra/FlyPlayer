@@ -1,9 +1,9 @@
-package com.jancar.player.music.model.musicplayer;
+package com.jancar.media.model.musicplayer;
 
 import android.content.Context;
 
 import com.jancar.media.data.Music;
-import com.jancar.player.music.model.listener.IMusicPlayerListener;
+import com.jancar.media.model.listener.IMusicPlayerListener;
 
 import java.util.List;
 

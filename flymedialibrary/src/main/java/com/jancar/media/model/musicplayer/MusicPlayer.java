@@ -1,4 +1,4 @@
-package com.jancar.player.music.model.musicplayer;
+package com.jancar.media.model.musicplayer;
 
 import android.content.Context;
 import android.media.MediaPlayer;
@@ -8,10 +8,10 @@ import android.os.Looper;
 import android.text.TextUtils;
 
 import com.jancar.media.data.Music;
+import com.jancar.media.model.listener.IMusicPlayerListener;
 import com.jancar.media.model.storage.Storage;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.SPUtil;
-import com.jancar.player.music.model.listener.IMusicPlayerListener;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.jancar.player.music.model.musicplayer;
+package com.jancar.media.model.musicplayer;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

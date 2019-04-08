@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import com.jancar.media.data.Music;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.player.music.adpater.GalleryAdapter;
-import com.jancar.player.music.model.musicplayer.MusicPlayer;
+import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.yarolegovich.discretescrollview.DSVOrientation;
 import com.yarolegovich.discretescrollview.DiscreteScrollView;
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer;

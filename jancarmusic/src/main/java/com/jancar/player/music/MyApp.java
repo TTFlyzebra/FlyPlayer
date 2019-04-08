@@ -5,9 +5,9 @@ import android.content.Context;
 import android.view.ViewConfiguration;
 
 import com.jancar.media.model.mediascan.MediaScan;
+import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.model.storage.Storage;
 import com.jancar.media.utils.FlyLog;
-import com.jancar.player.music.model.musicplayer.MusicPlayer;
 import com.squareup.leakcanary.LeakCanary;
 
 import java.lang.reflect.Field;
@@ -21,6 +21,7 @@ public class MyApp extends  Application{
         MediaScan.getInstance().init(getApplicationContext());
         Storage.getInstance().init(getApplicationContext());
         MusicPlayer.getInstance().init(getApplicationContext());
+
         /**
          * 设置Marquee不显示省略号
          */
