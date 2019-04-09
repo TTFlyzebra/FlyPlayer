@@ -176,6 +176,11 @@ public class MediaSession implements IMediaSession {
     }
 
     @Override
+    public void notifyPlayId(int current, int total) {
+        jacMediaSession.notifyPlayId(current,total);
+    }
+
+    @Override
     public void notifyProgress(int seekBarPos, int sumTime) {
 //        FlyLog.d("notifyProgress sumTime=%d,seekBarPos=%d", seekBarPos, sumTime);
         jacMediaSession.notifyProgress(seekBarPos, sumTime);

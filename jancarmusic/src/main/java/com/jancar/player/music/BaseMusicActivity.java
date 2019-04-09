@@ -299,6 +299,11 @@ public class BaseMusicActivity extends BaseActivity implements
             musicList.addAll(musicUrlList);
             musicPlayer.setPlayUrls(musicList);
         }
+        try {
+            mediaSession.notifyPlayId(Math.max(0, musicPlayer.getPlayPos()), musicList.size());
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
         super.musicUrlList(musicUrlList);
     }
 
@@ -532,6 +537,7 @@ public class BaseMusicActivity extends BaseActivity implements
                             lrcView.loadLrc(new File(lrcPath));
                         }
                         lrcView.setVisibility(View.VISIBLE);
+                        mediaSession.notifyPlayId(Math.max(0, musicPlayer.getPlayPos()), musicList.size());
                     } catch (Exception e) {
                         FlyLog.e(e.toString());
                     }
