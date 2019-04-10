@@ -115,7 +115,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
         }
     };
 
-    private IMediaSession mediaSession;
+    public IMediaSession mediaSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -508,6 +508,11 @@ public class VideoActivity_AP1 extends BaseActivity implements
                 player.play(videoList.get(0).url);
             }
         }
+        try {
+            mediaSession.notifyPlayId(Math.max(0, currenPos), videoList.size());
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
         super.videoUrlList(videoUrlList);
     }
 
@@ -562,6 +567,11 @@ public class VideoActivity_AP1 extends BaseActivity implements
                 play_pause.setImageResource(player.isPlaying() ? R.drawable.media_pause : R.drawable.media_play);
             }
         }, 100);
+        try {
+            mediaSession.notifyPlayId(Math.max(0, currenPos), videoList.size());
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
     }
 
     private void setCurrentPos() {
