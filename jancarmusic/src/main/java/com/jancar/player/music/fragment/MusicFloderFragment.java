@@ -1,6 +1,7 @@
 package com.jancar.player.music.fragment;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,7 +126,13 @@ public class MusicFloderFragment extends MusicFragment implements
 
                 Collections.sort(groupList, new Comparator<String>() {
                     public int compare(String p1, String p2) {
-                        return p1.compareToIgnoreCase(p2);
+                        if (TextUtils.isEmpty(p1)) {
+                            return 1;
+                        } else if (TextUtils.isEmpty(p2)) {
+                            return -1;
+                        } else {
+                            return p1.compareToIgnoreCase(p2);
+                        }
                     }
                 });
 

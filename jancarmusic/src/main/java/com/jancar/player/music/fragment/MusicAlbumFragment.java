@@ -1,6 +1,7 @@
 package com.jancar.player.music.fragment;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,9 +131,9 @@ public class MusicAlbumFragment extends MusicFragment implements
 
                 Collections.sort(albumGroupList, new Comparator<String>() {
                     public int compare(String p1, String p2) {
-                        if (p1.startsWith(getString(R.string.no_album_start))) {
+                        if (TextUtils.isEmpty(p1) || p1.startsWith(getString(R.string.no_album_start))) {
                             return 1;
-                        } else if (p2.startsWith(getString(R.string.no_album_start))) {
+                        } else if (TextUtils.isEmpty(p2) || p2.startsWith(getString(R.string.no_album_start))) {
                             return -1;
                         } else {
                             return p1.compareToIgnoreCase(p2);
