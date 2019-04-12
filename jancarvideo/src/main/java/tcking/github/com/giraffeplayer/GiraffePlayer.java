@@ -759,7 +759,7 @@ public class GiraffePlayer {
         $.id(R.id.app_video_currentTime).text(generateTime(position));
         $.id(R.id.app_video_endTime).text(generateTime(this.duration));
         try {
-            activity.mediaSession.notifyProgress((int) duration, (int) position);
+            activity.mediaSession.notifyProgress((int) position,(int) duration);
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }

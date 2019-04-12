@@ -14,7 +14,7 @@ public interface IMediaSession {
 
     void notifyPlayId(int current,int total);
 
-    void notifyProgress(int sumTime, int seekBarPos);
+    void notifyProgress(int position, int duration);
 
     void notifyPlayUri(String title);
 
