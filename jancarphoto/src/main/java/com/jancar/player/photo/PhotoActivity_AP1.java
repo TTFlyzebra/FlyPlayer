@@ -295,7 +295,7 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
 
     private boolean isShowLeftMenu = false;
 
-    private void showLeftMenu(boolean flag) {
+    private void showLeftMenu(final boolean flag) {
         leftLayout.setVisibility(View.VISIBLE);
         boolean isRtl = RtlTools.isLayoutRtl(leftLayout);
         leftLayout.animate()
@@ -311,8 +311,7 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        if (leftLayout.getX() > (screen_width - photo_left_list_width)
-                                || leftLayout.getX() < (-photo_left_list_width)) {
+                        if (!flag) {
                             leftLayout.setVisibility(View.INVISIBLE);
                         } else {
                             leftLayout.setVisibility(View.VISIBLE);
