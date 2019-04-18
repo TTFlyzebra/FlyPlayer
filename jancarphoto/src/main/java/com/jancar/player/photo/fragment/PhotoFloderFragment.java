@@ -198,10 +198,13 @@ public class PhotoFloderFragment extends BaseFragment implements
         }
         floderImage.isSelect = !floderImage.isSelect;
         adapter.notifyDataSetChanged();
-        for(int n=0;n<mAdapterList.size();n++){
-            if(mAdapterList.get(n).type==2){
-                ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(n, 60);
-                break;
+
+        if(floderVideo.type == 1) {
+            for (int n = 0; n < mAdapterList.size(); n++) {
+                if (mAdapterList.get(n).type == 2) {
+                    ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(n, 60);
+                    break;
+                }
             }
         }
     }
