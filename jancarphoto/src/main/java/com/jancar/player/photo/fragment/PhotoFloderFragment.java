@@ -199,7 +199,7 @@ public class PhotoFloderFragment extends BaseFragment implements
         floderImage.isSelect = !floderImage.isSelect;
         adapter.notifyDataSetChanged();
 
-        if(floderVideo.type == 1) {
+        if(floderImage.type == 1) {
             for (int n = 0; n < mAdapterList.size(); n++) {
                 if (mAdapterList.get(n).type == 2) {
                     ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(n, 60);
