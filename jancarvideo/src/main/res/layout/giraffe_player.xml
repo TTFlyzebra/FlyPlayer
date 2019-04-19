@@ -224,7 +224,7 @@
                     android:layout_toEndOf="@id/app_video_currentTime"
                     android:progressDrawable="@drawable/media_seekbar_style"
                     android:splitTrack="false"
-                    android:thumb="@drawable/media_seekbar_thumb"/>
+                    android:thumb="@drawable/media_seekbar_thumb" />
             </RelativeLayout>
 
             <LinearLayout
@@ -241,7 +241,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/play_button_magrin"
                     android:layout_marginEnd="@dimen/play_button_magrin"
-                    android:scaleType="fitXY"
+                    android:scaleType="center"
                     android:src="@drawable/media_fore" />
 
                 <ImageView
@@ -251,7 +251,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/play_button_magrin"
                     android:layout_marginEnd="@dimen/play_button_magrin"
-                    android:scaleType="fitXY"
+                    android:scaleType="center"
                     android:src="@drawable/media_play" />
 
                 <ImageView
@@ -261,7 +261,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/play_button_magrin"
                     android:layout_marginEnd="@dimen/play_button_magrin"
-                    android:scaleType="fitXY"
+                    android:scaleType="center"
                     android:src="@drawable/media_next" />
             </LinearLayout>
 
@@ -277,9 +277,9 @@
 
             <ImageView
                 android:id="@+id/menu_play_list"
-                android:layout_width="75px"
-                android:layout_height="75px"
-                android:layout_alignParentEnd="true"
+                android:layout_width="80px"
+                android:layout_height="match_parent"
+                android:layout_below="@id/rl_01"
                 android:layout_alignParentBottom="true"
                 android:scaleType="center"
                 android:src="@drawable/media_list_menu_close" />

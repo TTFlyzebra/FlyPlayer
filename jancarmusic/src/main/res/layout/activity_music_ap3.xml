@@ -219,7 +219,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/play_button_magrin"
                 android:layout_marginEnd="@dimen/play_button_magrin"
-                android:scaleType="fitCenter"
+                android:scaleType="center"
                 android:src="@drawable/media_fore" />
 
             <ImageView
@@ -229,7 +229,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/play_button_magrin"
                 android:layout_marginEnd="@dimen/play_button_magrin"
-                android:scaleType="fitCenter"
+                android:scaleType="center"
                 android:src="@drawable/media_play" />
 
             <ImageView
@@ -239,24 +239,18 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/play_button_magrin"
                 android:layout_marginEnd="@dimen/play_button_magrin"
-                android:scaleType="fitCenter"
+                android:scaleType="center"
                 android:src="@drawable/media_next" />
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="75px"
-            android:layout_height="75px"
+        <ImageView
+            android:id="@+id/ac_music_left_menu"
+            android:layout_width="80px"
+            android:layout_height="match_parent"
+            android:layout_below="@id/rl_01"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:gravity="center">
-
-            <ImageView
-                android:id="@+id/ac_music_left_menu"
-                android:layout_width="45px"
-                android:layout_height="45px"
-                android:scaleType="fitXY"
-                android:src="@drawable/media_list_menu_close" />
-        </RelativeLayout>
+            android:scaleType="center"
+            android:src="@drawable/media_list_menu_close" />
 
     </RelativeLayout>
 
