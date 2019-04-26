@@ -156,6 +156,7 @@ public class MediaSession implements IMediaSession {
 
     @Override
     public void notifyPlayState(int playStatus) {
+        FlyLog.d("notifyPlayState %d",playStatus);
         jacMediaSession.notifyPlayState(playStatus);
     }
 
@@ -177,22 +178,25 @@ public class MediaSession implements IMediaSession {
 
     @Override
     public void notifyPlayId(int current, int total) {
+        FlyLog.d("notifyPlayId %d,%d",current,total);
         jacMediaSession.notifyPlayId(current,total);
     }
 
     @Override
     public void notifyProgress(int position, int duration) {
-//        FlyLog.d("notifyProgress sumTime=%d,seekBarPos=%d", seekBarPos, sumTime);
+        FlyLog.d("notifyProgress %d,%d", position, duration);
         jacMediaSession.notifyProgress(position, duration);
     }
 
     @Override
-    public void notifyPlayUri(String title) {
-        jacMediaSession.notifyPlayUri(title);
+    public void notifyPlayUri(String url) {
+        FlyLog.d("notifyPlayUri "+ url);
+        jacMediaSession.notifyPlayUri(url);
     }
 
     @Override
     public void notifyId3(String title, String artist, String album, byte[] albumImageData) {
+        FlyLog.d("onID3 title=%s,artist=%s,album=%s", title, artist, album);
         jacMediaSession.notifyId3(title, artist, album, albumImageData);
     }
 

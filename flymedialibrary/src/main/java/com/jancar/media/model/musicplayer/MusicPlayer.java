@@ -62,8 +62,6 @@ public class MusicPlayer implements IMusicPlayer,
         }
         start();
         savePathUrl(mPlayPath);
-        mPlayStatus = STATUS_PLAYING;
-        notifyStatus();
     }
 
     private static class MusicPlayerHolder {

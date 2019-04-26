@@ -243,31 +243,18 @@ public class BaseMusicActivity extends BaseActivity implements
         tabView.setFocusPos(1);
     }
 
-    private boolean isStop = true;
-
-    protected void onStart() {
-        super.onStart();
-        isStop = false;
-    }
-
-    @Override
-    protected void onStop() {
-        isStop = true;
-        super.onStop();
-    }
-
     @Override
     protected void onDestroy() {
-        mediaSession.removeEventListener(this);
-        mediaSession.release();
-        mHandler.removeCallbacksAndMessages(null);
         musicPlayer.savePathUrl(currenPath);
-        musicPlayer.removeListener(this);
         musicPlayer.stop();
+        mediaSession.removeEventListener(this);
+        musicPlayer.removeListener(this);
         unregisterReceiver(mReceiver);
         abandonAudioFocus();
         Intent intent = new Intent(this, MusicService.class);
         stopService(intent);
+        mHandler.removeCallbacksAndMessages(null);
+        mediaSession.release();
         super.onDestroy();
     }
 
@@ -420,9 +407,14 @@ public class BaseMusicActivity extends BaseActivity implements
 
     @Override
     public void playStatusChange(int statu) {
+        FlyLog.d("playStatusChange %d",statu);
         switch (statu) {
             case MusicPlayer.STATUS_COMPLETED:
+                lrcView.setVisibility(View.GONE);
+                initSeekBar();
+                break;
             case MusicPlayer.STATUS_STARTPLAY:
+                mediaSession.notifyPlayUri(title);
                 lrcView.setVisibility(View.GONE);
                 break;
             case MusicPlayer.STATUS_PLAYING:
@@ -543,8 +535,8 @@ public class BaseMusicActivity extends BaseActivity implements
                     }
                 }
             });
-            mediaSession.notifyPlayUri(title);
             mediaSession.notifyId3(title, artist, album, albumImageData);
+            FlyLog.d("");
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }

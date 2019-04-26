@@ -26,7 +26,6 @@ import com.jancar.media.model.storage.Storage;
 import com.jancar.media.utils.CleanLeakUtils;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.SPUtil;
-import com.jancar.media.utils.SystemPropertiesProxy;
 
 import java.io.File;
 import java.lang.reflect.Constructor;

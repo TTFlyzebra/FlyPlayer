@@ -4,9 +4,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 
 import com.jancar.media.data.Music;
+import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.player.music.adpater.GalleryAdapter;
-import com.jancar.media.model.musicplayer.MusicPlayer;
 import com.yarolegovich.discretescrollview.DSVOrientation;
 import com.yarolegovich.discretescrollview.DiscreteScrollView;
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
@@ -33,25 +33,12 @@ public class MusicActivity extends MusicActivity_AP2 {
         discreteScrollView.addOnItemChangedListener(new DiscreteScrollView.OnItemChangedListener<RecyclerView.ViewHolder>() {
             @Override
             public void onCurrentItemChanged(@Nullable RecyclerView.ViewHolder viewHolder, int adapterPosition) {
-                FlyLog.d("onCurrentItemChanged adapterPosition=%d", adapterPosition);
-                if(adapterPosition==0){
-                    if(musicPlayer.isPlaying()){
-                        try{
-                            discreteScrollView.smoothScrollToPosition(musicPlayer.getPlayPos());
-                        }catch (Exception e){
-                            FlyLog.e(e.toString());
-                            e.printStackTrace();
-                        }
-                    }
-                } else if (adapterPosition >= 0 && musicPlayer.getPlayPos() > 0) {
-                    try {
-                        String url1 = musicList.get(adapterPosition).url;
-                        String url2 = musicPlayer.getPlayUrl();
-                        if (!url1.equals(url2)) {
-                            musicPlayer.play(musicList.get(adapterPosition).url);
-                        }
-                    }catch (Exception e){
-                        e.printStackTrace();
+                if(isStop) return;
+                int playPos = musicPlayer.getPlayPos();
+                FlyLog.d("ScrollView onCurrentItemChanged Position=%d,playPos=%d", adapterPosition, playPos);
+                if (adapterPosition != playPos) {
+                    if (playPos >= 0) {
+                        musicPlayer.play(musicList.get(adapterPosition).url);
                     }
                 }
             }
@@ -74,13 +61,10 @@ public class MusicActivity extends MusicActivity_AP2 {
         super.playStatusChange(statu);
         switch (statu) {
             case MusicPlayer.STATUS_PLAYING:
-                if (musicPlayer.getPlayPos() >= 0 && discreteScrollView.getCurrentItem() != musicPlayer.getPlayPos()) {
-                    try{
-                        discreteScrollView.smoothScrollToPosition(musicPlayer.getPlayPos());
-                    }catch (Exception e){
-                        FlyLog.e(e.toString());
-                        e.printStackTrace();
-                    }
+                int playPos = musicPlayer.getPlayPos();
+                if (playPos >= 0) {
+                    FlyLog.d("ScrollView Scroll To Position=%d", playPos);
+                    discreteScrollView.smoothScrollToPosition(playPos);
                 }
                 break;
             case MusicPlayer.STATUS_IDLE:

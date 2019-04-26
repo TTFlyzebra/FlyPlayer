@@ -16,7 +16,7 @@ public interface IMediaSession {
 
     void notifyProgress(int position, int duration);
 
-    void notifyPlayUri(String title);
+    void notifyPlayUri(String url);
 
     void notifyId3(String title, String artist, String album, byte[] albumImageData);
 
