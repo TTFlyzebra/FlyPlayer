@@ -32,13 +32,14 @@ public class MusicActivity extends MusicActivity_AP2 {
 
         discreteScrollView.addOnItemChangedListener(new DiscreteScrollView.OnItemChangedListener<RecyclerView.ViewHolder>() {
             @Override
-            public void onCurrentItemChanged(@Nullable RecyclerView.ViewHolder viewHolder, int adapterPosition) {
-                if(isStop) return;
+            public void onCurrentItemChanged(@Nullable RecyclerView.ViewHolder viewHolder, int currentPos) {
+                if (isStop) return;
                 int playPos = musicPlayer.getPlayPos();
-                FlyLog.d("ScrollView onCurrentItemChanged Position=%d,playPos=%d", adapterPosition, playPos);
-                if (adapterPosition != playPos) {
+                FlyLog.d("ScrollView onCurrentItemChanged Position=%d,playPos=%d,setPos=%d", currentPos, playPos,setPos);
+                if (setPos == playPos) return;
+                if (currentPos != playPos) {
                     if (playPos >= 0) {
-                        musicPlayer.play(musicList.get(adapterPosition).url);
+                        musicPlayer.play(musicList.get(currentPos).url);
                     }
                 }
             }
@@ -56,20 +57,22 @@ public class MusicActivity extends MusicActivity_AP2 {
     }
 
 
+    int setPos = 0;
+
     @Override
     public void playStatusChange(int statu) {
-        super.playStatusChange(statu);
         switch (statu) {
             case MusicPlayer.STATUS_PLAYING:
-                int playPos = musicPlayer.getPlayPos();
-                if (playPos >= 0) {
-                    FlyLog.d("ScrollView Scroll To Position=%d", playPos);
-                    discreteScrollView.smoothScrollToPosition(playPos);
+                setPos = musicPlayer.getPlayPos();
+                if (setPos >= 0) {
+                    FlyLog.d("ScrollView Scroll To Position=%d", setPos);
+                    discreteScrollView.smoothScrollToPosition(setPos);
                 }
                 break;
             case MusicPlayer.STATUS_IDLE:
                 break;
         }
+        super.playStatusChange(statu);
     }
 
     @Override

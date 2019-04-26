@@ -411,16 +411,18 @@ public class BaseMusicActivity extends BaseActivity implements
         switch (statu) {
             case MusicPlayer.STATUS_COMPLETED:
                 lrcView.setVisibility(View.GONE);
-                initSeekBar();
+                mediaSession.notifyPlayUri("");
                 break;
             case MusicPlayer.STATUS_STARTPLAY:
-                mediaSession.notifyPlayUri(title);
                 lrcView.setVisibility(View.GONE);
+                mediaSession.notifyPlayUri(title);
                 break;
             case MusicPlayer.STATUS_PLAYING:
                 playFore.setEnabled(true);
                 playNext.setEnabled(true);
                 initSeekBar();
+                mediaSession.notifyProgress(0, sumTime);
+                mediaSession.notifyPlayUri(title);
                 upPlayInfo(musicPlayer.getPlayUrl());
                 break;
             case MusicPlayer.STATUS_ERROR:
@@ -432,6 +434,8 @@ public class BaseMusicActivity extends BaseActivity implements
                 tvArtist.setText("");
                 tvAlbum.setText("");
                 initSeekBar();
+                mediaSession.notifyProgress(0, 0);
+                mediaSession.notifyId3("","","",null);
                 break;
         }
         mediaSession.notifyPlayState(statu == MusicPlayer.STATUS_PLAYING ? 1 : 0);
@@ -459,7 +463,6 @@ public class BaseMusicActivity extends BaseActivity implements
 
     private void initSeekBar() {
         sumTime = musicPlayer.getDuration();
-        mediaSession.notifyProgress(0, sumTime);
         seekBar.setMax(sumTime);
         int hou = sumTime / 3600000;
         int min = sumTime / 60000 % 60;
