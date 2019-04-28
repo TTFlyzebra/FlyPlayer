@@ -16,10 +16,12 @@ import java.util.List;
 public class MusicActivity extends MusicActivity_AP2 {
     private DiscreteScrollView discreteScrollView;
     private GalleryAdapter galleryAdapter;
+    private boolean isFirst = true;
 
     @Override
     protected void initView() {
         super.initView();
+        isFirst = true;
         discreteScrollView = findViewById(R.id.ac_music_viewpager);
         FlyLog.d("MusicActivity initView");
         discreteScrollView.setOrientation(DSVOrientation.HORIZONTAL);
@@ -33,13 +35,26 @@ public class MusicActivity extends MusicActivity_AP2 {
         discreteScrollView.addOnItemChangedListener(new DiscreteScrollView.OnItemChangedListener<RecyclerView.ViewHolder>() {
             @Override
             public void onCurrentItemChanged(@Nullable RecyclerView.ViewHolder viewHolder, int currentPos) {
+                if (isFirst) {
+                    isFirst = false;
+                    return;
+                }
                 if (isStop) return;
                 int playPos = musicPlayer.getPlayPos();
-                FlyLog.d("ScrollView onCurrentItemChanged Position=%d,playPos=%d,setPos=%d", currentPos, playPos,setPos);
-                if (setPos == playPos) return;
+                FlyLog.d("ScrollView onCurrentItemChanged Position=%d,playPos=%d,setPos=%d", currentPos, playPos, setPos);
                 if (currentPos != playPos) {
                     if (playPos >= 0) {
-                        musicPlayer.play(musicList.get(currentPos).url);
+                        try {
+                            if (currentPos >= 0 && currentPos < musicList.size()) {
+                                String url = musicList.get(currentPos).url;
+                                String playurl = musicPlayer.getPlayUrl();
+                                if (!url.equals(playurl)) {
+                                    musicPlayer.play(musicList.get(currentPos).url);
+                                }
+                            }
+                        } catch (Exception e) {
+                            FlyLog.e(e.toString());
+                        }
                     }
                 }
             }
