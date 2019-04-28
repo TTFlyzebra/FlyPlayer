@@ -24,4 +24,12 @@
     <dimen name="music_lrcview_width">580px</dimen>
 
     <dimen name="play_button_magrin">50px</dimen>
+
+    <dimen name="seek_height">30px</dimen>
+
+    <dimen name="seek_text_width">90px</dimen>
+
+    <dimen name="seek_text_size">18px</dimen>
+
+    <dimen name="seek_text_padding">10px</dimen>
 </resources>

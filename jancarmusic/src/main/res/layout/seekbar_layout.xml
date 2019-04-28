@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_01"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/seek_height"
+    android:layout_alignParentTop="true"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/ac_music_currentTime"
+        android:layout_width="@dimen/seek_text_width"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:gravity="end"
+        android:paddingEnd="@dimen/seek_text_padding"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/seek_text_size" />
+
+    <TextView
+        android:id="@+id/ac_music_endTime"
+        android:layout_width="@dimen/seek_text_width"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:gravity="start"
+        android:paddingStart="@dimen/seek_text_padding"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/seek_text_size" />
+
+    <SeekBar
+        android:id="@+id/ac_music_seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@id/ac_music_endTime"
+        android:layout_toEndOf="@id/ac_music_currentTime"
+        android:progressDrawable="@drawable/media_seekbar_style"
+        android:splitTrack="false"
+        android:thumb="@drawable/media_seekbar_thumb" />
+
+
+</RelativeLayout>
