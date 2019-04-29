@@ -54,7 +54,7 @@ public class FlyMediaService extends Service {
     private static final Executor executor = Executors.newFixedThreadPool(1);
     private static final HandlerThread sWorkerThread = new HandlerThread("notify-thread");
     private long startTime = 0;
-    private boolean firstMusic = true;
+    private boolean firstMusic = false;
 
     static {
         sWorkerThread.start();
@@ -168,6 +168,7 @@ public class FlyMediaService extends Service {
                 String str = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_AUTOPLAY, "false");
                 if (str.equals("true") && (System.currentTimeMillis() - startTime) > 10000) {
                     FlyLog.d("autoplay will scan path=%s", str1);
+                    firstMusic = true;
                     startScanPath(str1);
                 }
             }
@@ -613,7 +614,6 @@ public class FlyMediaService extends Service {
         isSetHideFile = !str1.endsWith("0");
         String str2 = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_SHOWALL_FILE, "0");
         isSetAllFile = !str2.endsWith("0");
-        firstMusic = true;
         sWorker.removeCallbacksAndMessages(null);
         startScanTime = System.currentTimeMillis();
         tryCount = 0;
