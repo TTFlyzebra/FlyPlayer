@@ -33,6 +33,7 @@ import com.jancar.mediascan.utils.SPUtil;
 import com.jancar.mediascan.utils.StorageTools;
 import com.jancar.mediascan.utils.StringTools;
 import com.jancar.mediascan.utils.SystemPropertiesProxy;
+import com.jancar.source.Page;
 import com.jancar.state.JacState;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
@@ -52,6 +53,8 @@ import static android.provider.MediaStore.Images.Media.query;
 public class FlyMediaService extends Service {
     private static final Executor executor = Executors.newFixedThreadPool(1);
     private static final HandlerThread sWorkerThread = new HandlerThread("notify-thread");
+    private long startTime = 0;
+    private boolean firstMusic = true;
 
     static {
         sWorkerThread.start();
@@ -123,6 +126,7 @@ public class FlyMediaService extends Service {
     public void onCreate() {
         super.onCreate();
         FlyLog.d("onCreate");
+        startTime = System.currentTimeMillis();
         String str1 = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_SHOWHIDE_FILE, "0");
         isSetHideFile = !str1.endsWith("0");
         String str2 = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_SHOWALL_FILE, "0");
@@ -162,7 +166,7 @@ public class FlyMediaService extends Service {
             String str1 = intent.getStringExtra(Const.SCAN_PATH_KEY);
             if (!TextUtils.isEmpty(str1) && StorageTools.isRemoved(this, str1)) {
                 String str = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_AUTOPLAY, "false");
-                if (str.equals("true")) {
+                if (str.equals("true") && (System.currentTimeMillis() - startTime) > 10000) {
                     FlyLog.d("autoplay will scan path=%s", str1);
                     startScanPath(str1);
                 }
@@ -185,9 +189,9 @@ public class FlyMediaService extends Service {
         sWorker.removeCallbacksAndMessages(null);
         unregisterReceiver(mediaScannerReceiver);
         jancarManager.unregisterJacStateListener(jacState.asBinder());
-        try{
+        try {
             unregisterReceiver(diskReceiver);
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
         super.onDestroy();
@@ -550,6 +554,16 @@ public class FlyMediaService extends Service {
 //                case ".wma":
                     //音乐文件小于1M不显示
                     if (!isSetAllFile && file.length() < (1024 * 1024)) break;
+                    if (firstMusic) {
+                        firstMusic = false;
+                        String str = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_AUTOPLAY, "false");
+                        if (str.equals("true") && (System.currentTimeMillis() - startTime) > 10000) {
+                            if (currentPath.startsWith("/storage/udisk")) {
+                                FlyLog.d("first music open music app");
+                                jancarManager.requestPage(Page.PAGE_MUSIC);
+                            }
+                        }
+                    }
                     synchronized (mMusicList) {
                         mMusicList.add(new Music(url, mMusicEnd.get()));
                         mMusicEnd.getAndIncrement();
@@ -599,6 +613,7 @@ public class FlyMediaService extends Service {
         isSetHideFile = !str1.endsWith("0");
         String str2 = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_SHOWALL_FILE, "0");
         isSetAllFile = !str2.endsWith("0");
+        firstMusic = true;
         sWorker.removeCallbacksAndMessages(null);
         startScanTime = System.currentTimeMillis();
         tryCount = 0;
