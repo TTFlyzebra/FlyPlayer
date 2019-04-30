@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.provider.MediaStore;
@@ -53,14 +54,15 @@ import static android.provider.MediaStore.Images.Media.query;
 public class FlyMediaService extends Service {
     private static final Executor executor = Executors.newFixedThreadPool(1);
     private static final HandlerThread sWorkerThread = new HandlerThread("notify-thread");
-    private long startTime = 0;
     private boolean firstMusic = false;
+    private AtomicBoolean finishCreate = new AtomicBoolean(false);
 
     static {
         sWorkerThread.start();
     }
 
     private static final Handler sWorker = new Handler(sWorkerThread.getLooper());
+    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private JancarManager jancarManager = null;
     private JacState jacState = new JacSystemStates();
@@ -126,7 +128,25 @@ public class FlyMediaService extends Service {
     public void onCreate() {
         super.onCreate();
         FlyLog.d("onCreate");
-        startTime = System.currentTimeMillis();
+        /**
+         * 解决插入两个U盘开机会跳U盘的问题
+         */
+        finishCreate.set(false);
+        String timeStr = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_WAITTIME, "15");
+        int time = 15;
+        try {
+            time = Integer.parseInt(timeStr);
+        } catch (Exception e) {
+            FlyLog.d(e.toString());
+        }
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finishCreate.set(true);
+            }
+        }, time * 1000);
+
+
         String str1 = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_SHOWHIDE_FILE, "0");
         isSetHideFile = !str1.endsWith("0");
         String str2 = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_SHOWALL_FILE, "0");
@@ -166,7 +186,7 @@ public class FlyMediaService extends Service {
             String str1 = intent.getStringExtra(Const.SCAN_PATH_KEY);
             if (!TextUtils.isEmpty(str1) && StorageTools.isRemoved(this, str1)) {
                 String str = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_AUTOPLAY, "false");
-                if (str.equals("true") && (System.currentTimeMillis() - startTime) > 10000) {
+                if (str.equals("true") && finishCreate.get()) {
                     FlyLog.d("autoplay will scan path=%s", str1);
                     firstMusic = true;
                     startScanPath(str1);
@@ -187,6 +207,7 @@ public class FlyMediaService extends Service {
 
     @Override
     public void onDestroy() {
+        mHandler.removeCallbacksAndMessages(null);
         sWorker.removeCallbacksAndMessages(null);
         unregisterReceiver(mediaScannerReceiver);
         jancarManager.unregisterJacStateListener(jacState.asBinder());
@@ -558,7 +579,7 @@ public class FlyMediaService extends Service {
                     if (firstMusic) {
                         firstMusic = false;
                         String str = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_AUTOPLAY, "false");
-                        if (str.equals("true") && (System.currentTimeMillis() - startTime) > 10000) {
+                        if (str.equals("true") && finishCreate.get()) {
                             if (currentPath.startsWith("/storage/udisk")) {
                                 FlyLog.d("first music open music app");
                                 jancarManager.requestPage(Page.PAGE_MUSIC);
