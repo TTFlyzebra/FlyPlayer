@@ -85,7 +85,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
         public void run() {
             try {
                 countSavePlaySeek++;
-                if (countSavePlaySeek % SAVEPLAYSEEKTIME == 0 && player != null && player.isPlaying()) {
+                if (countSavePlaySeek % SAVEPLAYSEEKTIME == 3 && player != null && player.isPlaying()) {
                     player.savePathUrl(currenPath);
                 }
                 player.setProgress();
@@ -244,7 +244,6 @@ public class VideoActivity_AP1 extends BaseActivity implements
         if (openList != null && !openList.isEmpty()) {
             currenPath = Storage.ALL_STORAGE;
             player.play(openList.get(0));
-            player.savePathUrl(currenPath);
             usbMediaScan.openStorager(new StorageInfo(currenPath));
         }
     }
@@ -544,7 +543,6 @@ public class VideoActivity_AP1 extends BaseActivity implements
                 break;
             case GiraffePlayer.STATUS_PLAYING:
                 setCurrentPos();
-                player.savePathUrl(currenPath);
                 mHandler.removeCallbacks(seekBarTask);
                 mHandler.post(seekBarTask);
                 mHandler.removeCallbacks(enableViewTask);
