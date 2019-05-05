@@ -61,7 +61,6 @@ public class MusicPlayer implements IMusicPlayer,
             saveSeek = 0;
         }
         start();
-        savePathUrl(mPlayPath);
     }
 
     private static class MusicPlayerHolder {

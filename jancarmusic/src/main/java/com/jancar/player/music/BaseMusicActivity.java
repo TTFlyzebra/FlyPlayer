@@ -101,7 +101,7 @@ public class BaseMusicActivity extends BaseActivity implements
         @Override
         public void run() {
             countSavePlaySeek++;
-            if (countSavePlaySeek % SAVEPLAYSEEKTIME == 0 && musicPlayer != null && musicPlayer.isPlaying()) {
+            if (countSavePlaySeek % SAVEPLAYSEEKTIME == 3 && musicPlayer != null && musicPlayer.isPlaying()) {
                 musicPlayer.savePathUrl(currenPath);
             }
             if (musicPlayer != null) {
@@ -202,7 +202,6 @@ public class BaseMusicActivity extends BaseActivity implements
         if (openList != null && !openList.isEmpty()) {
             currenPath = Storage.ALL_STORAGE;
             musicPlayer.play(openList.get(0));
-            musicPlayer.savePathUrl(currenPath);
             usbMediaScan.openStorager(new StorageInfo(currenPath));
         }
     }
