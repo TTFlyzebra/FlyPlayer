@@ -13,5 +13,5 @@
     <!--底部菜单高度-->
     <dimen name="photo_bottom_menu_height">118px</dimen>
 
-    <dimen name="play_button_magrin">50px</dimen>
+    <dimen name="music_playbutton_widht">180px</dimen>
 </resources>

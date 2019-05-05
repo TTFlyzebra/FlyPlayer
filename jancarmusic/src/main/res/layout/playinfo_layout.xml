@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="0.5"
+    android:gravity="start|center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start|center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:scaleType="fitXY"
+            android:src="@drawable/media_music_single" />
+
+        <com.jancar.media.view.MarqueeTextView
+            android:id="@+id/ac_music_single"
+            android:layout_width="wrap_content"
+            android:layout_height="50px"
+            android:layout_marginStart="20px"
+            android:layout_marginEnd="40px"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textColor="#FFF"
+            android:textSize="30px" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35px"
+        android:layout_marginBottom="35px"
+        android:gravity="start|center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:scaleType="fitXY"
+            android:src="@drawable/media_music_album_03" />
+
+        <com.jancar.media.view.MarqueeTextView
+            android:id="@+id/ac_music_album"
+            android:layout_width="wrap_content"
+            android:layout_height="50px"
+            android:layout_marginStart="20px"
+            android:layout_marginEnd="40px"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textColor="#FFF"
+            android:textSize="30px" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start|center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:scaleType="fitXY"
+            android:src="@drawable/media_music_artist_03" />
+
+        <com.jancar.media.view.MarqueeTextView
+            android:id="@+id/ac_music_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="50px"
+            android:layout_marginStart="20px"
+            android:layout_marginEnd="40px"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textColor="#FFF"
+            android:textSize="30px" />
+    </LinearLayout>
+</LinearLayout>

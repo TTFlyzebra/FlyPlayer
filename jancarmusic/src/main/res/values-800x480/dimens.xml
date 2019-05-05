@@ -13,15 +13,16 @@
     <!--底部菜单高度-->
     <dimen name="music_bottom_menu_height">115px</dimen>
 
-    <dimen name="music_iv01_margin_start">100px</dimen>
+    <dimen name="music_iv01_width">220px</dimen>
+    <dimen name="music_iv02_width">132px</dimen>
 
-    <dimen name="music_iv01_margin_top">10px</dimen>
+    <dimen name="music_lrc_height">42px</dimen>
+    <dimen name="music_lrc_textsize">18px</dimen>
 
-    <dimen name="music_iv02_margin_start">150px</dimen>
+    <dimen name="music_ap3_iv2padding">22px</dimen>
 
-    <dimen name="music_iv02_margin_top">60px</dimen>
+    <!--AP4特殊处理-->
+    <dimen name="music_ap4_iv01_width">240px</dimen>
+    <dimen name="music_ap4_iv02_width">210px</dimen>
 
-    <dimen name="music_lrcview_width">450px</dimen>
-
-    <dimen name="play_button_magrin">30px</dimen>
 </resources>
