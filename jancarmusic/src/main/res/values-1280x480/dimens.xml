@@ -20,4 +20,8 @@
     <dimen name="music_lrc_textsize">18px</dimen>
 
     <dimen name="music_ap3_iv2padding">22px</dimen>
+
+    <!--AP4特殊处理-->
+    <dimen name="music_ap4_iv01_width">240px</dimen>
+    <dimen name="music_ap4_iv02_width">210px</dimen>
 </resources>
