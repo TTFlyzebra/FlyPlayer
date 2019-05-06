@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jancar.media.model.musicplayer.MusicPlayer;
+import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.AnimationImageView;
 import com.jancar.media.view.MarqueeTextView;
@@ -110,7 +111,11 @@ public class MusicFloderAdapter extends BaseExpandableListAdapter {
             holder.textView2.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
             holder.textView3.setTextColor(mContext.getResources().getColorStateList(R.color.textcolor));
         }
-        holder.textView3.setText(String.format(mContext.getString(R.string.musicsumformat), itemList.get(groupPosition).size()));
+        try{
+            holder.textView3.setText(String.format(mContext.getString(R.string.musicsumformat), itemList.get(groupPosition).size()));
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
         return convertView;
     }
 

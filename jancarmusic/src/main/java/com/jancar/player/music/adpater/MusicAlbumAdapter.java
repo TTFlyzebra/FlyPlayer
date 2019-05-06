@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jancar.media.model.musicplayer.MusicPlayer;
+import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.StringTools;
 import com.jancar.media.view.AnimationImageView;
 import com.jancar.media.view.MarqueeTextView;
@@ -110,7 +111,11 @@ public class MusicAlbumAdapter extends BaseExpandableListAdapter {
         String str = groupList.get(groupPosition);
         holder.textView1.setText(str);
         holder.textView1.enableMarquee(isExpanded);
-        holder.textView2.setText(String.format(mContext.getString(R.string.musicsumformat),itemList.get(groupPosition).size()));
+        try{
+            holder.textView2.setText(String.format(mContext.getString(R.string.musicsumformat),itemList.get(groupPosition).size()));
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
         return convertView;
     }
 

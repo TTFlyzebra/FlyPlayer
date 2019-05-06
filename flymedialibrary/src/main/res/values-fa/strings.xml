@@ -22,9 +22,9 @@
 	<string name="photo">عکس</string>
 	<string name="video">تصویری</string>
 	<string name="music">موسیقی</string>
-	<string name="musicsumformat">(%d اول)</string>
+	<string name="musicsumformat">(%d)</string>
 	<string name="photosumformat">(%d)</string>
-	<string name="videosumformat">(%d مجموعه)</string>
+	<string name="videosumformat">(%d)</string>
 	<string name="lrc_label">بدون شعر</string>
 	<string name="music_scan1">دستگاه اسکن ...</string>
 	<string name="music_scan2">مجموع آهنگ%d</string>

@@ -140,7 +140,11 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
                 if (last1 > 0) {
                     textHolder.textView1.setText(path.substring(last1 + 1, path.length()));
                     textHolder.textView2.setText(path.substring(0, last1));
-                    textHolder.textView3.setText(String.format(mContext.getString(R.string.photosumformat), mList.get(position).sum));
+                    try{
+                        textHolder.textView3.setText(String.format(mContext.getString(R.string.videosumformat), mList.get(position).sum));
+                    }catch (Exception e){
+                        FlyLog.e(e.toString());
+                    }
                 }
                 int last2 = crtUrl.lastIndexOf(File.separator);
                 String selectPath = last2 > 0 ? crtUrl.substring(0, last2) : crtUrl;
