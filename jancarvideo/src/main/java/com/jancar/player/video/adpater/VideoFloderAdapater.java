@@ -26,6 +26,7 @@ import com.jancar.player.video.VideoActivity_AP1;
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import wseemann.media.FFmpegMediaMetadataRetriever;
@@ -143,7 +144,7 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
                     try{
                         textHolder.textView3.setText(String.format(mContext.getString(R.string.videosumformat), mList.get(position).sum));
                     }catch (Exception e){
-                        FlyLog.e(e.toString());
+                        textHolder.textView3.setText(String.format(Locale.ENGLISH,"(%d)", mList.get(position).sum));
                     }
                 }
                 int last2 = crtUrl.lastIndexOf(File.separator);

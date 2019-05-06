@@ -20,6 +20,7 @@ import com.jancar.player.photo.R;
 
 import java.io.File;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -93,7 +94,7 @@ public class PhotoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
                     try{
                         textHolder.textView3.setText(String.format(mContext.getString(R.string.photosumformat), mList.get(position).sum));
                     }catch (Exception e){
-                        FlyLog.e(e.toString());
+                        textHolder.textView3.setText(String.format(Locale.ENGLISH,"(%d)", mList.get(position).sum));
                     }
                 }
                 int last2 = crtUrl.lastIndexOf(File.separator);

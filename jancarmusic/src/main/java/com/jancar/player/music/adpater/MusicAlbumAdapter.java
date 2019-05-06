@@ -16,6 +16,7 @@ import com.jancar.media.view.MarqueeTextView;
 import com.jancar.player.music.R;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * ExpandableListView 适配器
@@ -114,7 +115,7 @@ public class MusicAlbumAdapter extends BaseExpandableListAdapter {
         try{
             holder.textView2.setText(String.format(mContext.getString(R.string.musicsumformat),itemList.get(groupPosition).size()));
         }catch (Exception e){
-            FlyLog.e(e.toString());
+            holder.textView2.setText(String.format(Locale.ENGLISH,"(%d)",itemList.get(groupPosition).size()));
         }
         return convertView;
     }
