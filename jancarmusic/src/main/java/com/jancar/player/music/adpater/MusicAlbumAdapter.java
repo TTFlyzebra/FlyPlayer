@@ -86,9 +86,7 @@ public class MusicAlbumAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup
-            parent) {
-
+    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         ViewHolderGroup holder = new ViewHolderGroup();
         if (null == convertView) {
             convertView = View.inflate(mContext, R.layout.explist_music_album_item_group, null);
@@ -140,7 +138,11 @@ public class MusicAlbumAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(v, (String) v.getTag(R.id.tag1));
+                    try{
+                        onItemClickListener.onItemClick(v, (String) v.getTag(R.id.tag1));
+                    }catch (Exception e){
+                        FlyLog.e(e.toString());
+                    }
                 }
             }
         });

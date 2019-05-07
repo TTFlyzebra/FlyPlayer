@@ -52,12 +52,11 @@ public class VideoPlayListFragment_AP1 extends BaseFragment implements
         adapter = new VideoPlayListAdapater(getActivity(), activity.videoList, recyclerView);
 
         int width = DisplayUtils.getMetrices(getActivity()).widthPixels;
-        if(width>=1280){
+        if (width >= 1280) {
             spanCount = 4;
-        }else{
+        } else {
             spanCount = 3;
         }
-
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), spanCount);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -69,9 +68,9 @@ public class VideoPlayListFragment_AP1 extends BaseFragment implements
     @Override
     public void onResume() {
         super.onResume();
-        if(VideoActivity_AP1.isScan){
+        if (VideoActivity_AP1.isScan) {
             scanMsgTv.setText(R.string.music_scan1);
-        }else{
+        } else {
             scanMsgTv.setText(String.format(getString(R.string.video_scan2), activity.videoList.size()));
         }
         scrollToCureentPlayItem();
@@ -102,16 +101,22 @@ public class VideoPlayListFragment_AP1 extends BaseFragment implements
     public void scanFinish(String path) {
         try {
             scanMsgTv.setText(String.format(getString(R.string.video_scan2), activity.videoList.size()));
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
     }
 
     @Override
     public void onItemClick(View view, int pos) {
-        activity.currenPos = pos;
-        activity.player.play(activity.videoList.get(activity.currenPos).url);
-        adapter.notifyDataSetChanged();
+        try {
+            if (pos >= 0 && pos < activity.videoList.size()) {
+                activity.currenPos = pos;
+                activity.player.play(activity.videoList.get(activity.currenPos).url);
+                adapter.notifyDataSetChanged();
+            }
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
     }
 
     @Override
@@ -123,7 +128,7 @@ public class VideoPlayListFragment_AP1 extends BaseFragment implements
     private void scrollToCureentPlayItem() {
         try {
             recyclerView.getLayoutManager().scrollToPosition(activity.currenPos);
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
     }

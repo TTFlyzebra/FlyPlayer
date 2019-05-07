@@ -77,8 +77,12 @@ public class MusicPlayListFragment_AP1 extends MusicFragment implements
 
     @Override
     public void onItemClick(View view, int pos) {
-        musicPlayer.play(mMusicList.get(pos).url);
-        adapter.notifyDataSetChanged();
+        try {
+            musicPlayer.play(mMusicList.get(pos).url);
+            adapter.notifyDataSetChanged();
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
     }
 
     @Override

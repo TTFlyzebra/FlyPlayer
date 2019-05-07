@@ -169,7 +169,11 @@ public class VideoFloderAdapater extends RecyclerView.Adapter<ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     if (mOnItemClick != null) {
-                        mOnItemClick.onItemClick(v, mList.get((Integer) v.getTag()));
+                        try {
+                            mOnItemClick.onItemClick(v, mList.get((Integer) v.getTag()));
+                        }catch (Exception e){
+                            FlyLog.e(e.toString());
+                        }
                     }
                 }
             });

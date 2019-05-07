@@ -338,9 +338,13 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
      * @param pos
      */
     public void setSelectItem(int pos) {
-        currentItem = pos;
-        CURRENT_IMAGE = imageList.get(currentItem);
-        viewPager.setCurrentItem(pos);
+        try {
+            currentItem = pos;
+            CURRENT_IMAGE = imageList.get(currentItem);
+            viewPager.setCurrentItem(pos);
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
     }
 
     @Override

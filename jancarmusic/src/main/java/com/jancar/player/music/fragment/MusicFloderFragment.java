@@ -157,9 +157,9 @@ public class MusicFloderFragment extends MusicFragment implements
     }
 
     @Override
-    public void onItemClick(View view, String string) {
+    public void onItemClick(View view, String url) {
         isClick = true;
-        musicPlayer.play(string);
+        musicPlayer.play(url);
     }
 
     @Override

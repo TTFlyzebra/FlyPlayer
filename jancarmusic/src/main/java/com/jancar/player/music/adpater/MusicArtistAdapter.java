@@ -144,7 +144,11 @@ public class MusicArtistAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(v, (String) v.getTag(R.id.tag1));
+                    try{
+                        onItemClickListener.onItemClick(v, (String) v.getTag(R.id.tag1));
+                    }catch (Exception e){
+                        FlyLog.e(e.toString());
+                    }
                 }
             }
         });
