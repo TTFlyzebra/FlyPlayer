@@ -998,11 +998,15 @@ public class GiraffePlayer {
         private boolean toSeek;
 
         @Override
-        public boolean onDown(MotionEvent e) {
-            if (e.getY() > 60) {
-                firstTouch = true;
+        public boolean onDown(MotionEvent event) {
+            try {
+                if (event.getY() > 60) {
+                    firstTouch = true;
+                }
+            }catch (Exception ee){
+                FlyLog.e(ee.toString());
             }
-            return super.onDown(e);
+            return super.onDown(event);
 
         }
 
@@ -1011,30 +1015,34 @@ public class GiraffePlayer {
          */
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            if (e1.getY() > 60) {
-                float mOldX = e1.getX(), mOldY = e1.getY();
-                float deltaY = mOldY - e2.getY();
-                float deltaX = mOldX - e2.getX();
-                if (firstTouch) {
-                    toSeek = Math.abs(distanceX) >= Math.abs(distanceY);
-                    volumeControl = mOldX > screenWidthPixels * 0.5f;
-                    firstTouch = false;
-                }
-
-                if (toSeek) {
-                    if (!isLive) {
-                        onProgressSlide(-deltaX / ijkVideoView.getWidth());
+            try {
+                if (e1.getY() > 60) {
+                    float mOldX = e1.getX(), mOldY = e1.getY();
+                    float deltaY = mOldY - e2.getY();
+                    float deltaX = mOldX - e2.getX();
+                    if (firstTouch) {
+                        toSeek = Math.abs(distanceX) >= Math.abs(distanceY);
+                        volumeControl = mOldX > screenWidthPixels * 0.5f;
+                        firstTouch = false;
                     }
-                } else {
-                    float percent = deltaY / ijkVideoView.getHeight();
-                    if (volumeControl) {
-                        onVolumeSlide(percent);
+
+                    if (toSeek) {
+                        if (!isLive) {
+                            onProgressSlide(-deltaX / ijkVideoView.getWidth());
+                        }
                     } else {
-                        onBrightnessSlide(percent);
+                        float percent = deltaY / ijkVideoView.getHeight();
+                        if (volumeControl) {
+                            onVolumeSlide(percent);
+                        } else {
+                            onBrightnessSlide(percent);
+                        }
+
+
                     }
-
-
                 }
+            }catch (Exception e){
+                FlyLog.e(e.toString());
             }
 
             return super.onScroll(e1, e2, distanceX, distanceY);
