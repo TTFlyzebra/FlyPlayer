@@ -34,7 +34,6 @@ import com.jancar.mediascan.utils.SPUtil;
 import com.jancar.mediascan.utils.StorageTools;
 import com.jancar.mediascan.utils.StringTools;
 import com.jancar.mediascan.utils.SystemPropertiesProxy;
-import com.jancar.source.Page;
 import com.jancar.state.JacState;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
@@ -578,13 +577,13 @@ public class FlyMediaService extends Service {
                     if (!isSetAllFile && file.length() < (1024 * 1024)) break;
                     if (firstMusic) {
                         firstMusic = false;
-                        String str = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_AUTOPLAY, "false");
-                        if (str.equals("true") && finishCreate.get()) {
-                            if (currentPath.startsWith("/storage/udisk")) {
-                                FlyLog.d("first music open music app");
-                                jancarManager.requestPage(Page.PAGE_MUSIC);
-                            }
-                        }
+//                        String str = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_AUTOPLAY, "false");
+//                        if (str.equals("true") && finishCreate.get()) {
+//                            if (currentPath.startsWith("/storage/udisk")) {
+//                                FlyLog.d("first music open music app");
+//                                jancarManager.requestPage(Page.PAGE_MUSIC);
+//                            }
+//                        }
                     }
                     synchronized (mMusicList) {
                         mMusicList.add(new Music(url, mMusicEnd.get()));
