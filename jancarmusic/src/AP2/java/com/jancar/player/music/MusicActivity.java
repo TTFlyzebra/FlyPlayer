@@ -18,6 +18,9 @@ public class MusicActivity extends MusicActivity_AP2 {
     private GalleryAdapter galleryAdapter;
     private boolean isFirst = true;
     private boolean isFinishScan = false;
+    private int playPos = 0;
+    private int crtPos = 0;
+
 
     @Override
     protected void initView() {
@@ -42,7 +45,7 @@ public class MusicActivity extends MusicActivity_AP2 {
                 }
                 if (isStop) return;
                 int playPos = musicPlayer.getPlayPos();
-                FlyLog.d("ScrollView onCurrentItemChanged Position=%d,playPos=%d,setPos=%d", currentPos, playPos, setPos);
+                FlyLog.d("ScrollView onCurrentItemChanged Position=%d,playPos=%d,setPos=%d", currentPos, playPos, MusicActivity.this.playPos);
                 if (currentPos != playPos && Math.abs(currentPos - playPos) == 1) {
                     if (playPos >= 0) {
                         try {
@@ -72,9 +75,6 @@ public class MusicActivity extends MusicActivity_AP2 {
 
     }
 
-
-    int setPos = 0;
-
     @Override
     public void playStatusChange(int statu) {
         switch (statu) {
@@ -88,13 +88,17 @@ public class MusicActivity extends MusicActivity_AP2 {
     }
 
     private void goCurrentPos() {
-        setPos = musicPlayer.getPlayPos();
-        if (setPos >= 0 && isFinishScan) {
-            FlyLog.d("ScrollView Scroll To Position=%d", setPos);
+        playPos = musicPlayer.getPlayPos();
+        if (playPos >= 0 && isFinishScan) {
             try {
-                galleryAdapter.notifyDataSetChanged();
-                if (setPos < musicList.size()) {
-                    discreteScrollView.smoothScrollToPosition(setPos);
+                crtPos = discreteScrollView.getCurrentItem();
+                FlyLog.d("ScrollView Scroll To playPos=%d,crtPos=%d", playPos,crtPos);
+                if (playPos < musicList.size()) {
+                    if (Math.abs(playPos - crtPos) == 1) {
+                        discreteScrollView.smoothScrollToPosition(playPos);
+                    } else {
+                        discreteScrollView.scrollToPosition(playPos);
+                    }
                 }
             } catch (Exception e) {
                 FlyLog.e(e.toString());
@@ -118,6 +122,7 @@ public class MusicActivity extends MusicActivity_AP2 {
     public void scanFinish(String path) {
         super.scanFinish(path);
         isFinishScan = true;
+        galleryAdapter.notifyDataSetChanged();
         goCurrentPos();
     }
 }

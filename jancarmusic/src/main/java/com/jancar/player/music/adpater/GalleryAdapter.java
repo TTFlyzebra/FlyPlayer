@@ -137,7 +137,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                     FlyLog.d("Error ID3 Info");
                 } catch (Exception e) {
                     FlyLog.e("url=%s,%s",url,e.toString());
-                    e.printStackTrace();
                 }
                 if (bitmap != null) {
                     if (doubleBitmapCache != null) {
