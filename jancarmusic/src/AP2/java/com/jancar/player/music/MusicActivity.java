@@ -92,7 +92,7 @@ public class MusicActivity extends MusicActivity_AP2 {
         if (setPos >= 0 && isFinishScan) {
             FlyLog.d("ScrollView Scroll To Position=%d", setPos);
             try {
-                discreteScrollView.notifyAll();
+                galleryAdapter.notifyDataSetChanged();
                 if (setPos < musicList.size()) {
                     discreteScrollView.smoothScrollToPosition(setPos);
                 }
