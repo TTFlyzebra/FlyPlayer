@@ -17,6 +17,7 @@ public class MusicActivity extends MusicActivity_AP2 {
     private DiscreteScrollView discreteScrollView;
     private GalleryAdapter galleryAdapter;
     private boolean isFirst = true;
+    private boolean isFinishScan = false;
 
     @Override
     protected void initView() {
@@ -42,7 +43,7 @@ public class MusicActivity extends MusicActivity_AP2 {
                 if (isStop) return;
                 int playPos = musicPlayer.getPlayPos();
                 FlyLog.d("ScrollView onCurrentItemChanged Position=%d,playPos=%d,setPos=%d", currentPos, playPos, setPos);
-                if (currentPos != playPos) {
+                if (currentPos != playPos && Math.abs(currentPos - playPos) == 1) {
                     if (playPos >= 0) {
                         try {
                             if (currentPos >= 0 && currentPos < musicList.size()) {
@@ -78,11 +79,7 @@ public class MusicActivity extends MusicActivity_AP2 {
     public void playStatusChange(int statu) {
         switch (statu) {
             case MusicPlayer.STATUS_PLAYING:
-                setPos = musicPlayer.getPlayPos();
-                if (setPos >= 0) {
-                    FlyLog.d("ScrollView Scroll To Position=%d", setPos);
-                    discreteScrollView.smoothScrollToPosition(setPos);
-                }
+                goCurrentPos();
                 break;
             case MusicPlayer.STATUS_IDLE:
                 break;
@@ -90,9 +87,37 @@ public class MusicActivity extends MusicActivity_AP2 {
         super.playStatusChange(statu);
     }
 
+    private void goCurrentPos() {
+        setPos = musicPlayer.getPlayPos();
+        if (setPos >= 0 && isFinishScan) {
+            FlyLog.d("ScrollView Scroll To Position=%d", setPos);
+            try {
+                discreteScrollView.notifyAll();
+                if (setPos < musicList.size()) {
+                    discreteScrollView.smoothScrollToPosition(setPos);
+                }
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         galleryAdapter.cancleAllTask();
+    }
+
+    @Override
+    public void notifyPathChange(String path) {
+        isFinishScan = false;
+        super.notifyPathChange(path);
+    }
+
+    @Override
+    public void scanFinish(String path) {
+        super.scanFinish(path);
+        isFinishScan = true;
+        goCurrentPos();
     }
 }

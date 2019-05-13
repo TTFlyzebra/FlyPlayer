@@ -53,9 +53,12 @@ public class MusicDiskCache implements ICache<Music> {
             snapShot = mDiskLruCache.get(EncodeHelper.md5(key));
             if (snapShot != null) {
                 in = snapShot.getInputStream(0);
-                int len = in.read(bytes);
-                String json = new String(bytes, 0, len);
-                music = GsonUtils.json2Object(json, Music.class);
+                int len = 0;
+                StringBuilder jsonBuffer = new StringBuilder();
+                while ((len = in.read(bytes)) != -1) {
+                    jsonBuffer.append(new String(bytes, 0, len));
+                }
+                music = GsonUtils.json2Object(jsonBuffer.toString(), Music.class);
             }
         } catch (Exception e) {
             FlyLog.e(e.toString());
