@@ -116,7 +116,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#EA212121" />
+            android:background="@color/music_fragment_list_bg" />
 
         <com.jancar.media.view.FlyTabView
             android:id="@+id/ac_photo_tabview"

@@ -70,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/music_bottom_menu_height"
         android:layout_alignParentBottom="true"
-        android:background="#B5343536"
+        android:background="@color/music_bottom_bg"
         android:paddingTop="8px"
         android:paddingBottom="8px"
         android:visibility="visible">
@@ -114,7 +114,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="56px"
-            android:background="#EA212121" />
+            android:background="@color/music_fragment_list_bg" />
 
         <com.jancar.media.view.FlyTabView
             android:id="@+id/ac_music_tabview"

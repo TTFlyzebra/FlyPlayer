@@ -1,0 +1,25 @@
+-- Merging decision tree log ---
+manifest
+ADDED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml:1:1-7:12
+INJECTED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml:1:1-7:12
+INJECTED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml:1:1-7:12
+	package
+		ADDED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml:2:5-42
+		INJECTED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml
+		INJECTED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml:1:11-69
+uses-sdk
+ADDED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml:4:5-5:37
+INJECTED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml:4:5-5:37
+INJECTED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml:4:5-5:37
+INJECTED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml:4:5-5:37
+INJECTED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml:4:5-5:37
+	android:targetSdkVersion
+		INJECTED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml
+		ADDED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml:4:5-5:37
+		INJECTED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		ADDED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml:5:9-34
+		INJECTED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml
+		INJECTED from G:\JanCar\JancarPlayers\ijkplayer\src\main\AndroidManifest.xml

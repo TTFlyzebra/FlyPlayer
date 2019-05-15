@@ -15,7 +15,7 @@
         android:id="@+id/ac_music_bkimg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/main_bg"
+        android:background="@drawable/main_bg"
         android:scaleType="fitXY" />
 
     <LinearLayout
@@ -76,7 +76,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/music_bottom_menu_height"
         android:layout_alignParentBottom="true"
-        android:background="#B5343536"
+        android:background="@color/music_bottom_bg"
         android:padding="8dp"
         android:visibility="visible">
 

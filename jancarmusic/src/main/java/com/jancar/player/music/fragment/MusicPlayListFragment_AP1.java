@@ -47,7 +47,8 @@ public class MusicPlayListFragment_AP1 extends MusicFragment implements
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(new RecycleViewDivider(getActivity(),
-                LinearLayoutManager.HORIZONTAL, 1, getActivity().getResources().getColor(R.color.divider)));
+                LinearLayoutManager.HORIZONTAL, (int) getResources().getDimension(R.dimen.line_heigth),
+                getActivity().getResources().getColor(R.color.divider)));
         recyclerView.setAdapter(adapter);
         musicUrlList(mMusicList);
     }
@@ -55,7 +56,7 @@ public class MusicPlayListFragment_AP1 extends MusicFragment implements
 
     @Override
     public void notifyPathChange(String path) {
-        FlyLog.d("notifyPathChange path=%s",path);
+        FlyLog.d("notifyPathChange path=%s", path);
         mMusicList.clear();
         scanMsgTv.setText(R.string.music_scan1);
         adapter.notifyDataSetChanged();
@@ -70,7 +71,7 @@ public class MusicPlayListFragment_AP1 extends MusicFragment implements
 
     @Override
     public void scanFinish(String path) {
-        FlyLog.d("finish scan path=%s",path);
+        FlyLog.d("finish scan path=%s", path);
         scanMsgTv.setText(String.format(getString(R.string.music_scan2), mMusicList.size()));
         adapter.notifyDataSetChanged();
     }
@@ -80,7 +81,7 @@ public class MusicPlayListFragment_AP1 extends MusicFragment implements
         try {
             musicPlayer.play(mMusicList.get(pos).url);
             adapter.notifyDataSetChanged();
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
     }
@@ -88,9 +89,9 @@ public class MusicPlayListFragment_AP1 extends MusicFragment implements
     @Override
     public void onResume() {
         super.onResume();
-        if(MusicActivity_AP1.isScan){
+        if (MusicActivity_AP1.isScan) {
             scanMsgTv.setText(R.string.music_scan1);
-        }else{
+        } else {
             scanMsgTv.setText(String.format(getString(R.string.music_scan2), mMusicList.size()));
         }
         scrollToCureentPlayItem();

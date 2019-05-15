@@ -17,4 +17,6 @@
     <!--文字颜色-->
     <color name="text_focus">#FF0370E5</color>
     <color name="text_no_focus">#FFFFFFFF</color>
+    <color name="music_bottom_bg">#B5343536</color>
+    <color name="music_fragment_list_bg">#EA212121</color>
 </resources>
