@@ -104,7 +104,7 @@ public class BaseMusicActivity extends BaseActivity implements
             if (countSavePlaySeek % SAVEPLAYSEEKTIME == 3 && musicPlayer != null && musicPlayer.isPlaying()) {
                 musicPlayer.savePathUrl(currenPath);
             }
-            if (musicPlayer != null) {
+            if (musicPlayer != null && musicPlayer.isPlaying()) {
                 seekBarPos = musicPlayer.getCurrentPosition();
                 lrcView.updateTime(seekBarPos);
                 setSeekStartText(seekBarPos);
@@ -406,7 +406,7 @@ public class BaseMusicActivity extends BaseActivity implements
 
     @Override
     public void playStatusChange(int statu) {
-        FlyLog.d("playStatusChange %d",statu);
+        FlyLog.d("playStatusChange %d", statu);
         switch (statu) {
             case MusicPlayer.STATUS_COMPLETED:
                 lrcView.setVisibility(View.GONE);
@@ -434,7 +434,7 @@ public class BaseMusicActivity extends BaseActivity implements
                 tvAlbum.setText("");
                 initSeekBar();
                 mediaSession.notifyProgress(0, 0);
-                mediaSession.notifyId3("","","",null);
+                mediaSession.notifyId3("", "", "", null);
                 break;
         }
         mediaSession.notifyPlayState(statu == MusicPlayer.STATUS_PLAYING ? 1 : 0);
