@@ -414,14 +414,12 @@ public class BaseMusicActivity extends BaseActivity implements
                 break;
             case MusicPlayer.STATUS_STARTPLAY:
                 lrcView.setVisibility(View.GONE);
-                mediaSession.notifyPlayUri(title);
                 break;
             case MusicPlayer.STATUS_PLAYING:
                 playFore.setEnabled(true);
                 playNext.setEnabled(true);
                 initSeekBar();
                 mediaSession.notifyProgress(0, sumTime);
-                mediaSession.notifyPlayUri(title);
                 upPlayInfo(musicPlayer.getPlayUrl());
                 break;
             case MusicPlayer.STATUS_ERROR:
@@ -477,6 +475,7 @@ public class BaseMusicActivity extends BaseActivity implements
     protected void upPlayInfo(String url) {
         title = StringTools.getNameByPath(url);
         tvSingle.setText(title);
+        mediaSession.notifyPlayUri(musicPlayer.getPlayUrl());
         executor.execute(new Runnable() {
             @Override
             public void run() {
