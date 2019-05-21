@@ -243,6 +243,16 @@ public class BaseMusicActivity extends BaseActivity implements
     }
 
     @Override
+    protected void onStart() {
+        if (isStop) {
+            upCurrenPlayImage(bitmap);
+            tvArtist.setText(TextUtils.isEmpty(artist) ? getString(R.string.no_artist) : artist);
+            tvAlbum.setText(TextUtils.isEmpty(album) ? getString(R.string.no_album) : album);
+        }
+        super.onStart();
+    }
+
+    @Override
     protected void onDestroy() {
         musicPlayer.savePathUrl(currenPath);
         musicPlayer.stop();
