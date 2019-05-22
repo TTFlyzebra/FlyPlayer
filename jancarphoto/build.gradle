@@ -81,10 +81,28 @@ android {
             resources.srcDir 'src/AP5/res' //资源目录
         }
 
+        AP6 {
+//            manifest.srcFile 'src/volkswagen/volkswagenAndroidManifest.xml'
+            java.srcDir 'src/AP6/java' // 指定源码目录
+            resources.srcDir 'src/AP6/res' //资源目录
+        }
+
+        AP7 {
+//            manifest.srcFile 'src/volkswagen/volkswagenAndroidManifest.xml'
+            java.srcDir 'src/AP7/java' // 指定源码目录
+            resources.srcDir 'src/AP7/res' //资源目录
+        }
+
         AP8 {
 //            manifest.srcFile 'src/volkswagen/volkswagenAndroidManifest.xml'
             java.srcDir 'src/AP8/java' // 指定源码目录
             resources.srcDir 'src/AP8/res' //资源目录
+        }
+
+        AP9 {
+//            manifest.srcFile 'src/volkswagen/volkswagenAndroidManifest.xml'
+            java.srcDir 'src/AP9/java' // 指定源码目录
+            resources.srcDir 'src/AP9/res' //资源目录
         }
     }
 
@@ -118,10 +136,28 @@ android {
             versionName "AP5_v1.0."+gitSHA
         }
 
+        AP6 {
+//            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
+//            applicationId = "com.longhorn.vwdvr"
+            versionName "AP6_v1.0."+gitSHA
+        }
+
+        AP7 {
+//            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
+//            applicationId = "com.longhorn.vwdvr"
+            versionName "AP7_v1.0."+gitSHA
+        }
+
         AP8 {
 //            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
 //            applicationId = "com.longhorn.vwdvr"
             versionName "AP8_v1.0."+gitSHA
+        }
+
+        AP9 {
+//            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
+//            applicationId = "com.longhorn.vwdvr"
+            versionName "AP9_v1.0."+gitSHA
         }
     }
 

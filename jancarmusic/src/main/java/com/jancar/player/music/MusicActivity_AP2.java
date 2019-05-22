@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import com.jancar.media.utils.BlurUtil;
 
 public class MusicActivity_AP2 extends BaseMusicActivity1 {
+
     private ImageView ac_music_bkimg;
 
     @Override

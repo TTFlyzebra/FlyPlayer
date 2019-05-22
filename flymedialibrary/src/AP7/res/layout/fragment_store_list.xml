@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fm_storage_rv01"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/item_divider" />
+
+    <View
+        android:id="@+id/item_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_above="@+id/fm_storage_refresh_01"
+        android:background="@drawable/custom_divider" />
+
+    <LinearLayout
+        android:id="@+id/fm_storage_refresh_01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40px"
+            android:textColor="@color/textcolor"
+            android:text="@string/refresh"
+            android:gravity="center"
+            android:duplicateParentState="true"
+            android:textSize="22px" />
+        <ImageView
+            android:layout_width="36px"
+            android:layout_height="36px"
+            android:duplicateParentState="true"
+            android:src="@drawable/media_refresh"/>
+    </LinearLayout>
+
+
+</RelativeLayout>
