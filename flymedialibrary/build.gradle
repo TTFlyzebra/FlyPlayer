@@ -48,8 +48,8 @@ android {
 
         AP6 {
 //            manifest.srcFile 'src/volkswagen/volkswagenAndroidManifest.xml'
-            java.srcDir 'src/AP5/java' // 指定源码目录
-            resources.srcDir 'src/AP5/res' //资源目录
+            java.srcDir 'src/AP6/java' // 指定源码目录
+            resources.srcDir 'src/AP6/res' //资源目录
         }
 
         AP7 {
