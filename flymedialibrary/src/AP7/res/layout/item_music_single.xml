@@ -17,7 +17,7 @@
             android:layout_marginStart="10px"
             android:duplicateParentState="true"
             android:scaleType="centerInside"
-            android:src="@drawable/media_music_single" />
+            android:src="@drawable/media_music_single_selected" />
 
         <com.jancar.media.view.MarqueeTextView
             android:id="@+id/item_tv01"

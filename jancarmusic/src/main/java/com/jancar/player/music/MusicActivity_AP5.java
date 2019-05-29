@@ -14,6 +14,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * 六边形显示
+ */
 public class MusicActivity_AP5 extends MusicActivity_AP6 {
 
     private ImageView ac_music_bkimg;
@@ -94,7 +97,7 @@ public class MusicActivity_AP5 extends MusicActivity_AP6 {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                final Bitmap blurBitmap = bitmap==null? null :BlurUtil.blur(MusicActivity_AP5.this, bitmap);
+                final Bitmap blurBitmap = bitmap == null ? null : BlurUtil.blur(MusicActivity_AP5.this, bitmap);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

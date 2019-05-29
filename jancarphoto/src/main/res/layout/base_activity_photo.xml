@@ -57,7 +57,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginTop="1px"
                 android:padding="10px"
-                android:scaleType="fitCenter"
+                android:scaleType="center"
                 android:src="@drawable/media_photo_rotate" />
         </LinearLayout>
 

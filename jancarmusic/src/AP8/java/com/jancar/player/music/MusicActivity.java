@@ -1,6 +1,6 @@
 package com.jancar.player.music;
 
 
-public class MusicActivity extends MusicActivity_AP4{
+public class MusicActivity extends MusicActivity_AP8 {
 
 }
