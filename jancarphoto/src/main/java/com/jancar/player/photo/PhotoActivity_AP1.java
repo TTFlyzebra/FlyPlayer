@@ -234,11 +234,13 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
                     break;
                 case R.id.ac_photo_zoomin:
                     PhotoView photoView2 = (PhotoView) viewPager.findViewById(imageResIDs.get(currentItem));
-                    photoView2.setScale(Math.max(PhotoViewAttacher.DEFAULT_MIN_SCALE, photoView2.getScale() - 0.25f), true);
+                    photoView2.setScale(Math.max(PhotoViewAttacher.DEFAULT_MIN_SCALE, photoView2.getScale() - 0.25f),
+                            photoView2.getWidth()/2,photoView2.getHeight()/2,false);
                     break;
                 case R.id.ac_photo_zoomout:
                     PhotoView photoView3 = (PhotoView) viewPager.findViewById(imageResIDs.get(currentItem));
-                    photoView3.setScale(Math.min(PhotoViewAttacher.DEFAULT_MAX_SCALE, photoView3.getScale() + 0.25f), true);
+                    photoView3.setScale(Math.min(PhotoViewAttacher.DEFAULT_MAX_SCALE, photoView3.getScale() + 0.25f),
+                            photoView3.getWidth()/2,photoView3.getHeight()/2,false);
                     break;
                 case R.id.ac_photo_paly_pause:
                     onPlayStatus();
