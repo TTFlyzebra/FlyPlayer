@@ -181,7 +181,9 @@
             android:layout_height="@dimen/video_bottom_menu_height"
             android:layout_alignParentBottom="true"
             android:background="#BD000000"
-            android:padding="8dp"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
             android:visibility="visible">
 
             <RelativeLayout
@@ -218,11 +220,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/app_video_endTime"
                     android:layout_toEndOf="@id/app_video_currentTime"
+                    android:layout_toStartOf="@id/app_video_endTime"
                     android:progressDrawable="@drawable/media_seekbar_style"
                     android:splitTrack="false"
-                    android:thumb="@drawable/media_seekbar_thumb"/>
+                    android:thumb="@drawable/media_seekbar_thumb" />
             </RelativeLayout>
 
             <LinearLayout
@@ -261,8 +263,8 @@
                 android:id="@+id/menu_play_mode"
                 android:layout_width="120px"
                 android:layout_height="match_parent"
-                android:layout_below="@id/rl_01"
                 android:layout_alignParentStart="true"
+                android:layout_below="@id/rl_01"
                 android:scaleType="center"
                 android:src="@drawable/media_video_mode1" />
 
@@ -270,8 +272,8 @@
                 android:id="@+id/menu_play_list"
                 android:layout_width="80px"
                 android:layout_height="match_parent"
-                android:layout_below="@id/rl_01"
                 android:layout_alignParentEnd="true"
+                android:layout_below="@id/rl_01"
                 android:scaleType="center"
                 android:src="@drawable/media_list_menu_close" />
 
@@ -281,10 +283,10 @@
             android:id="@+id/play_ll01_playlist"
             android:layout_width="@dimen/video_left_list_width"
             android:layout_height="@dimen/video_left_list_height"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="@dimen/video_left_list_margin_end"
+            android:layout_alignParentEnd="true"
             android:layout_marginBottom="@dimen/video_bottom_menu_height"
+            android:layout_marginEnd="@dimen/video_left_list_margin_end"
             android:orientation="vertical"
             android:visibility="invisible">
 
@@ -324,8 +326,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#7FFF0000"
-            android:paddingStart="10dp"
             android:paddingEnd="10dp"
+            android:paddingStart="10dp"
             android:textSize="15px" />
     </TableLayout>
 </RelativeLayout>
