@@ -72,7 +72,6 @@
         android:layout_alignParentBottom="true"
         android:background="@color/music_bottom_bg"
         android:paddingTop="8px"
-        android:paddingBottom="8px"
         android:visibility="visible">
 
         <include layout="@layout/seekbar_layout" />
