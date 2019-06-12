@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ac_photo_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/focus_background1"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:layoutDirection="ltr">
+
+    <com.jancar.media.view.PhotoViewPager
+        android:id="@+id/ac_photo_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/focus_background1"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
+
+    <com.jancar.media.view.TouchEventRelativeLayout
+        android:id="@+id/ac_photo_control"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/photo_bottom_menu_height_apa"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ac_photo_zoomout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_weight="1"
+                android:scaleType="center"
+                android:src="@drawable/media_photo_zoomout" />
+
+            <ImageView
+                android:id="@+id/ac_photo_zoomin"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_weight="1"
+                android:scaleType="center"
+                android:src="@drawable/media_photo_zoomin" />
+
+            <ImageView
+                android:id="@+id/ac_photo_rotate"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_weight="1"
+                android:scaleType="center"
+                android:src="@drawable/media_photo_rotate" />
+
+            <ImageView
+                android:id="@+id/ac_photo_play_fore"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_weight="1"
+                android:scaleType="center"
+                android:src="@drawable/media_fore_photo" />
+
+            <ImageView
+                android:id="@+id/ac_photo_paly_pause"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_weight="1"
+                android:scaleType="center"
+                android:src="@drawable/media_play_photo" />
+
+            <ImageView
+                android:id="@+id/ac_photo_play_next"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_weight="1"
+                android:scaleType="center"
+                android:src="@drawable/media_next_photo" />
+
+            <ImageView
+                android:id="@+id/ac_photo_left_menu"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="center"
+                android:src="@drawable/media_list_menu_close_photo" />
+        </LinearLayout>
+    </com.jancar.media.view.TouchEventRelativeLayout>
+
+
+    <com.jancar.media.view.TouchEventRelativeLayout
+        android:id="@+id/ac_photo_left_layout"
+        android:layout_width="@dimen/photo_left_list_width"
+        android:layout_height="@dimen/photo_left_list_height"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="@dimen/photo_bottom_menu_height"
+        android:layout_marginEnd="@dimen/photo_left_list_margin_end"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/music_fragment_list_bg" />
+
+        <com.jancar.media.view.FlyTabView
+            android:id="@+id/ac_photo_tabview"
+            android:layout_width="100px"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/media_list_header" />
+
+        <FrameLayout
+            android:id="@+id/ac_replace_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_marginEnd="100px" />
+    </com.jancar.media.view.TouchEventRelativeLayout>
+
+
+</RelativeLayout>

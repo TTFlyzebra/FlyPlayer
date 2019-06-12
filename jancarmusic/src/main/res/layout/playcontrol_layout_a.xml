@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@id/rl_01"
+    android:gravity="center"
+    android:layoutDirection="ltr">
+
+    <ImageView
+        android:id="@+id/ac_music_play_fore"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_weight="1"
+        android:scaleType="center"
+        android:src="@drawable/media_fore" />
+
+    <ImageView
+        android:id="@+id/ac_music_play"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_weight="1"
+        android:scaleType="center"
+        android:src="@drawable/media_play" />
+
+    <ImageView
+        android:id="@+id/ac_music_play_next"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_weight="1"
+        android:scaleType="center"
+        android:src="@drawable/media_next" />
+
+    <ImageView
+        android:id="@+id/ac_music_left_menu"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scaleType="center"
+        android:src="@drawable/media_list_menu_close" />
+</LinearLayout>

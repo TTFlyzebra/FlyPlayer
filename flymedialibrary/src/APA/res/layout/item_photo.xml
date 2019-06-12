@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="170px"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="130px"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/item_iv01"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="4px"
+            android:duplicateParentState="true"
+            android:scaleType="fitCenter" />
+
+        <ImageView
+            android:id="@+id/item_iv01_back"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:duplicateParentState="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/media_list_item_select" />
+    </RelativeLayout>
+
+    <com.jancar.media.view.MarqueeTextView
+        android:id="@+id/item_tv01"
+        android:layout_width="match_parent"
+        android:layout_height="40px"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="6px"
+        android:duplicateParentState="true"
+        android:ellipsize="marquee"
+        android:gravity="center"
+        android:marqueeRepeatLimit="1"
+        android:singleLine="true"
+        android:text="video "
+        android:textColor="@color/textcolor"
+        android:textSize="18px" />
+
+</RelativeLayout>

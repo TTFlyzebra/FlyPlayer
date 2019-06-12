@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="lrc_current_text_color">#FFd30808</color>
+    <!--文字颜色-->
+    <color name="text_focus">#FFd30808</color>
+    <color name="music_bottom_bg">#FF46494d</color>
+    <color name="music_fragment_list_bg">#FF242425</color>
+</resources>

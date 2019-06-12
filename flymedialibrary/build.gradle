@@ -69,6 +69,11 @@ android {
             java.srcDir 'src/AP9/java' // 指定源码目录
             resources.srcDir 'src/AP9/res' //资源目录
         }
+        APA {
+//            manifest.srcFile 'src/volkswagen/volkswagenAndroidManifest.xml'
+            java.srcDir 'src/APA/java' // 指定源码目录
+            resources.srcDir 'src/APA/res' //资源目录
+        }
     }
 
     productFlavors {
@@ -118,6 +123,12 @@ android {
         }
 
         AP9 {
+//            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
+//            applicationId = "com.longhorn.vwdvr"
+            versionName "1.0"
+        }
+
+        APA {
 //            manifestPlaceholders = [app_name:"VWDVR",package_name:"com.longhorn.viewdvr"]
 //            applicationId = "com.longhorn.vwdvr"
             versionName "1.0"

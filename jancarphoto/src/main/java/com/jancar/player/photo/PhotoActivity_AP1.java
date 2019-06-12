@@ -44,7 +44,7 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
     private MyPageAdapter adapter;
     public List<Image> imageList = new ArrayList<>();
     private Hashtable<Integer, Integer> imageResIDs = new Hashtable<>();
-    private ImageView photoFore, photoNext, photoRotate, photoZoomIn, photoZoomOut, photoPlay;
+    protected ImageView photoFore, photoNext, photoRotate, photoZoomIn, photoZoomOut, photoPlay;
     private ImageView leftMenu;
     private TouchEventRelativeLayout controlLayout;
     private TouchEventRelativeLayout leftLayout;
@@ -235,12 +235,12 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
                 case R.id.ac_photo_zoomin:
                     PhotoView photoView2 = (PhotoView) viewPager.findViewById(imageResIDs.get(currentItem));
                     photoView2.setScale(Math.max(PhotoViewAttacher.DEFAULT_MIN_SCALE, photoView2.getScale() - 0.25f),
-                            photoView2.getWidth()/2,photoView2.getHeight()/2,false);
+                            photoView2.getWidth() / 2, photoView2.getHeight() / 2, false);
                     break;
                 case R.id.ac_photo_zoomout:
                     PhotoView photoView3 = (PhotoView) viewPager.findViewById(imageResIDs.get(currentItem));
                     photoView3.setScale(Math.min(PhotoViewAttacher.DEFAULT_MAX_SCALE, photoView3.getScale() + 0.25f),
-                            photoView3.getWidth()/2,photoView3.getHeight()/2,false);
+                            photoView3.getWidth() / 2, photoView3.getHeight() / 2, false);
                     break;
                 case R.id.ac_photo_paly_pause:
                     onPlayStatus();
@@ -331,6 +331,10 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
                     }
                 })
                 .start();
+        setLeftMenuImage(leftMenu, flag);
+    }
+
+    public void setLeftMenuImage(ImageView leftMenu, boolean flag) {
         leftMenu.setImageResource(flag ? R.drawable.media_list_menu_open : R.drawable.media_list_menu_close);
     }
 
@@ -344,7 +348,7 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
             currentItem = pos;
             CURRENT_IMAGE = imageList.get(currentItem);
             viewPager.setCurrentItem(pos);
-        }catch (Exception e){
+        } catch (Exception e) {
             FlyLog.e(e.toString());
         }
     }
@@ -475,19 +479,29 @@ public abstract class PhotoActivity_AP1 extends BaseActivity implements
         switch (playStatu) {
             case STATU_PALY:
                 mHandler.removeCallbacks(playTask);
-                photoPlay.setImageResource(R.drawable.media_play);
+                setPhotoPlayImg();
                 playStatu = STATU_PAUSE;
                 break;
             case STATU_PAUSE:
                 mHandler.postDelayed(playTask, playTime);
-                photoPlay.setImageResource(R.drawable.media_pause);
+                setPhotoPauseImg();
                 playStatu = STATU_PALY;
                 break;
             default:
                 mHandler.removeCallbacks(playTask);
-                photoPlay.setImageResource(R.drawable.media_play);
+                setPhotoPlayImg();
                 break;
         }
+
+    }
+
+    protected void setPhotoPauseImg() {
+        photoPlay.setImageResource(R.drawable.media_pause);
+
+    }
+
+    protected void setPhotoPlayImg() {
+        photoPlay.setImageResource(R.drawable.media_play);
 
     }
 

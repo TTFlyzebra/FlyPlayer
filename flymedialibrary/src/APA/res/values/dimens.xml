@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="line_heigth">0px</dimen>
+    <!--SeekBar调节-->
+    <dimen name="seek_height">50px</dimen>
+    <dimen name="seek_text_width">90px</dimen>
+    <dimen name="seek_text_size">18px</dimen>
+    <dimen name="seek_text_padding">10px</dimen>
+
+</resources>

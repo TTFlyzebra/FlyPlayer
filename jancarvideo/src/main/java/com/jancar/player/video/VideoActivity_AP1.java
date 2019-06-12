@@ -51,7 +51,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
         GiraffePlayer.OnPlayStatusChangeLiseter,
         TouchEventRelativeLayout.OnTouchEventListener,
         IMediaEventListerner {
-    private ImageView play_fore, play_next, play_pause, leftMenu, play_mode;
+    protected ImageView play_fore, play_next, play_pause, leftMenu, play_mode;
     private TouchEventRelativeLayout leftLayout;
     private TouchEventRelativeLayout controlLayout;
     public int currenPos = 0;
@@ -291,21 +291,30 @@ public class VideoActivity_AP1 extends BaseActivity implements
     public void playNext() {
         if (play_next.isEnabled() && videoList != null && !videoList.isEmpty()) {
             setViewEnable(false);
-            play_fore.setImageResource(R.drawable.media_fore_01);
+            setPlayForeImg();
             currenPos = (currenPos + 1) % videoList.size();
             player.play(videoList.get(currenPos).url);
         }
+    }
+
+    public void setPlayForeImg() {
+        play_fore.setImageResource(R.drawable.media_fore_01);
     }
 
     @Override
     public void playPrev() {
         if (play_fore.isEnabled() && videoList != null && !videoList.isEmpty()) {
             setViewEnable(false);
-            play_next.setImageResource(R.drawable.media_next_01);
+            setPlayNextImg();
             currenPos = (currenPos - 1 + videoList.size()) % videoList.size();
             player.play(videoList.get(currenPos).url);
         }
     }
+
+    public void setPlayNextImg() {
+        play_next.setImageResource(R.drawable.media_next_01);
+    }
+
 
     @Override
     public void playOrPause() {
@@ -388,17 +397,19 @@ public class VideoActivity_AP1 extends BaseActivity implements
                     int mode = player.switchMode();
                     switch (mode) {
                         case IRenderView.AR_MATCH_PARENT:
-                            play_mode.setImageResource(R.drawable.media_video_mode2);
+
+                            setPlayModeImg(2);
                             break;
                         case IRenderView.AR_16_9_FIT_PARENT:
-                            play_mode.setImageResource(R.drawable.media_video_mode3);
+
+                            setPlayModeImg(3);
                             break;
                         case IRenderView.AR_4_3_FIT_PARENT:
-                            play_mode.setImageResource(R.drawable.media_video_mode4);
+                            setPlayModeImg(4);
                             break;
                         case IRenderView.AR_ASPECT_FIT_PARENT:
                         default:
-                            play_mode.setImageResource(R.drawable.media_video_mode1);
+                            setPlayModeImg(1);
                             break;
                     }
                 } catch (Exception e) {
@@ -407,6 +418,24 @@ public class VideoActivity_AP1 extends BaseActivity implements
                 break;
         }
     }
+
+    public void setPlayModeImg(int type) {
+        switch (type) {
+            case 1:
+                play_mode.setImageResource(R.drawable.media_video_mode1);
+                break;
+            case 2:
+                play_mode.setImageResource(R.drawable.media_video_mode2);
+                break;
+            case 3:
+                play_mode.setImageResource(R.drawable.media_video_mode3);
+                break;
+            case 4:
+                play_mode.setImageResource(R.drawable.media_video_mode4);
+                break;
+        }
+    }
+
 
     @Override
     public void onItemClick(View v, int pos) {
@@ -464,6 +493,11 @@ public class VideoActivity_AP1 extends BaseActivity implements
                     }
                 })
                 .start();
+        setLeftImg(flag);
+
+    }
+
+    public void setLeftImg(boolean flag) {
         leftMenu.setImageResource(flag ? R.drawable.media_list_menu_open : R.drawable.media_list_menu_close);
     }
 
@@ -561,7 +595,7 @@ public class VideoActivity_AP1 extends BaseActivity implements
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                play_pause.setImageResource(player.isPlaying() ? R.drawable.media_pause : R.drawable.media_play);
+                setPlayImg();
             }
         }, 100);
         try {
@@ -569,6 +603,10 @@ public class VideoActivity_AP1 extends BaseActivity implements
         } catch (Exception e) {
             FlyLog.e(e.toString());
         }
+    }
+
+    public void setPlayImg() {
+        play_pause.setImageResource(player.isPlaying() ? R.drawable.media_pause : R.drawable.media_play);
     }
 
     private void setCurrentPos() {
@@ -719,9 +757,18 @@ public class VideoActivity_AP1 extends BaseActivity implements
         leftLayout.setEnabled(flag);
         liveBox.setEnabled(flag);
         if (flag) {
-            play_next.setImageResource(R.drawable.media_next);
-            play_fore.setImageResource(R.drawable.media_fore);
+            setPlayNextPressedImg();
+            setPlayForePressedImg();
         }
+    }
+
+    public void setPlayNextPressedImg() {
+        play_next.setImageResource(R.drawable.media_next);
+    }
+
+    public void setPlayForePressedImg() {
+        play_fore.setImageResource(R.drawable.media_fore);
+
     }
 
     private Runnable enableViewTask = new Runnable() {

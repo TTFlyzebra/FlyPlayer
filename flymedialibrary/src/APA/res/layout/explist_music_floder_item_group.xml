@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="64px"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/item_iv01"
+        android:layout_width="0dp"
+        android:layout_height="64px"
+        android:layout_weight="0.15"
+        android:duplicateParentState="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/media_file" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="64px"
+        android:layout_marginStart="15px"
+        android:layout_weight="0.7"
+        android:duplicateParentState="true"
+        android:gravity="left|center"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="0.6"
+            android:gravity="left|bottom">
+
+            <com.jancar.media.view.MarqueeTextView
+                android:id="@+id/item_tv01"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:duplicateParentState="true"
+                android:ellipsize="marquee"
+                android:gravity="left|bottom"
+                android:singleLine="true"
+                android:textColor="@color/textcolor"
+                android:textSize="22px" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/item_tv03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:duplicateParentState="true"
+            android:gravity="left|bottom"
+            android:singleLine="true"
+            android:textColor="@color/textcolor"
+            android:textSize="22px" />
+
+        <com.jancar.media.view.MarqueeTextView
+            android:id="@+id/item_tv02"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="0.4"
+            android:duplicateParentState="true"
+            android:ellipsize="marquee"
+            android:gravity="left|top"
+            android:singleLine="true"
+            android:textColor="@color/textcolor"
+            android:textSize="16px"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/item_iv02"
+        android:layout_width="0dp"
+        android:layout_height="64px"
+        android:layout_weight="0.15"
+        android:duplicateParentState="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/media_down_01" />
+
+</LinearLayout>

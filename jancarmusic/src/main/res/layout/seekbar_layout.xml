@@ -34,11 +34,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toStartOf="@id/ac_music_endTime"
         android:layout_toEndOf="@id/ac_music_currentTime"
+        android:layout_toStartOf="@id/ac_music_endTime"
         android:progressDrawable="@drawable/media_seekbar_style"
         android:splitTrack="false"
-        android:thumb="@drawable/media_seekbar_thumb" />
+        android:thumb="@drawable/media_seekbar_thumb"
+        android:thumbOffset="2px" />
 
 
 </RelativeLayout>

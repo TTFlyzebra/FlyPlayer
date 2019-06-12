@@ -14,4 +14,6 @@
     <dimen name="photo_bottom_menu_height">118px</dimen>
 
     <dimen name="music_playbutton_widht">130px</dimen>
+    <!--底部菜单高度APA-->
+    <dimen name="photo_bottom_menu_height_apa">78px</dimen>
 </resources>
