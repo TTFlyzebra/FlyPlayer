@@ -2,6 +2,7 @@ package com.jancar.player.music.adpater;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import java.util.List;
  */
 
 public class MusicPlayListAdapter extends RecyclerView.Adapter<MusicPlayListAdapter.ViewHolder> {
+    private static final String TAG = "MusicPlayListAdapter";
     private List<Music> mList;
     private Context mContext;
     private RecyclerView mRecyclerView;
@@ -50,28 +52,30 @@ public class MusicPlayListAdapter extends RecyclerView.Adapter<MusicPlayListAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         String url = mList.get(position).url;
-        int start = url.lastIndexOf(File.separator)+1;
+        int start = url.lastIndexOf(File.separator) + 1;
         int end = url.lastIndexOf('.');
-        start = Math.max(0,start);
-        end = Math.max(0,end);
-        start = Math.min(start,url.length()-1);
-        end = Math.min(end,url.length()-1);
-        String name = url.substring(start,end);
+        start = Math.max(0, start);
+        end = Math.max(0, end);
+        start = Math.min(start, url.length() - 1);
+        end = Math.min(end, url.length() - 1);
+        String name = url.substring(start, end);
         holder.textView01.setText(name);
         String artist = mList.get(position).artist;
-        holder.textView02.setText(artist==null?"":artist);
+        Log.e(TAG, "onBindViewHolder: " + artist);
+        holder.textView02.setText(artist == null ? mContext.getString(R.string.no_artist) : artist);
+//        holder.textView02.setText(artist == null ? "" : artist);
 
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onItemClickListener!=null){
+                if (onItemClickListener != null) {
                     onItemClickListener.onItemClick(v, (Integer) v.getTag());
                 }
             }
         });
         boolean flag = url.equals(MusicPlayer.getInstance().getPlayUrl());
-        holder.imageView.setVisibility(flag?View.VISIBLE:View.INVISIBLE);
+        holder.imageView.setVisibility(flag ? View.VISIBLE : View.INVISIBLE);
         holder.itemView.setSelected(flag);
     }
 
@@ -85,6 +89,7 @@ public class MusicPlayListAdapter extends RecyclerView.Adapter<MusicPlayListAdap
         ImageView imageView;
         TextView textView01;
         MarqueeTextView textView02;
+
         public ViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.item_iv01);
