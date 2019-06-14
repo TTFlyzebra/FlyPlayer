@@ -131,8 +131,8 @@ public class FlyMediaService extends Service {
          * 解决插入两个U盘开机会跳U盘的问题
          */
         finishCreate.set(false);
-        String timeStr = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_WAITTIME, "15");
-        int time = 15;
+        String timeStr = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_WAITTIME, "30");
+        int time = 30;
         try {
             time = Integer.parseInt(timeStr);
         } catch (Exception e) {
@@ -193,8 +193,7 @@ public class FlyMediaService extends Service {
             }
 
             String str2 = intent.getStringExtra(Const.UMOUNT_STORE);
-            if (!TextUtils.isEmpty(str2)) {
-                FlyLog.d();
+            if (!TextUtils.isEmpty(str2) && finishCreate.get()) {
                 FlyLog.d("remove path=%s", str2);
                 removePath(str2);
             }
