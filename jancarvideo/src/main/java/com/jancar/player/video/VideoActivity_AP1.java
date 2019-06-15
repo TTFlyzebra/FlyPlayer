@@ -26,6 +26,7 @@ import com.jancar.media.model.mediaSession.MediaSession;
 import com.jancar.media.model.storage.Storage;
 import com.jancar.media.utils.FlyLog;
 import com.jancar.media.utils.RtlTools;
+import com.jancar.media.utils.SPUtil;
 import com.jancar.media.utils.SystemPropertiesProxy;
 import com.jancar.media.utils.UriTools;
 import com.jancar.media.view.FlyTabTextView;
@@ -244,6 +245,8 @@ public class VideoActivity_AP1 extends BaseActivity implements
         if (openList != null && !openList.isEmpty()) {
             currenPath = Storage.ALL_STORAGE;
             player.play(openList.get(0));
+            SPUtil.set(this, currenPath + "VIDEO_URL", openList.get(0));
+            SPUtil.set(this, currenPath + "VIDEO_SEEK", 0);
             usbMediaScan.openStorager(new StorageInfo(currenPath));
         }
     }
