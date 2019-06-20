@@ -131,8 +131,8 @@ public class FlyMediaService extends Service {
          * 解决插入两个U盘开机会跳U盘的问题
          */
         finishCreate.set(false);
-        String timeStr = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_WAITTIME, "30");
-        int time = 30;
+        String timeStr = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_WAITTIME, "65");
+        int time = 65;
         try {
             time = Integer.parseInt(timeStr);
         } catch (Exception e) {

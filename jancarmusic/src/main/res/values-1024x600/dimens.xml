@@ -12,6 +12,8 @@
     <dimen name="music_left_list_height">406px</dimen>
     <!--底部菜单高度-->
     <dimen name="music_bottom_menu_height">135px</dimen>
+    <!--底部菜单高度ap7-->
+    <dimen name="music_bottom_menu_height_ap7">75px</dimen>
     <!--AP1图片大小-->
     <dimen name="music_iv01_width">250px</dimen>
     <dimen name="music_iv02_width">152px</dimen>
