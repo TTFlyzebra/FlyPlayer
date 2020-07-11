@@ -31,9 +31,19 @@ public class StringTools {
 
     public static String getlrcByPath(String url) {
         try {
+            String strFile = "";
             int end = url.lastIndexOf('.');
             end = Math.max(0, end);
-            return url.substring(0, end)+".lrc";
+            strFile = url.substring(0, end)+".lrc";
+            File file = new File(strFile);
+            if(file.exists()){
+                FlyLog.d("Lyric path="+strFile);
+                return strFile;
+            }else{
+                String path = file.getParentFile().getAbsolutePath()+"/Lyric/"+file.getName();
+                FlyLog.d("Lyric path="+path);
+                return path;
+            }
         }catch (Exception e){
             FlyLog.e(e.toString());
             return "";

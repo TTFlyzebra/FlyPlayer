@@ -141,7 +141,7 @@ public class BaseMusicActivity extends BaseActivity implements
         mediaSession.addEventListener(this);
         music_left_list_width = getResources().getDimensionPixelSize(R.dimen.music_left_list_width);
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        requestAudioFocus();
+//        requestAudioFocus();
 
 
         /**
@@ -249,7 +249,7 @@ public class BaseMusicActivity extends BaseActivity implements
         mediaSession.removeEventListener(this);
         musicPlayer.removeListener(this);
         unregisterReceiver(mReceiver);
-        abandonAudioFocus();
+//        abandonAudioFocus();
         Intent intent = new Intent(this, MusicService.class);
         stopService(intent);
         mHandler.removeCallbacksAndMessages(null);

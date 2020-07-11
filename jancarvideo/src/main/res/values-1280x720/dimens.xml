@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--屏幕宽度-->
+    <dimen name="video_screen_width">1280px</dimen>
+    <!--屏幕高度-->
+    <dimen name="video_screen_height">800px</dimen>
+    <!--右边弹出列表宽度-->
+    <dimen name="video_left_list_width">640px</dimen>
+    <!--右边弹出列表宽度-->
+    <dimen name="video_left_list_margin_end">-639px</dimen>
+    <!--右边弹出列表高度-->
+    <dimen name="video_left_list_height">550px</dimen>
+    <!--底部菜单高度-->
+    <dimen name="video_bottom_menu_height">200px</dimen>
+
+    <dimen name="play_button_magrin">50px</dimen>
+</resources>

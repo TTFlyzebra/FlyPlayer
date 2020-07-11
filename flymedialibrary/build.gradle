@@ -84,5 +84,4 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation files('libs/disklrucache.jar')
     implementation files('libs/glide-3.7.0.jar')
-    compileOnly files('libs/framework.jar')
 }

@@ -17,7 +17,6 @@ import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
-import com.jancar.JancarManager;
 import com.jancar.media.FlyMedia;
 import com.jancar.media.Notify;
 import com.jancar.media.data.Image;
@@ -34,8 +33,6 @@ import com.jancar.mediascan.utils.SPUtil;
 import com.jancar.mediascan.utils.StorageTools;
 import com.jancar.mediascan.utils.StringTools;
 import com.jancar.mediascan.utils.SystemPropertiesProxy;
-import com.jancar.source.Page;
-import com.jancar.state.JacState;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
@@ -64,8 +61,6 @@ public class FlyMediaService extends Service {
     private static final Handler sWorker = new Handler(sWorkerThread.getLooper());
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
-    private JancarManager jancarManager = null;
-    private JacState jacState = new JacSystemStates();
 
     private static AtomicBoolean isRunning = new AtomicBoolean(false);
     private static AtomicBoolean isStoped = new AtomicBoolean(false);
@@ -87,7 +82,7 @@ public class FlyMediaService extends Service {
     private static RemoteCallbackList<Notify> mNotifys = new RemoteCallbackList<>();
     private MusicDoubleCache mDoubleMusicCache;
     private ListFileDiskCache mListDiskCache;
-    private static final String DEF_PATH = "/storage/emulated/0";
+    private static final String DEF_PATH = "/storage/emulated";
     private static String currentPath = "";
     private static final int UPDATE_DENSITY = 100;
     private static final int THREAD_WAIT_TIME = 100;
@@ -151,8 +146,6 @@ public class FlyMediaService extends Service {
         isSetHideFile = !str1.endsWith("0");
         String str2 = SystemPropertiesProxy.get(this, SystemPropertiesProxy.Property.PERSIST_KEY_SHOWALL_FILE, "0");
         isSetAllFile = !str2.endsWith("0");
-        jancarManager = (JancarManager) getSystemService("jancar_manager");
-        jancarManager.registerJacStateListener(jacState.asBinder());
         mDoubleMusicCache = MusicDoubleCache.getInstance(getApplicationContext());
         mListDiskCache = new ListFileDiskCache(this);
         String path = (String) SPUtil.get(this, "SAVEPATH", DEF_PATH);
@@ -210,7 +203,6 @@ public class FlyMediaService extends Service {
         mHandler.removeCallbacksAndMessages(null);
         sWorker.removeCallbacksAndMessages(null);
         unregisterReceiver(mediaScannerReceiver);
-        jancarManager.unregisterJacStateListener(jacState.asBinder());
         try {
             unregisterReceiver(diskReceiver);
         } catch (Exception e) {
@@ -469,7 +461,7 @@ public class FlyMediaService extends Service {
 
     private void removePath(String path) {
         FlyLog.d("remove mPath=%s,currentPath=%s", path, currentPath);
-        if ((currentPath.equals("/storage") || currentPath.equals(path)) && mEState == JacState.ePowerState.ePowerOn) {
+        if ((currentPath.equals("/storage") || currentPath.equals(path)) ) {
             FlyLog.d("clear all list");
             clearData();
             startScanPath(DEF_PATH);
@@ -582,7 +574,6 @@ public class FlyMediaService extends Service {
                         if (str.equals("true") && finishCreate.get()) {
                             if (currentPath.startsWith("/storage/udisk")) {
                                 FlyLog.d("first music open music app");
-                                jancarManager.requestPage(Page.PAGE_MUSIC);
                             }
                         }
                     }
@@ -1054,28 +1045,6 @@ public class FlyMediaService extends Service {
                         FlyLog.d(intent.toUri(0));
                         break;
                 }
-            }
-        }
-    }
-
-    private JacState.ePowerState mEState = JacState.ePowerState.ePowerOn;
-
-    public class JacSystemStates extends JacState {
-        @Override
-        public void OnPower(ePowerState eState) {
-            super.OnPower(eState);
-            mEState = eState;
-            if (eState == ePowerState.ePowerOn) {
-                FlyLog.d("ePowerState ePowerOn");
-            } else if (eState == ePowerState.ePowerOff) {
-                stopSelf();
-                FlyLog.d("ePowerState ePowerOff");
-            } else if (eState == ePowerState.ePowerStandby) {
-                FlyLog.d("ePowerState ePowerStandby");
-            } else if (eState == ePowerState.ePowerSleep) {
-                FlyLog.d("ePowerState ePowerSleep");
-            } else {
-                FlyLog.e("ePowerState error status");
             }
         }
     }

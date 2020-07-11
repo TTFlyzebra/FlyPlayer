@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--屏幕宽度-->
+    <dimen name="music_screen_width">1280px</dimen>
+    <!--屏幕高度-->
+    <dimen name="music_screen_height">480px</dimen>
+    <!--右边弹出列表宽度-->
+    <dimen name="music_left_list_width">708px</dimen>
+    <!--右边弹出列表宽度-->
+    <dimen name="music_left_list_margin_end">-653px</dimen>
+    <!--右边弹出列表高度-->
+    <dimen name="music_left_list_height">600px</dimen>
+    <!--底部菜单高度-->
+    <dimen name="music_bottom_menu_height">150px</dimen>
+
+    <dimen name="music_iv01_width">300px</dimen>
+    <dimen name="music_iv02_width">180px</dimen>
+
+    <dimen name="music_lrc_height">42px</dimen>
+    <dimen name="music_lrc_textsize">18px</dimen>
+
+    <dimen name="music_ap3_iv2padding">22px</dimen>
+
+    <!--AP4特殊处理-->
+    <dimen name="music_ap4_iv01_width">240px</dimen>
+    <dimen name="music_ap4_iv02_width">210px</dimen>
+</resources>

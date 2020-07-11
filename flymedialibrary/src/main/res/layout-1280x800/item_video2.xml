@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="137px"
+    android:minHeight="137px"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_margin="5px"
+        android:id="@+id/iv_gridview"
+        android:layout_width="match_parent"
+        android:layout_height="137px"
+        android:minHeight="137px"
+        android:duplicateParentState="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/media_default_image" />
+
+    <ImageView
+        android:layout_margin="5px"
+        android:id="@+id/item_iv01_back"
+        android:layout_width="match_parent"
+        android:layout_height="137px"
+        android:minHeight="137px"
+        android:duplicateParentState="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/rectangle_select" />
+
+    <com.jancar.media.view.MarqueeTextView
+        android:id="@+id/tv_gridview"
+        android:layout_marginStart="10px"
+        android:layout_marginEnd="10px"
+        android:layout_marginTop="105px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#2F000000"
+        android:duplicateParentState="true"
+        android:ellipsize="marquee"
+        android:gravity="center"
+        android:marqueeRepeatLimit="1"
+        android:singleLine="true"
+        android:text="video "
+        android:textColor="@color/textcolor"
+        android:textSize="22px" />
+
+</RelativeLayout>

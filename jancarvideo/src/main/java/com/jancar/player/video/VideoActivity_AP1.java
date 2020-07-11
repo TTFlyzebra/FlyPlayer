@@ -30,7 +30,6 @@ import com.jancar.media.utils.SystemPropertiesProxy;
 import com.jancar.media.utils.UriTools;
 import com.jancar.media.view.FlyTabTextView;
 import com.jancar.media.view.FlyTabView;
-import com.jancar.media.view.ParkWarningView;
 import com.jancar.media.view.TouchEventRelativeLayout;
 
 import java.io.File;
@@ -214,11 +213,6 @@ public class VideoActivity_AP1 extends BaseActivity implements
         mHandler.removeCallbacksAndMessages(null);
         player.removeStatusChangeLiseter(this);
         player.onDestroy();
-        try {
-            ((ParkWarningView) Objects.requireNonNull(findViewById(R.id.layout_parking))).onDestory();
-        } catch (Exception e) {
-            FlyLog.e();
-        }
         super.onDestroy();
     }
 
